@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f5">
+  <title>AI Legal | Hỗ trợ pháp lý thông minh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f7f5;
+      --surface: #fff;
+      --ink: #19251f;
+      --muted: #627168;
+      --green: #25483d;
+      --green-dark: #18372e;
+      --red: #b42318;
+      --gold: #d5a83b;
+      --line: #dce4de;
+      font-family: "Be Vietnam Pro", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; }
+    a { color: inherit; }
+    .page { width: min(1160px, calc(100% - 64px)); margin: 0 auto; }
+    .topbar { min-height: 92px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-size: 19px; font-weight: 800; }
+    .brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 6px; color: white; background: var(--red); font-size: 20px; }
+    .brand-name span { color: var(--red); }
+    .nav { display: flex; align-items: center; gap: 27px; }
+    .nav a { color: #42524a; text-decoration: none; font-size: 13px; font-weight: 600; }
+    .nav a:hover, .text-link:hover { color: var(--red); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; border: 1px solid transparent; border-radius: 5px; font: inherit; font-size: 13px; font-weight: 700; text-decoration: none; transition: background-color 160ms ease, transform 160ms ease; }
+    .button:hover { transform: translateY(-1px); }
+    .button-quiet { border-color: #cbd7cf; color: var(--green); background: transparent; }
+    .button-quiet:hover { background: #eaf0eb; }
+    .button-primary { color: white; background: var(--red); }
+    .button-primary:hover { background: #991b14; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr); align-items: center; gap: 64px; padding: 76px 0 62px; }
+    .hero-copy { animation: rise-in 520ms ease both; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; color: var(--red); font-size: 11px; font-weight: 800; }
+    .eyebrow-mark { width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid #e5c2be; border-radius: 4px; font-size: 13px; }
+    h1 { max-width: 650px; margin: 0; font-size: 48px; line-height: 1.17; font-weight: 800; }
+    h1 span { color: var(--green); }
+    .intro { max-width: 570px; margin: 20px 0 26px; color: var(--muted); font-size: 15px; line-height: 1.85; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 540px; margin-top: 44px; border-top: 1px solid var(--line); }
+    .stat { padding: 18px 12px 0 0; }
+    .stat + .stat { padding-left: 18px; border-left: 1px solid var(--line); }
+    .stat-value { font-size: 22px; font-weight: 800; color: var(--green); }
+    .stat-label { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .desk { position: relative; overflow: hidden; padding: 24px; border-radius: 8px; color: #f4f7f3; background: var(--green-dark); box-shadow: 0 22px 55px #18372e24; animation: rise-in 620ms 90ms ease both; }
+    .desk::after { position: absolute; right: -90px; bottom: -150px; width: 300px; height: 300px; border: 1px solid #ffffff16; border-radius: 50%; content: ""; box-shadow: 0 0 0 28px #ffffff08, 0 0 0 58px #ffffff06; pointer-events: none; }
+    .desk-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 23px; color: #d4e0d8; font-size: 12px; }
+    .window-dots { display: flex; gap: 6px; }
+    .window-dots span { width: 8px; height: 8px; border-radius: 50%; background: #d5a83b; }
+    .window-dots span:first-child { background: #dc786c; }
+    .window-dots span:last-child { background: #78a78b; }
+    .case { position: relative; z-index: 1; padding: 19px; border: 1px solid #ffffff1c; border-radius: 6px; background: #ffffff0b; }
+    .case-label { color: #c4d4ca; font-size: 11px; }
+    .case-title { margin: 8px 0; font-size: 22px; font-weight: 700; }
+    .case-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #c4d4ca; font-size: 11px; }
+    .status { display: inline-flex; align-items: center; gap: 6px; color: #d8e8b5; }
+    .status::before { width: 7px; height: 7px; border-radius: 50%; background: #b6d67f; content: ""; }
+    .process { display: grid; gap: 9px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .process li { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 9px 12px; border: 1px solid #ffffff18; border-radius: 5px; color: #e5ece7; background: #102a23; font-size: 12px; }
+    .step { width: 25px; height: 25px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 4px; color: #2b382a; background: #e4c76e; font-size: 11px; font-weight: 800; }
+    .features { padding: 27px 0 68px; border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
+    .section-kicker { margin: 0 0 7px; color: var(--red); font-size: 10px; font-weight: 800; }
+    h2 { margin: 0; font-size: 23px; line-height: 1.35; }
+    .text-link { color: var(--green); font-size: 12px; font-weight: 700; text-decoration: none; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .feature { min-height: 166px; padding: 20px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+    .feature-icon { width: 36px; height: 36px; display: grid; place-items: center; margin-bottom: 15px; border-radius: 5px; color: var(--red); background: #f8e9e6; font-size: 17px; }
+    .feature h3 { margin: 0 0 7px; font-size: 14px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    footer { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      .page { width: min(100% - 40px, 680px); }
+      .nav { gap: 16px; }
+      .nav a:nth-child(n+2) { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 36px; padding: 54px 0 42px; }
+      .desk { max-width: 560px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 10px; }
+      .feature { min-height: 0; }
+    }
+    @media (max-width: 520px) {
+      .page { width: calc(100% - 32px); }
+      .topbar { min-height: 72px; gap: 10px; }
+      .brand { gap: 8px; font-size: 16px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .nav { display: none; }
+      .nav-actions { gap: 7px; }
+      .button { min-height: 38px; padding: 0 11px; font-size: 11px; }
+      .hero { padding: 42px 0 34px; }
+      h1 { font-size: 36px; }
+      .intro { font-size: 13px; }
+      .stats { margin-top: 32px; }
+      .stat { padding-right: 6px; }
+      .stat + .stat { padding-left: 10px; }
+      .stat-value { font-size: 18px; }
+      .stat-label { font-size: 10px; }
+      .desk { padding: 17px; }
+      .case { padding: 15px; }
+      .case-title { font-size: 19px; }
+      .section-heading { align-items: start; flex-direction: column; gap: 8px; }
+      h2 { font-size: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="AI Legal - Trang chủ">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span class="brand-name">AI <span>Legal</span></span>
+      </a>
+      <nav class="nav" aria-label="Điều hướng chính">
+        <a href="/">Trang chủ</a>
+        <a href="#features">Dịch vụ</a>
+        <a href="#about">Về chúng tôi</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="button button-quiet" href="/login">Đăng nhập</a>
+        <a class="button button-primary" href="/signup">Bắt đầu ngay</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">§</span> HỆ THỐNG HỖ TRỢ PHÁP LÝ THÔNG MINH</p>
+          <h1>Một <span>cửa sổ pháp lý</span> cho mọi quyết định quan trọng.</h1>
+          <p class="intro">AI Legal giúp bạn tiếp cận thông tin pháp lý, nhận tư vấn rõ ràng và theo dõi tiến độ xử lý một cách nhanh chóng, chuyên nghiệp và dễ hiểu.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/signup">Khám phá ngay <span aria-hidden="true">&#8594;</span></a>
+            <a class="button button-quiet" href="#features">Tìm hiểu dịch vụ</a>
+          </div>
+          <div class="stats" aria-label="Thống kê dịch vụ">
+            <div class="stat"><div class="stat-value">120+</div><div class="stat-label">Luật sư hoạt động</div></div>
+            <div class="stat"><div class="stat-value">15k+</div><div class="stat-label">Khách hàng tin cậy</div></div>
+            <div class="stat"><div class="stat-value">4.9/5</div><div class="stat-label">Đánh giá</div></div>
+          </div>
+        </div>
+
+        <aside class="desk" aria-label="Minh họa quy trình hỗ trợ pháp lý">
+          <div class="desk-head">
+            <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span>AI LEGAL DESK</span>
+          </div>
+          <div class="case">
+            <div class="case-label">TÌNH HUỐNG HIỆN TẠI</div>
+            <div class="case-title">Hồ sơ hợp đồng</div>
+            <div class="case-meta"><span>Cập nhật gần đây: 2 giờ trước</span><span class="status">Đang xử lý</span></div>
+          </div>
+          <ol class="process">
+            <li><span class="step">1</span><span>Nhận diện vấn đề pháp lý</span></li>
+            <li><span class="step">2</span><span>Tổng hợp thông tin hỗ trợ</span></li>
+            <li><span class="step">3</span><span>Đề xuất phương án xử lý</span></li>
+          </ol>
+        </aside>
+      </section>
+
+      <section class="features" id="features" aria-labelledby="features-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">HỖ TRỢ BẠN TỪ BƯỚC ĐẦU</p><h2 id="features-title">Pháp lý rõ ràng, quy trình dễ theo dõi</h2></div>
+          <a class="text-link" href="/signup">Sử dụng dịch vụ <span aria-hidden="true">&#8594;</span></a>
+        </div>
+        <div class="feature-grid">
+          <article class="feature"><div class="feature-icon" aria-hidden="true">&#10003;</div><h3>Tư vấn pháp lý nhanh</h3><p>Kết nối bạn với kiến thức pháp lý chính xác và hỗ trợ trong thời gian ngắn.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">&#8644;</div><h3>Quy trình rõ ràng</h3><p>Theo dõi từng bước, nhận lời khuyên thực tế và hiểu rõ tình huống của bạn.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">&#9671;</div><h3>An toàn và minh bạch</h3><p>Dữ liệu được bảo mật và thông tin được trình bày rõ ràng, dễ tiếp cận.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>AI Legal · Hỗ trợ pháp lý dễ tiếp cận</span><a class="text-link" href="/login">Đăng nhập hệ thống</a></footer>
+  </div>
+</body>
+</html>

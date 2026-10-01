@@ -1,0 +1,9 @@
+stages:
+  - test
+
+frontend_validation:
+  stage: test
+  image: node:22-alpine
+  script:
+    - npm ci --ignore-scripts
+    - node --check AI_Legal/src/index.js

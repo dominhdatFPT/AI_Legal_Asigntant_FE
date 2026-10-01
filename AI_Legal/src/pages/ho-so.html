@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khởi tạo hồ sơ | AI Legal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#b40006",
+          "primary-container": "#da251d",
+          "primary-dark": "#7a0a06",
+          "brand-tint": "#FDF2F1",
+          "gold": "#ecc15a",
+          "gold-light": "#ffdf99",
+          "gold-dark": "#8d6b02",
+          "surface": "#f7f8fa",
+          "panel": "#ffffff",
+          "ink": "#121c27",
+          "muted": "#5f6b78",
+          "line": "#E6E8EC",
+          "success": "#15803D",
+        },
+        fontFamily: {
+          sans: ["Be Vietnam Pro", "Segoe UI", "sans-serif"],
+          serif: ["Noto Serif", "Georgia", "serif"],
+          mono: ["ui-monospace", "Consolas", "monospace"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .material-symbols-outlined { font-size: 20px; line-height: 1; }
+  .icon-fill { font-variation-settings: 'FILL' 1; }
+  .field { width: 100%; height: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E8EC; background: #fff; color: #121c27; font-size: 14px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .field:focus { border-color: #da251d; box-shadow: 0 0 0 3px rgba(218, 37, 29, .12); }
+  textarea.field { height: auto; padding: 10px 14px; resize: vertical; }
+  .label { display: block; margin-bottom: 6px; color: #5f6b78; font-size: 12px; font-weight: 500; }
+  .tab-btn[aria-selected="true"] { background: #fff; color: #b40006; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .check-row { opacity: 0; transform: translateY(6px); animation: rowIn .4s ease-out forwards; }
+  @keyframes rowIn { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .check-row { animation: none; opacity: 1; transform: none; } }
+</style>
+</head>
+<body class="bg-surface text-ink font-sans antialiased">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-30 bg-panel/95 backdrop-blur border-b border-line">
+  <div class="max-w-[1240px] mx-auto px-4 sm:px-6 h-[72px] flex items-center gap-4">
+    <a href="/" class="flex items-center gap-2.5 shrink-0">
+      <span class="w-10 h-10 rounded-lg bg-primary-container text-gold-light grid place-items-center shadow-sm">
+        <span class="material-symbols-outlined icon-fill">balance</span>
+      </span>
+      <span class="leading-tight">
+        <span class="block font-serif font-bold text-lg">AI <span class="text-primary-container">Legal</span></span>
+        <span class="block text-[10px] uppercase tracking-wider text-muted">Pháp lý số VN</span>
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-1 ml-2 xl:ml-4 bg-surface rounded-xl p-1">
+      <a href="/ho-so" class="px-3 xl:px-4 py-2 whitespace-nowrap rounded-lg bg-primary-container text-white text-sm font-semibold">Khởi tạo hồ sơ</a>
+      <a href="#" class="px-3 xl:px-4 py-2 whitespace-nowrap rounded-lg text-sm text-muted hover:text-ink hover:bg-panel">Thủ tục hành chính</a>
+      <a href="#" class="px-3 xl:px-4 py-2 whitespace-nowrap rounded-lg text-sm text-muted hover:text-ink hover:bg-panel">Cơ sở dữ liệu pháp luật</a>
+      <a href="/dashboard" class="px-3 xl:px-4 py-2 whitespace-nowrap rounded-lg text-sm text-muted hover:text-ink hover:bg-panel">Hồ sơ đã lưu</a>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-3 sm:gap-4">
+      <div class="hidden 2xl:flex items-center gap-2 px-3 py-1.5 rounded-full border border-line text-xs text-muted whitespace-nowrap">
+        <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+        VNeID &amp; Cổng DVC Quốc gia: <span class="text-success font-semibold">Đang hoạt động</span>
+      </div>
+      <button type="button" class="relative w-9 h-9 grid place-items-center rounded-lg hover:bg-surface" aria-label="Thông báo">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-gold"></span>
+      </button>
+      <div class="flex items-center gap-2.5">
+        <div class="hidden sm:block text-right leading-tight whitespace-nowrap">
+          <div class="text-sm font-semibold">Luật sư tư vấn</div>
+          <div class="text-[11px] text-muted">Hội viên VBF #8492</div>
+        </div>
+        <span class="w-9 h-9 rounded-full bg-gold-light text-gold-dark grid place-items-center text-sm font-bold">NA</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-[1240px] mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-dark via-primary to-primary-container text-white px-6 sm:px-10 py-9 shadow-lg">
+    <svg class="absolute -right-24 -top-24 w-[420px] h-[420px] text-gold opacity-15 pointer-events-none" viewBox="0 0 500 500" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="250" cy="250" r="230" stroke-dasharray="6 6"/><circle cx="250" cy="250" r="190"/><circle cx="250" cy="250" r="150" stroke-dasharray="3 4"/><circle cx="250" cy="250" r="110"/>
+      <path d="M250 180 L256 240 L310 215 L260 250 L315 270 L256 260 L250 320 L244 260 L185 270 L240 250 L190 215 L244 240 Z" fill="currentColor"/>
+    </svg>
+    <div class="relative max-w-3xl">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gold/40 text-gold-light text-[11px] font-semibold uppercase tracking-wider">
+        <span class="material-symbols-outlined icon-fill !text-sm">verified_user</span>
+        Khung định danh &amp; phân tích pháp lý tự động 2025
+      </span>
+      <h1 class="font-serif font-bold text-3xl sm:text-4xl leading-tight mt-4">
+        Chào mừng đến với AI Legal — <span class="text-gold-light">Trợ lý Pháp lý &amp; Thủ tục Hành chính Số</span>
+      </h1>
+      <p class="mt-4 text-white/85 text-[15px] leading-relaxed max-w-2xl">
+        Bạn chỉ cần cung cấp thông tin cơ bản. Trợ lý AI sẽ tự động thẩm tra dữ liệu pháp lý, xác thực danh tính và đề xuất thủ tục hành chính phù hợp nhất theo quy định hiện hành.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-xs font-medium"><span class="material-symbols-outlined !text-base text-gold">shield</span>Bảo mật chuẩn ISO/IEC 27001</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-xs font-medium"><span class="material-symbols-outlined !text-base text-gold">sync_alt</span>Đồng bộ CSDL Quốc gia về Dân cư &amp; DVC</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-xs font-medium"><span class="material-symbols-outlined !text-base text-gold">task_alt</span>Độ chính xác pháp lý 99.4%</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-6 items-start">
+
+    <!-- STEP 1: FORM -->
+    <section class="bg-panel rounded-2xl border border-line p-5 sm:p-6 lg:sticky lg:top-[92px]">
+      <div class="flex items-start gap-3">
+        <span class="w-8 h-8 shrink-0 rounded-full bg-primary-container text-white grid place-items-center text-sm font-bold">1</span>
+        <div class="flex-1">
+          <h2 class="font-serif font-bold text-lg">Nhập thông tin cá nhân &amp; Nhu cầu</h2>
+          <p class="text-xs text-muted mt-0.5">Hồ sơ nền tảng để đối soát dữ liệu cơ quan ban ngành</p>
+        </div>
+        <span class="px-2 py-0.5 rounded bg-brand-tint text-primary text-[11px] font-semibold">Bắt buộc</span>
+      </div>
+
+      <div class="mt-5 grid grid-cols-2 gap-1 p-1 rounded-lg bg-surface text-sm" role="tablist">
+        <button type="button" class="tab-btn py-2 rounded-md text-muted font-medium" role="tab" aria-selected="true" data-tab="personal">Cá nhân</button>
+        <button type="button" class="tab-btn py-2 rounded-md text-muted font-medium" role="tab" aria-selected="false" data-tab="business">Hộ kinh doanh / Doanh nghiệp</button>
+      </div>
+
+      <div class="mt-4 p-4 rounded-xl bg-brand-tint border border-primary-container/15">
+        <div class="flex gap-3">
+          <span class="material-symbols-outlined text-primary-container !text-2xl">qr_code_scanner</span>
+          <div>
+            <div class="text-sm font-semibold">Nạp dữ liệu tự động qua VNeID QR Code</div>
+            <p class="text-xs text-muted mt-1 leading-relaxed">Tiết kiệm 95% thời gian gõ dữ liệu, hạn chế sai sót thông tin hộ khẩu &amp; căn cước.</p>
+            <button type="button" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-line text-xs font-medium hover:border-primary-container">
+              <span class="material-symbols-outlined !text-base">photo_camera</span>Quét mã VNeID / Tải ảnh CCCD gắn chip
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form id="profileForm" class="mt-5 space-y-4">
+        <div>
+          <label class="label" for="fullName">Họ và tên người đại diện</label>
+          <div class="relative">
+            <input class="field pr-10" id="fullName" value="Nguyễn Văn An" required>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-success">check_circle</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between">
+            <label class="label" for="cccd">Số định danh cá nhân (CCCD 12 số)</label>
+            <span class="text-[11px] text-success font-semibold mb-1.5">● Đã đối soát CSDLQG</span>
+          </div>
+          <div class="relative">
+            <input class="field pr-10 font-mono tracking-wider" id="cccd" value="001092004821" inputmode="numeric" maxlength="12" pattern="\d{12}" required>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-success">check_circle</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="label" for="dob">Ngày sinh</label>
+            <input class="field" id="dob" type="date" value="1992-08-15">
+          </div>
+          <div>
+            <label class="label" for="gender">Giới tính</label>
+            <select class="field" id="gender"><option selected>Nam</option><option>Nữ</option><option>Khác</option></select>
+          </div>
+        </div>
+        <div>
+          <label class="label" for="address">Địa chỉ thường trú</label>
+          <input class="field" id="address" value="Phường Dịch Vọng Hậu, Quận Cầu Giấy, TP. Hà Nội">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="label" for="phone">Số điện thoại</label>
+            <input class="field font-mono" id="phone" type="tel" value="0912 345 678">
+          </div>
+          <div>
+            <label class="label" for="email">Email thông báo DVC</label>
+            <input class="field" id="email" type="email" value="nguyenvanan.law@gmail.com">
+          </div>
+        </div>
+        <div>
+          <label class="label" for="purpose">Mục đích / Nhu cầu pháp lý cần hỗ trợ</label>
+          <select class="field" id="purpose">
+            <option selected>Đăng ký thành lập doanh nghiệp mới (Công ty TNHH 1 TV)</option>
+            <option>Đăng ký hộ kinh doanh cá thể</option>
+            <option>Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</option>
+            <option>Chuyển nhượng quyền sử dụng đất</option>
+            <option>Tách thửa / Hợp thửa đất</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="note">Ghi chú bổ sung (Ngành nghề &amp; Vốn)</label>
+          <textarea class="field" id="note" rows="3">Dự kiến kinh doanh lĩnh vực dịch vụ công nghệ thông tin và bán lẻ thiết bị số, vốn điều lệ 500 triệu VNĐ.</textarea>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="submit" id="analyzeBtn" class="flex-1 h-12 rounded-xl bg-primary-container hover:bg-primary text-white font-semibold text-sm inline-flex items-center justify-center gap-2 shadow-md transition">
+            <span class="material-symbols-outlined icon-fill text-gold-light">auto_awesome</span>
+            <span id="analyzeLabel">Kích hoạt Trợ lý AI Thẩm định</span>
+          </button>
+          <button type="reset" class="h-12 px-4 rounded-xl border border-line text-sm text-muted hover:text-ink hover:bg-surface">Nhập lại</button>
+        </div>
+      </form>
+    </section>
+
+    <div class="space-y-6">
+      <!-- AI AGENT VERIFICATION -->
+      <section class="bg-panel rounded-2xl border border-line p-5 sm:p-6">
+        <div class="flex flex-wrap items-start gap-3">
+          <span class="w-10 h-10 shrink-0 rounded-lg bg-primary-container text-gold-light grid place-items-center">
+            <span class="material-symbols-outlined icon-fill">smart_toy</span>
+          </span>
+          <div class="flex-1 min-w-[200px]">
+            <h2 class="font-serif font-bold text-lg">AI Agent: Xác minh &amp; Thẩm định Dân cư</h2>
+            <p class="text-xs text-muted mt-0.5">Động cơ phân tích rà soát pháp lý đa tầng</p>
+          </div>
+          <span id="verifyStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-success text-xs font-semibold">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>Đã thẩm định thành công (0.8s)
+          </span>
+        </div>
+
+        <ul id="checkList" class="mt-5 divide-y divide-line">
+          <li class="check-row py-4 flex gap-3">
+            <span class="material-symbols-outlined text-success">verified</span>
+            <div class="flex-1">
+              <div class="flex flex-wrap justify-between gap-2"><span class="text-sm font-semibold">Xác thực danh tính CCCD 12 số</span><span class="text-xs text-success font-semibold">Hợp lệ (Khớp 100%)</span></div>
+              <p class="text-sm text-muted mt-1 leading-relaxed">Số CCCD <span class="font-mono">001092004821</span> hợp lệ theo tiêu chuẩn C06 Bộ Công An, trùng khớp dữ liệu vân tay &amp; mống mắt số hóa.</p>
+            </div>
+          </li>
+          <li class="check-row py-4 flex gap-3" style="animation-delay:.1s">
+            <span class="material-symbols-outlined text-success">gavel</span>
+            <div class="flex-1">
+              <div class="flex flex-wrap justify-between gap-2"><span class="text-sm font-semibold">Năng lực hành vi dân sự &amp; Tư cách pháp nhân</span><span class="text-xs text-success font-semibold">Đạt chuẩn</span></div>
+              <p class="text-sm text-muted mt-1 leading-relaxed">Công dân đủ 32 tuổi, không trong thời gian chấp hành án hoặc bị cấm thành lập, quản lý doanh nghiệp (Điều 17 Luật Doanh nghiệp 2020).</p>
+            </div>
+          </li>
+          <li class="check-row py-4 flex gap-3" style="animation-delay:.2s">
+            <span class="material-symbols-outlined text-success">apartment</span>
+            <div class="flex-1">
+              <div class="flex flex-wrap justify-between gap-2"><span class="text-sm font-semibold">Địa điểm kinh doanh &amp; Phân cấp thẩm quyền</span><span class="text-xs text-success font-semibold">Phù hợp địa bàn</span></div>
+              <p class="text-sm text-muted mt-1 leading-relaxed">Thuộc thẩm quyền quản lý của Phòng Đăng ký kinh doanh — Sở Kế hoạch và Đầu tư TP. Hà Nội.</p>
+            </div>
+          </li>
+          <li class="check-row py-4 flex gap-3" style="animation-delay:.3s">
+            <span class="material-symbols-outlined text-success">fact_check</span>
+            <div class="flex-1">
+              <div class="flex flex-wrap justify-between gap-2"><span class="text-sm font-semibold">Tra cứu &amp; Khớp mã ngành kinh tế Việt Nam (VSIC)</span><span class="text-xs text-success font-semibold">Đủ điều kiện</span></div>
+              <div class="mt-2 flex flex-wrap gap-1.5 font-mono text-[11px]">
+                <span class="px-2 py-0.5 rounded bg-surface border border-line">6201 - Lập trình MT</span>
+                <span class="px-2 py-0.5 rounded bg-surface border border-line">6202 - Tư vấn MT</span>
+                <span class="px-2 py-0.5 rounded bg-surface border border-line">4741 - Bán lẻ thiết bị số</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">Không thuộc danh mục ngành, nghề cấm đầu tư kinh doanh theo Luật Đầu tư 2020.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 rounded-lg bg-surface text-[11px] text-muted font-mono">
+          <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined !text-base text-gold-dark">workspace_premium</span>Chứng thực điện tử cấp bởi AI Legal Agentic Engine #VN-8829-LEG</span>
+          <span>Băm: SHA-256 Validated</span>
+        </div>
+      </section>
+
+      <!-- STEP 2: SUGGESTED PROCEDURES -->
+      <section class="bg-panel rounded-2xl border border-line p-5 sm:p-6">
+        <div class="flex items-start gap-3">
+          <span class="w-8 h-8 shrink-0 rounded-full bg-gold text-ink grid place-items-center text-sm font-bold">2</span>
+          <div>
+            <h2 class="font-serif font-bold text-lg">Đề xuất Thủ tục Hành chính Phù hợp</h2>
+            <p class="text-xs text-muted mt-0.5">Lộ trình giải quyết liên thông Cổng Dịch vụ công Quốc gia &amp; Cơ quan thuế</p>
+          </div>
+        </div>
+        <p class="mt-4 text-sm">Dựa trên hồ sơ của ông <strong id="citizenName">Nguyễn Văn An</strong>, AI đề xuất <strong class="text-primary">03 thủ tục hành chính liên thông</strong> chuẩn hóa:</p>
+
+        <!-- Main procedure -->
+        <article class="mt-4 rounded-xl border-2 border-primary-container/30 bg-brand-tint/60 p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gold-light text-gold-dark text-[11px] font-semibold">
+              <span class="material-symbols-outlined icon-fill !text-sm">star</span>Ưu tiên cao nhất — Thủ tục cốt lõi
+            </span>
+            <span class="font-mono text-[11px] text-muted">Mã TTHC: BKH-1982-HN</span>
+          </div>
+          <h3 class="font-serif font-bold text-lg mt-3">Đăng ký thành lập mới Công ty Trách nhiệm Hữu hạn Một thành viên</h3>
+          <div class="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div class="flex gap-2"><span class="material-symbols-outlined text-muted">account_balance</span><span><strong>Cơ quan:</strong> Phòng ĐKKD - Sở KH&amp;ĐT TP. Hà Nội</span></div>
+            <div class="flex gap-2"><span class="material-symbols-outlined text-muted">schedule</span><span><strong>Thời gian:</strong> 03 ngày làm việc</span></div>
+            <div class="flex gap-2"><span class="material-symbols-outlined text-muted">payments</span><span><strong>Lệ phí:</strong> Miễn phí khi nộp trực tuyến qua mạng</span></div>
+            <div class="flex gap-2 text-success font-semibold"><span class="material-symbols-outlined">task_alt</span><span>Đã chuẩn bị 100% hồ sơ số hóa</span></div>
+          </div>
+          <div class="mt-4 rounded-lg bg-panel border border-line p-3">
+            <div class="text-xs font-semibold text-muted mb-2">Giấy tờ AI đã tự động chuẩn bị sẵn:</div>
+            <ul class="space-y-1.5 text-sm">
+              <li class="flex gap-2"><span class="material-symbols-outlined !text-lg text-primary-container">description</span>Giấy đề nghị Đăng ký Doanh nghiệp (Mẫu Phụ lục I-2, Thông tư 01/2021/TT-BKHĐT)</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined !text-lg text-primary-container">description</span>Dự thảo Điều lệ Công ty TNHH MTV (Chuẩn hóa theo Luật Doanh nghiệp 2020)</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined !text-lg text-primary-container">description</span>Bản sao CCCD định danh điện tử gắn chip trích xuất từ VNeID</li>
+            </ul>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button type="button" class="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-primary-container hover:bg-primary text-white text-sm font-semibold">
+              <span class="material-symbols-outlined">cloud_upload</span>Nộp trực tuyến qua Cổng DVC
+            </button>
+            <button type="button" class="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-line bg-panel text-sm hover:bg-surface">
+              <span class="material-symbols-outlined">download</span>Tải trọn bộ hồ sơ đã điền (.PDF)
+            </button>
+          </div>
+        </article>
+
+        <!-- Procedure 2 -->
+        <article class="mt-4 rounded-xl border border-line bg-surface p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <span class="material-symbols-outlined text-gold-dark !text-2xl">key</span>
+          <div class="flex-1">
+            <h3 class="text-sm font-semibold">2. Đăng ký chữ ký số công cộng &amp; Khởi tạo hóa đơn điện tử</h3>
+            <p class="text-sm text-muted mt-0.5">Bắt buộc theo Nghị định 123/2020/NĐ-CP • Kích hoạt trong ngày</p>
+            <p class="text-xs text-gold-dark font-semibold mt-1">Ưu đãi liên kết: Trợ giá 50% thiết bị Token USB &amp; 1000 hóa đơn điện tử</p>
+          </div>
+          <button type="button" class="shrink-0 h-9 px-4 rounded-lg border border-line bg-panel text-xs font-semibold hover:border-primary-container">Đăng ký tích hợp</button>
+        </article>
+
+        <!-- Procedure 3 -->
+        <article class="mt-3 rounded-xl border border-line bg-surface p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <span class="material-symbols-outlined text-gold-dark !text-2xl">account_balance_wallet</span>
+          <div class="flex-1">
+            <h3 class="text-sm font-semibold">3. Mở tài khoản ngân hàng doanh nghiệp &amp; Kê khai thuế môn bài ban đầu</h3>
+            <p class="text-sm text-muted mt-0.5">Thời gian thực hiện: 01 ngày làm việc • Miễn lệ phí môn bài năm đầu tiên</p>
+            <p class="text-xs text-success font-semibold mt-1">Hỗ trợ kết nối API trực tiếp hệ thống Thuế điện tử (eTax)</p>
+          </div>
+          <button type="button" class="shrink-0 h-9 px-4 rounded-lg border border-line bg-panel text-xs font-semibold hover:border-primary-container">Xem hướng dẫn</button>
+        </article>
+
+        <!-- Lawyer CTA -->
+        <div class="mt-4 rounded-xl bg-gradient-to-r from-primary-dark to-primary text-white p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <span class="w-11 h-11 shrink-0 rounded-full bg-gold-light text-gold-dark grid place-items-center">
+            <span class="material-symbols-outlined icon-fill">support_agent</span>
+          </span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold">Bạn cần luật sư con người rà soát lần cuối trước khi nộp?</div>
+            <p class="text-xs text-white/80 mt-0.5 leading-relaxed">Được bảo chứng bởi Hội đồng Luật sư thành viên VBF. Tư vấn trực tiếp 1:1 qua cuộc gọi bảo mật.</p>
+          </div>
+          <button type="button" class="shrink-0 h-9 px-4 rounded-lg bg-gold hover:bg-gold-light text-ink text-xs font-bold">Đặt lịch tư vấn 1:1</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="mt-10 border-t border-line bg-panel">
+  <div class="max-w-[1240px] mx-auto px-4 sm:px-6 py-6 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs text-muted">
+    <div><span class="font-serif font-bold text-base text-ink">AI Legal Vietnam</span> <span class="mx-2">|</span> Nền tảng Trợ lý Pháp lý &amp; Khung Thủ tục Hành chính Số</div>
+    <div>Bản quyền © 2025 AI Legal. Hệ thống đối chiếu Nghị định &amp; Văn bản quy phạm pháp luật chuẩn hóa.</div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // Tabs Cá nhân / Hộ kinh doanh
+    document.querySelectorAll('.tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.tab-btn').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+        btn.setAttribute('aria-selected', 'true');
+      });
+    });
+
+    // Giả lập chạy AI thẩm định
+    var form = document.getElementById('profileForm');
+    var label = document.getElementById('analyzeLabel');
+    var btn = document.getElementById('analyzeBtn');
+    var status = document.getElementById('verifyStatus');
+    var list = document.getElementById('checkList');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.classList.add('opacity-80');
+      label.textContent = 'Đang thẩm định...';
+      status.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-gold-dark text-xs font-semibold';
+      status.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>Đang phân tích...';
+      list.style.opacity = '0.4';
+
+      setTimeout(function () {
+        document.getElementById('citizenName').textContent = document.getElementById('fullName').value || 'công dân';
+        list.style.opacity = '';
+        list.querySelectorAll('.check-row').forEach(function (row) {
+          row.style.animation = 'none';
+          void row.offsetWidth;
+          row.style.animation = '';
+        });
+        status.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-success text-xs font-semibold';
+        status.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-success"></span>Đã thẩm định thành công (0.8s)';
+        label.textContent = 'Kích hoạt Trợ lý AI Thẩm định';
+        btn.disabled = false;
+        btn.classList.remove('opacity-80');
+      }, 900);
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f4ef">
+    <title>Đăng nhập | Lexora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/login.css">
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel" aria-labelledby="login-title">
+        <a class="brand" href="/" aria-label="Lexora, trang chủ">
+          <span class="brand-mark" aria-hidden="true">L</span>
+          <span>lexora<span class="brand-period">.</span></span>
+        </a>
+
+        <div class="form-wrap">
+          <p class="eyebrow">CỔNG KHÁCH HÀNG</p>
+          <h1 id="login-title">Chào mừng<br>trở lại.</h1>
+          <p class="intro">Đăng nhập để tiếp tục theo dõi hồ sơ và trao đổi cùng luật sư của bạn.</p>
+
+          <form id="login-form" novalidate>
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <input id="email" name="email" type="email" placeholder="ten@email.com" autocomplete="username" required>
+            </div>
+
+            <div class="password-heading">
+              <label for="password">Mật khẩu</label>
+              <a href="#reset" id="reset-link">Quên mật khẩu?</a>
+            </div>
+            <div class="input-wrap password-wrap">
+              <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required minlength="8">
+              <button class="visibility-toggle" id="toggle-password" type="button" aria-label="Hiện mật khẩu" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" />
+                  <circle cx="12" cy="12" r="2.6" />
+                </svg>
+              </button>
+            </div>
+
+            <label class="remember-row" for="remember">
+              <input id="remember" name="remember" type="checkbox">
+              <span>Ghi nhớ đăng nhập</span>
+            </label>
+
+            <button class="submit-button" type="submit">Đăng nhập <span aria-hidden="true">&#8594;</span></button>
+            <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+          </form>
+
+          <p class="security-note"><span aria-hidden="true">&#9679;</span> Thông tin của bạn được bảo mật tuyệt đối</p>
+        </div>
+
+        <footer class="panel-footer">
+          <span>&copy; 2026 Lexora Legal</span>
+          <a href="mailto:hello@lexora.vn">Cần hỗ trợ?</a>
+        </footer>
+      </section>
+
+      <aside class="visual-panel" aria-label="Không gian tư vấn pháp lý Lexora">
+        <div class="visual-shade"></div>
+        <div class="visual-content">
+          <div class="visual-topline"><span></span> ĐỒNG HÀNH PHÁP LÝ</div>
+          <blockquote>“Sự rõ ràng hôm nay<br>là nền tảng vững chắc<br>cho ngày mai.”</blockquote>
+          <div class="visual-rule"></div>
+          <p class="visual-caption">Chuyên môn vững vàng. Đồng hành tận tâm.</p>
+          <div class="visual-index"><span>01</span><span class="index-line"></span><span>03</span></div>
+        </div>
+        <span class="visual-credit">LEXORA · LUẬT CHO CUỘC SỐNG</span>
+      </aside>
+    </main>
+    <script src="/login.js" defer></script>
+  </body>
+</html>
