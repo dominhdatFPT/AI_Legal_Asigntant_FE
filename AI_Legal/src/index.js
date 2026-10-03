@@ -26,6 +26,10 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
 });
 
+app.get('/detail-information', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
+});
+
 // Route API trả về định dạng JSON
 app.get('/api/users', (req, res) => {
   res.json([
