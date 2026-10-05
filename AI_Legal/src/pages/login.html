@@ -127,9 +127,26 @@
 <!-- Priority 1: High Trust VNeID SSO Action -->
 
 <!-- Clean Divider -->
+<div class="mb-4">
+  <button class="w-full h-12 px-5 rounded-xl bg-white border border-border-subtle text-on-surface font-label-lg text-label-lg shadow-sm hover:bg-surface-subtle hover:border-secondary-fixed-dim focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-wait" id="google-login-button" type="button">
+    <svg aria-hidden="true" class="w-5 h-5 shrink-0" viewBox="0 0 48 48">
+      <path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11c-.5 2.5-1.9 4.7-4 6.1v5.1h6.5c3.8-3.5 6.1-8.7 6.1-14.9z"/>
+      <path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.8L31 34.1c-1.8 1.2-4.1 1.9-7 1.9-5.3 0-9.8-3.6-11.4-8.4H5.9v5.3C9.3 39.5 16.1 44 24 44z"/>
+      <path fill="#FBBC05" d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.3H5.9a20 20 0 0 0 0 17.8l6.7-5.3z"/>
+      <path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6.1 29.5 4 24 4 16.1 4 9.3 8.5 5.9 15.1l6.7 5.3c1.6-4.8 6.1-8.3 11.4-8.3z"/>
+    </svg>
+    <span id="google-login-label">Đăng nhập bằng Google</span>
+  </button>
+  <p class="mt-2 min-h-5 text-center text-sm text-secondary" id="google-auth-message" role="status" aria-live="polite"></p>
+</div>
+<div class="relative mb-4 flex items-center" aria-hidden="true">
+  <div class="flex-grow border-t border-border-subtle"></div>
+  <span class="px-3 text-xs text-secondary">hoặc đăng nhập bằng CCCD</span>
+  <div class="flex-grow border-t border-border-subtle"></div>
+</div>
 
 <!-- Standard Administrative Login Form -->
-<form class="space-y-4" onsubmit="event.preventDefault(); window.location.href='/ho-so';">
+<form class="space-y-4" onsubmit="event.preventDefault(); window.location.href='/dashboard';">
 <!-- Username / Citizen ID / Tax ID -->
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="gov-identifier">Số CCCD <span class="text-primary">*</span></label>
@@ -201,4 +218,40 @@
   </script>
 </div></main>
 
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
+
+  const googleButton = document.getElementById('google-login-button');
+  const googleLabel = document.getElementById('google-login-label');
+  const googleMessage = document.getElementById('google-auth-message');
+
+  googleButton.addEventListener('click', async () => {
+    googleButton.disabled = true;
+    googleLabel.textContent = 'Đang kết nối Google...';
+    googleMessage.textContent = '';
+
+    try {
+      const configResponse = await fetch('/api/firebase-config');
+      if (!configResponse.ok) throw new Error('firebase/config-unavailable');
+
+      const firebaseConfig = await configResponse.json();
+      const auth = getAuth(initializeApp(firebaseConfig));
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      await signInWithPopup(auth, provider);
+      window.location.assign('/dashboard');
+    } catch (error) {
+      const messages = {
+        'auth/operation-not-allowed': 'Hãy bật Google trong Firebase Authentication.',
+        'auth/popup-blocked': 'Trình duyệt đã chặn cửa sổ đăng nhập. Hãy cho phép popup rồi thử lại.',
+        'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã được đóng.',
+        'auth/unauthorized-domain': 'Hãy thêm localhost vào Authorized domains trong Firebase.'
+      };
+      googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập bằng Google. Vui lòng thử lại.';
+      googleButton.disabled = false;
+      googleLabel.textContent = 'Đăng nhập bằng Google';
+    }
+  });
+</script>
 </body></html>

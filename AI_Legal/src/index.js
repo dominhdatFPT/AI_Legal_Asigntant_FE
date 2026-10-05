@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,16 +15,53 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'login.html'));
 });
 
+app.get('/api/firebase-config', (req, res) => {
+  try {
+    const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
+    const configMatch = configSource.match(/const\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;/);
+
+    if (!configMatch) {
+      return res.status(503).json({ error: 'Firebase configuration is unavailable.' });
+    }
+
+    const configObject = JSON.parse(
+      configMatch[1].replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+    );
+    const publicKeys = [
+      'apiKey',
+      'authDomain',
+      'projectId',
+      'storageBucket',
+      'messagingSenderId',
+      'appId',
+      'measurementId'
+    ];
+    const publicConfig = Object.fromEntries(
+      publicKeys
+        .filter((key) => typeof configObject[key] === 'string')
+        .map((key) => [key, configObject[key]])
+    );
+
+    if (!publicConfig.apiKey || !publicConfig.authDomain || !publicConfig.projectId || !publicConfig.appId) {
+      return res.status(503).json({ error: 'Firebase configuration is incomplete.' });
+    }
+
+    return res.json(publicConfig);
+  } catch {
+    return res.status(503).json({ error: 'Firebase configuration could not be loaded.' });
+  }
+});
+
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
-app.get('/ho-so', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'ho-so.html'));
-});
-
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
+});
+
+app.get('/detail-information', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
 // Route API trả về định dạng JSON
