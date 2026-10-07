@@ -112,12 +112,12 @@
 <form id="login-form" class="space-y-4 motion-safe:animate-fade-up-late">
 <!-- Email / Gmail -->
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="gov-identifier">Gmail / Email <span class="text-primary">*</span></label>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="gov-identifier">Tên đăng nhập / Email <span class="text-primary">*</span></label>
 <div class="group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
 <span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">person</span>
 </div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="gov-identifier" autocomplete="email" placeholder="ten@gmail.com" required="" type="email">
+<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="gov-identifier" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Tên đăng nhập hoặc ten@gmail.com" required="" type="text">
 </div>
 </div>
 <!-- Password Field with View Toggle -->
@@ -202,6 +202,13 @@
     signInWithEmailAndPassword,
     signInWithPopup
   } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
+  import {
+    describeLoginError,
+    homePathFor,
+    loginWithFirebaseToken,
+    loginWithPassword,
+    saveSession
+  } from '/auth-api.js';
 
   const loginForm = document.getElementById('login-form');
   const loginButton = document.getElementById('login-submit-button');
@@ -209,14 +216,14 @@
   const googleButton = document.getElementById('google-login-button');
   const googleLabel = document.getElementById('google-login-label');
   const googleMessage = document.getElementById('google-auth-message');
-      const googleSpinner = document.getElementById('google-auth-spinner');
+  const googleSpinner = document.getElementById('google-auth-spinner');
   let authPromise;
 
   const getFirebaseAuth = () => {
     if (!authPromise) {
       authPromise = fetch('/api/firebase-config')
         .then(async (response) => {
-          if (!response.ok) throw new Error('firebase/config-unavailable');
+          if (!response.ok) throw Object.assign(new Error('config'), { code: 'firebase/config-unavailable' });
           return getAuth(initializeApp(await response.json()));
         })
         .catch((error) => {
@@ -227,33 +234,35 @@
     return authPromise;
   };
 
+  // Đăng nhập xong ở Backend → lưu token → chuyển trang theo role.
+  const finishLogin = (data) => {
+    const session = saveSession(data);
+    window.location.assign(homePathFor(session.user?.role));
+  };
+
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     googleMessage.textContent = '';
     loginButton.disabled = true;
     loginLabel.textContent = 'Đang đăng nhập...';
 
-    try {
-      const auth = await getFirebaseAuth();
-      await signInWithEmailAndPassword(
-        auth,
-        document.getElementById('gov-identifier').value.trim(),
-        document.getElementById('gov-password').value
-      );
+    const identifier = document.getElementById('gov-identifier').value.trim();
+    const password = document.getElementById('gov-password').value;
 
-      window.location.assign('/dashboard');
+    try {
+      let data;
+      if (identifier.includes('@')) {
+        // Có "@" → tài khoản email Firebase (đăng ký ở trang /signup).
+        const auth = await getFirebaseAuth();
+        const credential = await signInWithEmailAndPassword(auth, identifier, password);
+        data = await loginWithFirebaseToken(await credential.user.getIdToken());
+      } else {
+        // Không có "@" → tên đăng nhập lưu trong database của Backend (vd: admin2026).
+        data = await loginWithPassword(identifier, password);
+      }
+      finishLogin(data);
     } catch (error) {
-      const messages = {
-        'auth/invalid-credential': 'Email hoặc mật khẩu không chính xác.',
-        'auth/invalid-login-credentials': 'Email hoặc mật khẩu không chính xác.',
-        'auth/user-not-found': 'Email hoặc mật khẩu không chính xác.',
-        'auth/wrong-password': 'Email hoặc mật khẩu không chính xác.',
-        'auth/too-many-requests': 'Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.',
-        'auth/operation-not-allowed': 'Hãy bật Email/Password trong Firebase Authentication.',
-        'firebase/config-unavailable': 'Không tải được cấu hình Firebase. Vui lòng thử lại.'
-      };
-      googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập. Vui lòng thử lại.';
-    } finally {
+      googleMessage.textContent = describeLoginError(error);
       loginButton.disabled = false;
       loginLabel.textContent = 'Đăng nhập hệ thống';
     }
@@ -261,8 +270,8 @@
 
   googleButton.addEventListener('click', async () => {
     googleButton.disabled = true;
-        googleButton.setAttribute('aria-busy', 'true');
-        googleSpinner.classList.remove('hidden');
+    googleButton.setAttribute('aria-busy', 'true');
+    googleSpinner.classList.remove('hidden');
     googleLabel.textContent = 'Đang kết nối Google...';
     googleMessage.textContent = '';
 
@@ -270,16 +279,10 @@
       const auth = await getFirebaseAuth();
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, provider);
-      window.location.assign('/dashboard');
+      const credential = await signInWithPopup(auth, provider);
+      finishLogin(await loginWithFirebaseToken(await credential.user.getIdToken()));
     } catch (error) {
-      const messages = {
-        'auth/operation-not-allowed': 'Hãy bật Google trong Firebase Authentication.',
-        'auth/popup-blocked': 'Trình duyệt đã chặn cửa sổ đăng nhập. Hãy cho phép popup rồi thử lại.',
-        'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã được đóng.',
-        'auth/unauthorized-domain': 'Hãy thêm localhost vào Authorized domains trong Firebase.'
-      };
-      googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập bằng Google. Vui lòng thử lại.';
+      googleMessage.textContent = describeLoginError(error);
       googleMessage.classList.add('motion-safe:animate-fade-up');
       googleButton.disabled = false;
       googleButton.setAttribute('aria-busy', 'false');

@@ -19,6 +19,11 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
+// Địa chỉ Backend (Gateway) mà trình duyệt sẽ gọi. Đổi bằng biến môi trường BACKEND_URL.
+app.get('/api/app-config', (req, res) => {
+  res.json({ apiBaseUrl: process.env.BACKEND_URL || 'http://localhost:8080' });
+});
+
 app.get('/api/firebase-config', (req, res) => {
   try {
     const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
@@ -66,14 +71,6 @@ app.get('/detail-information', (req, res) => {
 
 app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
-});
-
-// Route API trả về định dạng JSON
-app.get('/api/users', (req, res) => {
-  res.json([
-    { id: 1, name: 'Nguyễn Văn A' },
-    { id: 2, name: 'Trần Thị B' }
-  ]);
 });
 
 // Bắt đầu lắng nghe các kết nối
