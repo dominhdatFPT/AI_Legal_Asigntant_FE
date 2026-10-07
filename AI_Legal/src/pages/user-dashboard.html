@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Cổng Dịch vụ công Quốc gia</title><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-fixed": "#ffd9dd", "surface-bright": "#fff8f5", "tertiary-fixed-dim": "#ffb2bd", "secondary-fixed": "#ffdcc3", "surface-container-lowest": "#ffffff", "surface-variant": "#e9e1dd", "on-background": "#1e1b19", "secondary-fixed-dim": "#ffb77d", "on-tertiary-container": "#ffcbd2", "background": "#fff8f5", "primary-fixed": "#ffdad6", "on-primary-fixed": "#410002", "primary-container": "#b91c1c", "surface-dim": "#e0d8d5", "on-secondary-container": "#663500", "on-primary-fixed-variant": "#93000b", "surface-tint": "#b91c1c", "inverse-surface": "#33302d", "primary": "#93000b", "on-primary-container": "#ffcdc7", "surface-container-low": "#faf2ee", "secondary-container": "#fe932c", "on-secondary": "#ffffff", "primary-fixed-dim": "#ffb4ab", "on-tertiary-fixed": "#400014", "secondary": "#904d00", "on-secondary-fixed": "#2f1500", "error": "#ba1a1a", "outline": "#8f6f6c", "on-primary": "#ffffff", "on-secondary-fixed-variant": "#6e3900", "surface-container-high": "#eee7e3", "on-error": "#ffffff", "inverse-on-surface": "#f7efeb", "on-surface-variant": "#5b403d", "on-error-container": "#93000a", "inverse-primary": "#ffb4ab", "error-container": "#ffdad6", "on-surface": "#1e1b19", "tertiary": "#8a1538", "on-tertiary-fixed-variant": "#8a1538", "on-tertiary": "#ffffff", "outline-variant": "#e4beb9", "surface": "#fff8f5", "surface-container": "#f4ece8", "surface-container-highest": "#e9e1dd", "tertiary-container": "#aa304f" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-sm": "0.5rem", "gutter-mobile": "1rem", "space-lg": "1.5rem", "margin": "2rem", "gutter": "1.5rem", "space-xs": "0.25rem", "space-md": "1rem", "space-xl": "2.5rem", "margin-mobile": "1rem" }, "fontFamily": { "body-sm": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "title-md": ["Be Vietnam Pro"], "title-lg": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-lg-mobile": ["Be Vietnam Pro"], "title-sm": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"] }, "fontSize": { "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "display-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }], "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.005em", "fontWeight": "600" }] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50"><div class="h-28 bg-primary shadow-[0_2px_12px_rgba(65,0,2,0.25)]"><div class="h-16 bg-gradient-to-r from-tertiary via-primary-container to-primary"><div class="max-w-7xl mx-auto h-full px-margin flex items-center justify-between text-on-primary"><div class="flex items-center gap-space-md"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-on-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1XbqoFK1B2k135r9c0UPx-DazuudaDhGH3SedhM8m1bElqv650lvARtUTX-Vh450kin6deg3FB5MzJqg8lP0ANaGT_Ep-2iGGf_4UpAXS4QF-iSZOlGmT8oXKsL1lb-8ZrGEHtyYGbq6eEAsLWNqCjTe2DINJlBcsTyAqLNcsR3Sz0b0t0TkXOmteS7wn61E5EwMJPwKPhqb_ff6KsQPfLD2x4wlMNp92dTWSa8BTQ"/><div class="flex flex-col"><span class="font-title-md text-title-md tracking-wide uppercase leading-tight">Cổng Dịch vụ công Quốc gia</span><span class="font-label-sm text-label-sm text-on-primary-container opacity-90 uppercase tracking-wider">Hệ thống thông tin giải quyết thủ tục hành chính</span></div></div><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm bg-tertiary-container/40 px-space-md py-space-xs rounded"><span class="material-symbols-outlined text-secondary-container">verified_user</span><div class="flex flex-col text-left"><span class="font-title-sm text-title-sm text-on-primary leading-tight">Nguyễn Văn An</span><span class="font-label-sm text-label-sm text-on-primary-container leading-none">Định danh mức 2 (VNeID)</span></div></div><div class="flex items-center gap-space-md"><button class="flex items-center justify-center p-space-xs rounded text-on-primary hover:bg-surface-container-highest/20 hover:text-on-primary transition-colors" title="Thông báo" type="button"><span class="material-symbols-outlined">notifications</span></button><button class="flex items-center justify-center p-space-xs rounded text-on-primary hover:bg-surface-container-highest/20 hover:text-on-primary transition-colors" title="Trợ giúp &amp; Hướng dẫn" type="button"><span class="material-symbols-outlined">help</span></button><button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-lowest/10 text-on-primary hover:bg-surface-container-lowest/20 transition-colors font-label-md text-label-md" type="button"><span class="material-symbols-outlined text-title-sm">logout</span><span>Đăng xuất</span></button></div></div></div></div><div class="h-12 bg-surface-container-low shadow-[0_2px_6px_rgba(28,25,23,0.06)]"><div class="max-w-7xl mx-auto h-full px-margin flex items-center justify-between"><nav class="flex items-center gap-space-xs h-full" data-active-classes="bg-primary-container text-on-primary font-title-sm rounded-lg shadow-[0_2px_8px_rgba(185,28,28,0.35)]"><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="tong-quan-ho-so" href="#">Tổng quan hồ sơ</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="nop-ho-so-truc-tuyen" href="#">Nộp hồ sơ trực tuyến</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="tra-cuu-tien-do" href="#">Tra cứu tiến độ</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="kho-tai-lieu-dien-tu" href="#">Kho tài liệu điện tử</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="thanh-toan-nghia-vu-tai-chinh" href="#">Thanh toán nghĩa vụ tài chính</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="phan-anh-kien-nghi" href="#">Phản ánh &amp; Kiến nghị</a></nav><div class="flex items-center text-secondary font-label-sm text-label-sm gap-space-xs"><span class="material-symbols-outlined text-title-sm">schedule</span><span>Hỗ trợ kỹ thuật 24/7</span></div></div></div></div></header><main class="w-full pt-28 bg-surface min-h-[calc(100vh-16rem)]"><div class="flex flex-col w-full">
+<!-- BANNER CHÀO MỪNG & TRA CỨU HÀNH CHÍNH -->
+<section class="w-full bg-gradient-to-r from-tertiary via-primary-container to-primary text-on-primary py-space-xl px-margin relative overflow-hidden shadow-md">
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-surface-container-lowest/5 pointer-events-none blur-2xl"></div>
+<div class="absolute right-1/4 -bottom-24 w-96 h-96 rounded-full bg-secondary-container/10 pointer-events-none blur-3xl"></div>
+<div class="max-w-7xl mx-auto flex flex-col gap-space-lg relative z-10">
+<!-- Cột tiêu đề & Huy hiệu công dân -->
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-on-primary-container font-label-md text-label-md uppercase tracking-wider">
+<span class="material-symbols-outlined text-title-sm text-secondary-container">shield_with_heart</span>
+<span>Hệ thống Một cửa điện tử liên thông Quốc gia</span>
+</div>
+<h1 class="font-display text-display text-on-primary tracking-tight">
+            Chào mừng công dân 7 giờ kém 10
+          </h1>
+<div class="flex flex-wrap items-center gap-space-sm mt-space-xs font-body-sm text-body-sm text-on-primary-container">
+<span>Số định danh cá nhân (CCCD): <strong class="text-on-primary tracking-wider">00109600****</strong></span>
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary-container/40"></span>
+<span>Nơi thường trú: <strong class="text-on-primary">Phường Hàng Trống, Quận Hoàn Kiếm, Hà Nội</strong></span>
+</div>
+</div>
+<!-- Trạng thái Định danh VNeID Mức 2 -->
+<div class="flex items-center gap-space-sm bg-surface-container-lowest/15 backdrop-blur-sm px-space-md py-space-sm rounded-lg shadow-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest/20 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-title-sm text-title-sm text-on-primary font-bold">Xác thực VNeID Mức 2</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-primary-container/90">Ký số &amp; Giao dịch điện tử toàn trình</span>
+</div>
+</div>
+</div>
+<!-- Ô Tra cứu nhanh & Hành động cấp bách -->
+<div class="bg-surface-container-lowest text-on-surface rounded-xl p-space-md shadow-xl flex flex-col md:flex-row gap-space-md items-center justify-between">
+<div class="flex-1 w-full flex items-center bg-surface-container-low rounded-lg px-space-md py-space-xs focus-within:bg-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined text-outline text-headline-sm mr-space-sm">search</span>
+<input class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-space-xs" placeholder="Nhập mã số hồ sơ (ví dụ: H07.24.0819-0129) hoặc tên thủ tục hành chính cần nộp..." type="text"/>
+<button class="bg-primary-container hover:bg-primary text-on-primary font-title-sm text-title-sm px-space-lg py-space-sm rounded-lg transition-all shadow-[0_4px_14px_rgba(185,28,28,0.35)] flex items-center gap-space-xs shrink-0" type="button">
+<span>Tra cứu</span>
+<span class="material-symbols-outlined text-title-sm">arrow_forward</span>
+</button>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+<button class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all flex items-center justify-center gap-space-xs font-title-sm text-title-sm shadow-[0_4px_14px_rgba(185,28,28,0.35)] whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-title-md">add_circle</span>
+<span>Nộp hồ sơ mới</span>
+</button>
+<button class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-title-sm text-title-sm transition-colors flex items-center justify-center gap-space-xs whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-title-md text-secondary">calendar_clock</span>
+<span>Lịch hẹn giao dịch</span>
+</button>
+<button class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-title-sm text-title-sm transition-colors flex items-center justify-center gap-space-xs whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-title-md text-secondary">account_balance_wallet</span>
+<span>Nộp phí &amp; Lệ phí</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- NỘI DUNG CHÍNH: KHỐI THỐNG KÊ, DANH SÁCH & TIẾN TRÌNH -->
+<div class="max-w-7xl mx-auto w-full px-margin py-space-xl flex flex-col gap-space-xl">
+<!-- 1. KHỐI THỐNG KÊ TỔNG QUAN HỒ SƠ CỦA TÔI -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1: Tổng nộp -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-[0_4px_14px_rgba(245,158,11,0.25)] transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tổng hồ sơ đã nộp</span>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-headline-sm">folder_shared</span>
+</div>
+</div>
+<div class="mt-space-md flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">14</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">Năm 2024</span>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-label-lg text-secondary">domain</span>
+<span>Bao gồm cấp Bộ, Tỉnh &amp; Xã/Phường</span>
+</div>
+</div>
+<!-- Card 2: Đang thụ lý -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-[0_4px_14px_rgba(245,158,11,0.35)] transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Đang thụ lý giải quyết</span>
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-headline-sm animate-spin">sync</span>
+</div>
+</div>
+<div class="mt-space-md flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg text-secondary font-bold">03</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+            Đúng tiến độ
+          </span>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-secondary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-label-lg">timelapse</span>
+<span>Hạn trả gần nhất: 28/10/2024</span>
+</div>
+</div>
+<!-- Card 3: Đã hoàn thành -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-[0_4px_14px_rgba(245,158,11,0.25)] transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-emerald-800 uppercase tracking-wider font-semibold">Đã cấp kết quả số</span>
+<div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-800">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="mt-space-md flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg text-emerald-800 font-bold">10</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">100% Ký số</span>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-emerald-800 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-label-lg">cloud_done</span>
+<span>Đã lưu kho dữ liệu điện tử cá nhân</span>
+</div>
+</div>
+<!-- Card 4: Cần bổ sung / Chưa đạt -->
+<div class="bg-error-container/40 rounded-xl p-space-lg shadow-sm hover:shadow-[0_4px_14px_rgba(185,28,28,0.25)] transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-error uppercase tracking-wider font-bold">Cần bổ sung hồ sơ</span>
+<div class="w-10 h-10 rounded-lg bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-headline-sm animate-bounce">warning</span>
+</div>
+</div>
+<div class="mt-space-md flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg text-error font-bold">01</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-error text-on-error font-semibold">Yêu cầu gấp</span>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-error font-body-sm text-body-sm font-medium">
+<span class="material-symbols-outlined text-label-lg">notification_important</span>
+<span>Mã LLTP-2024-0492 cần thao tác</span>
+</div>
+</div>
+</section>
+<!-- 2. BỐ CỤC 2 CỘT CHÍNH (8 CỘT NỘI DUNG XỬ LÝ & 4 CỘT WIDGET DỊCH VỤ) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- CỘT CHÍNH (8 CỘT) -->
+<div class="lg:col-span-8 flex flex-col gap-space-xl">
+<!-- THÔNG BÁO CẦN BỔ SUNG KHẨN CẤP (NẾU CÓ) -->
+<div class="bg-error-container/60 rounded-xl p-space-lg shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-full bg-error text-on-error flex items-center justify-center shrink-0 shadow-md">
+<span class="material-symbols-outlined text-headline-sm">error</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm bg-error text-on-error px-space-xs py-0.5 rounded font-bold uppercase">Yêu cầu hoàn thiện</span>
+<span class="font-title-sm text-title-sm text-on-error-container font-mono">LLTP-2024-0492</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-error-container font-bold">
+                Cấp phiếu Lý lịch tư pháp số 1 (Sở Tư pháp Hà Nội)
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Lý do hoàn trả: <em>"Bản chụp CCCD mờ thông tin ngày cấp, yêu cầu cung cấp bản số hóa sắc nét hoặc xác thực VNeID điện tử bổ sung."</em>
+</p>
+</div>
+</div>
+<button class="w-full sm:w-auto shrink-0 bg-primary-container hover:bg-primary text-on-primary font-title-sm text-title-sm px-space-md py-space-sm rounded-lg shadow-[0_4px_14px_rgba(185,28,28,0.35)] transition-colors flex items-center justify-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-title-sm">upload_file</span>
+<span>Bổ sung tài liệu ngay</span>
+</button>
+</div>
+<!-- KHỐI TIẾN TRÌNH HỒ SƠ ĐANG XỬ LÝ NỔI BẬT (STEPPER TRỰC QUAN) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-headline-sm">track_changes</span>
+<div class="flex flex-col">
+<h2 class="font-title-lg text-title-lg text-on-surface font-bold uppercase tracking-wide">
+                  Theo dõi Tiến độ Hồ sơ Đang xử lý
+                </h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Quy trình kiểm soát theo thời gian thực liên thông Hệ thống Thông tin Một cửa</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed px-space-sm py-1 rounded font-semibold">
+              3 hồ sơ đang thực hiện
+            </span>
+</div>
+<div class="p-space-lg flex flex-col gap-space-xl">
+<!-- Hồ sơ 1: Cấp đổi Giấy phép lái xe quốc tế -->
+<div class="flex flex-col gap-space-md bg-surface-container-low/50 p-space-md rounded-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm font-mono bg-surface-container-highest px-space-xs py-0.5 rounded text-primary font-bold">GPLX-2024-8841</span>
+<span class="font-label-sm text-label-sm text-emerald-800 bg-emerald-100 px-space-xs py-0.5 rounded font-semibold">Dịch vụ công toàn trình Mức 4</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold mt-1">
+                    Cấp đổi Giấy phép lái xe quốc tế (IDP)
+                  </h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cơ quan giải quyết: Cục Đường bộ Việt Nam - Bộ Giao thông Vận tải</span>
+</div>
+<div class="flex flex-col sm:items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ngày hẹn trả kết quả:</span>
+<span class="font-title-sm text-title-sm text-primary font-bold">28/10/2024 (Trước 17:00)</span>
+</div>
+</div>
+<!-- Thanh tiến trình STEPPER (4 Bước) -->
+<div class="w-full py-space-sm">
+<div class="grid grid-cols-4 relative">
+<!-- Đường gióng ngang nền -->
+<div class="absolute top-4 left-6 right-6 h-1 bg-surface-container-highest z-0"></div>
+<!-- Đường gióng đã hoàn thành (chiếm 66% = 3 bước) -->
+<div class="absolute top-4 left-6 w-2/3 h-1 bg-emerald-600 z-0"></div>
+<!-- Mốc 1: Nộp hồ sơ -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-emerald-600 text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-title-sm font-bold">check</span>
+</div>
+<span class="font-title-sm text-title-sm text-emerald-800 font-semibold">Tiếp nhận hồ sơ</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">16/10 - 08:42</span>
+</div>
+<!-- Mốc 2: Thụ lý chuyên môn -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-emerald-600 text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-title-sm font-bold">check</span>
+</div>
+<span class="font-title-sm text-title-sm text-emerald-800 font-semibold">Thụ lý chuyên môn</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">18/10 - 14:15</span>
+</div>
+<!-- Mốc 3: Lãnh đạo ký duyệt (Hiện tại) -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-[0_0_0_4px_rgba(254,147,44,0.35)] animate-pulse">
+<span class="material-symbols-outlined text-title-sm">edit_document</span>
+</div>
+<span class="font-title-sm text-title-sm text-primary font-bold">Ký duyệt kết quả</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Đang xử lý</span>
+</div>
+<!-- Mốc 4: Trả kết quả -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="font-label-md text-label-md">04</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface-variant">Trả kết quả</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Bưu chính công ích</span>
+</div>
+</div>
+</div>
+<!-- Thanh tóm tắt trạng thái cán bộ giải quyết -->
+<div class="bg-surface-container-lowest p-space-sm rounded flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-title-sm text-secondary">badge</span>
+<span>Chuyên viên tiếp nhận: <strong>Trần Quốc Toản</strong> (Phòng Quản lý Phương tiện &amp; Người lái)</span>
+</div>
+<a class="text-primary hover:underline font-title-sm text-title-sm flex items-center gap-0.5" href="#">
+<span>Chi tiết nhật ký</span>
+<span class="material-symbols-outlined text-title-sm">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Hồ sơ 2: Đăng ký thường trú điện tử -->
+<div class="flex flex-col gap-space-md bg-surface-container-low/50 p-space-md rounded-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm font-mono bg-surface-container-highest px-space-xs py-0.5 rounded text-primary font-bold">CT01-2024-1102</span>
+<span class="font-label-sm text-label-sm text-emerald-800 bg-emerald-100 px-space-xs py-0.5 rounded font-semibold">Dịch vụ Cư trú số</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold mt-1">
+                    Đăng ký thường trú điện tử (Mẫu CT01)
+                  </h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cơ quan giải quyết: Công an Quận Hoàn Kiếm, TP. Hà Nội</span>
+</div>
+<div class="flex flex-col sm:items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ngày hẹn trả kết quả:</span>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">30/10/2024 (Trước 11:30)</span>
+</div>
+</div>
+<!-- Thanh tiến trình STEPPER (4 Bước) -->
+<div class="w-full py-space-sm">
+<div class="grid grid-cols-4 relative">
+<div class="absolute top-4 left-6 right-6 h-1 bg-surface-container-highest z-0"></div>
+<!-- Đang ở bước 2/4 (khoảng 33%) -->
+<div class="absolute top-4 left-6 w-1/3 h-1 bg-emerald-600 z-0"></div>
+<!-- Mốc 1 -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-emerald-600 text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-title-sm font-bold">check</span>
+</div>
+<span class="font-title-sm text-title-sm text-emerald-800 font-semibold">Nộp trực tuyến</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">20/10 - 09:10</span>
+</div>
+<!-- Mốc 2: Cảnh sát khu vực xác minh (Hiện tại) -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-[0_0_0_4px_rgba(254,147,44,0.35)] animate-pulse">
+<span class="material-symbols-outlined text-title-sm">home_pin</span>
+</div>
+<span class="font-title-sm text-title-sm text-primary font-bold">Xác minh thực tế</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">CSKV đang xử lý</span>
+</div>
+<!-- Mốc 3 -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="font-label-md text-label-md">03</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface-variant">Phê duyệt CSDL</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Cơ quan Công an</span>
+</div>
+<!-- Mốc 4 -->
+<div class="flex flex-col items-center text-center relative z-10 gap-space-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="font-label-md text-label-md">04</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface-variant">Thông báo VNeID</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Cập nhật sổ hộ khẩu điện tử</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. BẢNG DANH SÁCH LỊCH SỬ HỒ SƠ GẦN ĐÂY -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-lg bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-headline-sm">history_edu</span>
+<div class="flex flex-col">
+<h2 class="font-title-lg text-title-lg text-on-surface font-bold uppercase tracking-wide">
+                  Danh Sách Lịch Sử Hồ Sơ Gần Đây
+                </h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Theo dõi toàn bộ kết quả, chứng thư số và trạng thái xử lý</span>
+</div>
+</div>
+<button class="text-primary hover:text-on-primary hover:bg-primary-container px-space-md py-space-xs rounded-lg transition-colors font-title-sm text-title-sm flex items-center gap-space-xs self-start sm:self-auto" type="button">
+<span class="material-symbols-outlined text-title-sm">download</span>
+<span>Xuất danh sách (Excel/PDF)</span>
+</button>
+</div>
+<!-- Thanh Bộ Lọc Trạng Thái & Lĩnh Vực -->
+<div class="p-space-md bg-surface-container-lowest flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface-variant mr-space-xs">Trạng thái:</span>
+<button class="px-space-md py-1 rounded bg-primary-container text-on-primary font-label-md text-label-md shadow-sm" type="button">Tất cả (14)</button>
+<button class="px-space-md py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors" type="button">Đang xử lý (3)</button>
+<button class="px-space-md py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors" type="button">Đã hoàn thành (10)</button>
+<button class="px-space-md py-1 rounded bg-error-container text-on-error-container font-label-md text-label-md font-bold transition-colors" type="button">Cần bổ sung (1)</button>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Lĩnh vực:</span>
+<select class="bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded px-space-sm py-1 border-none outline-none">
+<option value="all">Tất cả lĩnh vực</option>
+<option value="tu-phap">Tư pháp - Hộ tịch</option>
+<option value="giao-thong">Giao thông vận tải</option>
+<option value="dat-dai">Tài nguyên &amp; Đất đai</option>
+<option value="thue">Thuế &amp; Tài chính</option>
+</select>
+</div>
+</div>
+<!-- Bảng Data Table chuẩn quy cách Nhà Nước -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-high text-on-surface font-label-md text-label-md uppercase tracking-wider">
+<tr>
+<th class="py-space-md px-space-md">Mã hồ sơ</th>
+<th class="py-space-md px-space-md">Tên thủ tục hành chính</th>
+<th class="py-space-md px-space-md">Cơ quan thụ lý</th>
+<th class="py-space-md px-space-md">Ngày nộp</th>
+<th class="py-space-md px-space-md">Hạn trả</th>
+<th class="py-space-md px-space-md text-center">Trạng thái</th>
+<th class="py-space-md px-space-md text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody class="text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md font-mono text-primary font-bold whitespace-nowrap">
+                    GPLX-2024-8841
+                  </td>
+<td class="py-space-md px-space-md">
+<span class="font-title-sm text-title-sm text-on-surface block">Đổi Giấy phép lái xe quốc tế (IDP)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Lệ phí: 135.000 đ (Đã thanh toán)</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                    Cục Đường bộ VN
+                  </td>
+<td class="py-space-md px-space-md whitespace-nowrap">16/10/2024</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-semibold text-secondary">28/10/2024</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-space-sm py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                      Đang ký duyệt
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center gap-space-xs">
+<button class="p-1 rounded hover:bg-surface-container-high text-primary" title="Xem chi tiết" type="button">
+<span class="material-symbols-outlined text-title-md">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant" title="Biên nhận điện tử" type="button">
+<span class="material-symbols-outlined text-title-md">receipt_long</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md font-mono text-primary font-bold whitespace-nowrap">
+                    CT01-2024-1102
+                  </td>
+<td class="py-space-md px-space-md">
+<span class="font-title-sm text-title-sm text-on-surface block">Đăng ký thường trú điện tử</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Lệ phí: Miễn phí theo quy định</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                    Công an Q. Hoàn Kiếm
+                  </td>
+<td class="py-space-md px-space-md whitespace-nowrap">20/10/2024</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-semibold text-secondary">30/10/2024</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-space-sm py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                      Đang xác minh
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center gap-space-xs">
+<button class="p-1 rounded hover:bg-surface-container-high text-primary" title="Xem chi tiết" type="button">
+<span class="material-symbols-outlined text-title-md">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant" title="In giấy tiếp nhận" type="button">
+<span class="material-symbols-outlined text-title-md">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Cảnh báo đỏ) -->
+<tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors">
+<td class="py-space-md px-space-md font-mono text-error font-bold whitespace-nowrap">
+                    LLTP-2024-0492
+                  </td>
+<td class="py-space-md px-space-md">
+<span class="font-title-sm text-title-sm text-error font-bold block">Cấp phiếu Lý lịch tư pháp số 1</span>
+<span class="font-label-sm text-label-sm text-error">Yêu cầu bổ sung CCCD công chứng</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                    Sở Tư pháp Hà Nội
+                  </td>
+<td class="py-space-md px-space-md whitespace-nowrap">14/10/2024</td>
+<td class="py-space-md px-space-md whitespace-nowrap text-error font-semibold">Tạm dừng đếm ngày</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-space-sm py-1 rounded bg-error text-on-error font-bold">
+<span class="material-symbols-outlined text-body-sm">priority_high</span>
+                      Cần bổ sung
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<button class="px-space-sm py-1 rounded bg-error text-on-error font-label-md text-label-md font-bold shadow-sm hover:opacity-95" type="button">
+                      Bổ sung ngay
+                    </button>
+</td>
+</tr>
+<!-- Row 4 (Đã hoàn thành) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md font-mono text-on-surface-variant whitespace-nowrap">
+                    TN23-2024-9104
+                  </td>
+<td class="py-space-md px-space-md">
+<span class="font-title-sm text-title-sm text-on-surface block">Cấp Bản sao Trích lục Khai sinh</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Lệ phí: 18.000 đ (Đã quyết toán)</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                    UBND Phường Hàng Trống
+                  </td>
+<td class="py-space-md px-space-md whitespace-nowrap">05/10/2024</td>
+<td class="py-space-md px-space-md whitespace-nowrap text-on-surface-variant">07/10/2024</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-space-sm py-1 rounded bg-emerald-100 text-emerald-800 font-semibold">
+<span class="material-symbols-outlined text-body-sm">check_circle</span>
+                      Đã trả kết quả
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center gap-space-xs">
+<button class="p-1 rounded hover:bg-surface-container-high text-emerald-800" title="Tải kết quả ký số (.PDF)" type="button">
+<span class="material-symbols-outlined text-title-md">download_done</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant" title="Xem chi tiết" type="button">
+<span class="material-symbols-outlined text-title-md">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 (Đã hoàn thành) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md font-mono text-on-surface-variant whitespace-nowrap">
+                    TB08-2024-3012
+                  </td>
+<td class="py-space-md px-space-md">
+<span class="font-title-sm text-title-sm text-on-surface block">Nộp Lệ phí trước bạ Ô tô, Xe máy</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Số tiền: 4.800.000 đ</span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant">
+                    Chi cục Thuế Q. Hoàn Kiếm
+                  </td>
+<td class="py-space-md px-space-md whitespace-nowrap">28/09/2024</td>
+<td class="py-space-md px-space-md whitespace-nowrap text-on-surface-variant">28/09/2024</td>
+<td class="py-space-md px-space-md text-center whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm px-space-sm py-1 rounded bg-emerald-100 text-emerald-800 font-semibold">
+<span class="material-symbols-outlined text-body-sm">check_circle</span>
+                      Đã nộp thuế số
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="inline-flex items-center gap-space-xs">
+<button class="p-1 rounded hover:bg-surface-container-high text-emerald-800" title="Chứng từ nộp thuế điện tử" type="button">
+<span class="material-symbols-outlined text-title-md">verified</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant" title="Xem chi tiết" type="button">
+<span class="material-symbols-outlined text-title-md">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Phân trang bảng -->
+<div class="p-space-md bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm">
+<span>Hiển thị 1 - 5 trong tổng số 14 hồ sơ</span>
+<div class="flex items-center gap-space-xs">
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-title-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded flex items-center justify-center bg-primary-container text-on-primary font-bold" type="button">1</button>
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface" type="button">2</button>
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface" type="button">3</button>
+<button class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-high text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-title-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CỘT PHỤ (4 CỘT WIDGET / SIDE PANEL) -->
+<aside class="lg:col-span-4 flex flex-col gap-space-xl">
+<!-- THẺ 1: LỊCH HẸN TIẾP DÂN & NHẬN KẾT QUẢ -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-md bg-gradient-to-r from-primary to-primary-container text-on-primary flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-title-lg">calendar_today</span>
+<h3 class="font-title-md text-title-md font-bold uppercase">Lịch hẹn Tiếp dân</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-lowest/20 px-space-xs py-0.5 rounded font-mono">01 Lịch sắp tới</span>
+</div>
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="bg-secondary-fixed/50 p-space-md rounded-lg flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed font-bold px-space-xs py-0.5 rounded">Ngày mai</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">09:30</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Lấy dấu vân tay &amp; Nhận Giấy phép Lái xe quốc tế</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-title-sm text-secondary">location_on</span>
+<span>Trung tâm Phục vụ Hành chính công TP. Hà Nội</span>
+</p>
+<div class="mt-space-xs pt-space-xs flex items-center justify-between text-label-sm font-label-sm text-secondary font-semibold">
+<span>Quầy giao dịch: <strong>Số 04</strong></span>
+<span>Mã số tiếp nhận: <strong>HN-A04</strong></span>
+</div>
+</div>
+<button class="w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-title-sm text-title-sm transition-colors flex items-center justify-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-title-sm text-secondary">event_repeat</span>
+<span>Đặt lịch hẹn làm thủ tục mới</span>
+</button>
+</div>
+</div>
+<!-- THẺ 2: KHO TÀI LIỆU SỐ CÔNG DÂN (ĐÃ ĐỒNG BỘ CSDL QUỐC GIA) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-md bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-title-lg">folder_special</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold uppercase">Kho Tài Liệu Số Công Dân</h3>
+</div>
+<span class="material-symbols-outlined text-emerald-800 text-title-md" title="Đã đồng bộ Cơ sở dữ liệu Quốc gia">cloud_done</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-sm">
+<!-- Tài liệu 1: CCCD Số -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-primary-container/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-title-md">badge</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Căn cước công dân số</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">00109600**** • C06 BCA</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-800 text-title-md" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Tài liệu 2: Giấy phép lái xe số -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-primary-container/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-title-md">directions_car</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Giấy phép lái xe (Hạng B2)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">01019488**** • Hạn 2031</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-800 text-title-md" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Tài liệu 3: Trích lục khai sinh số -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-primary-container/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-title-md">child_friendly</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Giấy khai sinh điện tử</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Bản sao điện tử ký số</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-800 text-title-md" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Tài liệu 4: Xác nhận cư trú (CT07) -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-primary-container/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-title-md">home</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Xác nhận thông tin cư trú (CT07)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Cấp ngày 12/08/2024</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-800 text-title-md" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pt-space-xs">
+<button class="w-full text-center text-primary font-title-sm text-title-sm hover:underline py-space-xs" type="button">
+                Xem toàn bộ 08 giấy tờ số hóa →
+              </button>
+</div>
+</div>
+</div>
+<!-- THẺ 3: DỊCH VỤ CÔNG TRỰC TUYẾN NỔI BẬT & THỰC HIỆN NHIỀU -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-md bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-title-lg">star</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold uppercase">Dịch Vụ Công Nổi Bật</h3>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Toàn trình</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">travel_explore</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold group-hover:text-primary transition-colors">Cấp hộ chiếu phổ thông trực tuyến</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Bộ Công an • Nhận tại nhà</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-title-sm">arrow_forward</span>
+</a>
+<a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">favorite</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold group-hover:text-primary transition-colors">Đăng ký kết hôn trực tuyến</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">UBND Cấp Xã / Phường</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-title-sm">arrow_forward</span>
+</a>
+<a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">apartment</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold group-hover:text-primary transition-colors">Đăng ký sang tên chuyển quyền đất đai</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Văn phòng Đăng ký Đất đai</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-title-sm">arrow_forward</span>
+</a>
+<a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">payments</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold group-hover:text-primary transition-colors">Nộp lệ phí trước bạ xe cơ giới</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tổng cục Thuế</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-title-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- BANNER TRỢ GIÚP & ĐƯỜNG DÂY NÓNG 24/7 -->
+<div class="bg-gradient-to-br from-surface-container-high to-surface-container p-space-lg rounded-xl flex items-center gap-space-md shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-headline-sm">headset_mic</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Cần hỗ trợ hồ sơ trực tuyến?</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tổng đài quốc gia <strong>1800 1096</strong> (Miễn phí 24/7)</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-high shadow-[0_-2px_10px_rgba(28,25,23,0.04)]"><div class="max-w-7xl mx-auto px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-space-xl"><div class="md:col-span-2 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-headline-sm font-headline-sm">assured_workload</span><span class="font-title-md text-title-md text-on-surface uppercase">Cơ quan chủ quản: Văn phòng Chính phủ</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Hệ thống giải quyết thủ tục hành chính liên thông cấp Bộ, Tỉnh và Cổng Dịch vụ công Quốc gia theo Nghị định số 61/2018/NĐ-CP và Nghị định số 107/2021/NĐ-CP của Chính phủ.</p><p class="font-label-sm text-label-sm text-on-surface-variant">Địa chỉ: Số 1 Hoàng Hoa Thám, Ba Đình, Hà Nội</p></div><div class="flex flex-col gap-space-sm"><span class="font-title-sm text-title-sm text-on-surface uppercase">Đường dây nóng hỗ trợ</span><div class="flex items-center gap-space-xs text-primary"><span class="material-symbols-outlined text-headline-sm font-headline-sm">support_agent</span><span class="font-headline-sm text-headline-sm">1800 1096</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Tổng đài miễn cước cuộc gọi phục vụ người dân và doanh nghiệp</span><span class="font-label-sm text-label-sm text-on-surface-variant">Email: dichvucong@chinhphu.vn</span></div><div class="flex flex-col gap-space-sm"><span class="font-title-sm text-title-sm text-on-surface uppercase">Quy định &amp; Hướng dẫn</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Quy chế hoạt động cổng thông tin</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Chính sách bảo mật dữ liệu công dân</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Hướng dẫn ký số và định danh điện tử</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Câu hỏi thường gặp (FAQ)</a></div></div><div class="bg-surface-container py-space-md px-space-md rounded flex flex-col md:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-sm"><span>© 2024 Cổng Dịch vụ công Quốc gia. Bản quyền thuộc Chính phủ nước CHXHCN Việt Nam.</span></div><div class="flex items-center gap-space-lg"><a class="hover:text-primary transition-colors" href="#">Điều khoản sử dụng</a><a class="hover:text-primary transition-colors" href="#">An toàn thông tin mạng</a><a class="hover:text-primary transition-colors" href="#">Sơ đồ cổng dịch vụ</a></div></div></div></footer></body></html>
