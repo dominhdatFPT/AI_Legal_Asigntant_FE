@@ -223,21 +223,6 @@ main {
     color: #b51f25;
 }
 
-.auth-panel--signup .auth-field-wrap.is-invalid {
-    border-color: #b91c1c;
-    box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.1);
-}
-
-.auth-panel--signup .auth-field-wrap.is-invalid .material-symbols-outlined {
-    color: #b91c1c;
-}
-
-.auth-panel--signup .auth-field-error {
-    color: #b91c1c;
-    font-size: 12px;
-    line-height: 16px;
-}
-
 .auth-panel #login-form .group.relative input,
 .auth-panel #gov-identifier,
 .auth-panel #gov-password,
@@ -409,12 +394,6 @@ main {
 
     .auth-panel--signup .auth-card-header {
         margin-bottom: 4px !important;
-    }
-
-    .auth-panel--signup .auth-field-error {
-        margin-top: 1px !important;
-        font-size: 11px;
-        line-height: 14px;
     }
 }
 

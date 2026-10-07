@@ -3,7 +3,6 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   getAuth,
-  sendEmailVerification,
   signOut,
   updateProfile
 } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
@@ -23,82 +22,6 @@ const submitSpinner = document.getElementById('signup-auth-spinner');
 const passwordInput = document.getElementById('password');
 const confirmationInput = document.getElementById('confirm-password');
 let servicesPromise;
-
-const fields = [
-  {
-    input: document.getElementById('username'),
-    wrapper: document.getElementById('username').parentElement,
-    error: document.getElementById('username-error'),
-    getMessage(value) {
-      return value.trim() ? '' : 'Vui lòng nhập tên đăng nhập.';
-    }
-  },
-  {
-    input: document.getElementById('email'),
-    wrapper: document.getElementById('email').parentElement,
-    error: document.getElementById('email-error'),
-    getMessage(value, input) {
-      if (!value.trim()) return 'Vui lòng nhập email.';
-      return input.validity.typeMismatch ? 'Vui lòng nhập địa chỉ email hợp lệ.' : '';
-    }
-  },
-  {
-    input: document.getElementById('phone'),
-    wrapper: document.getElementById('phone').parentElement,
-    error: document.getElementById('phone-error'),
-    getMessage(value) {
-      return value.trim() ? '' : 'Vui lòng nhập số điện thoại.';
-    }
-  },
-  {
-    input: passwordInput,
-    wrapper: passwordInput.parentElement,
-    error: document.getElementById('password-error'),
-    getMessage(value, input) {
-      if (!value) return 'Vui lòng nhập mật khẩu.';
-      return input.validity.tooShort ? 'Mật khẩu cần có ít nhất 8 ký tự.' : '';
-    }
-  },
-  {
-    input: confirmationInput,
-    wrapper: confirmationInput.parentElement,
-    error: document.getElementById('confirm-password-error'),
-    getMessage(value) {
-      if (!value) return 'Vui lòng xác nhận mật khẩu.';
-      return value === passwordInput.value ? '' : 'Mật khẩu xác nhận không khớp.';
-    }
-  }
-];
-
-fields.forEach(({ input, wrapper, error, getMessage }) => {
-  let touched = false;
-
-  const validate = () => {
-    const message = touched ? getMessage(input.value, input) : '';
-    const invalid = Boolean(message);
-    error.textContent = message;
-    error.classList.toggle('hidden', !invalid);
-    input.setAttribute('aria-invalid', String(invalid));
-    wrapper.classList.toggle('is-invalid', invalid);
-    if (input === confirmationInput) input.setCustomValidity(message);
-  };
-
-  input.addEventListener('blur', () => {
-    touched = true;
-    validate();
-  });
-  input.addEventListener('invalid', () => {
-    touched = true;
-    validate();
-  });
-  input.addEventListener('input', () => {
-    if (touched) validate();
-    if (input === passwordInput) {
-      const confirmationField = fields[fields.length - 1];
-      if (confirmationInput.value) confirmationField.input.dispatchEvent(new Event('input'));
-    }
-  });
-});
 
 const getFirebaseServices = () => {
   if (!servicesPromise) {
@@ -131,9 +54,9 @@ form.addEventListener('submit', async (event) => {
   event.preventDefault();
   message.textContent = '';
 
-  fields.forEach(({ input }) => input.dispatchEvent(new Event('blur')));
   if (passwordInput.value !== confirmationInput.value) {
-    confirmationInput.reportValidity();
+    message.textContent = 'Mật khẩu xác nhận không khớp.';
+    message.dataset.state = 'error';
     return;
   }
 
@@ -169,18 +92,10 @@ form.addEventListener('submit', async (event) => {
       createdAt: serverTimestamp()
     });
     profileSaved = true;
-    await sendEmailVerification(user);
     await signOut(auth);
 
     form.reset();
-    fields.forEach(({ input, wrapper, error }) => {
-      input.setCustomValidity('');
-      input.removeAttribute('aria-invalid');
-      wrapper.classList.remove('is-invalid');
-      error.textContent = '';
-      error.classList.add('hidden');
-    });
-    message.textContent = `Tài khoản đã tạo. Hãy mở email ${user.email}, xác minh địa chỉ rồi đăng nhập.`;
+    message.textContent = 'Tài khoản đã tạo thành công. Bạn có thể đăng nhập ngay bây giờ.';
     message.dataset.state = 'success';
   } catch (error) {
     if (user) {

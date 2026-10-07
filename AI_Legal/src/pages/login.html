@@ -117,9 +117,8 @@
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
 <span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">person</span>
 </div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="gov-identifier" aria-describedby="gov-identifier-error" autocomplete="email" placeholder="ten@gmail.com" required="" type="email">
+<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="gov-identifier" autocomplete="email" placeholder="ten@gmail.com" required="" type="email">
 </div>
-<p class="mt-1 hidden text-sm text-state-error motion-safe:animate-fade-up" id="gov-identifier-error" role="alert" aria-live="polite"></p>
 </div>
 <!-- Password Field with View Toggle -->
 <div>
@@ -133,12 +132,11 @@
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
 <span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">lock</span>
 </div>
-<input class="w-full h-12 pl-11 pr-11 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition" id="gov-password" aria-describedby="gov-password-error" autocomplete="current-password" placeholder="••••••••••••" required="" type="password">
+<input class="w-full h-12 pl-11 pr-11 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition" id="gov-password" autocomplete="current-password" placeholder="••••••••••••" required="" type="password">
 <button aria-label="Hiện mật khẩu" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-secondary hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition motion-reduce:transition-none" id="togglePasswordBtn" type="button">
 <span class="material-symbols-outlined text-xl" id="pwdToggleIcon">visibility</span>
 </button>
 </div>
-<p class="mt-1 hidden text-sm text-state-error motion-safe:animate-fade-up" id="gov-password-error" role="alert" aria-live="polite"></p>
 </div>
 <!-- Device Remember & Auxiliary Checkbox -->
 <div class="flex items-center justify-between pt-1">
@@ -201,10 +199,8 @@
   import {
     getAuth,
     GoogleAuthProvider,
-    sendEmailVerification,
     signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut
+    signInWithPopup
   } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
 
   const loginForm = document.getElementById('login-form');
@@ -231,77 +227,36 @@
     return authPromise;
   };
 
-      const fields = [
-        {
-          input: document.getElementById('gov-identifier'),
-          wrapper: document.getElementById('gov-identifier').parentElement,
-          error: document.getElementById('gov-identifier-error'),
-          getMessage(value) {
-            if (!value.trim()) return 'Vui lòng nhập email.';
-            return input.validity.typeMismatch ? 'Vui lòng nhập địa chỉ email hợp lệ.' : '';
-          }
-        },
-        {
-          input: document.getElementById('gov-password'),
-          wrapper: document.getElementById('gov-password').parentElement,
-          error: document.getElementById('gov-password-error'),
-          getMessage(value) {
-            return value ? '' : 'Vui lòng nhập mật khẩu.';
-          }
-        }
-      ];
-
-      fields.forEach(({ input, wrapper, error, getMessage }) => {
-        let touched = false;
-
-        const validate = () => {
-          const message = touched ? getMessage(input.value) : '';
-          const invalid = Boolean(message);
-          error.textContent = message;
-          error.classList.toggle('hidden', !invalid);
-          input.setAttribute('aria-invalid', String(invalid));
-          wrapper.classList.toggle('!border-state-error', invalid);
-          wrapper.classList.toggle('ring-4', invalid);
-          wrapper.classList.toggle('ring-state-error/10', invalid);
-        };
-
-        input.addEventListener('blur', () => {
-          touched = true;
-          validate();
-        });
-        input.addEventListener('invalid', () => {
-          touched = true;
-          validate();
-        });
-        input.addEventListener('input', () => {
-          if (touched) validate();
-        });
-      });
-
-  const loginForm = document.querySelector('form.space-y-4');
-  const identifierInput = document.getElementById('gov-identifier');
-  const passwordInput = document.getElementById('gov-password');
-  const passwordError = document.getElementById('gov-password-error');
-  const accounts = [
-    { identifier: '000000000001', password: 'admin123', destination: '/dashboard' },
-    { identifier: '000000000002', password: 'user123', destination: '/user-dashboard' }
-  ];
-
-  loginForm.addEventListener('submit', (event) => {
+  loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    googleMessage.textContent = '';
+    loginButton.disabled = true;
+    loginLabel.textContent = 'Đang đăng nhập...';
 
-    const account = accounts.find(({ identifier, password }) =>
-      identifier === identifierInput.value.trim() && password === passwordInput.value
-    );
+    try {
+      const auth = await getFirebaseAuth();
+      await signInWithEmailAndPassword(
+        auth,
+        document.getElementById('gov-identifier').value.trim(),
+        document.getElementById('gov-password').value
+      );
 
-    if (!account) {
-      passwordError.textContent = 'Số CCCD hoặc mật khẩu không chính xác.';
-      passwordError.classList.remove('hidden');
-      passwordInput.setAttribute('aria-invalid', 'true');
-      return;
+      window.location.assign('/dashboard');
+    } catch (error) {
+      const messages = {
+        'auth/invalid-credential': 'Email hoặc mật khẩu không chính xác.',
+        'auth/invalid-login-credentials': 'Email hoặc mật khẩu không chính xác.',
+        'auth/user-not-found': 'Email hoặc mật khẩu không chính xác.',
+        'auth/wrong-password': 'Email hoặc mật khẩu không chính xác.',
+        'auth/too-many-requests': 'Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.',
+        'auth/operation-not-allowed': 'Hãy bật Email/Password trong Firebase Authentication.',
+        'firebase/config-unavailable': 'Không tải được cấu hình Firebase. Vui lòng thử lại.'
+      };
+      googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập. Vui lòng thử lại.';
+    } finally {
+      loginButton.disabled = false;
+      loginLabel.textContent = 'Đăng nhập hệ thống';
     }
-
-    window.location.assign(account.destination);
   });
 
   googleButton.addEventListener('click', async () => {
@@ -315,19 +270,14 @@
       const auth = await getFirebaseAuth();
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
-      const credential = await signInWithPopup(auth, provider);
-      if (!credential.user.emailVerified) {
-        await signOut(auth);
-        throw new Error('auth/email-not-verified');
-      }
+      await signInWithPopup(auth, provider);
       window.location.assign('/dashboard');
     } catch (error) {
       const messages = {
         'auth/operation-not-allowed': 'Hãy bật Google trong Firebase Authentication.',
         'auth/popup-blocked': 'Trình duyệt đã chặn cửa sổ đăng nhập. Hãy cho phép popup rồi thử lại.',
         'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã được đóng.',
-        'auth/unauthorized-domain': 'Hãy thêm localhost vào Authorized domains trong Firebase.',
-        'auth/email-not-verified': 'Email Google này chưa được xác minh. Hãy xác minh email rồi thử lại.'
+        'auth/unauthorized-domain': 'Hãy thêm localhost vào Authorized domains trong Firebase.'
       };
       googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập bằng Google. Vui lòng thử lại.';
       googleMessage.classList.add('motion-safe:animate-fade-up');
