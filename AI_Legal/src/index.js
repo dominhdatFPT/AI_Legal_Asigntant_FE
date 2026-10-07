@@ -52,16 +52,12 @@ app.get('/api/firebase-config', (req, res) => {
   }
 });
 
-app.get('/signup', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'signup.html'));
-});
-
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
 });
 
-app.get('/detail-information', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
+app.get('/user-dashboard', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
 // Route API trả về định dạng JSON

@@ -278,52 +278,30 @@
         });
       });
 
-  loginForm.addEventListener('submit', async (event) => {
+  const loginForm = document.querySelector('form.space-y-4');
+  const identifierInput = document.getElementById('gov-identifier');
+  const passwordInput = document.getElementById('gov-password');
+  const passwordError = document.getElementById('gov-password-error');
+  const accounts = [
+    { identifier: '000000000001', password: 'admin123', destination: '/dashboard' },
+    { identifier: '000000000002', password: 'user123', destination: '/user-dashboard' }
+  ];
+
+  loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    googleMessage.textContent = '';
-    loginButton.disabled = true;
-    loginLabel.textContent = 'Đang đăng nhập...';
 
-    try {
-      const auth = await getFirebaseAuth();
-      const credential = await signInWithEmailAndPassword(
-        auth,
-        document.getElementById('gov-identifier').value.trim(),
-        document.getElementById('gov-password').value
-      );
-      await credential.user.reload();
+    const account = accounts.find(({ identifier, password }) =>
+      identifier === identifierInput.value.trim() && password === passwordInput.value
+    );
 
-      if (!credential.user.emailVerified) {
-        let verificationMessage = 'Email chưa được xác minh. Hãy kiểm tra hộp thư để mở liên kết xác minh.';
-        try {
-          await sendEmailVerification(credential.user);
-          verificationMessage = 'Email chưa được xác minh. Firebase đã gửi lại liên kết xác minh; hãy kiểm tra hộp thư và mục Spam.';
-        } catch (error) {
-          if (error.code === 'auth/too-many-requests') {
-            verificationMessage = 'Email chưa được xác minh. Hãy kiểm tra hộp thư hoặc thử gửi lại sau ít phút.';
-          }
-        }
-        await signOut(auth);
-        googleMessage.textContent = verificationMessage;
-        return;
-      }
-
-      window.location.assign('/dashboard');
-    } catch (error) {
-      const messages = {
-        'auth/invalid-credential': 'Email hoặc mật khẩu không chính xác.',
-        'auth/invalid-login-credentials': 'Email hoặc mật khẩu không chính xác.',
-        'auth/user-not-found': 'Email hoặc mật khẩu không chính xác.',
-        'auth/wrong-password': 'Email hoặc mật khẩu không chính xác.',
-        'auth/too-many-requests': 'Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.',
-        'auth/operation-not-allowed': 'Hãy bật Email/Password trong Firebase Authentication.',
-        'firebase/config-unavailable': 'Không tải được cấu hình Firebase. Vui lòng thử lại.'
-      };
-      googleMessage.textContent = messages[error.code] || 'Không thể đăng nhập. Vui lòng thử lại.';
-    } finally {
-      loginButton.disabled = false;
-      loginLabel.textContent = 'Đăng nhập hệ thống';
+    if (!account) {
+      passwordError.textContent = 'Số CCCD hoặc mật khẩu không chính xác.';
+      passwordError.classList.remove('hidden');
+      passwordInput.setAttribute('aria-invalid', 'true');
+      return;
     }
+
+    window.location.assign(account.destination);
   });
 
   googleButton.addEventListener('click', async () => {
