@@ -1,9 +1,18 @@
 stages:
   - test
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - .npm/
+
 frontend_validation:
   stage: test
   image: node:22-alpine
   script:
-    - npm ci --ignore-scripts
-    - node --check AI_Legal/src/index.js
+    - node -v
+    - npm -v
+    - npm install --no-fund --no-audit
+    - npm test
+    - npm run smoke

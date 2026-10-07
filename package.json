@@ -6,9 +6,17 @@
   "main": "AI_Legal/src/index.js",
   "scripts": {
     "start": "node AI_Legal/src/index.js",
-    "dev": "node --watch AI_Legal/src/index.js"
+    "dev": "node --watch AI_Legal/src/index.js",
+    "test": "node --check AI_Legal/src/index.js",
+    "smoke": "node -e \"const app=require('./AI_Legal/src/index.js'); console.log(typeof app);\"",
+    "css:build": "tailwindcss -i ./AI_Legal/src/tailwind.css -o ./AI_Legal/public/tailwind.css",
+    "css:watch": "npm run css:build -- --watch"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "firebase": "^12.19.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
   }
 }
