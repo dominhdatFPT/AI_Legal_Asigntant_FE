@@ -8,26 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet">
 <!-- Material Symbols Outlined -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<!-- Tailwind CSS with custom configuration -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#DA251D",
-            "primary-hover": "#c01f18",
-            "gold-star": "#FFCD00",
-            "border-subtle": "#E2E8F0"
-          },
-          fontFamily: {
-            sans: ["Be Vietnam Pro", "sans-serif"]
-          }
-        }
-      }
-    }
-  </script>
+<link rel="stylesheet" href="/tailwind.css">
 <style>
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -36,102 +17,169 @@
       line-height: 1;
     }
   </style>
+<link rel="stylesheet" href="/auth-shell.css">
 </head>
 <body class="h-full min-h-screen font-sans text-gray-900 bg-white antialiased">
 <!-- Split-Screen Container -->
-<div class="min-h-screen w-full flex flex-col lg:flex-row">
-<!-- LEFT PANEL (60% width Desktop): Scenic Background & Institutional Identity -->
-<section class="relative w-full lg:w-[60%] min-h-[420px] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden">
+<div class="auth-layout min-h-screen w-full flex flex-col lg:flex-row">
+<!-- LEFT PANEL: Institutional Authority & Legal AI Brand Stage -->
+<section class="auth-scene auth-scene--signup relative w-full lg:w-[60%] min-h-[420px] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden motion-safe:animate-fade-up">
 <!-- Background Image -->
-<img alt="Breathtaking terraced rice fields in Vietnam" class="absolute inset-0 w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtZALkyxJ2K_bHEUuUHMPnZ7QBu39GpwOZfuFAjpq_fewFBEzDfQWjFkSfT8HhfpVA6_c5CiK9FhBfuLPRwXvH3S05jg-4XWH0oYHz2wpww60ROkExIJZqx4Z2c6rI6SYG2n2WaudK2YEITAb3vKRmPEqUBh9mMCB1ylrWUShQC0jXuH3vHAMtcTsF1mcpbv6trlTFN9sHiFvO33psnSw2jsWCJtqtkW-coftmHnhcmI63zM_9nYle">
-<!-- Semi-transparent Red Overlay -->
-<div class="absolute inset-0 bg-[#DA251D]/60 backdrop-brightness-95"></div>
-<!-- Left Panel Content -->
-<div class="relative z-10 w-full max-w-2xl px-8 py-12 lg:p-16 flex flex-col items-center text-center text-white">
-<!-- Glowing Yellow-Gold 5-Pointed Star -->
-<div class="mb-6 flex items-center justify-center">
-<svg class="w-14 h-14 text-[#FFCD00] drop-shadow-[0_0_18px_rgba(255,205,0,0.7)]" fill="currentColor" viewBox="0 0 24 24">
-<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-</svg>
+<div class="auth-backdrop" aria-hidden="true">
+<img alt="" class="opacity-100" data-login-slide src="/images/login/hanoi-court.jpg" fetchpriority="high">
+<img alt="" class="opacity-0" data-login-slide src="/images/login/national-assembly.jpg" loading="lazy">
+<img alt="" class="opacity-0" data-login-slide src="/images/login/supreme-court.jpg" loading="lazy">
+<img alt="" class="opacity-0" data-login-slide src="/images/login/ho-chi-minh-court.jpg" loading="lazy">
+<div class="auth-shade auth-shade--photo"></div>
+<div class="auth-shade auth-shade--brand"></div>
 </div>
-<!-- Main Title -->
-<h1 class="text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-sm leading-tight">
-          Hệ thống Hỗ trợ Hồ sơ
+<div class="auth-drum" aria-hidden="true"><img src="/images/login/dong-son-drum-face.png" alt=""></div>
+<header class="relative z-10 flex items-center justify-between motion-safe:animate-fade-up-late">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center text-[#ffdf8a] shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">assured_workload</span>
+</div>
+<div>
+<div class="font-label-sm tracking-wider uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+<div class="font-body-sm text-white/80">Độc lập - Tự do - Hạnh phúc</div>
+</div>
+</div>
+<div class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-xs font-label-md text-white">
+<span class="w-2 h-2 rounded-full bg-state-success motion-safe:animate-pulse"></span>
+Trợ lý pháp lý trực tuyến
+</div>
+</header>
+<div class="auth-copy relative z-10 my-auto py-4 motion-safe:animate-fade-up-later">
+<div class="inline-block mb-4 relative [@media(max-height:700px)]:hidden">
+<div class="absolute inset-0 bg-[#ffdf8a] rounded-2xl filter blur-xl opacity-30"></div>
+<div class="relative w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-md p-1.5 shadow-xl flex items-center justify-center">
+<img class="w-full h-full object-contain filter drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLWrkBhwiVYIh8hPSz5N-xeqLw5Pmi6WMA5HwWTFODP_TOT76_rlBUVRmnZvhsla6Q8o0hGThWG-pecU0c-wVcSmBVqHD6rNxRE3xZI227np7WcCiLwE-i2Ib4uH567o50qS3TfEKpHfQr7doJBnjlr_WXCezdI7FVgKXOvjTRfhI9q4LcPg-ENS5GOKvVFyCfjC_B8kYsHMPLsLL8nqXi2NeIM-T7D3gLZijss6XOR2nDz_iPywf0xagFHH6cAKWcKmw" alt="" aria-hidden="true">
+</div>
+</div>
+<h1 class="font-display-hero text-headline-lg xl:text-display-hero text-white mb-3 tracking-tight [@media(max-height:760px)]:text-headline-lg">
+          CỔNG TRỢ LÝ PHÁP LÝ &amp; DỊCH VỤ CÔNG
         </h1>
-<!-- Subtitle -->
-<p class="mt-2 text-2xl lg:text-3xl font-medium text-white/95 tracking-normal">
-          Đất đai &amp; Hộ kinh doanh
+<p class="font-headline-sm text-headline-sm text-[#ffdf8a] font-normal mb-6 max-w-xl">
+          Hệ thống AI Hỗ trợ Hồ sơ Đất đai &amp; Hộ kinh doanh toàn quốc
         </p>
-<!-- 3 Pill Badges / Buttons -->
-<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-<div class="bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium flex items-center gap-2 hover:bg-white/30 transition-all cursor-default select-none shadow-sm">
-<span class="material-symbols-outlined text-base">search</span>
-<span class="">Tra cứu</span>
+<div class="space-y-3 max-w-xl">
+<div class="flex items-start gap-4 p-3 rounded-xl bg-white/10 backdrop-blur-md transition duration-200">
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center shrink-0 text-[#ffdf8a]">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
 </div>
-<div class="bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium flex items-center gap-2 hover:bg-white/30 transition-all cursor-default select-none shadow-sm">
-<span class="material-symbols-outlined text-base">edit_document</span>
-<span class="">Điền hồ sơ</span>
+<div>
+<h2 class="font-label-lg text-white">AI rà soát, thẩm định hồ sơ theo Luật Đất đai</h2>
+<p class="font-body-md text-white/80 mt-0.5 [@media(max-height:760px)]:hidden">Hỗ trợ rà soát giấy tờ, thông tin thửa đất và nội dung quy hoạch trước khi nộp.</p>
 </div>
-<div class="bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium flex items-center gap-2 hover:bg-white/30 transition-all cursor-default select-none shadow-sm">
-<span class="material-symbols-outlined text-base">cloud_upload</span>
-<span class="">Nộp trực tuyến</span>
+</div>
+<div class="flex items-start gap-4 p-3 rounded-xl bg-white/10 backdrop-blur-md transition duration-200">
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center shrink-0 text-[#ffdf8a]">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div>
+<h2 class="font-label-lg text-white">Tự động lập tờ khai Hộ kinh doanh nhanh chóng</h2>
+<p class="font-body-md text-white/80 mt-0.5 [@media(max-height:760px)]:hidden">Hỗ trợ chuẩn bị tờ khai và thông tin cần thiết cho hộ kinh doanh.</p>
+</div>
 </div>
 </div>
 </div>
 </section>
-<!-- RIGHT PANEL (40% width Desktop): Pure Clean Minimal Registration Form -->
-<section class="w-full lg:w-[40%] bg-white flex flex-col justify-center items-center px-6 py-10 lg:py-16">
-<div class="w-full max-w-md px-2 sm:px-6 flex flex-col justify-center">
-<!-- Logo Emblem -->
-<div class="flex justify-center mb-1">
-<div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-[#DA251D]">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">shield</span>
+<!-- RIGHT PANEL: Registration Form -->
+<section class="auth-panel auth-panel--signup w-full lg:w-[40%] flex flex-col justify-center items-center px-6 py-10 lg:py-16">
+<div class="flex items-center justify-between w-full max-w-[440px] mx-auto motion-safe:animate-fade-up-late">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-subtle font-label-md text-secondary">
+<span class="w-2 h-2 rounded-full bg-state-success"></span>
+<span>Hệ thống trực tuyến</span>
+</div>
+<div aria-label="Ngôn ngữ hiện tại: Tiếng Việt" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-subtle text-on-surface font-label-md">
+<span class="text-base leading-none">🇻🇳</span>
+<span>VI</span>
 </div>
 </div>
-<!-- Title & Subtitle -->
-<h2 class="text-3xl font-bold text-gray-900 text-center mt-3 tracking-tight">Đăng ký</h2>
-<p class="text-sm text-gray-500 text-center mt-1 mb-8">Tạo tài khoản để sử dụng dịch vụ</p>
-<!-- Registration Form (Only 3 fields) -->
-<form class="space-y-5" onsubmit="event.preventDefault(); const password = this.querySelector('#password').value; const confirmation = this.querySelector('#confirm-password').value; if (password !== confirmation) { alert('Mật khẩu xác nhận không khớp.'); return; } window.location.href = '/login?registered=1';">
-<!-- 1. Tên đăng nhập -->
+<div class="auth-card w-full max-w-[440px] mx-auto my-auto py-4">
+<nav class="auth-tabs" aria-label="Tài khoản">
+<a href="/login">Đăng nhập</a>
+<a href="/signup" aria-current="page">Đăng ký</a>
+</nav>
+<div class="auth-card-header text-center sm:text-left mb-6 [@media(max-height:760px)]:mb-4 motion-safe:animate-fade-up">
+<div class="auth-brand-row inline-flex sm:flex items-center gap-3 mb-4 [@media(max-height:760px)]:mb-2">
+<div class="w-12 h-12 rounded-xl bg-surface-brand-tint p-1 flex items-center justify-center shadow-sm">
+<img alt="Biểu trưng Cổng Dịch vụ công" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEAA9lNiqSALUJs-8-991kLV_iapHVkb4fmX6oA2a4qhQapEBWLcUdBumKVXdtvRQusKxjruS_YDg_FwN8kXJNBz-jpqkl0oRQbWHtVk_Sccv2u_karOi4bX1UJsdw3s8z-XCSHK0yBqAyGvIyh0_R7vn-o2W7DDOojs2Zvd6d3wdiBlK9b8frFfhCOTGmRYyoSF66BNkBy2LAXJadnsvby3_gz9YmBA9Cl8ABjcPUFkYAE0rNX6CnKpGSLOrMh_23Ju8">
+</div>
 <div>
-<label class="block text-sm font-semibold text-gray-700 mb-1.5" for="username">Số CCCD <span class="text-[#DA251D]">*</span></label>
-<div class="relative">
+<span class="inline-block px-2 py-0.5 bg-surface-brand-tint text-primary font-label-sm rounded uppercase tracking-wider">Phiên bản Số hóa 2.4</span>
+<p class="mt-1 text-xs text-secondary sm:hidden">Trợ lý hồ sơ pháp lý đất đai</p>
+</div>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Đăng ký tài khoản</h2>
+<p class="font-body-md text-body-md text-secondary">Tạo tài khoản để sử dụng dịch vụ hồ sơ trực tuyến.</p>
+</div>
+<!-- Registration Form -->
+<form id="signup-form" class="space-y-4 motion-safe:animate-fade-up-late">
+<!-- Username -->
+<div>
+<label class="block font-label-md text-on-surface mb-1.5" for="username">Tên đăng nhập <span class="text-primary">*</span></label>
+<div class="auth-field-wrap group relative">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
 <span class="material-symbols-outlined text-xl">person</span>
 </div>
-<input class="w-full h-12 pl-11 pr-4 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/20 transition-all" id="username" name="username" placeholder="Nhập 12 số CCCD" required="" type="text">
+<input class="w-full h-12 pl-11 pr-4 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" id="username" name="username" aria-describedby="username-error" autocomplete="username" placeholder="Nhập tên đăng nhập" required="" type="text">
 </div>
+<p class="auth-field-error hidden mt-1 text-sm text-state-error motion-safe:animate-fade-up" id="username-error" role="alert" aria-live="polite"></p>
+</div>
+<!-- Gmail / Email -->
+<div>
+<label class="block font-label-md text-on-surface mb-1.5" for="email">Gmail / Email <span class="text-primary">*</span></label>
+<div class="auth-field-wrap group relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+<span class="material-symbols-outlined text-xl">mail</span>
+</div>
+<input class="w-full h-12 pl-11 pr-4 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" id="email" name="email" aria-describedby="email-error" type="email" autocomplete="email" placeholder="ten@gmail.com" required>
+</div>
+<p class="auth-field-error hidden mt-1 text-sm text-state-error motion-safe:animate-fade-up" id="email-error" role="alert" aria-live="polite"></p>
+</div>
+<!-- Phone -->
+<div>
+<label class="block font-label-md text-on-surface mb-1.5" for="phone">Số điện thoại <span class="text-primary">*</span></label>
+<div class="auth-field-wrap group relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+<span class="material-symbols-outlined text-xl">call</span>
+</div>
+<input class="w-full h-12 pl-11 pr-4 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" id="phone" name="phone" aria-describedby="phone-error" type="tel" autocomplete="tel" inputmode="tel" placeholder="Nhập số điện thoại" required>
+</div>
+<p class="auth-field-error hidden mt-1 text-sm text-state-error motion-safe:animate-fade-up" id="phone-error" role="alert" aria-live="polite"></p>
 </div>
 <!-- 2. Mật khẩu -->
 <div>
-<label class="block text-sm font-semibold text-gray-700 mb-1.5" for="password">
-              Mật khẩu <span class="text-[#DA251D]">*</span>
+<label class="block font-label-md text-on-surface mb-1.5" for="password">
+              Mật khẩu <span class="text-primary">*</span>
 </label>
-<div class="relative">
+<div class="auth-field-wrap group relative">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
 <span class="material-symbols-outlined text-xl">lock</span>
 </div>
-<input class="w-full h-12 pl-11 pr-11 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/20 transition-all" id="password" name="password" placeholder="Nhập mật khẩu" required="" type="password">
+<input class="w-full h-12 pl-11 pr-11 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" id="password" name="password" aria-describedby="password-error" autocomplete="new-password" minlength="8" placeholder="Nhập mật khẩu" required="" type="password">
 <button aria-label="Hiện hoặc ẩn mật khẩu" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none" id="toggle-pwd-1" onclick="togglePasswordVisibility('password', 'pwd-icon-1')" type="button">
 <span class="material-symbols-outlined text-xl" id="pwd-icon-1">visibility</span>
 </button>
 </div>
+<p class="auth-field-error hidden mt-1 text-sm text-state-error motion-safe:animate-fade-up" id="password-error" role="alert" aria-live="polite"></p>
 </div>
 <!-- 3. Xác nhận mật khẩu -->
 <div>
-<label class="block text-sm font-semibold text-gray-700 mb-1.5" for="confirm-password">
-              Xác nhận mật khẩu <span class="text-[#DA251D]">*</span>
+<label class="block font-label-md text-on-surface mb-1.5" for="confirm-password">
+              Xác nhận mật khẩu <span class="text-primary">*</span>
 </label>
-<div class="relative">
+<div class="auth-field-wrap group relative">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
 <span class="material-symbols-outlined text-xl">lock</span>
 </div>
-<input class="w-full h-12 pl-11 pr-11 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/20 transition-all" id="confirm-password" name="confirm-password" placeholder="Nhập lại mật khẩu" required="" type="password">
+<input class="w-full h-12 pl-11 pr-11 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" id="confirm-password" name="confirm-password" aria-describedby="confirm-password-error" autocomplete="new-password" minlength="8" placeholder="Nhập lại mật khẩu" required="" type="password">
 <button aria-label="Hiện hoặc ẩn xác nhận mật khẩu" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none" id="toggle-pwd-2" onclick="togglePasswordVisibility('confirm-password', 'pwd-icon-2')" type="button">
 <span class="material-symbols-outlined text-xl" id="pwd-icon-2">visibility</span>
 </button>
 </div>
+<p class="auth-field-error hidden mt-1 text-sm text-state-error motion-safe:animate-fade-up" id="confirm-password-error" role="alert" aria-live="polite"></p>
 </div>
 <!-- Checkbox: Terms -->
 <div class="flex items-center space-x-2.5 pt-1">
@@ -141,15 +189,15 @@
 </label>
 </div>
 <!-- Primary Red Button -->
-<button class="w-full py-3.5 bg-[#DA251D] hover:bg-[#c01f18] text-white rounded-lg font-semibold text-base shadow-md transition-colors active:scale-[0.99] flex items-center justify-center space-x-2 mt-2" type="submit">
-<span class="">Đăng ký</span>
+<button id="signup-submit-button" aria-busy="false" class="auth-submit w-full h-12 px-6 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition duration-150 motion-reduce:transition-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-wait" type="submit">
+<span id="signup-submit-label">Đăng ký</span>
+<span id="signup-auth-spinner" aria-hidden="true" class="hidden h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/50 border-t-white motion-reduce:animate-none"></span>
 </button>
+<p id="signup-auth-message" class="min-h-5 text-sm text-center" role="status" aria-live="polite"></p>
 <!-- Navigation Link -->
-<div class="text-center pt-3">
-<p class="text-sm text-gray-600">
-              Đã có tài khoản? 
-              <a class="text-[#DA251D] font-semibold hover:underline ml-1" href="/login">Đăng nhập</a>
-</p>
+<div class="auth-account-switch pt-3">
+<span class="text-sm text-gray-600">Đã có tài khoản?</span>
+<a class="text-sm text-[#DA251D] font-semibold hover:underline" href="/login">Đăng nhập</a>
 </div>
 </form>
 </div>
@@ -173,4 +221,6 @@
   </script>
 
 
+<script type="module" src="/signup-auth.js"></script>
+<script src="/auth-shell.js" defer></script>
 </body></html>
