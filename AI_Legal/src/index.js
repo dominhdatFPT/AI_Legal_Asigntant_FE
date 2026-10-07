@@ -15,6 +15,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'login.html'));
 });
 
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'signup.html'));
+});
+
 app.get('/api/firebase-config', (req, res) => {
   try {
     const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
@@ -54,6 +58,10 @@ app.get('/api/firebase-config', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
+});
+
+app.get('/detail-information', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
 app.get('/user-dashboard', (req, res) => {
