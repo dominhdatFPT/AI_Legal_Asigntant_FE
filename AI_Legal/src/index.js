@@ -77,8 +77,12 @@ app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
-app.get('/applicationSubmission', (req, res) => {
+app.get('/api/application-submission-view', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+});
+
+app.get('/applicationSubmission', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
 // Bắt đầu lắng nghe các kết nối
