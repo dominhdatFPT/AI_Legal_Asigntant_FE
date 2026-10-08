@@ -46,6 +46,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script
         id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "border-focus": "#DA251D", "error": "#ba1a1a", "surface-container-high": "#dee9f9", "error-container": "#ffdad6", "surface-bright": "#f7f9ff", "on-tertiary-container": "#fff4e2", "tertiary-fixed": "#ffdf99", "primary-fixed": "#ffdad5", "secondary-fixed-dim": "#bcc8d6", "state-success": "#15803D", "secondary-container": "#d8e4f3", "surface-container-low": "#edf4ff", "surface-container-highest": "#d8e3f3", "inverse-surface": "#27313d", "primary-fixed-dim": "#ffb4a9", "on-primary": "#ffffff", "inverse-primary": "#ffb4a9", "on-tertiary": "#ffffff", "on-tertiary-fixed-variant": "#5a4300", "on-primary-fixed-variant": "#930004", "surface-container": "#e4effe", "surface-variant": "#d8e3f3", "tertiary": "#6f5400", "surface-container-lowest": "#ffffff", "inverse-on-surface": "#e8f1ff", "on-secondary": "#ffffff", "surface-brand-tint": "#FDF2F1", "on-surface": "#121c27", "border-subtle": "#E2E8F0", "outline": "#916f6a", "on-secondary-fixed": "#111d27", "secondary": "#545f6c", "primary-container": "#da251d", "on-primary-container": "#fff3f1", "on-error-container": "#93000a", "on-tertiary-fixed": "#251a00", "surface-dim": "#d0dbea", "on-surface-variant": "#5d403b", "on-secondary-fixed-variant": "#3d4854", "on-secondary-container": "#5a6572", "background": "#f7f9ff", "on-background": "#121c27", "surface-tint": "#bf080b", "secondary-fixed": "#d8e4f3", "primary": "#b40006", "tertiary-container": "#8d6b02", "surface": "#f7f9ff", "surface-subtle": "#F8FAFC", "state-error": "#B91C1C", "tertiary-fixed-dim": "#ecc15a", "outline-variant": "#e6bdb7", "surface-panel": "#FFFFFF", "on-primary-fixed": "#410001", "on-error": "#ffffff" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "margin": "2rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem" }, "fontFamily": { "headline-lg-mobile": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "display-hero": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"] }, "fontSize": { "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }] } } } };</script>
+<style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased min-h-screen">
@@ -612,6 +613,11 @@
             });
         </script>
     </main>
+<script type="module">
+  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
+  import { protectPage } from '/auth-api.js';
+  protectPage();
+</script>
 </body>
 
 </html>
