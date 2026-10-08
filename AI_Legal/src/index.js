@@ -69,6 +69,10 @@ app.get('/detail-information', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
+app.get('/user-management', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-management.html'));
+});
+
 app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
