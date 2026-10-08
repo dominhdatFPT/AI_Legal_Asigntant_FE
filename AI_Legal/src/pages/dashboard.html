@@ -193,32 +193,32 @@
       </div>
 
       <!-- Navigation Links -->
-      <nav class="flex flex-col gap-1.5 px-space-md"
+      <nav class="flex flex-col gap-1.5 px-space-md" id="sidebar-nav"
         data-active-classes="bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-label-md shadow-lg shadow-amber-950/40 border-l-4 border-white">
         <a aria-current="page"
-          class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
-          data-path="tong-quan" href="#">
+          class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
+          data-path="tong-quan" href="/dashboard">
           <span class="material-symbols-outlined text-[20px] text-stone-950 group-hover:scale-110 transition-transform"
             style="font-variation-settings: 'FILL' 1;">grid_view</span>
           <span class="font-label-md text-label-md tracking-wide">Tổng quan</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
           data-path="ho-so-dat-dai" href="#">
           <span
             class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">landscape</span>
           <span class="font-label-md text-label-md">Hồ sơ đất đai</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
           data-path="ho-so-ho-kinh-doanh" href="#">
           <span
             class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">storefront</span>
           <span class="font-label-md text-label-md">Hồ sơ hộ kinh doanh</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="cai-dat-he-thong" href="#">
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+          data-path="quan-ly-nguoi-dung" href="/user-management">
           <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">tune</span>
-          <span class="font-label-md text-label-md">Cài đặt hệ thống</span>
+            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">group</span>
+          <span class="font-label-md text-label-md">Quản lí người dùng</span>
         </a>
       </nav>
     </div>
@@ -1142,6 +1142,38 @@
   // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
   import { protectPage } from '/auth-api.js';
   protectPage(['admin']);
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && href !== '#' && href.startsWith('/')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+
+    const logoutBtn = document.querySelector('[data-logout]');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          if (typeof auth !== 'undefined' && auth.signOut) {
+            auth.signOut().then(() => {
+              window.location.href = '/login';
+            }).catch(() => {
+              window.location.href = '/login';
+            });
+          } else {
+            window.location.href = '/login';
+          }
+        }
+      });
+    }
+  });
 </script>
 </body>
 
