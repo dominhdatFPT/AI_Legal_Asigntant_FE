@@ -159,6 +159,7 @@
       }
     };
   </script>
+<style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950">
@@ -233,14 +234,14 @@
             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="font-label-md text-label-md text-white font-bold truncate">Nguyễn Văn An</span>
+            <span class="font-label-md text-label-md text-white font-bold truncate" data-user-field="name">Người dùng</span>
             <span class="font-label-sm text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
-              <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> Chuyên viên quản lý
+              <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
             </span>
           </div>
         </a>
         <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
-          href="#" title="Đăng xuất">
+          href="/login" title="Đăng xuất" data-logout>
           <span class="material-symbols-outlined text-[19px]">logout</span>
         </a>
       </div>
@@ -313,7 +314,7 @@
                 </div>
                 <h1
                   class="font-headline-lg text-headline-lg text-white font-extrabold mt-2 tracking-tight drop-shadow-sm">
-                  Xin chào, Nguyễn Văn An
+                  Xin chào, <span data-user-field="name">Người dùng</span>
                 </h1>
                 <p class="font-body-md text-body-md text-red-100/90 mt-1 max-w-2xl leading-relaxed">
                   Hôm nay bạn cần tra cứu hoặc xử lý hồ sơ nào? Hệ thống đã đồng bộ cơ sở dữ liệu địa chính và hộ kinh
@@ -1137,6 +1138,11 @@
     </button>
   </div>
 
+<script type="module">
+  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
+  import { protectPage } from '/auth-api.js';
+  protectPage(['admin']);
+</script>
 </body>
 
 </html>
