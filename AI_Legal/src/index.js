@@ -77,6 +77,10 @@ app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
+app.get('/applicationSubmission', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+});
+
 // Bắt đầu lắng nghe các kết nối
 if (require.main === module) {
   app.listen(port, () => {
