@@ -44,23 +44,6 @@
       box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35);
     }
 
-    /* Laser scan animation for eKYC reading */
-    @keyframes scanAnimation {
-      0% { top: 0%; opacity: 0.8; }
-      50% { top: 95%; opacity: 1; }
-      100% { top: 0%; opacity: 0.8; }
-    }
-
-    .scanner-line {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #ef4444, #f59e0b, #ef4444, transparent);
-      box-shadow: 0 0 12px 2px rgba(239, 68, 68, 0.8);
-      animation: scanAnimation 1.6s ease-in-out infinite;
-      z-index: 20;
-    }
   </style>
 
   <!-- Tailwind CSS & Exact Dashboard Tailwind Configuration -->
@@ -180,6 +163,7 @@
       }
     };
   </script>
+  <link rel="stylesheet" href="/admin-ai-chat.css">
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950 min-h-screen">
@@ -246,8 +230,7 @@
     <!-- User Profile in Sidebar (Matching dashboard.html) -->
     <div class="p-space-md bg-black/25 border-t border-white/10">
       <div class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <a class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1 hover:bg-white/10 transition-colors"
-          href="/detail-information" title="Xem thông tin chi tiết">
+        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
           <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
           </div>
@@ -257,7 +240,7 @@
               <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
             </span>
           </div>
-        </a>
+        </div>
         <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
           href="/login" title="Đăng xuất" data-logout>
           <span class="material-symbols-outlined text-[19px]">logout</span>
@@ -297,11 +280,11 @@
 
         <div class="h-5 w-px bg-stone-300"></div>
 
-        <a href="/detail-information"
-          class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs hover:ring-amber-400 transition-all"
-          title="Thông tin tài khoản">
+        <div
+          class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs"
+          aria-hidden="true">
           <span class="material-symbols-outlined text-white text-[18px]">person</span>
-        </a>
+        </div>
       </div>
     </header>
 
@@ -310,16 +293,16 @@
       <div class="flex flex-col w-full space-y-6">
 
         <!-- 1. TOP COMMAND BAR -->
-        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-md border border-stone-300/80">
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-gradient-to-r from-[#6e0d16] via-[#7d141e] to-[#9f1239] p-6 rounded-2xl shadow-md border border-red-900/50">
           <div class="space-y-1">
 
-            <h1 class="font-headline-lg text-headline-lg text-stone-900 font-extrabold tracking-tight mt-1">Quản Lý Danh Sách Người Dùng</h1>
-            <p class="font-body-md text-body-md text-stone-600">Hồ sơ định danh điện tử công dân, tích hợp quét ảnh CCCD gắn chip eKYC tự động và phân quyền nghiệp vụ hành chính số.</p>
+            <h1 class="font-headline-lg text-headline-lg text-white font-extrabold tracking-tight mt-1">Quản Lý Danh Sách Người Dùng</h1>
+            <p class="font-body-md text-body-md text-red-100">Quản lý thông tin người dùng, giấy tờ và phân quyền nghiệp vụ hành chính số.</p>
           </div>
           <div class="flex flex-wrap items-center gap-3">
             <button id="btn-open-create-modal"
-              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white font-label-md text-label-md font-bold shadow-md shadow-red-700/30 transition-all duration-200 active:scale-95">
-              <span class="material-symbols-outlined text-[19px]">person_add</span>
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-label-md text-label-md font-bold shadow-md shadow-black/20 transition-all duration-200 active:scale-95">
+              <span class="material-symbols-outlined text-[19px] text-stone-950">person_add</span>
               <span>+ Tạo Tài Khoản Người Dùng</span>
             </button>
             <button id="btn-export-excel"
@@ -363,10 +346,6 @@
                 <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700" id="count-locked">1</span>
               </button>
             </div>
-            <div class="flex items-center gap-2 text-stone-500 font-label-sm text-xs">
-              <span class="w-2 h-2 rounded-full bg-state-success animate-pulse"></span>
-              <span>Đồng bộ CSDL Dân Cư Quốc Gia (VNeID Mức 2)</span>
-            </div>
           </div>
 
           <!-- Search Inputs & Dropdowns -->
@@ -408,7 +387,7 @@
               </span>
             </div>
             <span class="text-stone-500 font-body-sm text-xs flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px] text-emerald-600">shield</span> Xác thực sinh trắc học VNeID
+              <span class="material-symbols-outlined text-[14px] text-stone-500">manage_accounts</span> Quản lý hồ sơ người dùng
             </span>
           </div>
 
@@ -465,7 +444,7 @@
 
   <!-- ========================================================================= -->
   <!-- MODAL ĐẦY ĐỦ: XEM CHI TIẾT (CHỈ XEM) HOẶC CHỈNH SỬA HỒ SƠ NGƯỜI DÙNG -->
-  <!-- ĐẦY ĐỦ: ẢNH CCCD MẶT TRƯỚC/SAU, NÚT "ĐỌC THÔNG TIN" eKYC, MỤC 2 ĐỊNH DANH, -->
+  <!-- ĐẦY ĐỦ: ẢNH CCCD MẶT TRƯỚC/SAU, MỤC 2 ĐỊNH DANH, -->
   <!-- MỤC 3 THẺ, MỤC 4 ĐỊA CHỈ (QUÊ QUÁN, THƯỜNG TRÚ, HIỆN TẠI VỚI CHECKBOX), -->
   <!-- MỤC 5 NHẬP TAY (SĐT, EMAIL CHỈ XEM, DÂN TỘC, MST), MỤC 6 XÁC NHẬN VÀ LƯU -->
   <!-- ========================================================================= -->
@@ -480,7 +459,7 @@
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <span class="font-label-sm text-amber-300 uppercase tracking-widest text-[10px] font-bold">HỒ SƠ ĐỊNH DANH ĐIỆN TỬ</span>
+              <span class="font-label-sm text-amber-300 uppercase tracking-widest text-[10px] font-bold">HỒ SƠ NGƯỜI DÙNG</span>
               <span id="modal-user-id-badge" class="px-2 py-0.2 rounded font-label-code text-[11px] bg-white/10 text-white font-bold">USR-0010928</span>
               <!-- Chế độ: Chỉ xem vs Chỉnh sửa -->
               <span id="modal-mode-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-200 border border-amber-300/30">
@@ -508,7 +487,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span id="modal-avatar-name" class="font-title-md text-title-md font-bold text-stone-900">Nguyễn Văn An</span>
-              <span id="modal-verified-icon" class="material-symbols-outlined text-[17px] text-red-600" title="Đã đối soát VNeID">verified</span>
+              <span id="modal-verified-icon" class="material-symbols-outlined text-[17px] text-red-600" title="Hồ sơ đã xác minh">verified</span>
             </div>
             <div class="flex items-center gap-2 text-xs text-stone-500 mt-0.5">
               <span id="modal-meta-regdate">Ngày tạo: 14/01/2024</span>
@@ -526,7 +505,7 @@
       <div class="p-6 overflow-y-auto max-h-[72vh] space-y-6 bg-white" id="modal-scroll-body">
 
         <!-- ================================================================= -->
-        <!-- MỤC 1: ẢNH CCCD (ẢNH MẶT TRƯỚC, ẢNH MẶT SAU & NÚT "ĐỌC THÔNG TIN" eKYC) -->
+        <!-- MỤC 1: ẢNH CCCD (ẢNH MẶT TRƯỚC VÀ MẶT SAU) -->
         <!-- ================================================================= -->
         <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/50 to-stone-50 border border-amber-200/80 shadow-xs space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 pb-2.5">
@@ -536,16 +515,10 @@
               </div>
               <div>
                 <h4 class="font-label-md text-label-md font-extrabold text-stone-900 uppercase">1. Ảnh Căn Cước Công Dân (Mặt trước &amp; Mặt sau)</h4>
-                <p class="text-xs text-stone-500">Hình ảnh chụp gốc hoặc bản quét eKYC từ ứng dụng định danh quốc gia VNeID</p>
+                <p class="text-xs text-stone-500">Ảnh giấy tờ do người dùng cung cấp; vui lòng kiểm tra thông tin trước khi lưu.</p>
               </div>
             </div>
 
-            <!-- Nút bấm "Đọc thông tin" để eKYC điền sẵn mục 2-4 -->
-            <button id="btn-ekyc-read" type="button"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-stone-950 font-label-md text-label-md font-bold shadow-md shadow-amber-900/20 active:scale-95 transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-[20px] text-stone-950 animate-pulse">document_scanner</span>
-              <span>Đọc thông tin (eKYC)</span>
-            </button>
           </div>
 
           <!-- Khu vực 2 ảnh thẻ CCCD trực quan -->
@@ -565,7 +538,6 @@
               
               <!-- Card Mockup Mặt Trước -->
               <div id="card-front-box" class="relative rounded-xl p-3.5 bg-gradient-to-br from-[#d4f1f4] via-[#eaf6f6] to-[#fce38a]/40 border-2 border-amber-300/80 shadow-md overflow-hidden flex flex-col justify-between h-[180px]">
-                <div id="scanner-line-front" class="scanner-line hidden"></div>
                 <!-- Card Header -->
                 <div class="flex items-start justify-between border-b border-stone-300/60 pb-1.5">
                   <div class="flex items-center gap-2">
@@ -612,7 +584,7 @@
                   <span>Có giá trị đến: <b id="card-front-expiry" class="text-red-700">15/08/2048</b></span>
                   <div class="flex items-center gap-1 font-label-code text-[8px] text-stone-400">
                     <span class="material-symbols-outlined text-[12px] text-emerald-600">qr_code_2</span>
-                    <span>VNeID Chip</span>
+                    <span>CCCD gắn chip</span>
                   </div>
                 </div>
               </div>
@@ -630,11 +602,10 @@
               
               <!-- Card Mockup Mặt Sau -->
               <div id="card-back-box" class="relative rounded-xl p-3.5 bg-gradient-to-br from-[#d4f1f4] via-[#eaf6f6] to-[#fce38a]/40 border-2 border-amber-300/80 shadow-md overflow-hidden flex flex-col justify-between h-[180px]">
-                <div id="scanner-line-back" class="scanner-line hidden"></div>
                 <!-- Card Header Back -->
                 <div class="flex items-center justify-between text-[9px] border-b border-stone-300/60 pb-1">
                   <span class="font-bold text-stone-700">Đặc điểm nhận dạng: Nốt ruồi c. 1cm dưới mép trái</span>
-                  <span class="text-[8px] font-label-code text-stone-500">QR-VNeID</span>
+                  <span class="text-[8px] font-label-code text-stone-500">Mã QR</span>
                 </div>
 
                 <!-- Issue Information -->
@@ -671,7 +642,7 @@
               <span class="material-symbols-outlined text-[18px]">badge</span>
               <span>2. Thông Tin Định Danh Công Dân</span>
             </span>
-            <span class="text-xs text-stone-500 font-medium">* Tự động trích xuất chính xác qua eKYC</span>
+            <span class="text-xs text-stone-500 font-medium">Vui lòng kiểm tra thông tin trước khi lưu hồ sơ.</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
@@ -952,7 +923,7 @@
       <div class="px-6 py-4 bg-[#F8F5EE] flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-200">
         <div class="flex items-center gap-2 text-xs text-stone-500">
           <span class="material-symbols-outlined text-[16px] text-amber-600">security</span>
-          <span>Dữ liệu được mã hóa và đối soát bảo mật VNeID Mức 2</span>
+          <span>Thông tin chỉ phục vụ quản lý hồ sơ người dùng.</span>
         </div>
 
         <div class="flex items-center gap-3">
@@ -1015,7 +986,7 @@
               <span class="material-symbols-outlined text-[17px]">id_card</span>
               <span>1. Định Danh &amp; Thông Tin Công Dân</span>
             </span>
-            <span class="text-xs text-stone-500 font-medium">* Tự động xác thực qua cơ sở dữ liệu VNeID</span>
+            <span class="text-xs text-stone-500 font-medium">Thông tin do người dùng cung cấp; cần được kiểm tra trước khi lưu.</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
@@ -1056,7 +1027,7 @@
             <div class="space-y-1">
               <label class="font-label-sm text-[11px] text-stone-500 uppercase font-bold">Trạng Thái Xác Thực Ban Đầu</label>
               <select id="create-user-status" class="w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600">
-                <option value="active">Đã xác minh qua VNeID mức 2 (Hoạt động)</option>
+                <option value="active">Đã xác minh hồ sơ (Hoạt động)</option>
                 <option value="pending">Chờ xác thực ảnh CCCD</option>
                 <option value="locked">Tạm khóa / Hạn chế</option>
               </select>
@@ -1194,7 +1165,7 @@
         verified: true,
         regDate: "14/01/2024",
         regTime: "09:20:15",
-        notes: "Đã đối soát sinh trắc học và căn cước công dân gắn chip thành công qua VNeID Mức 2 vào 14/01/2024 09:20. Thông tin hợp lệ.",
+        notes: "Thông tin hồ sơ đã được cán bộ kiểm tra ngày 14/01/2024. Thông tin hợp lệ.",
         initials: "NVA",
         avatarBg: "bg-[#881337]"
       },
@@ -1231,7 +1202,7 @@
         verified: true,
         regDate: "20/02/2024",
         regTime: "14:10:02",
-        notes: "Đại diện pháp luật Doanh nghiệp VietGroup, đã hoàn tất liên kết tài khoản thuế điện tử và VNeID tổ chức.",
+        notes: "Đại diện pháp luật Doanh nghiệp VietGroup, đã hoàn tất liên kết tài khoản thuế điện tử.",
         initials: "TTM",
         avatarBg: "bg-secondary"
       },
@@ -1268,7 +1239,7 @@
         verified: false,
         regDate: "05/03/2024",
         regTime: "16:45:11",
-        notes: "Hồ sơ vừa đăng ký trực tuyến, đã tải lên ảnh 2 mặt CCCD, đang chờ cán bộ đối soát hình ảnh sinh trắc học.",
+        notes: "Hồ sơ vừa đăng ký trực tuyến, đã tải lên ảnh 2 mặt CCCD và đang chờ cán bộ kiểm tra giấy tờ.",
         initials: "LHN",
         avatarBg: "bg-[#b45309]"
       },
@@ -1305,7 +1276,7 @@
         verified: true,
         regDate: "18/03/2024",
         regTime: "11:32:44",
-        notes: "Đã xác thực định danh mức 2 qua ứng dụng VNeID ngày 18/03/2024.",
+        notes: "Hồ sơ đã được cán bộ xác minh ngày 18/03/2024.",
         initials: "PTH",
         avatarBg: "bg-[#763300]"
       },
@@ -1598,7 +1569,7 @@
                 <div class="flex flex-col min-w-0">
                   <div class="flex items-center gap-1.5">
                     <span class="font-title-md text-title-md font-bold text-stone-900 truncate ${user.status === 'locked' ? 'line-through text-red-800' : ''}">${user.name}</span>
-                    ${user.verified ? '<span class="material-symbols-outlined text-[16px] text-red-600" title="Đã đối soát VNeID">verified</span>' : ''}
+                    ${user.verified ? '<span class="material-symbols-outlined text-[16px] text-red-600" title="Hồ sơ đã xác minh">verified</span>' : ''}
                   </div>
                   <span class="text-xs text-stone-500 font-label-code">ID: ${user.id}</span>
                 </div>
@@ -1815,7 +1786,6 @@
       const modalHeaderIcon = document.getElementById('modal-header-icon');
       const viewActions = document.getElementById('modal-view-actions');
       const editActions = document.getElementById('modal-edit-actions');
-      const btnEkycRead = document.getElementById('btn-ekyc-read');
       const sameAddressCheck = document.getElementById('modal-check-same-address');
 
       if (mode === 'view') {
@@ -1834,10 +1804,6 @@
 
         confirmCheckboxes.forEach(cb => cb.setAttribute('disabled', 'true'));
         if (sameAddressCheck) sameAddressCheck.setAttribute('disabled', 'true');
-        if (btnEkycRead) {
-          btnEkycRead.classList.add('opacity-50', 'pointer-events-none');
-        }
-
         viewActions.classList.remove('hidden');
         editActions.classList.add('hidden');
       } else {
@@ -1855,10 +1821,6 @@
 
         confirmCheckboxes.forEach(cb => cb.removeAttribute('disabled'));
         if (sameAddressCheck) sameAddressCheck.removeAttribute('disabled');
-        if (btnEkycRead) {
-          btnEkycRead.classList.remove('opacity-50', 'pointer-events-none');
-        }
-
         // Email LUÔN LUÔN là chỉ xem, không sửa theo yêu cầu
         const emailInput = document.getElementById('modal-input-email');
         if (emailInput) {
@@ -1912,73 +1874,6 @@
         }
         if (hint) hint.classList.add('hidden');
       }
-    }
-
-    // =========================================================================
-    // TÍNH NĂNG "ĐỌC THÔNG TIN" (eKYC SCAN): TỰ ĐỘNG ĐIỀN CÁC MỤC 2-4 TỪ ẢNH CCCD
-    // =========================================================================
-    function triggerEkycReading() {
-      const btnEkycRead = document.getElementById('btn-ekyc-read');
-      const scanFront = document.getElementById('scanner-line-front');
-      const scanBack = document.getElementById('scanner-line-back');
-
-      // Bật hiệu ứng quét laser
-      scanFront.classList.remove('hidden');
-      scanBack.classList.remove('hidden');
-      btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[19px] animate-spin">sync</span><span>Đang đọc CCCD...</span>`;
-      btnEkycRead.classList.add('pointer-events-none');
-
-      setTimeout(() => {
-        // Giả lập đọc OCR từ ảnh CCCD của người dùng hiện tại
-        const user = usersData.find(u => u.id === currentModalUserId) || usersData[0];
-
-        // 2. Điền Mục Định danh
-        document.getElementById('modal-input-name').value = user.name;
-        document.getElementById('modal-input-cccd').value = user.cccd;
-        document.getElementById('modal-input-dob').value = user.dob;
-        document.getElementById('modal-input-gender').value = user.gender;
-        document.getElementById('modal-input-nationality').value = user.nationality || "Việt Nam";
-
-        // 3. Điền Mục Thẻ
-        document.getElementById('modal-input-card-issuedate').value = user.cardIssueDate || "12/05/2021";
-        document.getElementById('modal-input-card-issueplace').value = user.cardIssuePlace || "Cục Cảnh sát QLHC về TTXH";
-        document.getElementById('modal-input-card-expiry').value = user.cardExpiry || "15/08/2048";
-
-        // 4. Điền Mục Địa chỉ
-        document.getElementById('modal-input-hometown').value = user.hometown || "Quê quán theo CSDL VNeID";
-        document.getElementById('modal-input-perm-street').value = user.permanentAddress?.street || "Số 42, Phố Tràng Thi";
-        document.getElementById('modal-input-perm-ward').value = user.permanentAddress?.ward || "Phường Hàng Trống";
-        document.getElementById('modal-input-perm-city').value = user.permanentAddress?.city || "Quận Hoàn Kiếm, TP. Hà Nội";
-
-        syncCurrentAddressState();
-
-        // Tắt quét laser
-        scanFront.classList.add('hidden');
-        scanBack.classList.add('hidden');
-        btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[20px] text-stone-950">done_all</span><span>Đã đọc xong eKYC</span>`;
-        btnEkycRead.classList.remove('pointer-events-none');
-
-        // Highlight hiệu ứng các trường vừa điền
-        const highlightedFields = [
-          'modal-input-name', 'modal-input-cccd', 'modal-input-dob', 'modal-input-gender',
-          'modal-input-nationality', 'modal-input-card-issuedate', 'modal-input-card-issueplace',
-          'modal-input-card-expiry', 'modal-input-hometown', 'modal-input-perm-street',
-          'modal-input-perm-ward', 'modal-input-perm-city'
-        ];
-        highlightedFields.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.classList.add('ring-2', 'ring-amber-500', 'bg-amber-50/50');
-            setTimeout(() => el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-50/50'), 2000);
-          }
-        });
-
-        showToast('Đọc eKYC thành công!', 'Đã tự động trích xuất và điền sẵn thông tin các Mục 2 (Định danh), Mục 3 (Thẻ), Mục 4 (Địa chỉ).');
-
-        setTimeout(() => {
-          btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[20px] text-stone-950">document_scanner</span><span>Đọc thông tin (eKYC)</span>`;
-        }, 3000);
-      }, 700);
     }
 
     // =========================================================================
@@ -2273,9 +2168,6 @@
       // NÚT "LƯU HỒ SƠ"
       document.getElementById('btn-save-user-record')?.addEventListener('click', saveUserRecord);
 
-      // Nút "Đọc thông tin" eKYC
-      document.getElementById('btn-ekyc-read')?.addEventListener('click', triggerEkycReading);
-
       // Ô tick "Giống nơi thường trú"
       const sameAddressCheck = document.getElementById('modal-check-same-address');
       if (sameAddressCheck) {
@@ -2362,6 +2254,7 @@
       console.log('Chạy ở chế độ giao diện độc lập:', e.message);
     }
   </script>
+  <script src="/admin-ai-chat.js" defer></script>
 
 </body>
 
