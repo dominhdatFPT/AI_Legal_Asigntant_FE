@@ -348,11 +348,11 @@
               </button>
               <button data-filter="personal"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors">
-                Cá nhân (<span id="count-personal">5</span>)
+                Công dân (<span id="count-personal">5</span>)
               </button>
               <button data-filter="business"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors">
-                Doanh nghiệp (<span id="count-business">3</span>)
+                Luật sư (<span id="count-business">3</span>)
               </button>
               <button data-filter="active"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-emerald-800 hover:bg-emerald-50 transition-colors flex items-center gap-1.5">
@@ -388,8 +388,9 @@
               <select id="user-type-select"
                 class="w-full px-3 py-2 bg-stone-50 rounded-xl border border-stone-300 text-body-md font-body-md text-stone-800 focus:outline-none focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-600 cursor-pointer font-medium">
                 <option value="">Tất cả Loại tài khoản</option>
-                <option value="personal">Cá nhân (Công dân)</option>
-                <option value="business">Doanh nghiệp / Tổ chức</option>
+                <option value="personal">Công dân</option>
+                <option value="business">Luật sư</option>
+                <option value="admin">Quản trị viên</option>
               </select>
             </div>
             <div class="md:col-span-3">
@@ -397,7 +398,7 @@
                 class="w-full px-3 py-2 bg-stone-50 rounded-xl border border-stone-300 text-body-md font-body-md text-stone-800 focus:outline-none focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-600 cursor-pointer font-medium">
                 <option value="">Tất cả Trạng thái</option>
                 <option value="active">Đang hoạt động</option>
-                <option value="pending">Chờ xác thực</option>
+                <option value="pending">Chờ xác thực (chưa khai hồ sơ CCCD)</option>
                 <option value="locked">Tạm khóa tài khoản</option>
               </select>
             </div>
@@ -912,8 +913,9 @@
             <div class="space-y-1">
               <label class="font-label-sm text-[11px] text-stone-600 uppercase font-bold">Loại Tài Khoản</label>
               <select id="modal-input-type" class="modal-input w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none font-medium">
-                <option value="personal">Cá nhân (Công dân)</option>
-                <option value="business">Doanh nghiệp / Tổ chức</option>
+                <option value="personal">Công dân</option>
+                <option value="business">Luật sư</option>
+                <option value="admin">Quản trị viên</option>
               </select>
             </div>
 
@@ -1064,8 +1066,9 @@
             <div class="space-y-1">
               <label class="font-label-sm text-[11px] text-stone-500 uppercase font-bold">Loại Tài Khoản *</label>
               <select id="create-user-type" class="w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600">
-                <option value="personal">Cá nhân (Công dân)</option>
-                <option value="business">Doanh nghiệp / Tổ chức</option>
+                <option value="personal">Công dân</option>
+                <option value="business">Luật sư</option>
+                <option value="admin">Quản trị viên</option>
               </select>
             </div>
             <div class="space-y-1">
@@ -1168,311 +1171,234 @@
   <!-- JAVASCRIPT: DATA STORE & CONTROLLER -->
   <!-- ========================================================= -->
   <script>
-    // Dữ liệu người dùng toàn diện chứa ĐỦ TẤT CẢ các mục được yêu cầu:
-    // 1. Ảnh CCCD (mặt trước, mặt sau)
-    // 2. Định danh: họ và tên, số CCCD, ngày sinh, giới tính, quốc tịch
-    // 3. Thẻ: ngày cấp, nơi cấp, hạn thẻ
-    // 4. Địa chỉ: quê quán, thường trú (số nhà/đường, xã/phường, tỉnh/thành), hiện tại (với checkbox)
-    // 5. Nhập tay: số điện thoại, email (chỉ xem, không sửa), dân tộc, mã số thuế
-    // 6. Xác nhận: cam đoan đúng sự thật, đồng ý lưu thông tin cá nhân
-    let usersData = [
-      {
-        id: "USR-0010928",
-        name: "Nguyễn Văn An",
-        cccd: "001092003841",
-        dob: "15/08/1988",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: "12/05/2021",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "15/08/2048",
-        hometown: "Xã Tiên Phương, Huyện Chương Mỹ, TP. Hà Nội",
-        permanentAddress: {
-          street: "Số 42, Phố Tràng Thi",
-          ward: "Phường Hàng Trống",
-          city: "Quận Hoàn Kiếm, TP. Hà Nội"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Số 42, Phố Tràng Thi",
-          ward: "Phường Hàng Trống",
-          city: "Quận Hoàn Kiếm, TP. Hà Nội"
-        },
-        phone: "0912.345.678",
-        email: "an.nguyen@gmail.com",
-        ethnicity: "Kinh",
-        taxCode: "8392019481",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "personal",
-        status: "active",
-        verified: true,
-        regDate: "14/01/2024",
-        regTime: "09:20:15",
-        notes: "Đã đối soát sinh trắc học và căn cước công dân gắn chip thành công qua VNeID Mức 2 vào 14/01/2024 09:20. Thông tin hợp lệ.",
-        initials: "NVA",
-        avatarBg: "bg-[#881337]"
-      },
-      {
-        id: "USR-0010884",
-        name: "Trần Thị Mai",
-        cccd: "079195006421",
-        dob: "22/04/1990",
-        gender: "Nữ",
-        nationality: "Việt Nam",
-        cardIssueDate: "10/08/2021",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "22/04/2050",
-        hometown: "Xã Bình Thạnh, Huyện Cần Giờ, TP. Hồ Chí Minh",
-        permanentAddress: {
-          street: "Tầng 8, Tòa nhà VietGroup, 120 Nguyễn Huệ",
-          ward: "Phường Bến Nghé",
-          city: "Quận 1, TP. Hồ Chí Minh"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Tầng 8, Tòa nhà VietGroup, 120 Nguyễn Huệ",
-          ward: "Phường Bến Nghé",
-          city: "Quận 1, TP. Hồ Chí Minh"
-        },
-        phone: "0988.765.432",
-        email: "mai.tran@vietgroup.vn",
-        ethnicity: "Kinh",
-        taxCode: "0318294021",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "business",
-        status: "active",
-        verified: true,
-        regDate: "20/02/2024",
-        regTime: "14:10:02",
-        notes: "Đại diện pháp luật Doanh nghiệp VietGroup, đã hoàn tất liên kết tài khoản thuế điện tử và VNeID tổ chức.",
-        initials: "TTM",
-        avatarBg: "bg-secondary"
-      },
-      {
-        id: "USR-0010992",
-        name: "Lê Hoàng Nam",
-        cccd: "048091005234",
-        dob: "10/11/1995",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: "15/03/2022",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "10/11/2035",
-        hometown: "Phường Điện Ngọc, Thị xã Điện Bàn, Tỉnh Quảng Nam",
-        permanentAddress: {
-          street: "Số 18 đường Bạch Đằng",
-          ward: "Phường Thạch Thang",
-          city: "Quận Hải Châu, TP. Đà Nẵng"
-        },
-        currentAddress: {
-          sameAsPermanent: false,
-          street: "Số 85 đường Trần Phú",
-          ward: "Phường Hải Châu 1",
-          city: "Quận Hải Châu, TP. Đà Nẵng"
-        },
-        phone: "0935.210.888",
-        email: "nam.lehoang@yahoo.com",
-        ethnicity: "Kinh",
-        taxCode: "",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "personal",
-        status: "pending",
-        verified: false,
-        regDate: "05/03/2024",
-        regTime: "16:45:11",
-        notes: "Hồ sơ vừa đăng ký trực tuyến, đã tải lên ảnh 2 mặt CCCD, đang chờ cán bộ đối soát hình ảnh sinh trắc học.",
-        initials: "LHN",
-        avatarBg: "bg-[#b45309]"
-      },
-      {
-        id: "USR-0011035",
-        name: "Phạm Thu Hà",
-        cccd: "001189007621",
-        dob: "05/09/1989",
-        gender: "Nữ",
-        nationality: "Việt Nam",
-        cardIssueDate: "18/06/2021",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "05/09/2049",
-        hometown: "Xã Đông Ngạc, Huyện Từ Liêm, TP. Hà Nội",
-        permanentAddress: {
-          street: "Phòng 1204, Chung cư D2 Giảng Võ",
-          ward: "Phường Giảng Võ",
-          city: "Quận Ba Đình, TP. Hà Nội"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Phòng 1204, Chung cư D2 Giảng Võ",
-          ward: "Phường Giảng Võ",
-          city: "Quận Ba Đình, TP. Hà Nội"
-        },
-        phone: "0918.334.221",
-        email: "thuha.pham@techlaw.com",
-        ethnicity: "Tày",
-        taxCode: "8029103842",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "personal",
-        status: "active",
-        verified: true,
-        regDate: "18/03/2024",
-        regTime: "11:32:44",
-        notes: "Đã xác thực định danh mức 2 qua ứng dụng VNeID ngày 18/03/2024.",
-        initials: "PTH",
-        avatarBg: "bg-[#763300]"
-      },
-      {
-        id: "USR-0009412",
-        name: "Đặng Quốc Tuấn",
-        cccd: "001085002239",
-        dob: "03/12/1985",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: "05/01/2021",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "03/12/2045",
-        hometown: "Xã Hải Bối, Huyện Đông Anh, TP. Hà Nội",
-        permanentAddress: {
-          street: "Số 58 đường Lê Lợi",
-          ward: "Phường Bến Nghé",
-          city: "Quận 1, TP. Hồ Chí Minh"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Số 58 đường Lê Lợi",
-          ward: "Phường Bến Nghé",
-          city: "Quận 1, TP. Hồ Chí Minh"
-        },
-        phone: "0903.445.112",
-        email: "tuan.dang@investasia.vn",
-        ethnicity: "Kinh",
-        taxCode: "0317829102",
-        isCommitted: false,
-        isAgreedSave: true,
-        type: "business",
-        status: "locked",
-        verified: false,
-        regDate: "11/11/2023",
-        regTime: "08:14:29",
-        notes: "Tài khoản bị tạm khóa do phát hiện nhiều lần đăng nhập bất thường và vi phạm quy định bảo mật hệ thống từ ngày 01/10/2024.",
-        initials: "DQT",
-        avatarBg: "bg-error"
-      },
-      {
-        id: "USR-0011150",
-        name: "Hoàng Đức Thắng",
-        cccd: "036094008129",
-        dob: "19/07/1992",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: "20/09/2022",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "19/07/2032",
-        hometown: "Xã Nghĩa An, Huyện Nam Trực, Tỉnh Nam Định",
-        permanentAddress: {
-          street: "Số 12 phố Lý Thường Kiệt",
-          ward: "Phường Bà Triệu",
-          city: "TP. Nam Định, Tỉnh Nam Định"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Số 12 phố Lý Thường Kiệt",
-          ward: "Phường Bà Triệu",
-          city: "TP. Nam Định, Tỉnh Nam Định"
-        },
-        phone: "0944.556.789",
-        email: "thang.hoang@kientruc.vn",
-        ethnicity: "Kinh",
-        taxCode: "8492019482",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "personal",
-        status: "active",
-        verified: true,
-        regDate: "25/03/2024",
-        regTime: "10:15:30",
-        notes: "Tài khoản kiến trúc sư nộp hồ sơ xin cấp đổi giấy phép xây dựng và đo đạc địa chính.",
-        initials: "HDT",
-        avatarBg: "bg-[#15803d]"
-      },
-      {
-        id: "USR-0011204",
-        name: "Bùi Tuyết Nhung",
-        cccd: "001198004523",
-        dob: "08/12/1998",
-        gender: "Nữ",
-        nationality: "Việt Nam",
-        cardIssueDate: "22/11/2022",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "08/12/2038",
-        hometown: "Xã Kim Nỗ, Huyện Đông Anh, TP. Hà Nội",
-        permanentAddress: {
-          street: "Số 88 đường Cầu Giấy",
-          ward: "Phường Quan Hoa",
-          city: "Quận Cầu Giấy, TP. Hà Nội"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Số 88 đường Cầu Giấy",
-          ward: "Phường Quan Hoa",
-          city: "Quận Cầu Giấy, TP. Hà Nội"
-        },
-        phone: "0977.123.999",
-        email: "nhung.bui@gmail.com",
-        ethnicity: "Kinh",
-        taxCode: "",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "personal",
-        status: "pending",
-        verified: false,
-        regDate: "02/04/2024",
-        regTime: "08:30:19",
-        notes: "Đăng ký hồ sơ hộ kinh doanh thời trang, đã nộp giấy tờ đang chờ đối soát.",
-        initials: "BTN",
-        avatarBg: "bg-[#9333ea]"
-      },
-      {
-        id: "USR-0010511",
-        name: "Võ Minh Trí",
-        cccd: "079093001847",
-        dob: "14/02/1987",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: "14/02/2021",
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "14/02/2047",
-        hometown: "Phường An Khánh, TP. Thủ Đức, TP. Hồ Chí Minh",
-        permanentAddress: {
-          street: "Tòa nhà Landmark 81, 720A Điện Biên Phủ",
-          ward: "Phường 22",
-          city: "Quận Bình Thạnh, TP. Hồ Chí Minh"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Tòa nhà Landmark 81, 720A Điện Biên Phủ",
-          ward: "Phường 22",
-          city: "Quận Bình Thạnh, TP. Hồ Chí Minh"
-        },
-        phone: "0908.667.889",
-        email: "tri.vo@saigonreal.vn",
-        ethnicity: "Kinh",
-        taxCode: "0319482910",
-        isCommitted: true,
-        isAgreedSave: true,
-        type: "business",
-        status: "active",
-        verified: true,
-        regDate: "12/12/2023",
-        regTime: "15:45:00",
-        notes: "Đại diện pháp luật Công ty Bất động sản Sài Gòn Real.",
-        initials: "VMT",
-        avatarBg: "bg-[#0284c7]"
+    // =========================================================================
+    // DỮ LIỆU THẬT TỪ BACKEND (User Service qua Gateway, mặc định http://localhost:8080)
+    // Đăng nhập bằng HttpOnly cookie (auth-api.js), nên chỉ cần fetch với credentials: 'include'.
+    //
+    // Giữ nguyên tên giá trị cũ của giao diện để không phải sửa markup:
+    //   type 'personal' = vai trò citizen (Công dân), 'business' = lawyer (Luật sư), 'admin' = admin
+    //   status 'locked' = bị khóa, 'pending' = đang hoạt động nhưng CHƯA khai hồ sơ CCCD, 'active' = còn lại
+    // =========================================================================
+    let usersData = [];
+
+    const ROLE_TO_TYPE = { citizen: 'personal', lawyer: 'business', admin: 'admin' };
+    const TYPE_TO_ROLE = { personal: 'citizen', business: 'lawyer', admin: 'admin' };
+    const ROLE_LABEL = { citizen: 'Công dân', lawyer: 'Luật sư', admin: 'Quản trị viên' };
+    const STATUS_LABEL = { active: 'Hoạt động', pending: 'Chờ xác thực', locked: 'Đã khóa' };
+    const AVATAR_BGS = ['bg-[#881337]', 'bg-secondary', 'bg-[#b45309]', 'bg-[#763300]', 'bg-[#15803d]', 'bg-[#9333ea]', 'bg-[#0284c7]'];
+
+    let apiBaseUrlPromise;
+    function apiBaseUrl() {
+      if (!apiBaseUrlPromise) {
+        apiBaseUrlPromise = fetch('/api/app-config')
+          .then(r => (r.ok ? r.json() : {}))
+          .then(c => (c.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, ''))
+          .catch(() => 'http://localhost:8080');
       }
-    ];
+      return apiBaseUrlPromise;
+    }
+
+    async function rawApi(path, { method = 'GET', body } = {}) {
+      const base = await apiBaseUrl();
+      return fetch(base + path, {
+        method,
+        credentials: 'include',
+        headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
+        body: body === undefined ? undefined : JSON.stringify(body)
+      });
+    }
+
+    // Nhiều request cùng hết hạn thì chỉ refresh 1 lần (gửi lại refresh token cũ lần 2 sẽ bị Backend hủy phiên).
+    let refreshPromise = null;
+    function refreshSession() {
+      if (!refreshPromise) {
+        refreshPromise = rawApi('/api/users/auth/refresh', { method: 'POST' })
+          .then(r => r.ok)
+          .catch(() => false)
+          .finally(() => setTimeout(() => { refreshPromise = null; }, 1000));
+      }
+      return refreshPromise;
+    }
+
+    async function api(path, options) {
+      let res;
+      try {
+        res = await rawApi(path, options);
+        if (res.status === 401 && await refreshSession()) res = await rawApi(path, options);
+      } catch {
+        throw new Error('Không kết nối được Backend. Hãy kiểm tra Gateway (http://localhost:8080) đã chạy chưa.');
+      }
+      if (res.status === 401) {
+        window.location.replace('/login'); // phiên đăng nhập đã hết
+      }
+      if (res.status === 204) return null;
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) {
+        const err = (payload && payload.error) || {};
+        const details = (err.details || []).map(d => `${d.field}: ${d.message}`).join('; ');
+        const message = err.message ? err.message + (details ? ` (${details})` : '') : `Lỗi ${res.status}`;
+        throw Object.assign(new Error(message), { code: err.code, status: res.status });
+      }
+      return payload ? payload.data : null;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+    }
+    const pad2 = n => String(n).padStart(2, '0');
+    function fmtDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return `${pad2(d.getDate())}/${pad2(d.getMonth() + 1)}/${d.getFullYear()}`;
+    }
+    function fmtTime(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+    }
+    function fmtDay(value) { // 'YYYY-MM-DD' -> 'DD/MM/YYYY'
+      if (!value) return '';
+      const [y, m, d] = String(value).slice(0, 10).split('-');
+      return `${d}/${m}/${y}`;
+    }
+    function fmtPhone(phone) {
+      if (!phone) return '—';
+      return /^\d{10}$/.test(phone) ? `${phone.slice(0, 4)}.${phone.slice(4, 7)}.${phone.slice(7)}` : phone;
+    }
+    function initialsOf(name) {
+      return name.split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 3).toUpperCase() || 'ND';
+    }
+    function avatarBgOf(id) {
+      let hash = 0;
+      for (const ch of id) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+      return AVATAR_BGS[hash % AVATAR_BGS.length];
+    }
+
+    function describeAccount(u, status) {
+      if (status === 'locked') {
+        const until = u.locked_until ? `đến ${fmtDate(u.locked_until)} ${fmtTime(u.locked_until)}` : 'vĩnh viễn';
+        return `Tài khoản bị khóa ${until}. Lý do: ${u.locked_reason || '(không ghi)'}.`;
+      }
+      if (status === 'pending') {
+        return u.created_as_lawyer
+          ? 'Tài khoản do quản trị viên cấp cho luật sư. Người dùng chưa khai hồ sơ CCCD.'
+          : 'Người dùng chưa khai hồ sơ CCCD.';
+      }
+      return u.role === 'admin' ? 'Tài khoản quản trị viên.' : 'Đã khai hồ sơ CCCD.';
+    }
+
+    // Đổi 1 người dùng từ API (AdminUser) sang dạng giao diện đang dùng.
+    function toViewUser(u) {
+      const name = u.full_name || u.username || u.email;
+      const status = u.status === 'locked'
+        ? 'locked'
+        : (u.role !== 'admin' && !u.has_citizen_profile ? 'pending' : 'active');
+      return {
+        id: u.id,
+        shortId: u.id.slice(0, 8).toUpperCase(),
+        raw: u,
+        role: u.role,
+        name,
+        email: u.email,
+        phone: fmtPhone(u.phone),
+        type: ROLE_TO_TYPE[u.role] || 'personal',
+        status,
+        verified: !!u.has_citizen_profile,
+        regDate: fmtDate(u.created_at),
+        regTime: fmtTime(u.created_at),
+        notes: describeAccount(u, status),
+        initials: initialsOf(name),
+        avatarBg: avatarBgOf(u.id),
+        // Thông tin CCCD: chỉ tải khi mở chi tiết (loadCitizenProfile)
+        profileLoaded: false,
+        cccd: '', dob: '', gender: '', nationality: '',
+        cardIssueDate: '', cardIssuePlace: '', cardExpiry: '',
+        hometown: '', permanentAddress: null, currentAddress: null,
+        ethnicity: '', taxCode: '', isCommitted: false, isAgreedSave: false
+      };
+    }
+
+    async function loadCitizenProfile(user) {
+      if (user.profileLoaded) return;
+      const p = await api(`/api/users/${user.id}/citizen-profile`);
+      user.profileLoaded = true;
+      if (!p) return;
+      const perm = p.permanent_address || {};
+      const curr = p.current_same_as_permanent ? perm : (p.current_address || {});
+      Object.assign(user, {
+        cccd: p.id_number,
+        dob: fmtDay(p.date_of_birth),
+        gender: p.gender,
+        nationality: p.nationality,
+        cardIssueDate: fmtDay(p.issue_date),
+        cardIssuePlace: p.issue_place,
+        cardExpiry: fmtDay(p.expiry_date),
+        hometown: p.place_of_origin || '',
+        permanentAddress: { street: perm.detail || '', ward: perm.ward || '', city: perm.province || '' },
+        currentAddress: {
+          sameAsPermanent: !!p.current_same_as_permanent,
+          street: curr.detail || '', ward: curr.ward || '', city: curr.province || ''
+        },
+        ethnicity: p.ethnicity || '',
+        taxCode: p.tax_code || '',
+        isCommitted: !!p.declared_at,
+        isAgreedSave: !!p.consented_at
+      });
+    }
+
+    function renderTableMessage(icon, message) {
+      userTableBody.innerHTML = `
+        <tr>
+          <td colspan="7" class="py-12 text-center text-stone-500">
+            <span class="material-symbols-outlined text-[36px] text-stone-400 mb-2">${icon}</span>
+            <p class="font-medium text-stone-600">${escapeHtml(message)}</p>
+          </td>
+        </tr>
+      `;
+    }
+
+    // Tải toàn bộ người dùng (chưa bị xóa) từ Backend, mỗi lần gọi 100 người.
+    async function loadUsers() {
+      if (!usersData.length) renderTableMessage('hourglass_top', 'Đang tải danh sách người dùng...');
+      try {
+        const all = [];
+        let page = 1;
+        let totalPages = 1;
+        do {
+          const data = await api(`/api/users?page=${page}&page_size=100`);
+          all.push(...data.items);
+          totalPages = data.pagination.total_pages;
+          page += 1;
+        } while (page <= totalPages);
+        usersData = all.map(toViewUser);
+      } catch (e) {
+        usersData = [];
+        updateCounts();
+        if (displayUserCountEl) displayUserCountEl.textContent = 0;
+        renderTableMessage('cloud_off', `Không tải được danh sách người dùng: ${e.message}`);
+        return;
+      }
+      updateCounts();
+      renderUserTable();
+    }
+
+    function exportUsersCsv() {
+      const rows = [['ID', 'Họ và tên', 'Email', 'Số điện thoại', 'Ngày đăng ký', 'Vai trò', 'Trạng thái', 'Đã khai hồ sơ CCCD', 'Ghi chú']];
+      usersData.forEach(u => rows.push([
+        u.id, u.name, u.email, u.raw.phone || '', `${u.regDate} ${u.regTime}`,
+        ROLE_LABEL[u.role] || u.role, STATUS_LABEL[u.status], u.verified ? 'Có' : 'Chưa', u.notes
+      ]));
+      // Thêm BOM để Excel đọc đúng tiếng Việt
+      const csv = '﻿' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      link.download = `danh-sach-nguoi-dung-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      showToast('Xuất danh sách thành công', `Đã xuất ${usersData.length} người dùng ra file CSV (mở được bằng Excel).`);
+    }
 
     // State
     let currentModalUserId = null;
@@ -1538,7 +1464,8 @@
         if (query) {
           const matchName = user.name.toLowerCase().includes(query);
           const matchEmail = user.email.toLowerCase().includes(query);
-          const matchPhone = user.phone.replace(/\D/g, '').includes(query.replace(/\D/g, ''));
+          const queryDigits = query.replace(/\D/g, '');
+          const matchPhone = queryDigits !== '' && user.phone.replace(/\D/g, '').includes(queryDigits);
           const matchId = user.id.toLowerCase().includes(query);
           if (!matchName && !matchEmail && !matchPhone && !matchId) return false;
         }
@@ -1586,8 +1513,10 @@
         }
 
         const typeBadge = user.type === 'business'
-          ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#881337]/10 text-[#881337] border border-[#881337]/20">Doanh nghiệp</span>`
-          : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-800 border border-stone-200">Cá nhân</span>`;
+          ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#881337]/10 text-[#881337] border border-[#881337]/20">Luật sư</span>`
+          : user.type === 'admin'
+            ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300">Quản trị viên</span>`
+            : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-800 border border-stone-200">Công dân</span>`;
 
         let rowBgClass = 'hover:bg-amber-50/50 transition-colors group';
         if (user.status === 'locked') rowBgClass = 'hover:bg-red-50/50 bg-red-50/20 transition-colors group';
@@ -1612,10 +1541,10 @@
                 </div>
                 <div class="flex flex-col min-w-0">
                   <div class="flex items-center gap-1.5">
-                    <span class="font-title-md text-title-md font-bold text-stone-900 truncate ${user.status === 'locked' ? 'line-through text-red-800' : ''}">${user.name}</span>
-                    ${user.verified ? '<span class="material-symbols-outlined text-[16px] text-red-600" title="Đã đối soát VNeID">verified</span>' : ''}
+                    <span class="font-title-md text-title-md font-bold text-stone-900 truncate ${user.status === 'locked' ? 'line-through text-red-800' : ''}">${escapeHtml(user.name)}</span>
+                    ${user.verified ? '<span class="material-symbols-outlined text-[16px] text-red-600" title="Đã khai hồ sơ CCCD">verified</span>' : ''}
                   </div>
-                  <span class="text-xs text-stone-500 font-label-code">ID: ${user.id}</span>
+                  <span class="text-xs text-stone-500 font-label-code" title="${user.id}">ID: ${user.shortId}</span>
                 </div>
               </div>
             </td>
@@ -1623,8 +1552,8 @@
             <!-- Email & Số điện thoại -->
             <td class="py-3.5 px-4">
               <div class="flex flex-col">
-                <span class="font-semibold text-red-700 text-xs underline underline-offset-2">${user.email}</span>
-                <span class="text-[11px] text-stone-500 font-label-code mt-0.5">${user.phone}</span>
+                <span class="font-semibold text-red-700 text-xs underline underline-offset-2">${escapeHtml(user.email)}</span>
+                <span class="text-[11px] text-stone-500 font-label-code mt-0.5">${escapeHtml(user.phone)}</span>
               </div>
             </td>
 
@@ -1673,8 +1602,8 @@
                 <button
                   class="btn-delete-user p-1.5 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-100/50 transition-colors"
                   data-id="${user.id}"
-                  data-name="${user.name}"
-                  data-email="${user.email}"
+                  data-name="${escapeHtml(user.name)}"
+                  data-email="${escapeHtml(user.email)}"
                   title="Xóa tài khoản người dùng">
                   <i class="fa-solid fa-trash-can text-[15px]"></i>
                 </button>
@@ -1721,29 +1650,35 @@
     // =========================================================================
     // HÀM MỞ VÀ ĐIỀN DỮ LIỆU ĐẦY ĐỦ VÀO MODAL CHI TIẾT / CHỈNH SỬA
     // =========================================================================
-    function openUserModal(userId, mode = 'view') {
+    async function openUserModal(userId, mode = 'view') {
       const user = usersData.find(u => u.id === userId);
       if (!user) return;
+      try {
+        await loadCitizenProfile(user);
+      } catch (e) {
+        showToast('Không tải được hồ sơ CCCD', e.message, true);
+      }
 
       currentModalUserId = userId;
       currentModalMode = mode;
 
       // Header & Meta
-      document.getElementById('modal-user-id-badge').textContent = user.id;
+      document.getElementById('modal-user-id-badge').textContent = user.shortId;
+      document.getElementById('modal-user-id-badge').title = user.id;
       document.getElementById('modal-avatar').textContent = user.initials;
       document.getElementById('modal-avatar').className = `w-10 h-10 rounded-full ${user.avatarBg} text-white flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-red-600/30 shrink-0`;
       document.getElementById('modal-avatar-name').textContent = user.name;
       document.getElementById('modal-meta-regdate').textContent = `Ngày tạo: ${user.regDate} ${user.regTime}`;
-      document.getElementById('modal-meta-type-text').textContent = user.type === 'business' ? 'Tài khoản Doanh nghiệp' : 'Tài khoản Cá nhân';
+      document.getElementById('modal-meta-type-text').textContent = `Tài khoản ${ROLE_LABEL[user.role] || ''}`;
 
       // 1. Thẻ CCCD Mockup
-      document.getElementById('card-front-cccd').textContent = user.cccd;
+      document.getElementById('card-front-cccd').textContent = user.cccd || 'Chưa khai hồ sơ';
       document.getElementById('card-front-name').textContent = user.name;
-      document.getElementById('card-front-dob').textContent = user.dob;
-      document.getElementById('card-front-gender').textContent = user.gender;
-      document.getElementById('card-front-expiry').textContent = user.cardExpiry || '15/08/2048';
-      document.getElementById('card-back-issuedate').textContent = user.cardIssueDate || '12/05/2021';
-      document.getElementById('card-back-issueplace').textContent = user.cardIssuePlace || 'Cục Cảnh sát QLHC về TTXH';
+      document.getElementById('card-front-dob').textContent = user.dob || '—';
+      document.getElementById('card-front-gender').textContent = user.gender || '—';
+      document.getElementById('card-front-expiry').textContent = user.cardExpiry || '—';
+      document.getElementById('card-back-issuedate').textContent = user.cardIssueDate || '—';
+      document.getElementById('card-back-issueplace').textContent = user.cardIssuePlace || '—';
       document.getElementById('card-back-mrz1').textContent = `IDVNM${user.cccd}<<<<<<<<<<<<<<`;
       document.getElementById('card-back-mrz3').textContent = `${user.name.toUpperCase().replace(/\s+/g, '<')}<<<<<<<<<<<<<<<<`;
 
@@ -1752,7 +1687,7 @@
       document.getElementById('modal-input-cccd').value = user.cccd; // SỐ CCCD HIỂN THỊ ĐẦY ĐỦ TẠI ĐÂY
       document.getElementById('modal-input-dob').value = user.dob;
       document.getElementById('modal-input-gender').value = user.gender;
-      document.getElementById('modal-input-nationality').value = user.nationality || 'Việt Nam';
+      document.getElementById('modal-input-nationality').value = user.nationality || '';
 
       // 3. Mục Thẻ CCCD
       document.getElementById('modal-input-card-issuedate').value = user.cardIssueDate || '';
@@ -1777,7 +1712,7 @@
       // 5. Mục Nhập Tay (SĐT, Email chỉ xem, Dân tộc, MST)
       document.getElementById('modal-input-phone').value = user.phone;
       document.getElementById('modal-input-email').value = user.email; // Email chỉ xem, không sửa
-      document.getElementById('modal-input-ethnicity').value = user.ethnicity || 'Kinh';
+      document.getElementById('modal-input-ethnicity').value = user.ethnicity || '';
       document.getElementById('modal-input-taxcode').value = user.taxCode || '';
 
       // Phân quyền & trạng thái
@@ -1882,6 +1817,19 @@
         }
 
         syncCurrentAddressState();
+
+        // Backend chỉ cho admin đổi VAI TRÒ và KHÓA / MỞ KHÓA. Thông tin CCCD do chính người dùng khai,
+        // nên các ô còn lại giữ ở chế độ chỉ xem.
+        const adminEditableIds = ['modal-input-type', 'modal-input-status'];
+        inputs.forEach(input => {
+          if (adminEditableIds.includes(input.id)) return;
+          input.setAttribute('disabled', 'true');
+          input.classList.remove('focus:ring-2', 'focus:ring-red-600/20', 'focus:border-red-600', 'bg-white');
+          input.classList.add('bg-stone-100/70', 'cursor-default', 'text-stone-800');
+        });
+        confirmCheckboxes.forEach(cb => cb.setAttribute('disabled', 'true'));
+        if (sameAddressCheck) sameAddressCheck.setAttribute('disabled', 'true');
+        if (btnEkycRead) btnEkycRead.classList.add('opacity-50', 'pointer-events-none');
 
         viewActions.classList.add('hidden');
         editActions.classList.remove('hidden');
@@ -1998,101 +1946,63 @@
     // =========================================================================
     // NÚT "LƯU HỒ SƠ" (SAVE USER RECORD)
     // =========================================================================
-    function saveUserRecord() {
-      if (!currentModalUserId) return;
-      const userIndex = usersData.findIndex(u => u.id === currentModalUserId);
-      if (userIndex === -1) return;
+    async function saveUserRecord() {
+      const user = usersData.find(u => u.id === currentModalUserId);
+      if (!user) return;
 
-      // Kiểm tra 2 ô xác nhận cam đoan và đồng ý lưu thông tin cá nhân
-      const isCommitted = document.getElementById('modal-check-commit').checked;
-      const isAgreedSave = document.getElementById('modal-check-agree').checked;
-
-      if (!isCommitted || !isAgreedSave) {
-        alert('Vui lòng chọn cả 2 mục cam đoan đúng sự thật và đồng ý lưu trữ thông tin cá nhân trước khi lưu hồ sơ!');
-        return;
-      }
-
-      // Thu thập thông tin từ các mục
-      const newName = document.getElementById('modal-input-name').value.trim();
-      const newCccd = document.getElementById('modal-input-cccd').value.trim();
-      const newDob = document.getElementById('modal-input-dob').value.trim();
-      const newGender = document.getElementById('modal-input-gender').value;
-      const newNationality = document.getElementById('modal-input-nationality').value.trim();
-
-      const newCardIssueDate = document.getElementById('modal-input-card-issuedate').value.trim();
-      const newCardIssuePlace = document.getElementById('modal-input-card-issueplace').value.trim();
-      const newCardExpiry = document.getElementById('modal-input-card-expiry').value.trim();
-
-      const newHometown = document.getElementById('modal-input-hometown').value.trim();
-      const newPermStreet = document.getElementById('modal-input-perm-street').value.trim();
-      const newPermWard = document.getElementById('modal-input-perm-ward').value.trim();
-      const newPermCity = document.getElementById('modal-input-perm-city').value.trim();
-
-      const sameAddress = document.getElementById('modal-check-same-address').checked;
-      const newCurrStreet = document.getElementById('modal-input-curr-street').value.trim();
-      const newCurrWard = document.getElementById('modal-input-curr-ward').value.trim();
-      const newCurrCity = document.getElementById('modal-input-curr-city').value.trim();
-
-      const newPhone = document.getElementById('modal-input-phone').value.trim();
-      // Email giữ nguyên không sửa theo yêu cầu
-      const newEthnicity = document.getElementById('modal-input-ethnicity').value.trim();
-      const newTaxCode = document.getElementById('modal-input-taxcode').value.trim();
-
-      const newType = document.getElementById('modal-input-type').value;
+      const newRole = TYPE_TO_ROLE[document.getElementById('modal-input-type').value];
       const newStatus = document.getElementById('modal-input-status').value;
-      const newNotes = document.getElementById('modal-input-notes').value.trim();
+      const wasLocked = user.raw.status === 'locked';
+      const wantLocked = newStatus === 'locked';
+      const saveBtn = document.getElementById('btn-save-user-record');
+      const changes = [];
 
-      if (!newName || !newCccd || !newPhone) {
-        alert('Vui lòng điền đầy đủ các thông tin bắt buộc: Họ tên, Số CCCD và Số điện thoại!');
+      if (newRole === user.role && wantLocked === wasLocked) {
+        showToast('Không có thay đổi', 'Quản trị viên chỉ đổi được Loại tài khoản (vai trò) và Trạng thái khóa. Thông tin CCCD do người dùng tự khai.');
         return;
       }
 
-      // Cập nhật người dùng
-      usersData[userIndex] = {
-        ...usersData[userIndex],
-        name: newName,
-        cccd: newCccd,
-        dob: newDob,
-        gender: newGender,
-        nationality: newNationality,
-        cardIssueDate: newCardIssueDate,
-        cardIssuePlace: newCardIssuePlace,
-        cardExpiry: newCardExpiry,
-        hometown: newHometown,
-        permanentAddress: {
-          street: newPermStreet,
-          ward: newPermWard,
-          city: newPermCity
-        },
-        currentAddress: {
-          sameAsPermanent: sameAddress,
-          street: sameAddress ? newPermStreet : newCurrStreet,
-          ward: sameAddress ? newPermWard : newCurrWard,
-          city: sameAddress ? newPermCity : newCurrCity
-        },
-        phone: newPhone,
-        ethnicity: newEthnicity,
-        taxCode: newTaxCode,
-        isCommitted: isCommitted,
-        isAgreedSave: isAgreedSave,
-        type: newType,
-        status: newStatus,
-        notes: newNotes,
-        initials: newName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase()
-      };
+      if (saveBtn) saveBtn.disabled = true;
+      try {
+        if (newRole && newRole !== user.role) {
+          await api(`/api/users/${user.id}/role`, { method: 'PUT', body: { role: newRole } });
+          changes.push(`vai trò: ${ROLE_LABEL[newRole]}`);
+        }
 
-      // Đóng modal
-      userModal.classList.add('hidden');
+        if (wantLocked && !wasLocked) {
+          const reason = prompt(`Lý do khóa tài khoản "${user.name}" (người dùng sẽ thấy lý do này):`, '');
+          if (reason !== null && !reason.trim()) alert('Bắt buộc nhập lý do khóa.');
+          if (reason && reason.trim()) {
+            const daysText = prompt('Khóa trong bao nhiêu ngày? (để trống = khóa vĩnh viễn)', '7');
+            if (daysText !== null) {
+              const days = daysText.trim() === '' ? null : Number(daysText);
+              if (days !== null && (!Number.isInteger(days) || days < 1 || days > 3650)) {
+                alert('Số ngày khóa phải là số nguyên từ 1 đến 3650.');
+              } else {
+                await api(`/api/users/${user.id}/lock`, { method: 'POST', body: { reason: reason.trim(), duration_days: days } });
+                changes.push(days ? `khóa ${days} ngày` : 'khóa vĩnh viễn');
+              }
+            }
+          }
+        } else if (!wantLocked && wasLocked) {
+          await api(`/api/users/${user.id}/unlock`, { method: 'POST' });
+          changes.push('mở khóa');
+        }
+      } catch (e) {
+        showToast('Không lưu được', e.message, true);
+      } finally {
+        if (saveBtn) saveBtn.disabled = false;
+      }
 
-      // Cập nhật bảng và hiển thị toast
-      renderUserTable();
-      updateCounts();
-
-      showToast('Lưu hồ sơ thành công', `Hồ sơ công dân "${newName}" đã được lưu trữ và cập nhật vào hệ thống.`);
+      if (changes.length) {
+        userModal.classList.add('hidden');
+        await loadUsers();
+        showToast('Đã lưu thay đổi', `"${user.name}": ${changes.join(', ')}.`);
+      }
     }
 
     // =========================================================================
-    // XÓA TÀI KHOẢN
+    // XÓA TÀI KHOẢN (xóa mềm: admin khôi phục lại được, email không đăng ký lại được)
     // =========================================================================
     let targetedDeleteUserId = null;
     function openDeleteModal(userId, name, email) {
@@ -2102,104 +2012,80 @@
       deleteModal.classList.remove('hidden');
     }
 
-    function confirmDeleteUser() {
+    async function confirmDeleteUser() {
       if (!targetedDeleteUserId) return;
-      const userIndex = usersData.findIndex(u => u.id === targetedDeleteUserId);
-      if (userIndex === -1) return;
-
-      const userName = usersData[userIndex].name;
-      usersData.splice(userIndex, 1);
-
-      deleteModal.classList.add('hidden');
-      targetedDeleteUserId = null;
-
-      renderUserTable();
-      updateCounts();
-
-      showToast('Đã xóa tài khoản thành công', `Hồ sơ "${userName}" đã được gỡ bỏ khỏi hệ thống.`);
+      const user = usersData.find(u => u.id === targetedDeleteUserId);
+      if (!user) return;
+      const btn = document.getElementById('btn-confirm-delete');
+      if (btn) btn.disabled = true;
+      try {
+        await api(`/api/users/${user.id}`, { method: 'DELETE' });
+        deleteModal.classList.add('hidden');
+        targetedDeleteUserId = null;
+        await loadUsers();
+        showToast('Đã xóa tài khoản', `"${user.name}" đã bị xóa (xóa mềm, có thể khôi phục khi cần).`);
+      } catch (e) {
+        showToast('Không xóa được', e.message, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     // =========================================================================
-    // TẠO TÀI KHOẢN MỚI
+    // TẠO TÀI KHOẢN MỚI: người dùng đăng nhập bằng email + mật khẩu do admin đặt
     // =========================================================================
-    function submitCreateUser() {
+    async function submitCreateUser() {
       const name = document.getElementById('create-user-name').value.trim();
-      const cccd = document.getElementById('create-user-cccd').value.trim();
       const email = document.getElementById('create-user-email').value.trim();
       const phone = document.getElementById('create-user-phone').value.trim();
       const type = document.getElementById('create-user-type').value;
-      const status = document.getElementById('create-user-status').value;
 
-      if (!name || !cccd || !email || !phone) {
-        alert('Vui lòng nhập đầy đủ: Họ tên, Số CCCD, Email và Số điện thoại!');
+      if (!name || !email) {
+        alert('Vui lòng nhập Họ tên và Email!');
+        return;
+      }
+      const password = prompt(`Đặt mật khẩu cho ${email} (ít nhất 8 ký tự). Hãy gửi mật khẩu này cho người dùng, họ có thể đổi sau:`, '');
+      if (password === null) return;
+      if (password.length < 8) {
+        alert('Mật khẩu phải có ít nhất 8 ký tự.');
         return;
       }
 
-      const newIdNum = Math.floor(10000 + Math.random() * 90000);
-      const newId = `USR-00${newIdNum}`;
-      const initials = name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-      const now = new Date();
-      const regDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth()+1).padStart(2, '0')}/${now.getFullYear()}`;
-      const regTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-
-      const newUser = {
-        id: newId,
-        name: name,
-        cccd: cccd,
-        dob: "01/01/1990",
-        gender: "Nam",
-        nationality: "Việt Nam",
-        cardIssueDate: regDate,
-        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
-        cardExpiry: "01/01/2050",
-        hometown: "Theo dữ liệu CCCD",
-        permanentAddress: {
-          street: "Số nhà/đường",
-          ward: "Xã/phường",
-          city: "Tỉnh/thành phố"
-        },
-        currentAddress: {
-          sameAsPermanent: true,
-          street: "Số nhà/đường",
-          ward: "Xã/phường",
-          city: "Tỉnh/thành phố"
-        },
-        email: email,
-        phone: phone,
-        ethnicity: "Kinh",
-        taxCode: "",
-        isCommitted: true,
-        isAgreedSave: true,
-        regDate: regDate,
-        regTime: regTime,
-        type: type,
-        status: status,
-        verified: status === 'active',
-        notes: `Khởi tạo hồ sơ người dùng mới lúc ${regTime} ngày ${regDate}.`,
-        initials: initials || "NDM",
-        avatarBg: "bg-red-700"
-      };
-
-      usersData.unshift(newUser);
-
-      createUserModal.classList.add('hidden');
-
-      document.getElementById('create-user-name').value = '';
-      document.getElementById('create-user-cccd').value = '';
-      document.getElementById('create-user-email').value = '';
-      document.getElementById('create-user-phone').value = '';
-
-      renderUserTable();
-      updateCounts();
-
-      showToast('Khởi tạo hồ sơ thành công', `Đã lưu hồ sơ mới cho ${name} (${newId}).`);
+      const role = TYPE_TO_ROLE[type] || 'citizen';
+      const btn = document.getElementById('btn-submit-create-user');
+      if (btn) btn.disabled = true;
+      try {
+        await api('/api/users', {
+          method: 'POST',
+          body: { email, password, full_name: name, phone: phone || null, account_type: role }
+        });
+        createUserModal.classList.add('hidden');
+        ['create-user-name', 'create-user-cccd', 'create-user-email', 'create-user-phone'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        await loadUsers();
+        const lawyerNote = role === 'lawyer' ? ' Tài khoản luật sư vẫn là Công dân cho tới khi được duyệt hồ sơ.' : '';
+        showToast('Đã tạo tài khoản', `Đăng nhập bằng ${email} và mật khẩu vừa đặt.${lawyerNote}`);
+      } catch (e) {
+        showToast('Không tạo được tài khoản', e.message, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     // Toast helper
-    function showToast(title, message) {
+    function showToast(title, message, isError = false) {
       if (!toastEl) return;
-      document.getElementById('toast-title').textContent = title;
-      document.getElementById('toast-message').textContent = message;
+      const titleEl = document.getElementById('toast-title');
+      if (titleEl) titleEl.textContent = title;
+      document.getElementById('toast-message').textContent = titleEl ? message : `${title}: ${message}`;
+      const iconEl = document.getElementById('toast-icon');
+      if (iconEl) {
+        iconEl.textContent = isError ? 'error' : 'check_circle';
+        iconEl.classList.toggle('text-red-400', isError);
+        iconEl.classList.toggle('text-emerald-400', !isError);
+      }
 
       toastEl.classList.remove('hidden');
       setTimeout(() => {
@@ -2234,9 +2120,13 @@
     // =========================================================================
     // INITIALIZATION & EVENT LISTENERS
     // =========================================================================
+    // Tải dữ liệu sau khi module protectPage (cuối trang) xác nhận đã đăng nhập bằng tài khoản admin,
+    // để không gọi refresh token song song với nó.
+    window.addEventListener('admin-auth-ready', loadUsers, { once: true });
+
     document.addEventListener('DOMContentLoaded', function() {
       updateCounts();
-      renderUserTable();
+      renderTableMessage('hourglass_top', 'Đang kiểm tra đăng nhập...');
 
       // Check all checkbox
       const checkAllBox = document.getElementById('check-all');
@@ -2324,9 +2214,7 @@
       });
 
       // Export excel demo
-      document.getElementById('btn-export-excel')?.addEventListener('click', () => {
-        showToast('Xuất danh sách thành công', 'File Excel danh sách người dùng đã được xuất thành công.');
-      });
+      document.getElementById('btn-export-excel')?.addEventListener('click', exportUsersCsv);
 
       // Sidebar routing
       const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
@@ -2366,11 +2254,13 @@
     try {
       const authModule = await import('/auth-api.js');
       if (authModule && authModule.protectPage) {
-        authModule.protectPage(['admin']);
+        await authModule.protectPage(['admin']);
       }
     } catch (e) {
       console.log('Chạy ở chế độ giao diện độc lập:', e.message);
     }
+    // Đã là admin (chưa đăng nhập thì protectPage chuyển sang /login và không tới dòng này)
+    window.dispatchEvent(new Event('admin-auth-ready'));
   </script>
 
 </body>
