@@ -69,7 +69,19 @@ app.get('/detail-information', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
+app.get('/user-management', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-management.html'));
+});
+
 app.get('/user-dashboard', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
+});
+
+app.get('/api/application-submission-view', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+});
+
+app.get('/applicationSubmission', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
