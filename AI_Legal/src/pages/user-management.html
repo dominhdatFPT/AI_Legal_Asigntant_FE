@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,support_agent,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
+  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
   <style>
@@ -44,23 +44,6 @@
       box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35);
     }
 
-    /* Laser scan animation for eKYC reading */
-    @keyframes scanAnimation {
-      0% { top: 0%; opacity: 0.8; }
-      50% { top: 95%; opacity: 1; }
-      100% { top: 0%; opacity: 0.8; }
-    }
-
-    .scanner-line {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #ef4444, #f59e0b, #ef4444, transparent);
-      box-shadow: 0 0 12px 2px rgba(239, 68, 68, 0.8);
-      animation: scanAnimation 1.6s ease-in-out infinite;
-      z-index: 20;
-    }
   </style>
 
   <!-- Tailwind CSS & Exact Dashboard Tailwind Configuration -->
@@ -180,6 +163,7 @@
       }
     };
   </script>
+  <link rel="stylesheet" href="/admin-ai-chat.css">
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950 min-h-screen">
@@ -246,8 +230,7 @@
     <!-- User Profile in Sidebar (Matching dashboard.html) -->
     <div class="p-space-md bg-black/25 border-t border-white/10">
       <div class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <a class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1 hover:bg-white/10 transition-colors"
-          href="/detail-information" title="Xem thông tin chi tiết">
+        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
           <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
           </div>
@@ -257,7 +240,7 @@
               <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
             </span>
           </div>
-        </a>
+        </div>
         <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
           href="/login" title="Đăng xuất" data-logout>
           <span class="material-symbols-outlined text-[19px]">logout</span>
@@ -276,8 +259,6 @@
       <div class="flex items-center gap-space-md">
         <div class="flex items-center gap-space-xs text-stone-500">
           <a href="/dashboard" class="font-body-sm text-body-sm text-stone-600 font-medium hover:text-red-700 transition-colors">Cổng hành chính</a>
-          <span class="material-symbols-outlined text-[16px] text-amber-600">chevron_right</span>
-          <span class="font-body-sm text-body-sm text-stone-600 font-medium">Hệ thống nghiệp vụ</span>
           <span class="material-symbols-outlined text-[16px] text-amber-600">chevron_right</span>
           <span class="font-label-md text-label-md text-red-800 font-bold">Quản lí người dùng</span>
         </div>
@@ -299,11 +280,11 @@
 
         <div class="h-5 w-px bg-stone-300"></div>
 
-        <a href="/detail-information"
-          class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs hover:ring-amber-400 transition-all"
-          title="Thông tin tài khoản">
+        <div
+          class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs"
+          aria-hidden="true">
           <span class="material-symbols-outlined text-white text-[18px]">person</span>
-        </a>
+        </div>
       </div>
     </header>
 
@@ -312,21 +293,16 @@
       <div class="flex flex-col w-full space-y-6">
 
         <!-- 1. TOP COMMAND BAR -->
-        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-md border border-stone-300/80">
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-gradient-to-r from-[#6e0d16] via-[#7d141e] to-[#9f1239] p-6 rounded-2xl shadow-md border border-red-900/50">
           <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-100 text-red-800 border border-red-300 font-label-sm text-label-sm font-bold uppercase tracking-wider">
-                <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-1.5"></span> Phân Hệ Quản Lý Người Dùng &amp; eKYC
-              </span>
-              <span class="text-stone-500 font-label-code text-xs">VNeID-SYNC.2025</span>
-            </div>
-            <h1 class="font-headline-lg text-headline-lg text-stone-900 font-extrabold tracking-tight mt-1">Quản Lý Danh Sách Người Dùng</h1>
-            <p class="font-body-md text-body-md text-stone-600">Hồ sơ định danh điện tử công dân, tích hợp quét ảnh CCCD gắn chip eKYC tự động và phân quyền nghiệp vụ hành chính số.</p>
+
+            <h1 class="font-headline-lg text-headline-lg text-white font-extrabold tracking-tight mt-1">Quản Lý Danh Sách Người Dùng</h1>
+            <p class="font-body-md text-body-md text-red-100">Quản lý thông tin người dùng, giấy tờ và phân quyền nghiệp vụ hành chính số.</p>
           </div>
           <div class="flex flex-wrap items-center gap-3">
             <button id="btn-open-create-modal"
-              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white font-label-md text-label-md font-bold shadow-md shadow-red-700/30 transition-all duration-200 active:scale-95">
-              <span class="material-symbols-outlined text-[19px]">person_add</span>
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-stone-950 font-label-md text-label-md font-bold shadow-md shadow-black/20 transition-all duration-200 active:scale-95">
+              <span class="material-symbols-outlined text-[19px] text-stone-950">person_add</span>
               <span>+ Tạo Tài Khoản Người Dùng</span>
             </button>
             <button id="btn-export-excel"
@@ -369,10 +345,6 @@
                 <span>Tạm khóa</span>
                 <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700" id="count-locked">1</span>
               </button>
-            </div>
-            <div class="flex items-center gap-2 text-stone-500 font-label-sm text-xs">
-              <span class="w-2 h-2 rounded-full bg-state-success animate-pulse"></span>
-              <span>Đồng bộ CSDL Dân Cư Quốc Gia (VNeID Mức 2)</span>
             </div>
           </div>
 
@@ -424,7 +396,7 @@
               </span>
             </div>
             <span class="text-stone-500 font-body-sm text-xs flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px] text-emerald-600">shield</span> Xác thực sinh trắc học VNeID
+              <span class="material-symbols-outlined text-[14px] text-stone-500">manage_accounts</span> Quản lý hồ sơ người dùng
             </span>
           </div>
 
@@ -481,7 +453,7 @@
 
   <!-- ========================================================================= -->
   <!-- MODAL ĐẦY ĐỦ: XEM CHI TIẾT (CHỈ XEM) HOẶC CHỈNH SỬA HỒ SƠ NGƯỜI DÙNG -->
-  <!-- ĐẦY ĐỦ: ẢNH CCCD MẶT TRƯỚC/SAU, NÚT "ĐỌC THÔNG TIN" eKYC, MỤC 2 ĐỊNH DANH, -->
+  <!-- ĐẦY ĐỦ: ẢNH CCCD MẶT TRƯỚC/SAU, MỤC 2 ĐỊNH DANH, -->
   <!-- MỤC 3 THẺ, MỤC 4 ĐỊA CHỈ (QUÊ QUÁN, THƯỜNG TRÚ, HIỆN TẠI VỚI CHECKBOX), -->
   <!-- MỤC 5 NHẬP TAY (SĐT, EMAIL CHỈ XEM, DÂN TỘC, MST), MỤC 6 XÁC NHẬN VÀ LƯU -->
   <!-- ========================================================================= -->
@@ -496,7 +468,7 @@
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <span class="font-label-sm text-amber-300 uppercase tracking-widest text-[10px] font-bold">HỒ SƠ ĐỊNH DANH ĐIỆN TỬ</span>
+              <span class="font-label-sm text-amber-300 uppercase tracking-widest text-[10px] font-bold">HỒ SƠ NGƯỜI DÙNG</span>
               <span id="modal-user-id-badge" class="px-2 py-0.2 rounded font-label-code text-[11px] bg-white/10 text-white font-bold">USR-0010928</span>
               <!-- Chế độ: Chỉ xem vs Chỉnh sửa -->
               <span id="modal-mode-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-200 border border-amber-300/30">
@@ -524,7 +496,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span id="modal-avatar-name" class="font-title-md text-title-md font-bold text-stone-900">Nguyễn Văn An</span>
-              <span id="modal-verified-icon" class="material-symbols-outlined text-[17px] text-red-600" title="Đã đối soát VNeID">verified</span>
+              <span id="modal-verified-icon" class="material-symbols-outlined text-[17px] text-red-600" title="Hồ sơ đã xác minh">verified</span>
             </div>
             <div class="flex items-center gap-2 text-xs text-stone-500 mt-0.5">
               <span id="modal-meta-regdate">Ngày tạo: 14/01/2024</span>
@@ -542,7 +514,7 @@
       <div class="p-6 overflow-y-auto max-h-[72vh] space-y-6 bg-white" id="modal-scroll-body">
 
         <!-- ================================================================= -->
-        <!-- MỤC 1: ẢNH CCCD (ẢNH MẶT TRƯỚC, ẢNH MẶT SAU & NÚT "ĐỌC THÔNG TIN" eKYC) -->
+        <!-- MỤC 1: ẢNH CCCD (ẢNH MẶT TRƯỚC VÀ MẶT SAU) -->
         <!-- ================================================================= -->
         <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/50 to-stone-50 border border-amber-200/80 shadow-xs space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 pb-2.5">
@@ -552,16 +524,10 @@
               </div>
               <div>
                 <h4 class="font-label-md text-label-md font-extrabold text-stone-900 uppercase">1. Ảnh Căn Cước Công Dân (Mặt trước &amp; Mặt sau)</h4>
-                <p class="text-xs text-stone-500">Hình ảnh chụp gốc hoặc bản quét eKYC từ ứng dụng định danh quốc gia VNeID</p>
+                <p class="text-xs text-stone-500">Ảnh giấy tờ do người dùng cung cấp; vui lòng kiểm tra thông tin trước khi lưu.</p>
               </div>
             </div>
 
-            <!-- Nút bấm "Đọc thông tin" để eKYC điền sẵn mục 2-4 -->
-            <button id="btn-ekyc-read" type="button"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-stone-950 font-label-md text-label-md font-bold shadow-md shadow-amber-900/20 active:scale-95 transition-all cursor-pointer">
-              <span class="material-symbols-outlined text-[20px] text-stone-950 animate-pulse">document_scanner</span>
-              <span>Đọc thông tin (eKYC)</span>
-            </button>
           </div>
 
           <!-- Khu vực 2 ảnh thẻ CCCD trực quan -->
@@ -581,7 +547,6 @@
               
               <!-- Card Mockup Mặt Trước -->
               <div id="card-front-box" class="relative rounded-xl p-3.5 bg-gradient-to-br from-[#d4f1f4] via-[#eaf6f6] to-[#fce38a]/40 border-2 border-amber-300/80 shadow-md overflow-hidden flex flex-col justify-between h-[180px]">
-                <div id="scanner-line-front" class="scanner-line hidden"></div>
                 <!-- Card Header -->
                 <div class="flex items-start justify-between border-b border-stone-300/60 pb-1.5">
                   <div class="flex items-center gap-2">
@@ -628,7 +593,7 @@
                   <span>Có giá trị đến: <b id="card-front-expiry" class="text-red-700">15/08/2048</b></span>
                   <div class="flex items-center gap-1 font-label-code text-[8px] text-stone-400">
                     <span class="material-symbols-outlined text-[12px] text-emerald-600">qr_code_2</span>
-                    <span>VNeID Chip</span>
+                    <span>CCCD gắn chip</span>
                   </div>
                 </div>
               </div>
@@ -646,11 +611,10 @@
               
               <!-- Card Mockup Mặt Sau -->
               <div id="card-back-box" class="relative rounded-xl p-3.5 bg-gradient-to-br from-[#d4f1f4] via-[#eaf6f6] to-[#fce38a]/40 border-2 border-amber-300/80 shadow-md overflow-hidden flex flex-col justify-between h-[180px]">
-                <div id="scanner-line-back" class="scanner-line hidden"></div>
                 <!-- Card Header Back -->
                 <div class="flex items-center justify-between text-[9px] border-b border-stone-300/60 pb-1">
                   <span class="font-bold text-stone-700">Đặc điểm nhận dạng: Nốt ruồi c. 1cm dưới mép trái</span>
-                  <span class="text-[8px] font-label-code text-stone-500">QR-VNeID</span>
+                  <span class="text-[8px] font-label-code text-stone-500">Mã QR</span>
                 </div>
 
                 <!-- Issue Information -->
@@ -687,7 +651,7 @@
               <span class="material-symbols-outlined text-[18px]">badge</span>
               <span>2. Thông Tin Định Danh Công Dân</span>
             </span>
-            <span class="text-xs text-stone-500 font-medium">* Tự động trích xuất chính xác qua eKYC</span>
+            <span class="text-xs text-stone-500 font-medium">Vui lòng kiểm tra thông tin trước khi lưu hồ sơ.</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
@@ -969,7 +933,7 @@
       <div class="px-6 py-4 bg-[#F8F5EE] flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-200">
         <div class="flex items-center gap-2 text-xs text-stone-500">
           <span class="material-symbols-outlined text-[16px] text-amber-600">security</span>
-          <span>Dữ liệu được mã hóa và đối soát bảo mật VNeID Mức 2</span>
+          <span>Thông tin chỉ phục vụ quản lý hồ sơ người dùng.</span>
         </div>
 
         <div class="flex items-center gap-3">
@@ -1032,7 +996,7 @@
               <span class="material-symbols-outlined text-[17px]">id_card</span>
               <span>1. Định Danh &amp; Thông Tin Công Dân</span>
             </span>
-            <span class="text-xs text-stone-500 font-medium">* Tự động xác thực qua cơ sở dữ liệu VNeID</span>
+            <span class="text-xs text-stone-500 font-medium">Thông tin do người dùng cung cấp; cần được kiểm tra trước khi lưu.</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
@@ -1074,7 +1038,7 @@
             <div class="space-y-1">
               <label class="font-label-sm text-[11px] text-stone-500 uppercase font-bold">Trạng Thái Xác Thực Ban Đầu</label>
               <select id="create-user-status" class="w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600">
-                <option value="active">Đã xác minh qua VNeID mức 2 (Hoạt động)</option>
+                <option value="active">Đã xác minh hồ sơ (Hoạt động)</option>
                 <option value="pending">Chờ xác thực ảnh CCCD</option>
                 <option value="locked">Tạm khóa / Hạn chế</option>
               </select>
@@ -1112,10 +1076,10 @@
   <!-- ========================================================= -->
   <!-- MODAL: XÁC NHẬN XÓA TÀI KHOẢN (CONFIRM DELETE) -->
   <!-- ========================================================= -->
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 overflow-y-auto hidden" id="deleteModal">
+  <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 overflow-y-auto hidden" id="deleteModal">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-red-300 relative transition-all transform animate-in fade-in zoom-in-95 duration-200" onclick="event.stopPropagation()">
       <div class="absolute top-4 right-4 z-10">
-        <button class="w-8 h-8 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors" id="btn-close-delete-modal" title="Đóng">
+        <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors" id="btn-close-delete-modal" title="Đóng">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
@@ -1148,10 +1112,10 @@
         </div>
       </div>
       <div class="px-6 py-4 bg-[#F8F5EE] border-t border-stone-200 flex items-center justify-end gap-3">
-        <button class="px-4 py-2 rounded-xl bg-white border border-stone-300 text-stone-800 font-label-md text-label-md font-semibold hover:bg-stone-100 transition-colors shadow-xs" id="btn-cancel-delete">
+        <button type="button" class="px-4 py-2 rounded-xl bg-white border border-stone-300 text-stone-800 font-label-md text-label-md font-semibold hover:bg-stone-100 transition-colors shadow-xs" id="btn-cancel-delete">
           Hủy bỏ
         </button>
-        <button class="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-label-md text-label-md font-bold shadow-md shadow-red-700/30 transition-all active:scale-95" id="btn-confirm-delete">
+        <button type="button" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-label-md text-label-md font-bold shadow-md shadow-red-700/30 transition-all active:scale-95" id="btn-confirm-delete">
           <span class="material-symbols-outlined text-[18px]">delete</span>
           <span>Xác nhận Xóa</span>
         </button>
@@ -1638,6 +1602,7 @@
       // 3. NÚT XÓA
       document.querySelectorAll('.btn-delete-user').forEach(btn => {
         btn.addEventListener('click', function(e) {
+          e.preventDefault();
           e.stopPropagation();
           const userId = this.getAttribute('data-id');
           const userName = this.getAttribute('data-name');
@@ -1764,7 +1729,6 @@
       const modalHeaderIcon = document.getElementById('modal-header-icon');
       const viewActions = document.getElementById('modal-view-actions');
       const editActions = document.getElementById('modal-edit-actions');
-      const btnEkycRead = document.getElementById('btn-ekyc-read');
       const sameAddressCheck = document.getElementById('modal-check-same-address');
 
       if (mode === 'view') {
@@ -1783,10 +1747,6 @@
 
         confirmCheckboxes.forEach(cb => cb.setAttribute('disabled', 'true'));
         if (sameAddressCheck) sameAddressCheck.setAttribute('disabled', 'true');
-        if (btnEkycRead) {
-          btnEkycRead.classList.add('opacity-50', 'pointer-events-none');
-        }
-
         viewActions.classList.remove('hidden');
         editActions.classList.add('hidden');
       } else {
@@ -1804,10 +1764,6 @@
 
         confirmCheckboxes.forEach(cb => cb.removeAttribute('disabled'));
         if (sameAddressCheck) sameAddressCheck.removeAttribute('disabled');
-        if (btnEkycRead) {
-          btnEkycRead.classList.remove('opacity-50', 'pointer-events-none');
-        }
-
         // Email LUÔN LUÔN là chỉ xem, không sửa theo yêu cầu
         const emailInput = document.getElementById('modal-input-email');
         if (emailInput) {
@@ -1829,7 +1785,6 @@
         });
         confirmCheckboxes.forEach(cb => cb.setAttribute('disabled', 'true'));
         if (sameAddressCheck) sameAddressCheck.setAttribute('disabled', 'true');
-        if (btnEkycRead) btnEkycRead.classList.add('opacity-50', 'pointer-events-none');
 
         viewActions.classList.add('hidden');
         editActions.classList.remove('hidden');
@@ -1874,73 +1829,6 @@
         }
         if (hint) hint.classList.add('hidden');
       }
-    }
-
-    // =========================================================================
-    // TÍNH NĂNG "ĐỌC THÔNG TIN" (eKYC SCAN): TỰ ĐỘNG ĐIỀN CÁC MỤC 2-4 TỪ ẢNH CCCD
-    // =========================================================================
-    function triggerEkycReading() {
-      const btnEkycRead = document.getElementById('btn-ekyc-read');
-      const scanFront = document.getElementById('scanner-line-front');
-      const scanBack = document.getElementById('scanner-line-back');
-
-      // Bật hiệu ứng quét laser
-      scanFront.classList.remove('hidden');
-      scanBack.classList.remove('hidden');
-      btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[19px] animate-spin">sync</span><span>Đang đọc CCCD...</span>`;
-      btnEkycRead.classList.add('pointer-events-none');
-
-      setTimeout(() => {
-        // Giả lập đọc OCR từ ảnh CCCD của người dùng hiện tại
-        const user = usersData.find(u => u.id === currentModalUserId) || usersData[0];
-
-        // 2. Điền Mục Định danh
-        document.getElementById('modal-input-name').value = user.name;
-        document.getElementById('modal-input-cccd').value = user.cccd;
-        document.getElementById('modal-input-dob').value = user.dob;
-        document.getElementById('modal-input-gender').value = user.gender;
-        document.getElementById('modal-input-nationality').value = user.nationality || "Việt Nam";
-
-        // 3. Điền Mục Thẻ
-        document.getElementById('modal-input-card-issuedate').value = user.cardIssueDate || "12/05/2021";
-        document.getElementById('modal-input-card-issueplace').value = user.cardIssuePlace || "Cục Cảnh sát QLHC về TTXH";
-        document.getElementById('modal-input-card-expiry').value = user.cardExpiry || "15/08/2048";
-
-        // 4. Điền Mục Địa chỉ
-        document.getElementById('modal-input-hometown').value = user.hometown || "Quê quán theo CSDL VNeID";
-        document.getElementById('modal-input-perm-street').value = user.permanentAddress?.street || "Số 42, Phố Tràng Thi";
-        document.getElementById('modal-input-perm-ward').value = user.permanentAddress?.ward || "Phường Hàng Trống";
-        document.getElementById('modal-input-perm-city').value = user.permanentAddress?.city || "Quận Hoàn Kiếm, TP. Hà Nội";
-
-        syncCurrentAddressState();
-
-        // Tắt quét laser
-        scanFront.classList.add('hidden');
-        scanBack.classList.add('hidden');
-        btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[20px] text-stone-950">done_all</span><span>Đã đọc xong eKYC</span>`;
-        btnEkycRead.classList.remove('pointer-events-none');
-
-        // Highlight hiệu ứng các trường vừa điền
-        const highlightedFields = [
-          'modal-input-name', 'modal-input-cccd', 'modal-input-dob', 'modal-input-gender',
-          'modal-input-nationality', 'modal-input-card-issuedate', 'modal-input-card-issueplace',
-          'modal-input-card-expiry', 'modal-input-hometown', 'modal-input-perm-street',
-          'modal-input-perm-ward', 'modal-input-perm-city'
-        ];
-        highlightedFields.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.classList.add('ring-2', 'ring-amber-500', 'bg-amber-50/50');
-            setTimeout(() => el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-50/50'), 2000);
-          }
-        });
-
-        showToast('Đọc eKYC thành công!', 'Đã tự động trích xuất và điền sẵn thông tin các Mục 2 (Định danh), Mục 3 (Thẻ), Mục 4 (Địa chỉ).');
-
-        setTimeout(() => {
-          btnEkycRead.innerHTML = `<span class="material-symbols-outlined text-[20px] text-stone-950">document_scanner</span><span>Đọc thông tin (eKYC)</span>`;
-        }, 3000);
-      }, 700);
     }
 
     // =========================================================================
@@ -2005,6 +1893,11 @@
     // XÓA TÀI KHOẢN (xóa mềm: admin khôi phục lại được, email không đăng ký lại được)
     // =========================================================================
     let targetedDeleteUserId = null;
+    function closeDeleteModal() {
+      deleteModal.classList.add('hidden');
+      targetedDeleteUserId = null;
+    }
+
     function openDeleteModal(userId, name, email) {
       targetedDeleteUserId = userId;
       document.getElementById('delete-user-name').textContent = name;
@@ -2173,9 +2066,6 @@
       // NÚT "LƯU HỒ SƠ"
       document.getElementById('btn-save-user-record')?.addEventListener('click', saveUserRecord);
 
-      // Nút "Đọc thông tin" eKYC
-      document.getElementById('btn-ekyc-read')?.addEventListener('click', triggerEkycReading);
-
       // Ô tick "Giống nơi thường trú"
       const sameAddressCheck = document.getElementById('modal-check-same-address');
       if (sameAddressCheck) {
@@ -2206,11 +2096,11 @@
       });
 
       // Delete modal events
-      document.getElementById('btn-close-delete-modal')?.addEventListener('click', () => deleteModal.classList.add('hidden'));
-      document.getElementById('btn-cancel-delete')?.addEventListener('click', () => deleteModal.classList.add('hidden'));
+      document.getElementById('btn-close-delete-modal')?.addEventListener('click', closeDeleteModal);
+      document.getElementById('btn-cancel-delete')?.addEventListener('click', closeDeleteModal);
       document.getElementById('btn-confirm-delete')?.addEventListener('click', confirmDeleteUser);
       deleteModal.addEventListener('click', function(e) {
-        if (e.target === deleteModal) deleteModal.classList.add('hidden');
+        if (e.target === deleteModal) closeDeleteModal();
       });
 
       // Export excel demo
@@ -2262,6 +2152,7 @@
     // Đã là admin (chưa đăng nhập thì protectPage chuyển sang /login và không tới dòng này)
     window.dispatchEvent(new Event('admin-auth-ready'));
   </script>
+  <script src="/admin-ai-chat.js" defer></script>
 
 </body>
 
