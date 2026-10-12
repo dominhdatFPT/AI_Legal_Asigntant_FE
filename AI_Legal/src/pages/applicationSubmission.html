@@ -172,8 +172,41 @@
   <!-- MAIN APP CONTAINER -->
   <main id="application-submission-main" class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 pt-6 pb-24 sm:pb-8">
 
+    <section id="template-browser" class="space-y-6" aria-labelledby="template-browser-title">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div class="mx-auto max-w-3xl text-center">
+          <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base">folder_shared</span> HỒ SƠ TRỰC TUYẾN</span>
+          <h1 id="template-browser-title" class="mt-3 text-2xl font-bold text-on-surface sm:text-3xl">Bạn cần làm thủ tục nào?</h1>
+          <p class="mt-2 text-sm text-secondary">Chọn lĩnh vực để xem các mẫu hồ sơ. Bạn có thể tự điền biểu mẫu hoặc nhờ trợ lý AI hướng dẫn.</p>
+        </div>
+        <div id="law-category-cards" class="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <button type="button" data-law-category="dat-dai" class="group rounded-2xl border border-slate-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-primary"><span class="material-symbols-outlined text-2xl">real_estate_agent</span></span>
+            <span class="mt-4 block text-lg font-bold text-on-surface">Luật Đất đai</span>
+            <span class="mt-1 block text-sm leading-relaxed text-secondary">Đăng ký đất đai, cấp đổi giấy chứng nhận, sang tên, tách thửa và các thủ tục liên quan.</span>
+            <span class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Xem biểu mẫu <span class="material-symbols-outlined text-base">arrow_forward</span></span>
+          </button>
+          <button type="button" data-law-category="ho-kinh-doanh" class="group rounded-2xl border border-slate-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><span class="material-symbols-outlined text-2xl">storefront</span></span>
+            <span class="mt-4 block text-lg font-bold text-on-surface">Luật Kinh doanh</span>
+            <span class="mt-1 block text-sm leading-relaxed text-secondary">Thành lập hộ kinh doanh, thay đổi thông tin, tạm ngừng hoặc chấm dứt hoạt động.</span>
+            <span class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Xem biểu mẫu <span class="material-symbols-outlined text-base">arrow_forward</span></span>
+          </button>
+        </div>
+        <div id="template-list-panel" class="mt-7 hidden">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div><p class="text-xs font-semibold uppercase tracking-wide text-primary">Danh mục biểu mẫu</p><h2 id="template-list-title" class="mt-1 text-xl font-bold text-on-surface"></h2><p id="template-list-description" class="mt-1 text-sm text-secondary"></p></div>
+            <button id="back-to-law-categories" type="button" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-on-surface hover:bg-slate-50"><span class="material-symbols-outlined text-base">arrow_back</span> Chọn lĩnh vực khác</button>
+          </div>
+          <div id="procedure-template-list" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <p class="mt-5 text-center text-xs text-secondary">Biểu mẫu đang ở chế độ xem trước. Vui lòng kiểm tra thông tin và căn cứ áp dụng trước khi nộp thực tế.</p>
+      </div>
+    </section>
+
     <!-- HERO / AUTO-FILL TRIGGER BANNER -->
-  <div class="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-slate-200/80 relative overflow-hidden">
+  <div id="application-form-help" class="hidden bg-white rounded-2xl p-5 mb-6 shadow-sm border border-slate-200/80 relative overflow-hidden">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4"><div><p class="text-[11px] font-bold uppercase tracking-wide text-primary">Mẫu hồ sơ đang chọn</p><h2 id="application-template-name" class="mt-1 text-base font-bold text-on-surface">Chưa chọn mẫu</h2></div><div class="flex flex-wrap gap-2"><button id="back-to-template-list" type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-on-surface hover:bg-slate-50"><span class="material-symbols-outlined text-base">arrow_back</span> Danh sách mẫu</button><button id="btn-ai-fill-support" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-bold text-white shadow-sm hover:bg-indigo-700"><span class="material-symbols-outlined text-base">auto_awesome</span> AI hỗ trợ điền</button></div></div>
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex items-center gap-3.5">
       <div class="w-11 h-11 rounded-xl bg-red-50 text-primary flex items-center justify-center shrink-0 border border-red-100">
@@ -204,7 +237,7 @@
 </div>
 
     <!-- MAIN FORM GRID (Left: Stepper & Form Content, Right: Summary & AI Inspector) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <div id="application-form-workspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- LEFT: FORM SECTION (8 Cols) -->
       <div class="lg:col-span-8 space-y-6">
@@ -212,28 +245,24 @@
         <!-- STEPPER PROCESS BAR -->
         <div class="rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-sm sm:p-4">
           <div class="mb-3 flex items-center justify-between gap-3">
-            <p id="form-progress-label" aria-live="polite" class="text-xs font-semibold text-on-surface">Nhóm đã hoàn thành: 0/3</p>
+            <p id="form-progress-label" aria-live="polite" class="text-xs font-semibold text-on-surface">Hoàn thành thông tin hồ sơ: 0%</p>
             <span class="text-[10px] text-secondary">Chọn một bước để xem lại hoặc chỉnh sửa.</span>
           </div>
-          <div class="mb-3 h-1.5 overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-label="Tiến độ điền thông tin" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+          <div class="mb-3 h-1.5 overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-label="Tiến độ điền thông tin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <div id="form-progress-bar" class="h-full w-0 rounded-full bg-emerald-600 transition-[width] duration-200 motion-reduce:transition-none"></div>
           </div>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-            <button type="button" data-form-step="1" onclick="goToFormStep(1)" aria-controls="form-step-procedure" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+            <button type="button" data-form-step="1" onclick="goToFormStep(1)" aria-controls="form-step-personal" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
               <span data-step-number class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-700">1</span>
-              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Chọn thủ tục</span><span id="step-status-1" class="block truncate text-[10px] text-secondary">Chưa chọn</span></span>
+              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Thông tin cá nhân</span><span id="step-status-1" class="block truncate text-[10px] text-secondary">0/8 mục</span></span>
             </button>
-            <button type="button" data-form-step="2" onclick="goToFormStep(2)" aria-controls="form-step-personal" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
+            <button type="button" data-form-step="2" onclick="goToFormStep(2)" aria-controls="form-step-details" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
               <span data-step-number class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-700">2</span>
-              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Thông tin cá nhân</span><span id="step-status-2" class="block truncate text-[10px] text-secondary">0/8 mục</span></span>
+              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Thông tin thủ tục</span><span id="step-status-2" class="block truncate text-[10px] text-secondary">0/8 mục</span></span>
             </button>
-            <button type="button" data-form-step="3" onclick="goToFormStep(3)" aria-controls="form-step-details" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
+            <button type="button" data-form-step="3" onclick="goToFormStep(3)" aria-controls="form-step-review" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
               <span data-step-number class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-700">3</span>
-              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Thông tin thủ tục</span><span id="step-status-3" class="block truncate text-[10px] text-secondary">0/8 mục</span></span>
-            </button>
-            <button type="button" data-form-step="4" onclick="goToFormStep(4)" aria-controls="form-step-review" class="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-left transition hover:border-red-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200">
-              <span data-step-number class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-700">4</span>
-              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Kiểm tra hồ sơ</span><span id="step-status-4" class="block truncate text-[10px] text-secondary">Sẵn sàng kiểm tra</span></span>
+              <span class="min-w-0"><span class="block truncate text-xs font-bold text-on-surface">Kiểm tra hồ sơ</span><span id="step-status-3" class="block truncate text-[10px] text-secondary">Sẵn sàng kiểm tra</span></span>
             </button>
           </div>
         </div>
@@ -241,16 +270,16 @@
         <!-- MAIN SUBMISSION FORM -->
         <form id="submission-form" onsubmit="event.preventDefault(); handleSubmitProcedure();" class="space-y-6">
 
-          <!-- SECTION 1: LỰA CHỌN THỦ TỤC -->
-          <div id="form-step-procedure" class="bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4 scroll-mt-6">
+          <!-- Hidden internal controls: procedure already selected in the template browser. -->
+          <div id="form-step-procedure" class="hidden bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4 scroll-mt-6" aria-hidden="true">
             <div class="flex items-center justify-between border-b border-border-subtle pb-3">
               <div class="flex items-center gap-2.5">
                 <span class="w-8 h-8 rounded-lg bg-red-50 text-primary flex items-center justify-center">
                   <span class="material-symbols-outlined filled text-lg">folder_shared</span>
                 </span>
                 <div>
-                  <h3 class="font-bold text-base text-on-surface">1. Chọn thủ tục bạn muốn thực hiện</h3>
-                  <p class="text-xs text-secondary">Chọn lĩnh vực rồi tìm thủ tục phù hợp với nhu cầu của bạn.</p>
+                  <h3 class="font-bold text-base text-on-surface">Thủ tục đã chọn</h3>
+                  <p class="text-xs text-secondary">Thủ tục này được chọn ở danh sách mẫu trước đó.</p>
                 </div>
               </div>
               <span class="text-xs font-semibold bg-red-100 text-primary px-2.5 py-1 rounded-full">Cần hoàn thành</span>
@@ -278,7 +307,7 @@
                   Nhóm thủ tục <span class="text-primary">*</span>
                 </label>
                 <div class="relative">
-                  <select id="proc-category" onchange="updateProcedureTypes()" class="w-full h-11 px-3.5 bg-surface-subtle border border-slate-200 rounded-xl text-xs text-on-surface font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"><option value="dat-dai" selected="">Đất đai &amp; Nhà ở</option><option value="ho-kinh-doanh">Hộ kinh doanh &amp; Doanh nghiệp</option></select>
+          <select id="proc-category" onchange="updateProcedureTypes()" class="w-full h-11 px-3.5 bg-surface-subtle border border-slate-200 rounded-xl text-xs text-on-surface font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"><option value="dat-dai" selected="">Luật Đất đai</option><option value="ho-kinh-doanh">Luật Kinh doanh</option></select>
                 </div>
               </div>
 
@@ -309,7 +338,7 @@
             </div>
           </div>
 
-          <!-- SECTION 2: LÝ LỊCH CÔNG DÂN & CHỦ HỒ SƠ (CÓ AUTO-FILL) -->
+          <!-- STEP 1: LÝ LỊCH CÔNG DÂN & CHỦ HỒ SƠ (CÓ AUTO-FILL) -->
           <div id="form-step-personal" class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 scroll-mt-6">
   <div class="flex items-center justify-between border-b border-slate-100 pb-3">
     <div class="flex items-center gap-2.5">
@@ -317,7 +346,7 @@
         <span class="material-symbols-outlined filled text-lg">badge</span>
       </span>
       <div>
-        <h3 class="font-bold text-sm sm:text-base text-on-surface">2. Thông tin người làm hồ sơ</h3>
+        <h3 class="font-bold text-sm sm:text-base text-on-surface">1. Thông tin người làm hồ sơ</h3>
         <p class="text-xs text-secondary">Đây là thông tin mẫu. Hãy cập nhật thông tin chính xác của bạn trước khi tạo hồ sơ.</p>      </div>
     </div>
     <div class="flex items-center gap-2">
@@ -437,10 +466,10 @@
   </div>
 </div>
 
-          <!-- SECTION 3: THÔNG TIN CHI TIẾT THỦ TỤC & ĐẤT ĐAI / HỘ KINH DOANH -->
-          <div id="form-step-details" class="bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4"><div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-subtle pb-3 gap-2"><div class="flex items-center gap-2.5"><span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined filled text-lg">description</span></span><div><div class="flex flex-wrap items-center gap-2"><h3 class="font-bold text-base text-on-surface">3. Thông tin về đất, nhà ở và tài sản trên đất</h3><span class="text-[11px] font-bold bg-red-100 text-primary px-2.5 py-0.5 rounded-full border border-red-200">Mẫu số 04/ĐK</span></div><p class="text-xs text-secondary mt-0.5">Biểu mẫu theo quy định của Luật Đất đai 2024. Hãy điền theo giấy tờ về đất và nhà ở của bạn.</p><p class="text-[11px] text-secondary mt-1">Các mục có dấu * là bắt buộc. Bạn có thể xem số liệu trên giấy chứng nhận hoặc giấy tờ liên quan.</p></div></div><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold self-start sm:self-center"><span class="material-symbols-outlined text-sm filled text-amber-600">verified</span>Mẫu theo quy định</div></div><div class="space-y-5"><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex items-center justify-between border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">map</span>Phần A. Kê khai Thửa đất (Mục 2 theo Mẫu 04/ĐK)</h4><span class="text-[11px] text-secondary font-medium">Số thửa, số tờ thường có trên giấy chứng nhận.</span></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-lot">Thửa đất số <span class="text-primary">*</span></label><input type="text" id="land-lot" value="128" placeholder="VD: 128" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-map">Tờ bản đồ số <span class="text-primary">*</span></label><input type="text" id="land-map" value="14" placeholder="VD: 14" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-cadastral-sheet">Số mảnh trích đo địa chính (nếu có)</label><input type="text" id="land-cadastral-sheet" value="TĐ-2024/09" placeholder="(Nếu có)" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area">Tổng diện tích (m²) <span class="text-primary">*</span></label><input type="text" id="land-area" value="85.5 m²" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-private">Sử dụng riêng (m²) <span class="text-primary">*</span></label><input type="text" id="land-area-private" value="85.5 m²" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-common">Sử dụng chung (m²)</label><input type="text" id="land-area-common" value="0 m²" placeholder="VD: 0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-location">Địa chỉ thửa đất <span class="text-primary">*</span> (Số nhà/đường, Thôn/Tổ, Phường/Xã, Quận/Huyện, Tỉnh/TP)</label><input type="text" id="land-location" value="Thửa đất số 128, Khu dân cư Kim Mã, Phường Kim Mã, Quận Ba Đình, TP. Hà Nội" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-purpose">Mục đích sử dụng đất <span class="text-primary">*</span></label><select id="land-purpose" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Đất ở tại đô thị (ODT)</option><option>Đất ở tại nông thôn (ONT)</option><option>Đất thương mại, dịch vụ (TMD)</option><option>Đất trồng cây lâu năm (CLN)</option><option>Đất sản xuất kinh doanh phi nông nghiệp (SKC)</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-start-time">Thời điểm bắt đầu sử dụng đất</label><input type="text" id="land-start-time" value="Trước ngày 15/10/1993" placeholder="VD: Tháng 03/2005" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-duration">Thời hạn đề nghị sử dụng đất <span class="text-primary">*</span></label><select id="land-duration" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Lâu dài</option><option>Có thời hạn đến 50 năm</option><option>Đến ngày cụ thể theo dự án</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-origin">Nguồn gốc sử dụng đất <span class="text-primary">*</span></label><select id="land-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Công nhận quyền sử dụng đất như giao đất có thu tiền sử dụng đất</option><option>Nhận chuyển nhượng quyền sử dụng đất hợp pháp</option><option>Được tặng cho quyền sử dụng đất</option><option>Nhận thừa kế quyền sử dụng đất</option><option>Nhà nước giao đất có thu tiền sử dụng đất</option></select></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-easement">Quyền hoặc hạn chế liên quan đến thửa đất liền kề (nếu có)</label><input type="text" id="land-easement" value="Không có tranh chấp; Quyền về lối đi chung ngõ 2.5m tiếp giáp mặt phía Đông" placeholder="Lối đi chung, cấp thoát nước, đường dây điện qua thửa..." class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-2 gap-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">home</span>Phần B. Nhà ở, công trình xây dựng gắn liền với đất (Mục 3 theo Mẫu 04/ĐK)</h4><label class="flex items-center gap-2 cursor-pointer select-none text-xs text-on-surface font-semibold"><input type="checkbox" id="check-has-asset" checked="" class="w-4 h-4 rounded text-primary accent-primary cursor-pointer">Thửa đất có nhà ở hoặc công trình cần đăng ký</label></div><div id="section-asset-fields" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-type">Loại công trình / Nhà ở <span class="text-primary">*</span></label><select id="asset-type" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Nhà ở riêng lẻ đô thị</option><option>Căn hộ nhà chung cư</option><option>Công trình xây dựng hỗn hợp</option><option>Nhà xưởng, nhà kho gắn liền</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-build-area">Diện tích xây dựng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-build-area" value="72.0 m²" placeholder="VD: 72.0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floor-area">Diện tích sàn xây dựng/sử dụng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-floor-area" value="216.5 m²" placeholder="VD: 216.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-ownership">Hình thức sở hữu <span class="text-primary">*</span></label><select id="asset-ownership" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Sở hữu riêng (toàn bộ diện tích)</option><option>Sở hữu chung hợp nhất</option><option>Sở hữu chung theo phần</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floors">Kết cấu &amp; Số tầng <span class="text-primary">*</span></label><input type="text" id="asset-floors" value="Bê tông cốt thép, 03 tầng nổi, 0 hầm" placeholder="VD: 03 tầng nổi, 0 hầm" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-duration">Thời hạn sở hữu <span class="text-primary">*</span></label><input type="text" id="asset-duration" value="Lâu dài" placeholder="VD: Lâu dài" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-origin">Nguồn gốc tạo lập tài sản <span class="text-primary">*</span></label><select id="asset-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Tự đầu tư xây dựng (Có Giấy phép xây dựng)</option><option>Mua bán nhà ở có sẵn</option><option>Được tặng cho nhà ở gắn liền với đất</option><option>Thừa kế nhà ở</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-permit">Giấy phép xây dựng / Giấy tờ pháp lý</label><input type="text" id="asset-permit" value="GPXD số 118/GPXD-UBND cấp ngày 20/09/2018" placeholder="Số GPXD hoặc văn bản hoàn công" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">check_circle</span>Phần C. Bạn muốn cơ quan giải quyết nội dung nào? (Mục 4, Mẫu 04/ĐK)</h4><p class="text-[11px] text-secondary mt-0.5">Chọn một hoặc nhiều nội dung phù hợp với nhu cầu của bạn.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1"><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-1" checked="" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.1.</strong> Đề nghị đăng ký đất đai, tài sản gắn liền với đất</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-2" checked="" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.2.</strong> Đề nghị cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản (Sổ đỏ/Sổ hồng)</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-3" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.3.</strong> Đề nghị ghi nợ tiền sử dụng đất, lệ phí trước bạ</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-4" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.4.</strong> Đề nghị khác (yêu cầu riêng theo hồ sơ)</span></label></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-notes">Nội dung đề nghị thêm (nếu có)</label><textarea id="land-notes" rows="2" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition" placeholder="Bạn có thể ghi thêm yêu cầu hoặc thông tin cần lưu ý...">Tôi đề nghị cơ quan xem xét đăng ký thửa đất và cấp Giấy chứng nhận theo thông tin đã khai.</textarea></div></div></div></div>
+          <!-- STEP 2: THÔNG TIN CHI TIẾT THỦ TỤC & ĐẤT ĐAI / HỘ KINH DOANH -->
+          <div id="form-step-details" class="bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4"><div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-subtle pb-3 gap-2"><div class="flex items-center gap-2.5"><span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined filled text-lg">description</span></span><div><div class="flex flex-wrap items-center gap-2"><h3 class="font-bold text-base text-on-surface">2. Thông tin về đất, nhà ở và tài sản trên đất</h3><span class="text-[11px] font-bold bg-red-100 text-primary px-2.5 py-0.5 rounded-full border border-red-200">Mẫu số 04/ĐK</span></div><p class="text-xs text-secondary mt-0.5">Biểu mẫu theo quy định của Luật Đất đai 2024. Hãy điền theo giấy tờ về đất và nhà ở của bạn.</p><p class="text-[11px] text-secondary mt-1">Các mục có dấu * là bắt buộc. Bạn có thể xem số liệu trên giấy chứng nhận hoặc giấy tờ liên quan.</p></div></div><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold self-start sm:self-center"><span class="material-symbols-outlined text-sm filled text-amber-600">verified</span>Mẫu theo quy định</div></div><div class="space-y-5"><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex items-center justify-between border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">map</span>Phần A. Kê khai Thửa đất (Mục 2 theo Mẫu 04/ĐK)</h4><span class="text-[11px] text-secondary font-medium">Số thửa, số tờ thường có trên giấy chứng nhận.</span></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-lot">Thửa đất số <span class="text-primary">*</span></label><input type="text" id="land-lot" value="128" placeholder="VD: 128" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-map">Tờ bản đồ số <span class="text-primary">*</span></label><input type="text" id="land-map" value="14" placeholder="VD: 14" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-cadastral-sheet">Số mảnh trích đo địa chính (nếu có)</label><input type="text" id="land-cadastral-sheet" value="TĐ-2024/09" placeholder="(Nếu có)" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area">Tổng diện tích (m²) <span class="text-primary">*</span></label><input type="text" id="land-area" value="85.5 m²" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-private">Sử dụng riêng (m²) <span class="text-primary">*</span></label><input type="text" id="land-area-private" value="85.5 m²" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-common">Sử dụng chung (m²)</label><input type="text" id="land-area-common" value="0 m²" placeholder="VD: 0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-location">Địa chỉ thửa đất <span class="text-primary">*</span> (Số nhà/đường, Thôn/Tổ, Phường/Xã, Quận/Huyện, Tỉnh/TP)</label><input type="text" id="land-location" value="Thửa đất số 128, Khu dân cư Kim Mã, Phường Kim Mã, Quận Ba Đình, TP. Hà Nội" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-purpose">Mục đích sử dụng đất <span class="text-primary">*</span></label><select id="land-purpose" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Đất ở tại đô thị (ODT)</option><option>Đất ở tại nông thôn (ONT)</option><option>Đất thương mại, dịch vụ (TMD)</option><option>Đất trồng cây lâu năm (CLN)</option><option>Đất sản xuất kinh doanh phi nông nghiệp (SKC)</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-start-time">Thời điểm bắt đầu sử dụng đất</label><input type="text" id="land-start-time" value="Trước ngày 15/10/1993" placeholder="VD: Tháng 03/2005" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-duration">Thời hạn đề nghị sử dụng đất <span class="text-primary">*</span></label><select id="land-duration" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Lâu dài</option><option>Có thời hạn đến 50 năm</option><option>Đến ngày cụ thể theo dự án</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-origin">Nguồn gốc sử dụng đất <span class="text-primary">*</span></label><select id="land-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Công nhận quyền sử dụng đất như giao đất có thu tiền sử dụng đất</option><option>Nhận chuyển nhượng quyền sử dụng đất hợp pháp</option><option>Được tặng cho quyền sử dụng đất</option><option>Nhận thừa kế quyền sử dụng đất</option><option>Nhà nước giao đất có thu tiền sử dụng đất</option></select></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-easement">Quyền hoặc hạn chế liên quan đến thửa đất liền kề (nếu có)</label><input type="text" id="land-easement" value="Không có tranh chấp; Quyền về lối đi chung ngõ 2.5m tiếp giáp mặt phía Đông" placeholder="Lối đi chung, cấp thoát nước, đường dây điện qua thửa..." class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-2 gap-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">home</span>Phần B. Nhà ở, công trình xây dựng gắn liền với đất (Mục 3 theo Mẫu 04/ĐK)</h4><label class="flex items-center gap-2 cursor-pointer select-none text-xs text-on-surface font-semibold"><input type="checkbox" id="check-has-asset" checked="" class="w-4 h-4 rounded text-primary accent-primary cursor-pointer">Thửa đất có nhà ở hoặc công trình cần đăng ký</label></div><div id="section-asset-fields" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-type">Loại công trình / Nhà ở <span class="text-primary">*</span></label><select id="asset-type" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Nhà ở riêng lẻ đô thị</option><option>Căn hộ nhà chung cư</option><option>Công trình xây dựng hỗn hợp</option><option>Nhà xưởng, nhà kho gắn liền</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-build-area">Diện tích xây dựng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-build-area" value="72.0 m²" placeholder="VD: 72.0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floor-area">Diện tích sàn xây dựng/sử dụng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-floor-area" value="216.5 m²" placeholder="VD: 216.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-ownership">Hình thức sở hữu <span class="text-primary">*</span></label><select id="asset-ownership" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Sở hữu riêng (toàn bộ diện tích)</option><option>Sở hữu chung hợp nhất</option><option>Sở hữu chung theo phần</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floors">Kết cấu &amp; Số tầng <span class="text-primary">*</span></label><input type="text" id="asset-floors" value="Bê tông cốt thép, 03 tầng nổi, 0 hầm" placeholder="VD: 03 tầng nổi, 0 hầm" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-duration">Thời hạn sở hữu <span class="text-primary">*</span></label><input type="text" id="asset-duration" value="Lâu dài" placeholder="VD: Lâu dài" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-origin">Nguồn gốc tạo lập tài sản <span class="text-primary">*</span></label><select id="asset-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Tự đầu tư xây dựng (Có Giấy phép xây dựng)</option><option>Mua bán nhà ở có sẵn</option><option>Được tặng cho nhà ở gắn liền với đất</option><option>Thừa kế nhà ở</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-permit">Giấy phép xây dựng / Giấy tờ pháp lý</label><input type="text" id="asset-permit" value="GPXD số 118/GPXD-UBND cấp ngày 20/09/2018" placeholder="Số GPXD hoặc văn bản hoàn công" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">check_circle</span>Phần C. Bạn muốn cơ quan giải quyết nội dung nào? (Mục 4, Mẫu 04/ĐK)</h4><p class="text-[11px] text-secondary mt-0.5">Chọn một hoặc nhiều nội dung phù hợp với nhu cầu của bạn.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1"><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-1" checked="" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.1.</strong> Đề nghị đăng ký đất đai, tài sản gắn liền với đất</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-2" checked="" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.2.</strong> Đề nghị cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản (Sổ đỏ/Sổ hồng)</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-3" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.3.</strong> Đề nghị ghi nợ tiền sử dụng đất, lệ phí trước bạ</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-4" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.4.</strong> Đề nghị khác (yêu cầu riêng theo hồ sơ)</span></label></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-notes">Nội dung đề nghị thêm (nếu có)</label><textarea id="land-notes" rows="2" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition" placeholder="Bạn có thể ghi thêm yêu cầu hoặc thông tin cần lưu ý...">Tôi đề nghị cơ quan xem xét đăng ký thửa đất và cấp Giấy chứng nhận theo thông tin đã khai.</textarea></div></div></div></div>
 
-          <!-- SECTION 4: TRA CỨU & XEM LẠI HỒ SƠ -->
+          <!-- STEP 3: TRA CỨU & XEM LẠI HỒ SƠ -->
           <section id="form-step-review" class="rounded-2xl border border-red-200 bg-white p-6 shadow-sm space-y-4 scroll-mt-6">
             <div class="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <div class="flex items-center gap-3">
@@ -448,7 +477,7 @@
                   <span class="material-symbols-outlined filled">auto_awesome</span>
                 </span>
                 <div>
-                  <h3 class="text-base font-bold text-on-surface">4. Kiểm tra hồ sơ trước khi tạo</h3>
+                  <h3 class="text-base font-bold text-on-surface">3. Kiểm tra hồ sơ trước khi tạo</h3>
                   <p class="mt-0.5 text-xs text-secondary">Bạn có thể hỏi trợ lý để tìm thủ tục. Hãy điền và kiểm tra thông tin ở các bước phía trên.</p>
                 </div>
               </div>
@@ -637,6 +666,18 @@
       { id: 'hkd-3', category: 'ho-kinh-doanh', name: 'Thông báo tạm ngừng hoạt động hộ kinh doanh', keywords: 'tạm ngừng hoạt động hộ kinh doanh' },
       { id: 'hkd-4', category: 'ho-kinh-doanh', name: 'Đăng ký chấm dứt hoạt động hộ kinh doanh', keywords: 'đăng ký chấm dứt giải thể hộ kinh doanh' }
     ];
+    const procedureTemplateDescriptions = {
+      'land-first-registration': 'Kê khai thông tin thửa đất, nhà ở và đề nghị đăng ký/cấp giấy chứng nhận.',
+      '1': 'Dành cho các trường hợp sang tên do chuyển nhượng, tặng cho hoặc thừa kế.',
+      '2': 'Dùng khi giấy chứng nhận bị mất, hỏng hoặc cần cấp đổi.',
+      '3': 'Kê khai nhu cầu tách một thửa hoặc hợp nhiều thửa đất.',
+      '4': 'Tra cứu thủ tục đăng ký hoặc xóa đăng ký thế chấp quyền sử dụng đất.',
+      'hkd-1': 'Kê khai thông tin chủ hộ, tên hộ kinh doanh, ngành nghề và địa điểm kinh doanh.',
+      'hkd-2': 'Kê khai nội dung cần thay đổi như địa chỉ, ngành nghề hoặc vốn kinh doanh.',
+      'hkd-3': 'Thông báo thời gian và lý do tạm ngừng hoạt động hộ kinh doanh.',
+      'hkd-4': 'Kê khai thông tin để chấm dứt hoạt động hộ kinh doanh.'
+    };
+    const businessProgressFields = ['business-name', 'business-type', 'business-industry', 'business-capital', 'business-address', 'business-owner', 'business-phone', 'business-notes'];
     let activeProcedureSuggestionIndex = -1;
 
     function normalizeProcedureText(value) {
@@ -688,7 +729,7 @@
           title.textContent = procedure.name;
           const categoryLabel = document.createElement('span');
           categoryLabel.className = 'text-[10px] text-slate-500';
-          categoryLabel.textContent = category === 'dat-dai' ? 'Đất đai & Nhà ở' : 'Hộ kinh doanh';
+          categoryLabel.textContent = category === 'dat-dai' ? 'Luật Đất đai' : 'Luật Kinh doanh';
           option.append(title, categoryLabel);
           option.addEventListener('mousedown', (event) => event.preventDefault());
           option.addEventListener('click', () => selectProcedure(procedure.id));
@@ -830,9 +871,9 @@
       }
       const email = document.getElementById('citizen-email').value;
       document.getElementById('modal-email-sent').textContent = email || 'Chưa nhập';
-      activeFormStep = 4;
+      activeFormStep = 3;
       updateApplicationProgress();
-      document.getElementById('step-status-4').textContent = 'Đã tạo bản xem trước';
+      document.getElementById('step-status-3').textContent = 'Đã tạo bản xem trước';
       document.getElementById('success-modal').classList.remove('hidden');
     }
 
@@ -862,6 +903,129 @@
       updateApplicationProgress();
     }
 
+    function setupTemplateBrowser() {
+      const browser = document.getElementById('template-browser');
+      const categoryCards = document.getElementById('law-category-cards');
+      const listPanel = document.getElementById('template-list-panel');
+      const list = document.getElementById('procedure-template-list');
+      const title = document.getElementById('template-list-title');
+      const description = document.getElementById('template-list-description');
+      const formHelp = document.getElementById('application-form-help');
+      const workspace = document.getElementById('application-form-workspace');
+      const details = document.getElementById('form-step-details');
+      if (!browser || !categoryCards || !listPanel || !list || !details) return;
+
+      const personalSection = document.getElementById('form-step-personal');
+      const locationFields = document.getElementById('sel-city')?.closest('div.grid');
+      if (personalSection && locationFields && !document.getElementById('recipient-location-fields')) {
+        const locationPanel = document.createElement('section');
+        locationPanel.id = 'recipient-location-fields';
+        locationPanel.className = 'space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
+        locationPanel.innerHTML = '<div><h3 class="text-sm font-bold text-on-surface">Nơi tiếp nhận hồ sơ</h3><p class="mt-1 text-xs text-secondary">Chọn địa phương dự kiến nộp hồ sơ.</p></div>';
+        locationFields.parentElement.insertBefore(locationPanel, locationFields);
+        locationPanel.append(locationFields);
+        personalSection.append(locationPanel);
+      }
+
+      if (!document.getElementById('business-details-panel')) {
+        const businessPanel = document.createElement('div');
+        businessPanel.id = 'business-details-panel';
+        businessPanel.className = 'hidden space-y-4';
+        businessPanel.innerHTML = `<div class="flex flex-wrap items-start justify-between gap-3 border-b border-border-subtle pb-4"><div><h3 class="text-base font-bold text-on-surface">2. Thông tin đăng ký hộ kinh doanh</h3><p class="mt-1 text-xs leading-relaxed text-secondary">Biểu mẫu xem trước để bạn khai thông tin cơ bản. Cơ quan tiếp nhận có thể yêu cầu mẫu và giấy tờ theo thủ tục cụ thể.</p></div><span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Mẫu tham khảo</span></div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2"><div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-name">Tên hộ kinh doanh <span class="text-primary">*</span></label><input id="business-name" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ví dụ: Hộ kinh doanh An Phát"></div>
+          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-type">Loại hình đăng ký</label><select id="business-type" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm"><option>Hộ kinh doanh</option><option>Doanh nghiệp tư nhân</option><option>Công ty trách nhiệm hữu hạn</option><option>Công ty cổ phần</option></select></div>
+          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-industry">Ngành, nghề kinh doanh <span class="text-primary">*</span></label><input id="business-industry" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Mô tả ngành nghề kinh doanh"></div>
+          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-capital">Vốn kinh doanh dự kiến</label><input id="business-capital" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ví dụ: 100.000.000 đồng"></div>
+          <div class="sm:col-span-2"><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-address">Địa điểm kinh doanh <span class="text-primary">*</span></label><input id="business-address" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố"></div>
+          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-owner">Người đại diện/chủ hộ</label><input id="business-owner" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Họ và tên"></div>
+          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-phone">Số điện thoại liên hệ</label><input id="business-phone" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Số điện thoại"></div>
+          <div class="sm:col-span-2"><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-notes">Nội dung cần thay đổi/ghi chú</label><textarea id="business-notes" rows="3" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ghi nội dung đăng ký, thay đổi hoặc lưu ý khác"></textarea></div></div>
+          <div class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-xs leading-relaxed text-blue-900">Đây là giao diện xem thử để nhập thông tin. Việc tạo hồ sơ chính thức cần đối chiếu biểu mẫu và yêu cầu hiện hành của cơ quan đăng ký kinh doanh tại địa phương.</div>`;
+        details.append(businessPanel);
+        businessPanel.querySelectorAll('input, select, textarea').forEach((field) => {
+          ['input', 'change'].forEach((eventName) => field.addEventListener(eventName, () => {
+            updateApplicationSummary();
+            updateApplicationProgress();
+          }));
+        });
+      }
+
+      function chooseCategory(category) {
+        document.getElementById('proc-category').value = category;
+        updateProcedureTypes();
+        const procedures = procedureCatalog.filter((procedure) => procedure.category === category);
+        const label = category === 'dat-dai' ? 'Luật Đất đai' : 'Luật Kinh doanh';
+        title.textContent = `${label} · ${procedures.length} biểu mẫu`;
+        description.textContent = category === 'dat-dai'
+          ? 'Chọn thủ tục phù hợp để mở biểu mẫu kê khai thông tin đất đai.'
+          : 'Chọn thủ tục phù hợp để mở biểu mẫu thông tin đăng ký kinh doanh.';
+        list.replaceChildren();
+        procedures.forEach((procedure) => {
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'group flex w-full items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-red-300 hover:bg-red-50/40 hover:shadow-sm focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-5';
+          const copy = document.createElement('span');
+          copy.className = 'min-w-0';
+          const name = document.createElement('strong');
+          name.className = 'block text-sm font-bold text-on-surface sm:text-base';
+          name.textContent = procedure.name;
+          const summary = document.createElement('span');
+          summary.className = 'mt-1 block text-xs leading-relaxed text-secondary sm:text-sm';
+          summary.textContent = procedureTemplateDescriptions[procedure.id] || 'Mở biểu mẫu để khai thông tin hồ sơ.';
+          const tag = document.createElement('span');
+          tag.className = 'mt-2 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600';
+          tag.textContent = category === 'dat-dai' ? 'Biểu mẫu đất đai' : 'Biểu mẫu kinh doanh';
+          copy.append(name, summary, tag);
+          const arrow = document.createElement('span');
+          arrow.className = 'material-symbols-outlined shrink-0 text-primary transition group-hover:translate-x-1';
+          arrow.textContent = 'arrow_forward';
+          item.append(copy, arrow);
+          item.addEventListener('click', () => openTemplateForm(procedure));
+          list.append(item);
+        });
+        categoryCards.classList.add('hidden');
+        listPanel.classList.remove('hidden');
+        document.getElementById('template-browser-title').textContent = 'Chọn mẫu hồ sơ';
+      }
+
+      function openTemplateForm(procedure) {
+        document.getElementById('proc-category').value = procedure.category;
+        updateProcedureTypes();
+        selectProcedure(procedure.id);
+        browser.classList.add('hidden');
+        formHelp?.classList.remove('hidden');
+        workspace?.classList.remove('hidden');
+        document.getElementById('application-template-name')?.replaceChildren(document.createTextNode(procedure.name));
+        const businessPanel = document.getElementById('business-details-panel');
+        const isBusiness = procedure.category === 'ho-kinh-doanh';
+        [...details.children].forEach((child) => {
+          if (child === businessPanel) return;
+          child.classList.toggle('hidden', isBusiness);
+        });
+        businessPanel?.classList.toggle('hidden', !isBusiness);
+        const backButton = document.getElementById('back-to-template-list');
+        if (backButton) backButton.onclick = () => {
+          browser.classList.remove('hidden');
+          formHelp?.classList.add('hidden');
+          workspace?.classList.add('hidden');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        const aiButton = document.getElementById('btn-ai-fill-support');
+        if (aiButton) aiButton.onclick = () => window.dispatchEvent(new CustomEvent('admin-ai:open', {
+          detail: { prompt: `Tôi đang điền mẫu "${procedure.name}" thuộc lĩnh vực ${isBusiness ? 'Luật Kinh doanh' : 'Luật Đất đai'}. Hãy hướng dẫn tôi cần chuẩn bị và điền thông tin nào vào biểu mẫu này.` }
+        }));
+        updateApplicationProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      categoryCards.querySelectorAll('[data-law-category]').forEach((button) => button.addEventListener('click', () => chooseCategory(button.dataset.lawCategory)));
+      document.getElementById('back-to-law-categories')?.addEventListener('click', () => {
+        listPanel.classList.add('hidden');
+        categoryCards.classList.remove('hidden');
+        document.getElementById('template-browser-title').textContent = 'Bạn cần làm thủ tục nào?';
+      });
+    }
+
     const personalProgressFields = [
       'citizen-fullname', 'citizen-id', 'citizen-id-date', 'citizen-dob',
       'citizen-gender', 'citizen-phone', 'citizen-email', 'citizen-address'
@@ -881,30 +1045,27 @@
     }
 
     function updateApplicationProgress() {
-      const procedureSelected = Boolean(
-        document.getElementById('proc-name')?.value &&
-        document.getElementById('proc-search-input')?.value.trim() ===
-          document.getElementById('proc-name')?.selectedOptions[0]?.textContent
-      );
       const personalCompleted = personalProgressFields.filter(valueIsPresent).length;
-      const procedureCompleted = procedureProgressFields.filter(valueIsPresent).length;
-      const groupStates = [procedureSelected, personalCompleted === personalProgressFields.length, procedureCompleted === procedureProgressFields.length];
+      const activeProcedureFields = document.getElementById('proc-category')?.value === 'ho-kinh-doanh'
+        ? businessProgressFields
+        : procedureProgressFields;
+      const procedureCompleted = activeProcedureFields.filter(valueIsPresent).length;
+      const groupStates = [personalCompleted === personalProgressFields.length, procedureCompleted === activeProcedureFields.length];
       const completedGroups = groupStates.filter(Boolean).length;
       const progress = Math.round((completedGroups / groupStates.length) * 100);
 
-      document.getElementById('step-status-1').textContent = procedureSelected ? 'Đã chọn' : 'Chưa chọn';
-      document.getElementById('step-status-2').textContent = `${personalCompleted}/${personalProgressFields.length} mục`;
-      document.getElementById('step-status-3').textContent = `${procedureCompleted}/${procedureProgressFields.length} mục`;
-      document.getElementById('step-status-4').textContent = completedGroups === 3 ? 'Sẵn sàng xem lại' : 'Còn thiếu thông tin';
-      document.getElementById('form-progress-label').textContent = `Nhóm đã hoàn thành: ${completedGroups}/3`;
+      document.getElementById('step-status-1').textContent = `${personalCompleted}/${personalProgressFields.length} mục`;
+      document.getElementById('step-status-2').textContent = `${procedureCompleted}/${activeProcedureFields.length} mục`;
+      document.getElementById('step-status-3').textContent = completedGroups === 2 ? 'Sẵn sàng xem lại' : 'Còn thiếu thông tin';
+      document.getElementById('form-progress-label').textContent = `Hoàn thành thông tin hồ sơ: ${progress}%`;
 
       const progressBar = document.getElementById('form-progress-bar');
       progressBar.style.width = `${progress}%`;
-      progressBar.parentElement.setAttribute('aria-valuenow', String(completedGroups));
+      progressBar.parentElement.setAttribute('aria-valuenow', String(progress));
 
       document.querySelectorAll('[data-form-step]').forEach((button) => {
         const step = Number(button.dataset.formStep);
-        const complete = step <= 3 && groupStates[step - 1];
+        const complete = step <= 2 ? groupStates[step - 1] : completedGroups === 2;
         const isActive = step === activeFormStep;
         button.setAttribute('aria-current', isActive ? 'step' : 'false');
         button.classList.toggle('border-primary', isActive);
@@ -921,10 +1082,9 @@
 
     function goToFormStep(step) {
       const targets = {
-        1: 'form-step-procedure',
-        2: 'form-step-personal',
-        3: 'form-step-details',
-        4: 'form-step-review'
+        1: 'form-step-personal',
+        2: 'form-step-details',
+        3: 'form-step-review'
       };
       const target = document.getElementById(targets[step]);
       if (!target) return;
@@ -979,7 +1139,12 @@
 
       setText('sum-name', document.getElementById('citizen-fullname')?.value.trim());
       setText('sum-id', document.getElementById('citizen-id')?.value.trim());
-      setText('sum-land-reference', `Thửa ${document.getElementById('land-lot')?.value.trim() || '—'} / Bản đồ ${document.getElementById('land-map')?.value.trim() || '—'}`);
+      const isBusiness = category === 'ho-kinh-doanh';
+      setText('sum-land-reference', isBusiness
+        ? (document.getElementById('business-name')?.value.trim() || 'Chưa nhập tên hộ kinh doanh')
+        : `Thửa ${document.getElementById('land-lot')?.value.trim() || '—'} / Bản đồ ${document.getElementById('land-map')?.value.trim() || '—'}`);
+      const referenceLabel = document.getElementById('sum-land-reference')?.previousElementSibling;
+      if (referenceLabel) referenceLabel.textContent = isBusiness ? 'Tên hộ kinh doanh:' : 'Thửa đất / Tờ bản đồ:';
       setText('sum-procedure', procedure || 'Bạn chưa chọn thủ tục');
       setText('sum-form-template', category === 'dat-dai' ? 'Mẫu số 04/ĐK' : 'Theo thủ tục đã chọn');
       setText('sum-office', [district, city].filter(Boolean).join(', '));
@@ -1021,10 +1186,9 @@
           updateApplicationProgress();
         }, { rootMargin: '-18% 0px -68% 0px', threshold: 0 });
         [
-          ['form-step-procedure', 1],
-          ['form-step-personal', 2],
-          ['form-step-details', 3],
-          ['form-step-review', 4]
+          ['form-step-personal', 1],
+          ['form-step-details', 2],
+          ['form-step-review', 3]
         ].forEach(([id, step]) => {
           const section = document.getElementById(id);
           if (!section) return;
@@ -1037,6 +1201,7 @@
     }
 
     updateProcedureTypes();
+    setupTemplateBrowser();
     initializeApplicationFormUi();
   </script>
 

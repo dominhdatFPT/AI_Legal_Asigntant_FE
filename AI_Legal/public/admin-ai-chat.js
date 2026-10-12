@@ -99,7 +99,7 @@
     assistantIcon.append(createIcon('M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1 M9 12h6m-3-3v6'));
     const welcomeBubble = document.createElement('div');
     welcomeBubble.className = 'admin-ai-bubble';
-    welcomeBubble.textContent = 'Xin chào! Tôi có thể giải đáp câu hỏi về pháp luật đất đai và tra cứu thủ tục hành chính. Bạn cần hỏi gì?';
+    welcomeBubble.textContent = 'Xin chào! Tôi có thể hỗ trợ tra cứu thủ tục về đất đai, hộ kinh doanh và hướng dẫn bạn chuẩn bị thông tin cho hồ sơ.';
     welcome.append(assistantIcon, welcomeBubble);
 
     const suggestions = document.createElement('div');
@@ -134,7 +134,7 @@
     form.append(input, send);
     const footnote = document.createElement('p');
     footnote.className = 'admin-ai-footnote';
-    footnote.textContent = 'Câu trả lời do AI tổng hợp từ Luật Đất đai 2024, chỉ mang tính tham khảo.';
+    footnote.textContent = 'Câu trả lời do AI tổng hợp để tham khảo. Vui lòng đối chiếu yêu cầu của cơ quan tiếp nhận hồ sơ.';
     composerWrap.append(form, footnote);
 
     panel.append(header, messages, composerWrap);
@@ -150,6 +150,10 @@
 
     launcher.addEventListener('click', () => setOpen(panel.hidden));
     close.addEventListener('click', () => setOpen(false));
+    document.addEventListener('admin-ai:open', (event) => {
+      if (event.detail?.prompt) input.value = event.detail.prompt;
+      setOpen(true);
+    });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !panel.hidden) setOpen(false);
     });
