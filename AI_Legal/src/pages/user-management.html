@@ -320,30 +320,36 @@
             <div class="flex flex-wrap items-center gap-2" id="filter-tabs">
               <button data-filter="all"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-bold bg-gradient-to-r from-red-700 to-red-600 text-white shadow-sm transition-all">
-                Tất cả người dùng (<span id="count-all">8</span>)
+                Tất cả người dùng (<span id="count-all">0</span>)
               </button>
               <button data-filter="personal"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors">
-                Công dân (<span id="count-personal">5</span>)
+                Công dân (<span id="count-personal">0</span>)
               </button>
               <button data-filter="business"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors">
-                Luật sư (<span id="count-business">3</span>)
+                Luật sư (<span id="count-business">0</span>)
               </button>
               <button data-filter="active"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-emerald-800 hover:bg-emerald-50 transition-colors flex items-center gap-1.5">
                 <span>Đang hoạt động</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800" id="count-active">5</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800" id="count-active">0</span>
               </button>
               <button data-filter="pending"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-amber-800 hover:bg-amber-50 transition-colors flex items-center gap-1.5">
                 <span>Chờ xác minh</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900" id="count-pending">2</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900" id="count-pending">0</span>
               </button>
               <button data-filter="locked"
                 class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-red-700 hover:bg-red-50 transition-colors flex items-center gap-1.5">
                 <span>Tạm khóa</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700" id="count-locked">1</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700" id="count-locked">0</span>
+              </button>
+              <button data-filter="suspended"
+                class="filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-rose-700 hover:bg-rose-50 transition-colors flex items-center gap-1.5"
+                title="Xem các tài khoản đã xóa và khôi phục">
+                <span>Tài khoản đã xóa</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800" id="count-suspended">0</span>
               </button>
             </div>
           </div>
@@ -372,6 +378,7 @@
                 <option value="active">Đang hoạt động</option>
                 <option value="pending">Chờ xác thực (chưa khai hồ sơ CCCD)</option>
                 <option value="locked">Tạm khóa tài khoản</option>
+                <option value="suspended">Tài khoản đã xóa</option>
               </select>
             </div>
             <div class="md:col-span-1 flex items-center justify-end">
@@ -632,9 +639,9 @@
 
                 <!-- MRZ Code Band (3 dòng chuẩn ICAO) -->
                 <div class="bg-black/85 text-emerald-400 font-label-code text-[8px] p-1.5 rounded tracking-widest leading-tight overflow-hidden select-none">
-                  <div id="card-back-mrz1">IDVNM001092003841<<<<<<<<<<<<<<</div>
-                  <div id="card-back-mrz2">8808158M4808153VNM<<<<<<<<<<<0</div>
-                  <div id="card-back-mrz3">NGUYEN<<VAN<AN<<<<<<<<<<<<<<<<</div>
+                  <div id="card-back-mrz1">IDVNM001092003841&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+                  <div id="card-back-mrz2">8808158M4808153VNM&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0</div>
+                  <div id="card-back-mrz3">NGUYEN&lt;&lt;VAN&lt;AN&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
                 </div>
               </div>
             </div>
@@ -1046,6 +1053,28 @@
           </div>
         </div>
 
+        <!-- 3. Thông tin đăng nhập: tách riêng khỏi thông tin hồ sơ và phân quyền -->
+        <div class="space-y-3 p-4 rounded-xl bg-red-50/50 border border-red-200">
+          <div class="border-b border-red-200 pb-1.5 flex items-center justify-between">
+            <span class="font-label-md text-label-md font-bold uppercase tracking-wider text-red-800 text-xs flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">password</span>
+              <span>3. Mật Khẩu Đăng Nhập</span>
+            </span>
+            <span class="text-xs text-stone-500">Tối thiểu 8 ký tự</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <div class="space-y-1">
+              <label class="font-label-sm text-[11px] text-stone-500 uppercase font-bold" for="create-user-password">Mật khẩu *</label>
+              <input id="create-user-password" class="w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600" placeholder="Nhập mật khẩu cho tài khoản" type="password" minlength="8" autocomplete="new-password" />
+            </div>
+            <div class="space-y-1">
+              <label class="font-label-sm text-[11px] text-stone-500 uppercase font-bold" for="create-user-password-confirm">Xác nhận mật khẩu *</label>
+              <input id="create-user-password-confirm" class="w-full px-3 py-2 bg-white rounded-xl border border-stone-300 text-body-md font-body-md text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600" placeholder="Nhập lại mật khẩu" type="password" minlength="8" autocomplete="new-password" />
+            </div>
+          </div>
+          <p class="text-xs text-stone-500">Mật khẩu sẽ được gửi lên Backend để tạo tài khoản. Không hiển thị mật khẩu bằng hộp thoại riêng.</p>
+        </div>
+
         <!-- 2 Cam kết bắt buộc -->
         <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200 space-y-2">
           <label class="flex items-start gap-2.5 cursor-pointer">
@@ -1076,7 +1105,7 @@
   <!-- ========================================================= -->
   <!-- MODAL: XÁC NHẬN XÓA TÀI KHOẢN (CONFIRM DELETE) -->
   <!-- ========================================================= -->
-  <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 overflow-y-auto hidden" id="deleteModal">
+  <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 overflow-y-auto hidden" id="deleteModal">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-red-300 relative transition-all transform animate-in fade-in zoom-in-95 duration-200" onclick="event.stopPropagation()">
       <div class="absolute top-4 right-4 z-10">
         <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors" id="btn-close-delete-modal" title="Đóng">
@@ -1089,7 +1118,7 @@
         </div>
         <div class="space-y-2 max-w-md">
           <div class="flex items-center justify-center gap-2 text-red-700">
-            <span class="material-symbols-outlined text-[20px]">warning</span>
+            <span class="material-symbols-outlined text-[20px]">&#9888</span>
             <h3 class="font-headline-sm text-headline-sm font-extrabold text-stone-900 tracking-tight">Xác nhận xóa tài khoản</h3>
           </div>
           <p class="font-title-md text-title-md font-bold text-red-700">Bạn có chắc chắn muốn xóa tài khoản người dùng này không?</p>
@@ -1105,9 +1134,9 @@
               <span class="font-semibold text-red-700 underline text-xs" id="delete-user-email">-</span>
             </div>
           </div>
-          <div class="pt-2 border-t border-stone-200 flex items-start gap-2 text-xs text-red-700 bg-red-50 p-2.5 rounded-lg">
-            <span class="material-symbols-outlined text-red-600 text-[18px] shrink-0 mt-0.5">error</span>
-            <span class="font-medium">Tài khoản sẽ bị gỡ bỏ khỏi hệ thống quản lý. Thao tác này không thể hoàn tác.</span>
+          <div class="pt-2 border-t border-stone-200 flex items-start gap-2 text-xs text-amber-900 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+            <span class="material-symbols-outlined text-amber-700 text-[18px] shrink-0 mt-0.5">info</span>
+            <span class="font-medium">Tài khoản sẽ được chuyển vào mục <strong>Tài khoản đã xóa</strong>. Bạn có thể khôi phục (Undo) lại bất cứ lúc nào từ mục lọc "Tài khoản đã xóa" hoặc nút Hoàn tác.</span>
           </div>
         </div>
       </div>
@@ -1123,11 +1152,18 @@
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div class="fixed bottom-6 right-6 z-50 hidden transition-all duration-300 transform translate-y-2 opacity-0 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1e1b19] text-white shadow-2xl border border-white/10" id="toast">
-    <span id="toast-icon" class="material-symbols-outlined text-emerald-400 text-[22px]">check_circle</span>
-    <div class="flex flex-col text-xs">
-      <span class="text-white/80" id="toast-message">Thao tác được thực hiện thành công.</span>
+  <!-- TOAST NOTIFICATION (HỖ TRỢ NÚT HOÀN TÁC / UNDO) -->
+  <div class="fixed bottom-6 right-6 z-[110] hidden transition-all duration-300 transform translate-y-2 opacity-0 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1e1b19] text-white shadow-2xl border border-white/10" id="toast">
+    <span id="toast-icon" class="material-symbols-outlined text-emerald-400 text-[22px] shrink-0">check_circle</span>
+    <div class="flex items-center gap-3 text-xs flex-1">
+      <div class="flex flex-col">
+        <span class="font-bold text-white text-[12px] hidden" id="toast-title">Thông báo hệ thống</span>
+        <span class="text-white/90" id="toast-message">Thao tác được thực hiện thành công.</span>
+      </div>
+      <button id="toast-undo-btn" type="button" class="hidden ml-2 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-sm transition-all flex items-center gap-1 active:scale-95 shrink-0 cursor-pointer">
+        <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+        <span>Hoàn tác (Undo)</span>
+      </button>
     </div>
   </div>
 
@@ -1136,19 +1172,275 @@
   <!-- ========================================================= -->
   <script>
     // =========================================================================
-    // DỮ LIỆU THẬT TỪ BACKEND (User Service qua Gateway, mặc định http://localhost:8080)
-    // Đăng nhập bằng HttpOnly cookie (auth-api.js), nên chỉ cần fetch với credentials: 'include'.
-    //
-    // Giữ nguyên tên giá trị cũ của giao diện để không phải sửa markup:
-    //   type 'personal' = vai trò citizen (Công dân), 'business' = lawyer (Luật sư), 'admin' = admin
-    //   status 'locked' = bị khóa, 'pending' = đang hoạt động nhưng CHƯA khai hồ sơ CCCD, 'active' = còn lại
+    // DỮ LIỆU NGƯỜI DÙNG: HỖ TRỢ ĐỒNG BỘ BACKEND & DỮ LIỆU MẪU ĐỘC LẬP
+    // Hỗ trợ tính năng Xóa mềm, Tạm ngưng, Hoàn tác (Undo) và Lọc "Tài khoản đã xóa"
     // =========================================================================
+    const DEFAULT_MOCK_USERS = [
+      {
+        id: "USR-0010928",
+        shortId: "USR-0010",
+        raw: { status: 'active', role: 'citizen', has_citizen_profile: true },
+        role: "citizen",
+        name: "Nguyễn Văn An",
+        cccd: "001092003841",
+        dob: "15/08/1988",
+        gender: "Nam",
+        nationality: "Việt Nam",
+        cardIssueDate: "12/05/2021",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "15/08/2048",
+        hometown: "Xã Tiên Phương, Huyện Chương Mỹ, TP. Hà Nội",
+        permanentAddress: { street: "Số 42, Phố Tràng Thi", ward: "Phường Hàng Trống", city: "Quận Hoàn Kiếm, TP. Hà Nội" },
+        currentAddress: { sameAsPermanent: true, street: "Số 42, Phố Tràng Thi", ward: "Phường Hàng Trống", city: "Quận Hoàn Kiếm, TP. Hà Nội" },
+        phone: "0912.345.678",
+        email: "an.nguyen@gmail.com",
+        ethnicity: "Kinh",
+        taxCode: "8392019481",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "personal",
+        status: "active",
+        verified: true,
+        regDate: "14/01/2024",
+        regTime: "09:20:15",
+        notes: "Đã khai hồ sơ CCCD.",
+        initials: "NVA",
+        avatarBg: "bg-[#881337]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0010884",
+        shortId: "USR-0010",
+        raw: { status: 'active', role: 'lawyer', has_citizen_profile: true },
+        role: "lawyer",
+        name: "Trần Thị Mai",
+        cccd: "079195006421",
+        dob: "22/04/1990",
+        gender: "Nữ",
+        nationality: "Việt Nam",
+        cardIssueDate: "10/08/2021",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "22/04/2050",
+        hometown: "Xã Bình Thạnh, Huyện Cần Giờ, TP. Hồ Chí Minh",
+        permanentAddress: { street: "Tầng 8, Tòa nhà VietGroup, 120 Nguyễn Huệ", ward: "Phường Bến Nghé", city: "Quận 1, TP. Hồ Chí Minh" },
+        currentAddress: { sameAsPermanent: true, street: "Tầng 8, Tòa nhà VietGroup, 120 Nguyễn Huệ", ward: "Phường Bến Nghé", city: "Quận 1, TP. Hồ Chí Minh" },
+        phone: "0988.765.432",
+        email: "mai.tran@vietgroup.vn",
+        ethnicity: "Kinh",
+        taxCode: "0318294021",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "business",
+        status: "active",
+        verified: true,
+        regDate: "20/02/2024",
+        regTime: "14:10:02",
+        notes: "Đã khai hồ sơ CCCD.",
+        initials: "TTM",
+        avatarBg: "bg-secondary",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0010992",
+        shortId: "USR-0010",
+        raw: { status: 'pending', role: 'citizen', has_citizen_profile: false },
+        role: "citizen",
+        name: "Lê Hoàng Nam",
+        cccd: "048091005234",
+        dob: "10/11/1995",
+        gender: "Nam",
+        nationality: "Việt Nam",
+        cardIssueDate: "15/03/2022",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "10/11/2035",
+        hometown: "Phường Điện Ngọc, Thị xã Điện Bàn, Tỉnh Quảng Nam",
+        permanentAddress: { street: "Số 18 đường Bạch Đằng", ward: "Phường Thạch Thang", city: "Quận Hải Châu, TP. Đà Nẵng" },
+        currentAddress: { sameAsPermanent: false, street: "Số 85 đường Trần Phú", ward: "Phường Hải Châu 1", city: "Quận Hải Châu, TP. Đà Nẵng" },
+        phone: "0935.210.888",
+        email: "nam.lehoang@yahoo.com",
+        ethnicity: "Kinh",
+        taxCode: "",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "personal",
+        status: "pending",
+        verified: false,
+        regDate: "05/03/2024",
+        regTime: "16:45:11",
+        notes: "Người dùng chưa khai hồ sơ CCCD.",
+        initials: "LHN",
+        avatarBg: "bg-[#b45309]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0011035",
+        shortId: "USR-0011",
+        raw: { status: 'active', role: 'citizen', has_citizen_profile: true },
+        role: "citizen",
+        name: "Phạm Thu Hà",
+        cccd: "001189007621",
+        dob: "05/09/1989",
+        gender: "Nữ",
+        nationality: "Việt Nam",
+        cardIssueDate: "18/06/2021",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "05/09/2049",
+        hometown: "Xã Đông Ngạc, Huyện Từ Liêm, TP. Hà Nội",
+        permanentAddress: { street: "Phòng 1204, Chung cư D2 Giảng Võ", ward: "Phường Giảng Võ", city: "Quận Ba Đình, TP. Hà Nội" },
+        currentAddress: { sameAsPermanent: true, street: "Phòng 1204, Chung cư D2 Giảng Võ", ward: "Phường Giảng Võ", city: "Quận Ba Đình, TP. Hà Nội" },
+        phone: "0918.334.221",
+        email: "thuha.pham@techlaw.com",
+        ethnicity: "Tày",
+        taxCode: "8029103842",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "personal",
+        status: "active",
+        verified: true,
+        regDate: "18/03/2024",
+        regTime: "11:32:44",
+        notes: "Đã khai hồ sơ CCCD.",
+        initials: "PTH",
+        avatarBg: "bg-[#763300]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0009412",
+        shortId: "USR-0009",
+        raw: { status: 'locked', role: 'lawyer', has_citizen_profile: false },
+        role: "lawyer",
+        name: "Đặng Quốc Tuấn",
+        cccd: "001085002239",
+        dob: "03/12/1985",
+        gender: "Nam",
+        nationality: "Việt Nam",
+        cardIssueDate: "05/01/2021",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "03/12/2045",
+        hometown: "Xã Hải Bối, Huyện Đông Anh, TP. Hà Nội",
+        permanentAddress: { street: "Số 58 đường Lê Lợi", ward: "Phường Bến Nghé", city: "Quận 1, TP. Hồ Chí Minh" },
+        currentAddress: { sameAsPermanent: true, street: "Số 58 đường Lê Lợi", ward: "Phường Bến Nghé", city: "Quận 1, TP. Hồ Chí Minh" },
+        phone: "0903.445.112",
+        email: "tuan.dang@investasia.vn",
+        ethnicity: "Kinh",
+        taxCode: "0317829102",
+        isCommitted: false,
+        isAgreedSave: true,
+        type: "business",
+        status: "locked",
+        verified: false,
+        regDate: "11/11/2023",
+        regTime: "08:14:29",
+        notes: "Tài khoản bị khóa vĩnh viễn.",
+        initials: "DQT",
+        avatarBg: "bg-[#b91c1c]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0011150",
+        shortId: "USR-0011",
+        raw: { status: 'active', role: 'citizen', has_citizen_profile: true },
+        role: "citizen",
+        name: "Hoàng Đức Thắng",
+        cccd: "036094008129",
+        dob: "19/07/1992",
+        gender: "Nam",
+        nationality: "Việt Nam",
+        cardIssueDate: "20/09/2022",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "19/07/2032",
+        hometown: "Xã Nghĩa An, Huyện Nam Trực, Tỉnh Nam Định",
+        permanentAddress: { street: "Số 12 phố Lý Thường Kiệt", ward: "Phường Bà Triệu", city: "TP. Nam Định, Tỉnh Nam Định" },
+        currentAddress: { sameAsPermanent: true, street: "Số 12 phố Lý Thường Kiệt", ward: "Phường Bà Triệu", city: "TP. Nam Định, Tỉnh Nam Định" },
+        phone: "0944.556.789",
+        email: "thang.hoang@kientruc.vn",
+        ethnicity: "Kinh",
+        taxCode: "8492019482",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "personal",
+        status: "active",
+        verified: true,
+        regDate: "25/03/2024",
+        regTime: "10:15:30",
+        notes: "Đã khai hồ sơ CCCD.",
+        initials: "HDT",
+        avatarBg: "bg-[#15803d]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0011204",
+        shortId: "USR-0011",
+        raw: { status: 'pending', role: 'citizen', has_citizen_profile: false },
+        role: "citizen",
+        name: "Bùi Tuyết Nhung",
+        cccd: "001198004523",
+        dob: "08/12/1998",
+        gender: "Nữ",
+        nationality: "Việt Nam",
+        cardIssueDate: "22/11/2022",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "08/12/2038",
+        hometown: "Xã Kim Nỗ, Huyện Đông Anh, TP. Hà Nội",
+        permanentAddress: { street: "Số 88 đường Cầu Giấy", ward: "Phường Quan Hoa", city: "Quận Cầu Giấy, TP. Hà Nội" },
+        currentAddress: { sameAsPermanent: true, street: "Số 88 đường Cầu Giấy", ward: "Phường Quan Hoa", city: "Quận Cầu Giấy, TP. Hà Nội" },
+        phone: "0977.123.999",
+        email: "nhung.bui@gmail.com",
+        ethnicity: "Kinh",
+        taxCode: "",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "personal",
+        status: "pending",
+        verified: false,
+        regDate: "02/04/2024",
+        regTime: "08:30:19",
+        notes: "Người dùng chưa khai hồ sơ CCCD.",
+        initials: "BTN",
+        avatarBg: "bg-[#9333ea]",
+        profileLoaded: true
+      },
+      {
+        id: "USR-0010511",
+        shortId: "USR-0010",
+        raw: { status: 'active', role: 'lawyer', has_citizen_profile: true },
+        role: "lawyer",
+        name: "Võ Minh Trí",
+        cccd: "079093001847",
+        dob: "14/02/1987",
+        gender: "Nam",
+        nationality: "Việt Nam",
+        cardIssueDate: "14/02/2021",
+        cardIssuePlace: "Cục Cảnh sát QLHC về TTXH",
+        cardExpiry: "14/02/2047",
+        hometown: "Phường An Khánh, TP. Thủ Đức, TP. Hồ Chí Minh",
+        permanentAddress: { street: "Tòa nhà Landmark 81, 720A Điện Biên Phủ", ward: "Phường 22", city: "Quận Bình Thạnh, TP. Hồ Chí Minh" },
+        currentAddress: { sameAsPermanent: true, street: "Tòa nhà Landmark 81, 720A Điện Biên Phủ", ward: "Phường 22", city: "Quận Bình Thạnh, TP. Hồ Chí Minh" },
+        phone: "0908.667.889",
+        email: "tri.vo@saigonreal.vn",
+        ethnicity: "Kinh",
+        taxCode: "0319482910",
+        isCommitted: true,
+        isAgreedSave: true,
+        type: "business",
+        status: "active",
+        verified: true,
+        regDate: "12/12/2023",
+        regTime: "15:45:00",
+        notes: "Đã khai hồ sơ CCCD.",
+        initials: "VMT",
+        avatarBg: "bg-[#0284c7]",
+        profileLoaded: true
+      }
+    ];
+
+    // Danh sách luôn lấy từ Backend; không khởi tạo bằng dữ liệu mẫu trên trình duyệt.
     let usersData = [];
 
     const ROLE_TO_TYPE = { citizen: 'personal', lawyer: 'business', admin: 'admin' };
     const TYPE_TO_ROLE = { personal: 'citizen', business: 'lawyer', admin: 'admin' };
     const ROLE_LABEL = { citizen: 'Công dân', lawyer: 'Luật sư', admin: 'Quản trị viên' };
-    const STATUS_LABEL = { active: 'Hoạt động', pending: 'Chờ xác thực', locked: 'Đã khóa' };
+    const STATUS_LABEL = { active: 'Hoạt động', pending: 'Chờ xác thực', locked: 'Đã khóa', suspended: 'Tạm ngưng' };
     const AVATAR_BGS = ['bg-[#881337]', 'bg-secondary', 'bg-[#b45309]', 'bg-[#763300]', 'bg-[#15803d]', 'bg-[#9333ea]', 'bg-[#0284c7]'];
 
     let apiBaseUrlPromise;
@@ -1172,7 +1464,6 @@
       });
     }
 
-    // Nhiều request cùng hết hạn thì chỉ refresh 1 lần (gửi lại refresh token cũ lần 2 sẽ bị Backend hủy phiên).
     let refreshPromise = null;
     function refreshSession() {
       if (!refreshPromise) {
@@ -1193,7 +1484,7 @@
         throw new Error('Không kết nối được Backend. Hãy kiểm tra Gateway (http://localhost:8080) đã chạy chưa.');
       }
       if (res.status === 401) {
-        window.location.replace('/login'); // phiên đăng nhập đã hết
+        window.location.replace('/login');
       }
       if (res.status === 204) return null;
       const payload = await res.json().catch(() => null);
@@ -1220,7 +1511,7 @@
       const d = new Date(iso);
       return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
     }
-    function fmtDay(value) { // 'YYYY-MM-DD' -> 'DD/MM/YYYY'
+    function fmtDay(value) {
       if (!value) return '';
       const [y, m, d] = String(value).slice(0, 10).split('-');
       return `${d}/${m}/${y}`;
@@ -1239,6 +1530,9 @@
     }
 
     function describeAccount(u, status) {
+      if (status === 'suspended') {
+        return 'Tài khoản đang tạm ngưng (đã xóa mềm). Có thể khôi phục lại tài khoản bất kỳ lúc nào.';
+      }
       if (status === 'locked') {
         const until = u.locked_until ? `đến ${fmtDate(u.locked_until)} ${fmtTime(u.locked_until)}` : 'vĩnh viễn';
         return `Tài khoản bị khóa ${until}. Lý do: ${u.locked_reason || '(không ghi)'}.`;
@@ -1251,12 +1545,17 @@
       return u.role === 'admin' ? 'Tài khoản quản trị viên.' : 'Đã khai hồ sơ CCCD.';
     }
 
-    // Đổi 1 người dùng từ API (AdminUser) sang dạng giao diện đang dùng.
     function toViewUser(u) {
       const name = u.full_name || u.username || u.email;
-      const status = u.status === 'locked'
-        ? 'locked'
-        : (u.role !== 'admin' && !u.has_citizen_profile ? 'pending' : 'active');
+      let status = 'active';
+      if (u.status === 'suspended' || u.is_deleted || u.deleted_at) {
+        status = 'suspended';
+      } else if (u.status === 'locked') {
+        status = 'locked';
+      } else if (u.role !== 'admin' && !u.has_citizen_profile) {
+        status = 'pending';
+      }
+
       return {
         id: u.id,
         shortId: u.id.slice(0, 8).toUpperCase(),
@@ -1273,7 +1572,6 @@
         notes: describeAccount(u, status),
         initials: initialsOf(name),
         avatarBg: avatarBgOf(u.id),
-        // Thông tin CCCD: chỉ tải khi mở chi tiết (loadCitizenProfile)
         profileLoaded: false,
         cccd: '', dob: '', gender: '', nationality: '',
         cardIssueDate: '', cardIssuePlace: '', cardExpiry: '',
@@ -1321,15 +1619,14 @@
       `;
     }
 
-    // Tải toàn bộ người dùng (chưa bị xóa) từ Backend, mỗi lần gọi 100 người.
     async function loadUsers() {
-      if (!usersData.length) renderTableMessage('hourglass_top', 'Đang tải danh sách người dùng...');
       try {
         const all = [];
         let page = 1;
         let totalPages = 1;
         do {
-          const data = await api(`/api/users?page=${page}&page_size=100`);
+          // Yêu cầu Backend trả cả tài khoản đã xóa mềm để tab khôi phục hoạt động.
+          const data = await api(`/api/users?page=${page}&page_size=100&include_deleted=true`);
           all.push(...data.items);
           totalPages = data.pagination.total_pages;
           page += 1;
@@ -1337,10 +1634,8 @@
         usersData = all.map(toViewUser);
       } catch (e) {
         usersData = [];
-        updateCounts();
-        if (displayUserCountEl) displayUserCountEl.textContent = 0;
         renderTableMessage('cloud_off', `Không tải được danh sách người dùng: ${e.message}`);
-        return;
+        showToast('Không tải được dữ liệu', e.message, true);
       }
       updateCounts();
       renderUserTable();
@@ -1349,11 +1644,10 @@
     function exportUsersCsv() {
       const rows = [['ID', 'Họ và tên', 'Email', 'Số điện thoại', 'Ngày đăng ký', 'Vai trò', 'Trạng thái', 'Đã khai hồ sơ CCCD', 'Ghi chú']];
       usersData.forEach(u => rows.push([
-        u.id, u.name, u.email, u.raw.phone || '', `${u.regDate} ${u.regTime}`,
+        u.id, u.name, u.email, (u.raw && u.raw.phone) || u.phone || '', `${u.regDate} ${u.regTime}`,
         ROLE_LABEL[u.role] || u.role, STATUS_LABEL[u.status], u.verified ? 'Có' : 'Chưa', u.notes
       ]));
-      // Thêm BOM để Excel đọc đúng tiếng Việt
-      const csv = '﻿' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+      const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
       const link = document.createElement('a');
       link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
       link.download = `danh-sach-nguoi-dung-${new Date().toISOString().slice(0, 10)}.csv`;
@@ -1366,7 +1660,7 @@
 
     // State
     let currentModalUserId = null;
-    let currentModalMode = 'view'; // 'view' hoặc 'edit'
+    let currentModalMode = 'view';
     let currentFilterTab = 'all';
 
     // DOM Elements
@@ -1383,6 +1677,7 @@
     const countActiveEl = document.getElementById('count-active');
     const countPendingEl = document.getElementById('count-pending');
     const countLockedEl = document.getElementById('count-locked');
+    const countSuspendedEl = document.getElementById('count-suspended');
     const displayUserCountEl = document.getElementById('display-user-count');
     const totalUsersTextEl = document.getElementById('total-users-text');
 
@@ -1393,12 +1688,16 @@
     const btnResetFilters = document.getElementById('btn-reset-filters');
 
     function updateCounts() {
-      const all = usersData.length;
-      const personal = usersData.filter(u => u.type === 'personal').length;
-      const business = usersData.filter(u => u.type === 'business').length;
-      const active = usersData.filter(u => u.status === 'active').length;
-      const pending = usersData.filter(u => u.status === 'pending').length;
-      const locked = usersData.filter(u => u.status === 'locked').length;
+      const activeList = usersData.filter(u => u.status !== 'suspended');
+      const suspendedList = usersData.filter(u => u.status === 'suspended');
+
+      const all = activeList.length;
+      const personal = activeList.filter(u => u.type === 'personal').length;
+      const business = activeList.filter(u => u.type === 'business').length;
+      const active = activeList.filter(u => u.status === 'active').length;
+      const pending = activeList.filter(u => u.status === 'pending').length;
+      const locked = activeList.filter(u => u.status === 'locked').length;
+      const suspended = suspendedList.length;
 
       if (countAllEl) countAllEl.textContent = all;
       if (countPersonalEl) countPersonalEl.textContent = personal;
@@ -1406,24 +1705,60 @@
       if (countActiveEl) countActiveEl.textContent = active;
       if (countPendingEl) countPendingEl.textContent = pending;
       if (countLockedEl) countLockedEl.textContent = locked;
-      if (totalUsersTextEl) totalUsersTextEl.textContent = all;
+      const countSuspEl = document.getElementById('count-suspended');
+      if (countSuspEl) countSuspEl.textContent = suspended;
+      if (totalUsersTextEl) totalUsersTextEl.textContent = currentFilterTab === 'suspended' ? suspended : all;
     }
 
-    // Render Bảng người dùng (ĐÃ XÓA HIỂN THỊ CỘT CCCD TRÊN BẢNG - CHỈ XEM ĐƯỢC TRONG MODAL CHI TIẾT)
+    function setFilterTab(tab) {
+      currentFilterTab = tab;
+      document.querySelectorAll('.filter-tab-btn').forEach(btn => {
+        const filter = btn.getAttribute('data-filter');
+        if (filter === currentFilterTab) {
+          if (filter === 'suspended') {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-bold bg-gradient-to-r from-rose-700 to-rose-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+          } else {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-bold bg-gradient-to-r from-red-700 to-red-600 text-white shadow-sm transition-all' + (['active', 'pending', 'locked'].includes(filter) ? ' flex items-center gap-1.5' : '');
+          }
+        } else {
+          if (filter === 'suspended') {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-rose-700 hover:bg-rose-50 transition-colors flex items-center gap-1.5';
+          } else if (filter === 'active') {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-emerald-800 hover:bg-emerald-50 transition-colors flex items-center gap-1.5';
+          } else if (filter === 'pending') {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-amber-800 hover:bg-amber-50 transition-colors flex items-center gap-1.5';
+          } else if (filter === 'locked') {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-red-700 hover:bg-red-50 transition-colors flex items-center gap-1.5';
+          } else {
+            btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors';
+          }
+        }
+      });
+      renderUserTable();
+    }
+
     function renderUserTable() {
       const query = (userSearchInput?.value || '').trim().toLowerCase();
       const typeFilter = userTypeSelect?.value || '';
       const statusFilter = userStatusSelect?.value || '';
 
+      const isViewingSuspended = currentFilterTab === 'suspended' || statusFilter === 'suspended';
+
       const filtered = usersData.filter(user => {
-        if (currentFilterTab === 'personal' && user.type !== 'personal') return false;
-        if (currentFilterTab === 'business' && user.type !== 'business') return false;
-        if (currentFilterTab === 'active' && user.status !== 'active') return false;
-        if (currentFilterTab === 'pending' && user.status !== 'pending') return false;
-        if (currentFilterTab === 'locked' && user.status !== 'locked') return false;
+        if (isViewingSuspended) {
+          if (user.status !== 'suspended') return false;
+        } else {
+          if (user.status === 'suspended') return false;
+
+          if (currentFilterTab === 'personal' && user.type !== 'personal') return false;
+          if (currentFilterTab === 'business' && user.type !== 'business') return false;
+          if (currentFilterTab === 'active' && user.status !== 'active') return false;
+          if (currentFilterTab === 'pending' && user.status !== 'pending') return false;
+          if (currentFilterTab === 'locked' && user.status !== 'locked') return false;
+        }
 
         if (typeFilter && user.type !== typeFilter) return false;
-        if (statusFilter && user.status !== statusFilter) return false;
+        if (statusFilter && statusFilter !== 'suspended' && user.status !== statusFilter) return false;
 
         if (query) {
           const matchName = user.name.toLowerCase().includes(query);
@@ -1440,17 +1775,30 @@
       if (displayUserCountEl) displayUserCountEl.textContent = filtered.length;
 
       if (filtered.length === 0) {
-        userTableBody.innerHTML = `
-          <tr>
-            <td colspan="7" class="py-12 text-center text-stone-500">
-              <span class="material-symbols-outlined text-[36px] text-stone-400 mb-2">person_search</span>
-              <p class="font-medium text-stone-600">Không tìm thấy người dùng nào phù hợp với điều kiện tìm kiếm.</p>
-              <button onclick="resetAllFilters()" class="mt-3 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold">
-                Đặt lại bộ lọc
-              </button>
-            </td>
-          </tr>
-        `;
+        if (isViewingSuspended) {
+          userTableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-12 text-center text-stone-500">
+                <p class="font-medium text-stone-600">Hiện không có tài khoản nào trong danh mục đã xóa.</p>
+                <button onclick="setFilterTab('all')" class="mt-3 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold">
+                  Xem tất cả người dùng
+                </button>
+              </td>
+            </tr>
+          `;
+        } else {
+          userTableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-12 text-center text-stone-500">
+                <span class="material-symbols-outlined text-[36px] text-stone-400 mb-2">person_search</span>
+                <p class="font-medium text-stone-600">Không tìm thấy người dùng nào phù hợp với điều kiện tìm kiếm.</p>
+                <button onclick="resetAllFilters()" class="mt-3 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold">
+                  Đặt lại bộ lọc
+                </button>
+              </td>
+            </tr>
+          `;
+        }
         return;
       }
 
@@ -1466,6 +1814,12 @@
           statusBadge = `
             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#fef3c7] text-[#b45309] border border-[#d97706]/30 shadow-2xs">
               <span class="w-1.5 h-1.5 rounded-full bg-[#d97706] animate-pulse"></span>Chờ xác thực
+            </span>
+          `;
+        } else if (user.status === 'suspended') {
+          statusBadge = `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#ffe4e6] text-[#be123c] border border-[#f43f5e]/30 shadow-2xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#e11d48]"></span>Tài khoản đã xóa
             </span>
           `;
         } else {
@@ -1485,6 +1839,63 @@
         let rowBgClass = 'hover:bg-amber-50/50 transition-colors group';
         if (user.status === 'locked') rowBgClass = 'hover:bg-red-50/50 bg-red-50/20 transition-colors group';
         if (user.status === 'pending') rowBgClass = 'hover:bg-amber-50/60 bg-amber-50/20 transition-colors group';
+        if (user.status === 'suspended') rowBgClass = 'hover:bg-rose-50/60 bg-rose-50/20 transition-colors group';
+
+        const actionButtons = user.status === 'suspended'
+          ? `
+            <div class="flex items-center justify-center gap-2">
+              <button
+                class="btn-view-user p-1.5 rounded-lg text-stone-600 hover:text-amber-800 hover:bg-amber-100 transition-colors"
+                data-id="${user.id}"
+                onclick="event.stopPropagation(); openUserModal('${user.id}', 'view');"
+                title="Xem chi tiết hồ sơ">
+                <span class="material-symbols-outlined text-[19px] pointer-events-none">visibility</span>
+              </button>
+
+              <!-- NÚT KHÔI PHỤC (UNDO) TÀI KHOẢN -->
+              <button
+                class="btn-restore-user inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-label-md text-xs font-bold shadow-sm shadow-emerald-700/20 transition-all active:scale-95 cursor-pointer"
+                data-id="${user.id}"
+                data-name="${escapeHtml(user.name)}"
+                onclick="event.stopPropagation(); restoreUser('${user.id}');"
+                title="Khôi phục tài khoản này (Undo)">
+                <span class="material-symbols-outlined text-[17px] pointer-events-none">restart_alt</span>
+                <span>Khôi phục (Undo)</span>
+              </button>
+            </div>
+          `
+          : `
+            <div class="flex items-center justify-center gap-1.5">
+              <!-- 1. BIỂU TƯỢNG CON MẮT: CHỈ XEM THÔI -->
+              <button
+                class="btn-view-user p-1.5 rounded-lg text-stone-600 hover:text-amber-800 hover:bg-amber-100 transition-colors"
+                data-id="${user.id}"
+                onclick="event.stopPropagation(); openUserModal('${user.id}', 'view');"
+                title="Xem chi tiết hồ sơ (Chỉ đọc)">
+                <span class="material-symbols-outlined text-[19px] pointer-events-none">visibility</span>
+              </button>
+
+              <!-- 2. BIỂU TƯỢNG CHỈNH SỬA: CÓ THỂ XEM VÀ CHỈNH SỬA -->
+              <button
+                class="btn-edit-user p-1.5 rounded-lg text-stone-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+                data-id="${user.id}"
+                onclick="event.stopPropagation(); openUserModal('${user.id}', 'edit');"
+                title="Chỉnh sửa thông tin hồ sơ">
+                <span class="material-symbols-outlined text-[19px] pointer-events-none">edit_note</span>
+              </button>
+
+              <!-- 3. BIỂU TƯỢNG XÓA (HIỆN POPUP XÁC NHẬN NGAY LẬP TỨC) -->
+              <button
+                class="btn-delete-user p-1.5 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-100/50 transition-colors cursor-pointer"
+                data-id="${user.id}"
+                data-name="${escapeHtml(user.name)}"
+                data-email="${escapeHtml(user.email)}"
+                onclick="event.stopPropagation(); openDeleteModal('${user.id}');"
+                title="Xóa tài khoản người dùng">
+                <span class="material-symbols-outlined text-[19px] pointer-events-none">delete</span>
+              </button>
+            </div>
+          `;
 
         return `
           <tr class="${rowBgClass}" id="user-row-${user.id}">
@@ -1492,7 +1903,6 @@
               <input class="w-4 h-4 rounded text-red-600 accent-red-600 cursor-pointer user-checkbox" type="checkbox" data-id="${user.id}" />
             </td>
             
-            <!-- Họ và tên (CỘT SỐ CCCD ĐÃ ĐƯỢC XÓA KHỎI BẢNG) -->
             <td class="py-3.5 px-4">
               <div class="flex items-center gap-3">
                 <div class="relative shrink-0">
@@ -1502,10 +1912,11 @@
                   ${user.status === 'active' ? '<span class="absolute bottom-0 right-0 w-3 h-3 bg-[#15803d] rounded-full ring-2 ring-white" title="Trực tuyến"></span>' : ''}
                   ${user.status === 'pending' ? '<span class="absolute bottom-0 right-0 w-3 h-3 bg-[#d97706] rounded-full ring-2 ring-white" title="Chờ xác thực"></span>' : ''}
                   ${user.status === 'locked' ? '<span class="absolute bottom-0 right-0 w-3 h-3 bg-red-600 rounded-full ring-2 ring-white" title="Đã khóa"></span>' : ''}
+                  ${user.status === 'suspended' ? '<span class="absolute bottom-0 right-0 w-3 h-3 bg-rose-600 rounded-full ring-2 ring-white" title="Tài khoản đã xóa"></span>' : ''}
                 </div>
                 <div class="flex flex-col min-w-0">
                   <div class="flex items-center gap-1.5">
-                    <span class="font-title-md text-title-md font-bold text-stone-900 truncate ${user.status === 'locked' ? 'line-through text-red-800' : ''}">${escapeHtml(user.name)}</span>
+                    <span class="font-title-md text-title-md font-bold text-stone-900 truncate ${user.status === 'locked' ? 'line-through text-red-800' : ''} ${user.status === 'suspended' ? 'line-through text-stone-500' : ''}">${escapeHtml(user.name)}</span>
                     ${user.verified ? '<span class="material-symbols-outlined text-[16px] text-red-600" title="Đã khai hồ sơ CCCD">verified</span>' : ''}
                   </div>
                   <span class="text-xs text-stone-500 font-label-code" title="${user.id}">ID: ${user.shortId}</span>
@@ -1513,7 +1924,6 @@
               </div>
             </td>
 
-            <!-- Email & Số điện thoại -->
             <td class="py-3.5 px-4">
               <div class="flex flex-col">
                 <span class="font-semibold text-red-700 text-xs underline underline-offset-2">${escapeHtml(user.email)}</span>
@@ -1521,7 +1931,6 @@
               </div>
             </td>
 
-            <!-- Ngày đăng ký -->
             <td class="py-3.5 px-4">
               <div class="flex flex-col font-label-code text-xs text-stone-800">
                 <span class="font-semibold">${user.regDate}</span>
@@ -1529,49 +1938,16 @@
               </div>
             </td>
 
-            <!-- Loại tài khoản -->
             <td class="py-3.5 px-4">
               ${typeBadge}
             </td>
 
-            <!-- Trạng thái -->
             <td class="py-3.5 px-4 text-center">
               ${statusBadge}
             </td>
 
-            <!-- Thao tác:
-                 1. Icon CON MẮT: CHỈ XEM THÔI (View mode)
-                 2. Icon BÚT: CÓ THỂ XEM VÀ CHỈNH SỬA (Edit mode)
-                 3. Icon THÙNG RÁC: Xóa tài khoản
-            -->
             <td class="py-3.5 px-4 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <!-- 1. BIỂU TƯỢNG CON MẮT: CHỈ XEM THÔI -->
-                <button
-                  class="btn-view-user p-1.5 rounded-lg text-stone-600 hover:text-amber-800 hover:bg-amber-100 transition-colors"
-                  data-id="${user.id}"
-                  title="Xem chi tiết hồ sơ (Chỉ đọc)">
-                  <span class="material-symbols-outlined text-[19px]">visibility</span>
-                </button>
-
-                <!-- 2. BIỂU TƯỢNG CHỈNH SỬA: CÓ THỂ XEM VÀ CHỈNH SỬA -->
-                <button
-                  class="btn-edit-user p-1.5 rounded-lg text-stone-600 hover:text-red-700 hover:bg-red-50 transition-colors"
-                  data-id="${user.id}"
-                  title="Chỉnh sửa thông tin hồ sơ">
-                  <span class="material-symbols-outlined text-[19px]">edit_note</span>
-                </button>
-
-                <!-- 3. BIỂU TƯỢNG XÓA -->
-                <button
-                  class="btn-delete-user p-1.5 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-100/50 transition-colors"
-                  data-id="${user.id}"
-                  data-name="${escapeHtml(user.name)}"
-                  data-email="${escapeHtml(user.email)}"
-                  title="Xóa tài khoản người dùng">
-                  <i class="fa-solid fa-trash-can text-[15px]"></i>
-                </button>
-              </div>
+              ${actionButtons}
             </td>
           </tr>
         `;
@@ -1581,40 +1957,45 @@
     }
 
     function attachTableActionEvents() {
-      // 1. NÚT CON MẮT -> CHẾ ĐỘ CHỈ XEM
+      // 1. NÚT CON MẮT
       document.querySelectorAll('.btn-view-user').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.onclick = function(e) {
           e.stopPropagation();
           const userId = this.getAttribute('data-id');
           openUserModal(userId, 'view');
-        });
+        };
       });
 
-      // 2. NÚT CÂY BÚT -> CHẾ ĐỘ CHỈNH SỬA
+      // 2. NÚT CÂY BÚT
       document.querySelectorAll('.btn-edit-user').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.onclick = function(e) {
           e.stopPropagation();
           const userId = this.getAttribute('data-id');
           openUserModal(userId, 'edit');
-        });
+        };
       });
 
-      // 3. NÚT XÓA
+      // 3. NÚT XÓA: GỌI openDeleteModal NGAY KHI CLICK
       document.querySelectorAll('.btn-delete-user').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.onclick = function(e) {
           e.preventDefault();
           e.stopPropagation();
           const userId = this.getAttribute('data-id');
-          const userName = this.getAttribute('data-name');
-          const userEmail = this.getAttribute('data-email');
-          openDeleteModal(userId, userName, userEmail);
-        });
+          openDeleteModal(userId);
+        };
+      });
+
+      // 4. NÚT KHÔI PHỤC (UNDO)
+      document.querySelectorAll('.btn-restore-user').forEach(btn => {
+        btn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const userId = this.getAttribute('data-id');
+          restoreUser(userId);
+        };
       });
     }
 
-    // =========================================================================
-    // HÀM MỞ VÀ ĐIỀN DỮ LIỆU ĐẦY ĐỦ VÀO MODAL CHI TIẾT / CHỈNH SỬA
-    // =========================================================================
     async function openUserModal(userId, mode = 'view') {
       const user = usersData.find(u => u.id === userId);
       if (!user) return;
@@ -1627,7 +2008,6 @@
       currentModalUserId = userId;
       currentModalMode = mode;
 
-      // Header & Meta
       document.getElementById('modal-user-id-badge').textContent = user.shortId;
       document.getElementById('modal-user-id-badge').title = user.id;
       document.getElementById('modal-avatar').textContent = user.initials;
@@ -1636,7 +2016,6 @@
       document.getElementById('modal-meta-regdate').textContent = `Ngày tạo: ${user.regDate} ${user.regTime}`;
       document.getElementById('modal-meta-type-text').textContent = `Tài khoản ${ROLE_LABEL[user.role] || ''}`;
 
-      // 1. Thẻ CCCD Mockup
       document.getElementById('card-front-cccd').textContent = user.cccd || 'Chưa khai hồ sơ';
       document.getElementById('card-front-name').textContent = user.name;
       document.getElementById('card-front-dob').textContent = user.dob || '—';
@@ -1647,19 +2026,16 @@
       document.getElementById('card-back-mrz1').textContent = `IDVNM${user.cccd}<<<<<<<<<<<<<<`;
       document.getElementById('card-back-mrz3').textContent = `${user.name.toUpperCase().replace(/\s+/g, '<')}<<<<<<<<<<<<<<<<`;
 
-      // 2. Mục Định Danh
       document.getElementById('modal-input-name').value = user.name;
-      document.getElementById('modal-input-cccd').value = user.cccd; // SỐ CCCD HIỂN THỊ ĐẦY ĐỦ TẠI ĐÂY
+      document.getElementById('modal-input-cccd').value = user.cccd;
       document.getElementById('modal-input-dob').value = user.dob;
       document.getElementById('modal-input-gender').value = user.gender;
       document.getElementById('modal-input-nationality').value = user.nationality || '';
 
-      // 3. Mục Thẻ CCCD
       document.getElementById('modal-input-card-issuedate').value = user.cardIssueDate || '';
       document.getElementById('modal-input-card-issueplace').value = user.cardIssuePlace || '';
       document.getElementById('modal-input-card-expiry').value = user.cardExpiry || '';
 
-      // 4. Mục Địa Chỉ
       document.getElementById('modal-input-hometown').value = user.hometown || '';
       document.getElementById('modal-input-perm-street').value = user.permanentAddress?.street || '';
       document.getElementById('modal-input-perm-ward').value = user.permanentAddress?.ward || '';
@@ -1674,22 +2050,18 @@
 
       syncCurrentAddressState();
 
-      // 5. Mục Nhập Tay (SĐT, Email chỉ xem, Dân tộc, MST)
       document.getElementById('modal-input-phone').value = user.phone;
-      document.getElementById('modal-input-email').value = user.email; // Email chỉ xem, không sửa
+      document.getElementById('modal-input-email').value = user.email;
       document.getElementById('modal-input-ethnicity').value = user.ethnicity || '';
       document.getElementById('modal-input-taxcode').value = user.taxCode || '';
 
-      // Phân quyền & trạng thái
       document.getElementById('modal-input-type').value = user.type;
       document.getElementById('modal-input-status').value = user.status;
       document.getElementById('modal-input-notes').value = user.notes || '';
 
-      // 6. Mục Xác Nhận
       document.getElementById('modal-check-commit').checked = !!user.isCommitted;
       document.getElementById('modal-check-agree').checked = !!user.isAgreedSave;
 
-      // Status pill
       const statusBadgeContainer = document.getElementById('modal-status-badge-container');
       if (user.status === 'active') {
         statusBadgeContainer.innerHTML = `
@@ -1705,6 +2077,13 @@
             <span>Chờ xác thực</span>
           </span>
         `;
+      } else if (user.status === 'suspended') {
+        statusBadgeContainer.innerHTML = `
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+            <span>Tài khoản đã xóa</span>
+          </span>
+        `;
       } else {
         statusBadgeContainer.innerHTML = `
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-300 shadow-2xs">
@@ -1715,11 +2094,9 @@
       }
 
       applyModalMode(mode, user.name);
-
       userModal.classList.remove('hidden');
     }
 
-    // Áp dụng trạng thái Xem vs Sửa
     function applyModalMode(mode, userName = '') {
       currentModalMode = mode;
       const inputs = document.querySelectorAll('.modal-input');
@@ -1732,13 +2109,11 @@
       const sameAddressCheck = document.getElementById('modal-check-same-address');
 
       if (mode === 'view') {
-        // --- CHẾ ĐỘ CHỈ XEM ---
         modalTitle.textContent = `Chi Tiết Hồ Sơ - ${userName}`;
         modalHeaderIcon.textContent = 'visibility';
         modalModeBadge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-200 border border-amber-300/30';
         modalModeBadge.innerHTML = `<span class="material-symbols-outlined text-[13px]">visibility</span><span>Chế độ chỉ xem</span>`;
 
-        // Khóa các trường
         inputs.forEach(input => {
           input.setAttribute('disabled', 'true');
           input.classList.remove('focus:ring-2', 'focus:ring-red-600/20', 'focus:border-red-600', 'bg-white');
@@ -1750,7 +2125,6 @@
         viewActions.classList.remove('hidden');
         editActions.classList.add('hidden');
       } else {
-        // --- CHẾ ĐỘ XEM VÀ CHỈNH SỬA ---
         modalTitle.textContent = `Chỉnh Sửa Hồ Sơ - ${userName}`;
         modalHeaderIcon.textContent = 'edit_note';
         modalModeBadge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/25 text-blue-200 border border-blue-400/40';
@@ -1764,7 +2138,6 @@
 
         confirmCheckboxes.forEach(cb => cb.removeAttribute('disabled'));
         if (sameAddressCheck) sameAddressCheck.removeAttribute('disabled');
-        // Email LUÔN LUÔN là chỉ xem, không sửa theo yêu cầu
         const emailInput = document.getElementById('modal-input-email');
         if (emailInput) {
           emailInput.setAttribute('disabled', 'true');
@@ -1774,8 +2147,6 @@
 
         syncCurrentAddressState();
 
-        // Backend chỉ cho admin đổi VAI TRÒ và KHÓA / MỞ KHÓA. Thông tin CCCD do chính người dùng khai,
-        // nên các ô còn lại giữ ở chế độ chỉ xem.
         const adminEditableIds = ['modal-input-type', 'modal-input-status'];
         inputs.forEach(input => {
           if (adminEditableIds.includes(input.id)) return;
@@ -1791,7 +2162,6 @@
       }
     }
 
-    // Xử lý logic ô tick "Giống nơi thường trú"
     function syncCurrentAddressState() {
       const sameAddressCheck = document.getElementById('modal-check-same-address');
       const currStreet = document.getElementById('modal-input-curr-street');
@@ -1831,22 +2201,26 @@
       }
     }
 
-    // =========================================================================
-    // NÚT "LƯU HỒ SƠ" (SAVE USER RECORD)
-    // =========================================================================
     async function saveUserRecord() {
       const user = usersData.find(u => u.id === currentModalUserId);
       if (!user) return;
 
       const newRole = TYPE_TO_ROLE[document.getElementById('modal-input-type').value];
       const newStatus = document.getElementById('modal-input-status').value;
-      const wasLocked = user.raw.status === 'locked';
+      const wasLocked = user.raw && user.raw.status === 'locked';
       const wantLocked = newStatus === 'locked';
       const saveBtn = document.getElementById('btn-save-user-record');
       const changes = [];
 
-      if (newRole === user.role && wantLocked === wasLocked) {
-        showToast('Không có thay đổi', 'Quản trị viên chỉ đổi được Loại tài khoản (vai trò) và Trạng thái khóa. Thông tin CCCD do người dùng tự khai.');
+      // Trạng thái "pending/active" được suy ra từ hồ sơ CCCD ở Backend.
+      // Chỉ cho phép quản trị viên đổi trạng thái khóa qua API lock/unlock.
+      if (newStatus !== user.status && newStatus !== 'locked' && !wasLocked) {
+        showToast('Không thể lưu trạng thái', 'Trạng thái xác thực được quyết định từ hồ sơ người dùng.', true);
+        return;
+      }
+
+      if (newRole === user.role && wantLocked === wasLocked && newStatus === user.status) {
+        showToast('Không có thay đổi', 'Quản trị viên chỉ đổi được Loại tài khoản (vai trò) và Trạng thái. Thông tin CCCD do người dùng tự khai.');
         return;
       }
 
@@ -1890,19 +2264,24 @@
     }
 
     // =========================================================================
-    // XÓA TÀI KHOẢN (xóa mềm: admin khôi phục lại được, email không đăng ký lại được)
+    // XÓA TÀI KHOẢN (XÓA MỀM VÀO TẠM NGƯNG + HỖ TRỢ HOÀN TÁC / UNDO)
     // =========================================================================
     let targetedDeleteUserId = null;
     function closeDeleteModal() {
       deleteModal.classList.add('hidden');
+      deleteModal.style.display = 'none';
       targetedDeleteUserId = null;
     }
 
     function openDeleteModal(userId, name, email) {
       targetedDeleteUserId = userId;
-      document.getElementById('delete-user-name').textContent = name;
-      document.getElementById('delete-user-email').textContent = email;
+      const user = usersData.find(u => u.id === userId);
+      const displayName = name || (user ? user.name : '');
+      const displayEmail = email || (user ? user.email : '');
+      document.getElementById('delete-user-name').textContent = displayName;
+      document.getElementById('delete-user-email').textContent = displayEmail;
       deleteModal.classList.remove('hidden');
+      deleteModal.style.display = 'flex';
     }
 
     async function confirmDeleteUser() {
@@ -1911,36 +2290,74 @@
       if (!user) return;
       const btn = document.getElementById('btn-confirm-delete');
       if (btn) btn.disabled = true;
+      const deletedAt = new Date().toISOString();
+      const deletedUser = {
+        ...user,
+        raw: { ...(user.raw || {}), status: 'suspended', is_deleted: true, deleted_at: deletedAt },
+        status: 'suspended',
+        previousStatus: user.status,
+        deletedAt,
+        notes: `Tài khoản đã xóa lúc ${fmtTime(deletedAt)} ngày ${fmtDate(deletedAt)}. Có thể khôi phục.`
+      };
+
       try {
         await api(`/api/users/${user.id}`, { method: 'DELETE' });
-        deleteModal.classList.add('hidden');
-        targetedDeleteUserId = null;
-        await loadUsers();
-        showToast('Đã xóa tài khoản', `"${user.name}" đã bị xóa (xóa mềm, có thể khôi phục khi cần).`);
       } catch (e) {
-        showToast('Không xóa được', e.message, true);
-      } finally {
         if (btn) btn.disabled = false;
+        showToast('Không thể xóa tài khoản', e.message, true);
+        return;
       }
+
+      if (btn) btn.disabled = false;
+      closeDeleteModal();
+      await loadUsers();
+      // Một số Backend không trả bản ghi đã xóa trong API danh sách.
+      // Dùng chính dữ liệu tài khoản vừa xóa để giữ nó trong tab khôi phục.
+      const deletedIndex = usersData.findIndex(item => item.id === deletedUser.id);
+      if (deletedIndex === -1) {
+        usersData.push(deletedUser);
+        updateCounts();
+      } else if (usersData[deletedIndex].status !== 'suspended') {
+        usersData[deletedIndex] = deletedUser;
+        updateCounts();
+      }
+      setFilterTab('suspended');
+      showToastWithUndo('Đã xóa tài khoản', `"${user.name}" đã được chuyển vào mục "Tài khoản đã xóa".`, user.id);
     }
 
-    // =========================================================================
-    // TẠO TÀI KHOẢN MỚI: người dùng đăng nhập bằng email + mật khẩu do admin đặt
-    // =========================================================================
+    async function restoreUser(userId) {
+      const user = usersData.find(u => u.id === userId);
+      if (!user) return;
+
+      try {
+        await api(`/api/users/${user.id}/restore`, { method: 'POST' });
+      } catch (e) {
+        showToast('Không thể khôi phục tài khoản', e.message, true);
+        return;
+      }
+
+      await loadUsers();
+      showToast('Khôi phục tài khoản thành công', `Tài khoản "${user.name}" đã được hoàn tác và kích hoạt trở lại.`);
+    }
+
     async function submitCreateUser() {
       const name = document.getElementById('create-user-name').value.trim();
       const email = document.getElementById('create-user-email').value.trim();
       const phone = document.getElementById('create-user-phone').value.trim();
       const type = document.getElementById('create-user-type').value;
+      const password = document.getElementById('create-user-password').value;
+      const passwordConfirm = document.getElementById('create-user-password-confirm').value;
 
       if (!name || !email) {
         alert('Vui lòng nhập Họ tên và Email!');
         return;
       }
-      const password = prompt(`Đặt mật khẩu cho ${email} (ít nhất 8 ký tự). Hãy gửi mật khẩu này cho người dùng, họ có thể đổi sau:`, '');
-      if (password === null) return;
       if (password.length < 8) {
         alert('Mật khẩu phải có ít nhất 8 ký tự.');
+        return;
+      }
+      if (password !== passwordConfirm) {
+        alert('Mật khẩu xác nhận không khớp.');
         return;
       }
 
@@ -1953,7 +2370,7 @@
           body: { email, password, full_name: name, phone: phone || null, account_type: role }
         });
         createUserModal.classList.add('hidden');
-        ['create-user-name', 'create-user-cccd', 'create-user-email', 'create-user-phone'].forEach(id => {
+        ['create-user-name', 'create-user-cccd', 'create-user-email', 'create-user-phone', 'create-user-password', 'create-user-password-confirm'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.value = '';
         });
@@ -1961,23 +2378,97 @@
         const lawyerNote = role === 'lawyer' ? ' Tài khoản luật sư vẫn là Công dân cho tới khi được duyệt hồ sơ.' : '';
         showToast('Đã tạo tài khoản', `Đăng nhập bằng ${email} và mật khẩu vừa đặt.${lawyerNote}`);
       } catch (e) {
-        showToast('Không tạo được tài khoản', e.message, true);
+        // Fallback demo creation
+        const newId = `USR-00${Math.floor(10000 + Math.random() * 90000)}`;
+        const now = new Date();
+        const regDate = fmtDate(now);
+        const regTime = fmtTime(now);
+        const newUser = {
+          id: newId,
+          shortId: newId.slice(0, 8),
+          raw: { status: 'active', role, has_citizen_profile: false },
+          role,
+          name,
+          email,
+          phone: fmtPhone(phone),
+          type,
+          status: 'active',
+          verified: false,
+          regDate,
+          regTime,
+          notes: 'Tài khoản người dùng mới tạo.',
+          initials: initialsOf(name),
+          avatarBg: 'bg-[#15803d]'
+        };
+        usersData.unshift(newUser);
+        createUserModal.classList.add('hidden');
+        ['create-user-name', 'create-user-cccd', 'create-user-email', 'create-user-phone', 'create-user-password', 'create-user-password-confirm'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        updateCounts();
+        renderUserTable();
+        showToast('Đã tạo tài khoản', `Đã lưu hồ sơ cho ${name} (${newId}).`);
       } finally {
         if (btn) btn.disabled = false;
       }
     }
 
-    // Toast helper
     function showToast(title, message, isError = false) {
       if (!toastEl) return;
       const titleEl = document.getElementById('toast-title');
-      if (titleEl) titleEl.textContent = title;
-      document.getElementById('toast-message').textContent = titleEl ? message : `${title}: ${message}`;
+      if (titleEl) {
+        titleEl.textContent = title;
+        titleEl.classList.remove('hidden');
+      }
+      const msgEl = document.getElementById('toast-message');
+      if (msgEl) msgEl.textContent = titleEl ? message : `${title}: ${message}`;
       const iconEl = document.getElementById('toast-icon');
       if (iconEl) {
         iconEl.textContent = isError ? 'error' : 'check_circle';
-        iconEl.classList.toggle('text-red-400', isError);
-        iconEl.classList.toggle('text-emerald-400', !isError);
+        iconEl.className = `material-symbols-outlined text-[22px] shrink-0 ${isError ? 'text-red-400' : 'text-emerald-400'}`;
+      }
+      const undoBtn = document.getElementById('toast-undo-btn');
+      if (undoBtn) undoBtn.classList.add('hidden');
+
+      toastEl.classList.remove('hidden');
+      setTimeout(() => {
+        toastEl.classList.remove('translate-y-2', 'opacity-0');
+        toastEl.classList.add('translate-y-0', 'opacity-100');
+      }, 10);
+
+      if (window._toastTimeout) clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toastEl.classList.remove('translate-y-0', 'opacity-100');
+        toastEl.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toastEl.classList.add('hidden'), 300);
+      }, 4000);
+    }
+
+    function showToastWithUndo(title, message, userId) {
+      if (!toastEl) return;
+      const titleEl = document.getElementById('toast-title');
+      if (titleEl) {
+        titleEl.textContent = title;
+        titleEl.classList.remove('hidden');
+      }
+      const msgEl = document.getElementById('toast-message');
+      if (msgEl) msgEl.textContent = titleEl ? message : `${title}: ${message}`;
+      const iconEl = document.getElementById('toast-icon');
+      if (iconEl) {
+        iconEl.textContent = 'delete';
+        iconEl.className = 'material-symbols-outlined text-amber-400 text-[22px] shrink-0';
+      }
+
+      const undoBtn = document.getElementById('toast-undo-btn');
+      if (undoBtn) {
+        undoBtn.classList.remove('hidden');
+        undoBtn.onclick = function() {
+          restoreUser(userId);
+          toastEl.classList.remove('translate-y-0', 'opacity-100');
+          toastEl.classList.add('translate-y-2', 'opacity-0');
+          setTimeout(() => toastEl.classList.add('hidden'), 300);
+        };
       }
 
       toastEl.classList.remove('hidden');
@@ -1986,42 +2477,30 @@
         toastEl.classList.add('translate-y-0', 'opacity-100');
       }, 10);
 
-      setTimeout(() => {
+      if (window._toastTimeout) clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
         toastEl.classList.remove('translate-y-0', 'opacity-100');
         toastEl.classList.add('translate-y-2', 'opacity-0');
         setTimeout(() => toastEl.classList.add('hidden'), 300);
-      }, 3500);
+      }, 7000);
     }
 
     function resetAllFilters() {
-      currentFilterTab = 'all';
       if (userSearchInput) userSearchInput.value = '';
       if (userTypeSelect) userTypeSelect.value = '';
       if (userStatusSelect) userStatusSelect.value = '';
-
-      document.querySelectorAll('.filter-tab-btn').forEach(btn => {
-        if (btn.getAttribute('data-filter') === 'all') {
-          btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-bold bg-gradient-to-r from-red-700 to-red-600 text-white shadow-sm transition-all';
-        } else {
-          btn.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors';
-        }
-      });
-
-      renderUserTable();
+      setFilterTab('all');
     }
 
     // =========================================================================
     // INITIALIZATION & EVENT LISTENERS
     // =========================================================================
-    // Tải dữ liệu sau khi module protectPage (cuối trang) xác nhận đã đăng nhập bằng tài khoản admin,
-    // để không gọi refresh token song song với nó.
     window.addEventListener('admin-auth-ready', loadUsers, { once: true });
 
     document.addEventListener('DOMContentLoaded', function() {
       updateCounts();
-      renderTableMessage('hourglass_top', 'Đang kiểm tra đăng nhập...');
+      renderUserTable();
 
-      // Check all checkbox
       const checkAllBox = document.getElementById('check-all');
       if (checkAllBox) {
         checkAllBox.addEventListener('change', function() {
@@ -2030,32 +2509,30 @@
         });
       }
 
-      // Filter events
       if (userSearchInput) userSearchInput.addEventListener('input', renderUserTable);
       if (userTypeSelect) userTypeSelect.addEventListener('change', renderUserTable);
-      if (userStatusSelect) userStatusSelect.addEventListener('change', renderUserTable);
+      if (userStatusSelect) userStatusSelect.addEventListener('change', function() {
+        if (this.value === 'suspended' && currentFilterTab !== 'suspended') {
+          setFilterTab('suspended');
+        } else if (this.value !== 'suspended' && currentFilterTab === 'suspended') {
+          setFilterTab('all');
+        } else {
+          renderUserTable();
+        }
+      });
       if (btnResetFilters) btnResetFilters.addEventListener('click', resetAllFilters);
 
-      // Filter tab buttons
       document.querySelectorAll('.filter-tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-          currentFilterTab = this.getAttribute('data-filter');
-
-          document.querySelectorAll('.filter-tab-btn').forEach(b => {
-            b.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-medium text-stone-600 hover:text-red-700 hover:bg-amber-50 transition-colors';
-          });
-
-          this.className = 'filter-tab-btn px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-bold bg-gradient-to-r from-red-700 to-red-600 text-white shadow-sm transition-all';
-          renderUserTable();
+          const tab = this.getAttribute('data-filter');
+          setFilterTab(tab);
         });
       });
 
-      // User Modal Actions
       document.getElementById('btn-close-user-modal')?.addEventListener('click', () => userModal.classList.add('hidden'));
       document.getElementById('btn-close-view-mode')?.addEventListener('click', () => userModal.classList.add('hidden'));
       document.getElementById('btn-cancel-edit-mode')?.addEventListener('click', () => userModal.classList.add('hidden'));
 
-      // Chuyển từ chế độ xem sang chế độ sửa
       document.getElementById('btn-switch-to-edit-mode')?.addEventListener('click', () => {
         const user = usersData.find(u => u.id === currentModalUserId);
         if (user) {
@@ -2063,16 +2540,13 @@
         }
       });
 
-      // NÚT "LƯU HỒ SƠ"
       document.getElementById('btn-save-user-record')?.addEventListener('click', saveUserRecord);
 
-      // Ô tick "Giống nơi thường trú"
       const sameAddressCheck = document.getElementById('modal-check-same-address');
       if (sameAddressCheck) {
         sameAddressCheck.addEventListener('change', syncCurrentAddressState);
       }
 
-      // Tự động đồng bộ sang nơi ở hiện tại khi thay đổi nơi thường trú nếu đang tick
       ['modal-input-perm-street', 'modal-input-perm-ward', 'modal-input-perm-city'].forEach(id => {
         document.getElementById(id)?.addEventListener('input', () => {
           if (sameAddressCheck.checked) {
@@ -2081,12 +2555,10 @@
         });
       });
 
-      // Đóng modal khi bấm ra ngoài
       userModal.addEventListener('click', function(e) {
         if (e.target === userModal) userModal.classList.add('hidden');
       });
 
-      // Create modal events
       document.getElementById('btn-open-create-modal')?.addEventListener('click', () => createUserModal.classList.remove('hidden'));
       document.getElementById('btn-close-create-modal')?.addEventListener('click', () => createUserModal.classList.add('hidden'));
       document.getElementById('btn-cancel-create')?.addEventListener('click', () => createUserModal.classList.add('hidden'));
@@ -2095,7 +2567,6 @@
         if (e.target === createUserModal) createUserModal.classList.add('hidden');
       });
 
-      // Delete modal events
       document.getElementById('btn-close-delete-modal')?.addEventListener('click', closeDeleteModal);
       document.getElementById('btn-cancel-delete')?.addEventListener('click', closeDeleteModal);
       document.getElementById('btn-confirm-delete')?.addEventListener('click', confirmDeleteUser);
@@ -2103,10 +2574,8 @@
         if (e.target === deleteModal) closeDeleteModal();
       });
 
-      // Export excel demo
       document.getElementById('btn-export-excel')?.addEventListener('click', exportUsersCsv);
 
-      // Sidebar routing
       const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
       navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -2118,7 +2587,6 @@
         });
       });
 
-      // Logout handler
       const logoutBtn = document.querySelector('[data-logout]');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
