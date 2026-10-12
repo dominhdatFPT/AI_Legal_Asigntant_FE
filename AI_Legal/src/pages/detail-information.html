@@ -37,6 +37,14 @@
         ::-webkit-scrollbar {
             display: none;
         }
+        /* Vietnamese uppercase vowels can stack two marks above a letter.
+           Do not clip the tilde on Ễ to a short label-font line box. */
+        #full-name {
+            font-family: Arial, "Segoe UI", sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 32px;
+        }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
@@ -353,19 +361,18 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-street">Số
-                                            nhà / Tên đường</label>
+                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-street">Chi tiết địa chỉ</label>
                                         <input
                                             class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
                                             id="perm-street" name="perm-street"
-                                            placeholder="Số nhà, ngõ/ngách, đường phố" type="text">
+                                            placeholder="Số nhà, đường phố hoặc quận/huyện" type="text">
                                     </div>
                                     <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-ward">Xã /
-                                            Phường / Thị trấn</label>
+                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-ward">Xã / Phường,
+                                            Quận / Huyện</label>
                                         <input
                                             class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-ward" name="perm-ward" placeholder="Phường / Xã" type="text">
+                                            id="perm-ward" name="perm-ward" placeholder="Phường / Xã, Quận / Huyện" type="text">
                                     </div>
                                     <div class="flex flex-col gap-1">
                                         <label class="font-label-sm text-label-sm text-secondary"
@@ -641,6 +648,7 @@
             const ocrStatus = field('ocr-status');
             const images = { front: null, back: null };
             let ocrSessionId = null; // phiên OCR đã dùng để điền form, gửi kèm khi lưu
+            let ocrHasStarted = false;
 
             const setOcrStatus = (message, isError = false) => {
                 ocrStatus.textContent = message;
@@ -650,6 +658,8 @@
 
             for (const side of ['front', 'back']) {
                 field(`file-${side}`).addEventListener('change', (event) => {
+                    ocrSessionId = null;
+                    field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
                     const file = event.target.files[0];
                     const preview = field(`preview-${side}`);
                     if (preview.src) URL.revokeObjectURL(preview.src);
@@ -681,12 +691,12 @@
                 });
             }
 
-            // "Số nhà, Phường/Xã, Tỉnh/Thành phố" → 3 ô địa chỉ; không tách được thì để cả chuỗi ở ô đầu.
+            // First comma: detail boundary; last comma: province boundary.
             const fillAddress = (address) => {
                 const parts = address.split(',').map((part) => part.trim()).filter(Boolean);
-                const [street, ward, province] = parts.length >= 3
-                    ? [parts.slice(0, -2).join(', '), parts.at(-2), parts.at(-1)]
-                    : [address, '', ''];
+                const street = parts[0] || '';
+                const province = parts.length > 1 ? parts.at(-1) : '';
+                const ward = parts.slice(1, -1).join(', ');
                 field('perm-street').value = street;
                 field('perm-ward').value = ward;
                 field('perm-province').value = province;
@@ -698,20 +708,39 @@
                 date_of_birth: 'Ngày sinh',
                 issue_date: 'Ngày cấp',
                 issue_place: 'Nơi cấp',
-                permanent_address: 'Nơi thường trú'
+                permanent_address: 'Nơi thường trú',
+                sex: 'Giới tính',
+                nationality: 'Quốc tịch',
+                expiry_date: 'Hạn thẻ',
+                place_of_origin: 'Quê quán'
             };
 
-            const applyOcrFields = (fields) => {
-                if (fields.full_name) field('full-name').value = fields.full_name;
+            const applyOcrFields = (fields, additional = {}) => {
+                const address = fields.permanent_address || additional.residence_address;
+                const origin = additional.place_of_origin || additional.registered_birth_place;
+                if (fields.full_name) field('full-name').value = fields.full_name.normalize('NFC');
                 if (fields.identity_number) field('cccd-number').value = fields.identity_number;
                 if (fields.date_of_birth) field('dob').value = fromIsoDate(fields.date_of_birth);
                 if (fields.issue_date) field('issue-date').value = fromIsoDate(fields.issue_date);
                 if (fields.issue_place) field('issue-place').value = fields.issue_place;
-                if (fields.permanent_address) fillAddress(fields.permanent_address);
-                return Object.keys(OCR_FIELD_LABELS).filter((key) => !fields[key]).map((key) => OCR_FIELD_LABELS[key]);
+                if (address) fillAddress(address);
+                const gender = { male: 'Nam', female: 'Nữ' }[additional.sex];
+                if (gender) {
+                    form.querySelectorAll('input[name="gender"]').forEach((radio) => {
+                        radio.checked = radio.value === gender;
+                    });
+                }
+                if (additional.nationality) field('nationality').value = additional.nationality;
+                if (additional.expiry_date) field('expiry-date').value = fromIsoDate(additional.expiry_date);
+                if (origin) field('origin-place').value = origin;
+                const available = { ...fields, ...additional, sex: gender, permanent_address: address, place_of_origin: origin };
+                return Object.keys(OCR_FIELD_LABELS).filter((key) => !available[key]).map((key) => OCR_FIELD_LABELS[key]);
             };
 
             ocrButton.addEventListener('click', async () => {
+                ocrHasStarted = true;
+                ocrSessionId = null;
+                field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
                 ocrButton.disabled = true;
                 ocrButton.setAttribute('aria-busy', 'true');
                 ocrLabel.textContent = 'Đang đọc...';
@@ -719,7 +748,7 @@
                 try {
                     const result = await readIdentityCardOcr(images.front, images.back);
                     ocrSessionId = result.session_id;
-                    const missing = applyOcrFields(result.fields || {});
+                    const missing = applyOcrFields(result.fields || {}, result.additional_fields || {});
                     field('ocr-filled-badge').classList.replace('hidden', 'inline-flex');
                     setOcrStatus(missing.length
                         ? `Đã điền sẵn. Chưa đọc chắc chắn: ${missing.join(', ')}. Hãy nhập tay các mục này và kiểm tra lại toàn bộ trước khi lưu.`
@@ -895,7 +924,14 @@
             const notice = field('profile-required-notice');
             notice.classList.toggle('hidden', !cameForApplication);
             notice.classList.toggle('flex', cameForApplication);
-            fillForm(await fetchMyCitizenProfile().catch(() => null), user);
+            const initialProfile = await fetchMyCitizenProfile().catch(() => null);
+            if (!ocrHasStarted) {
+                fillForm(initialProfile, user);
+            } else {
+                // A slow profile request must not overwrite fresh OCR results.
+                field('email-address').value = user.email || '';
+                if (!field('phone-number').value) field('phone-number').value = user.phone || '';
+            }
             window.handleSameAddressToggle(sameAddress);
         </script>
     </main>
