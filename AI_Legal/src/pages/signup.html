@@ -71,36 +71,13 @@
 </div>
 <!-- RIGHT PANEL: Dedicated Auth Form Canvas (40% Desktop) -->
 <div class="auth-panel auth-panel--signup w-full lg:w-2/5 h-full overflow-y-auto flex flex-col justify-between p-6 sm:p-8 lg:p-10 [@media(max-height:760px)]:py-5 relative">
-<!-- Top Utility / Language & Support Switcher -->
-<div class="flex items-center justify-between w-full max-w-[440px] mx-auto motion-safe:animate-fade-up-late">
-<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-subtle font-label-md text-secondary">
-<span class="w-2 h-2 rounded-full bg-state-success"></span>
-<span class="">Hệ thống trực tuyến</span>
-</div>
-<div class="flex items-center gap-2 text-on-surface">
-<div aria-label="Ngôn ngữ hiện tại: Tiếng Việt" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-subtle text-on-surface font-label-md">
-<span class="text-base leading-none">🇻🇳</span>
-<span class="">VI</span>
-</div>
-</div>
-</div>
 <!-- Auth Card Container (440px max width for optimal data entry eye tracking) -->
 <div class="auth-card w-full max-w-[440px] mx-auto my-auto py-4">
 <nav class="auth-tabs" aria-label="Tài khoản">
 <a href="/login">Đăng nhập</a>
 <a href="/signup" aria-current="page">Đăng ký</a>
 </nav>
-<!-- Header with Small Golden Shield Emblem -->
 <div class="auth-card-header text-center sm:text-left mb-6 [@media(max-height:760px)]:mb-4 motion-safe:animate-fade-up">
-<div class="auth-brand-row inline-flex sm:flex items-center gap-3 mb-4 [@media(max-height:760px)]:mb-2">
-<div class="w-12 h-12 rounded-xl bg-surface-brand-tint p-1 flex items-center justify-center shadow-sm">
-<img alt="Biểu trưng Cổng Dịch vụ công" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEAA9lNiqSALUJs-8-991kLV_iapHVkb4fmX6oA2a4qhQapEBWLcUdBumKVXdtvRQusKxjruS_YDg_FwN8kXJNBz-jpqkl0oRQbWHtVk_Sccv2u_karOi4bX1UJsdw3s8z-XCSHK0yBqAyGvIyh0_R7vn-o2W7DDOojs2Zvd6d3wdiBlK9b8frFfhCOTGmRYyoSF66BNkBy2LAXJadnsvby3_gz9YmBA9Cl8ABjcPUFkYAE0rNX6CnKpGSLOrMh_23Ju8">
-</div>
-<div>
-<span class="inline-block px-2 py-0.5 bg-surface-brand-tint text-primary font-label-sm rounded uppercase tracking-wider">Phiên bản Số hóa 2.4</span>
-<p class="mt-1 text-xs text-secondary sm:hidden">Trợ lý hồ sơ pháp lý đất đai</p>
-</div>
-</div>
 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">
             Đăng ký tài khoản
           </h2>
@@ -110,19 +87,9 @@
 </div>
 <!-- Standard Administrative Registration Form -->
 <form id="signup-form" class="space-y-4 motion-safe:animate-fade-up-late">
-<!-- Username -->
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="username">Tên đăng nhập <span class="text-primary">*</span></label>
-<div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
-<span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">person</span>
-</div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="username" name="username" autocomplete="username" placeholder="Nhập tên đăng nhập" required="" type="text">
-</div>
-</div>
 <!-- Gmail / Email -->
 <div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email">Gmail / Email <span class="text-primary">*</span></label>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email">Email <span class="text-primary">*</span></label>
 <div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
 <span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">mail</span>

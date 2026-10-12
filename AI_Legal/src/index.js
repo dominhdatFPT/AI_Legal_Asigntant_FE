@@ -19,6 +19,10 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
+app.get('/forgot-password', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
+});
+
 // Địa chỉ Backend (Gateway) mà trình duyệt sẽ gọi. Đổi bằng biến môi trường BACKEND_URL.
 app.get('/api/app-config', (req, res) => {
   res.json({ apiBaseUrl: process.env.BACKEND_URL || 'http://localhost:8080' });
