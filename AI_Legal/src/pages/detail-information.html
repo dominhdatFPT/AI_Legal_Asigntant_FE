@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="vi" style="">
+
+<html lang="vi">
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="web_blank" name="shell-type">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_blank" name="shell-type" />
     <title>Xác thực Căn cước Công dân - Hệ thống Hỗ trợ Hồ sơ</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap"
-        rel="stylesheet">
-    <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,support_agent,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
-    
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
     <style>
         @layer base {
 
@@ -49,22 +54,95 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script
         id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "border-focus": "#DA251D", "error": "#ba1a1a", "surface-container-high": "#dee9f9", "error-container": "#ffdad6", "surface-bright": "#f7f9ff", "on-tertiary-container": "#fff4e2", "tertiary-fixed": "#ffdf99", "primary-fixed": "#ffdad5", "secondary-fixed-dim": "#bcc8d6", "state-success": "#15803D", "secondary-container": "#d8e4f3", "surface-container-low": "#edf4ff", "surface-container-highest": "#d8e3f3", "inverse-surface": "#27313d", "primary-fixed-dim": "#ffb4a9", "on-primary": "#ffffff", "inverse-primary": "#ffb4a9", "on-tertiary": "#ffffff", "on-tertiary-fixed-variant": "#5a4300", "on-primary-fixed-variant": "#930004", "surface-container": "#e4effe", "surface-variant": "#d8e3f3", "tertiary": "#6f5400", "surface-container-lowest": "#ffffff", "inverse-on-surface": "#e8f1ff", "on-secondary": "#ffffff", "surface-brand-tint": "#FDF2F1", "on-surface": "#121c27", "border-subtle": "#E2E8F0", "outline": "#916f6a", "on-secondary-fixed": "#111d27", "secondary": "#545f6c", "primary-container": "#da251d", "on-primary-container": "#fff3f1", "on-error-container": "#93000a", "on-tertiary-fixed": "#251a00", "surface-dim": "#d0dbea", "on-surface-variant": "#5d403b", "on-secondary-fixed-variant": "#3d4854", "on-secondary-container": "#5a6572", "background": "#f7f9ff", "on-background": "#121c27", "surface-tint": "#bf080b", "secondary-fixed": "#d8e4f3", "primary": "#b40006", "tertiary-container": "#8d6b02", "surface": "#f7f9ff", "surface-subtle": "#F8FAFC", "state-error": "#B91C1C", "tertiary-fixed-dim": "#ecc15a", "outline-variant": "#e6bdb7", "surface-panel": "#FFFFFF", "on-primary-fixed": "#410001", "on-error": "#ffffff" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "margin": "2rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem" }, "fontFamily": { "headline-lg-mobile": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "display-hero": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"] }, "fontSize": { "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }] } } } };</script>
-    <style id="auth-pending">body{visibility:hidden!important}</style>
+<style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased min-h-screen">
     <main class="w-full min-h-screen bg-surface flex items-center justify-center">
         <div class="flex flex-col w-full">
             <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
-                <div class="hidden items-start gap-3 p-4 rounded-xl bg-surface-brand-tint border border-primary-container/30 text-on-surface"
-                    id="profile-required-notice" role="status">
-                    <span class="material-symbols-outlined text-primary-container text-2xl shrink-0">info</span>
-                    <p class="font-body-md text-body-md">
-                        <strong>Bạn cần cập nhật thông tin cá nhân trước khi tạo hồ sơ.</strong>
-                        Điền đầy đủ thông tin theo CCCD rồi bấm "Lưu hồ sơ", hệ thống sẽ đưa bạn quay lại trang Tạo hồ sơ.
-                    </p>
-                </div>
                 <!-- Top Stepper / Wizard Panel -->
+                <div class="bg-surface-panel rounded-xl shadow-sm p-6 flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-9 h-9 rounded-lg bg-surface-brand-tint flex items-center justify-center text-primary-container">
+                                <span class="material-symbols-outlined text-2xl"
+                                    style="font-variation-settings: 'FILL' 1;">assured_workload</span>
+                            </div>
+                            <div>
+                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Đăng ký &amp; Xác thực Chủ
+                                    sở hữu</h2>
+                                <p class="font-body-sm text-body-sm text-secondary">Hệ thống hỗ trợ cấp hồ sơ đất đai
+                                    &amp; Đăng ký hộ kinh doanh cá thể điện tử</p>
+                            </div>
+                        </div>
+                        <div
+                            class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-subtle text-secondary font-label-sm text-label-sm">
+                            <span class="w-2 h-2 rounded-full bg-state-success animate-pulse"></span>
+                            KẾT NỐI CƠ SỞ DỮ LIỆU QUỐC GIA
+                        </div>
+                    </div>
+                    <!-- Stepper Nodes -->
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2">
+                        <!-- Step 1 -->
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-surface-subtle">
+                            <div
+                                class="w-8 h-8 rounded-full bg-state-success text-on-primary flex items-center justify-center font-label-md text-label-md">
+                                <span class="material-symbols-outlined text-base font-bold">check</span>
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="font-label-sm text-label-sm text-state-success uppercase tracking-wider block">Bước
+                                    1</span>
+                                <span class="font-label-md text-label-md text-on-surface truncate block">Tạo tài
+                                    khoản</span>
+                            </div>
+                        </div>
+                        <!-- Step 2 (Active) -->
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-surface-brand-tint relative shadow-sm">
+                            <div
+                                class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-lg text-label-lg shadow-sm">
+                                2
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="font-label-sm text-label-sm text-primary-container font-semibold uppercase tracking-wider block">Bước
+                                    2 - Đang thực hiện</span>
+                                <span class="font-label-md text-label-md font-bold text-on-surface truncate block">Thông
+                                    tin CCCD</span>
+                            </div>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-surface-subtle opacity-75">
+                            <div
+                                class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md">
+                                3
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="font-label-sm text-label-sm text-secondary uppercase tracking-wider block">Bước
+                                    3</span>
+                                <span class="font-label-md text-label-md text-secondary truncate block">Xác thực VNeID /
+                                    Face</span>
+                            </div>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-surface-subtle opacity-60">
+                            <div
+                                class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md">
+                                4
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="font-label-sm text-label-sm text-secondary uppercase tracking-wider block">Bước
+                                    4</span>
+                                <span class="font-label-md text-label-md text-secondary truncate block">Hoàn tất thủ
+                                    tục</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Main CCCD Form Card -->
                 <div class="bg-surface-panel rounded-xl shadow-sm overflow-hidden flex flex-col">
                     <!-- Form Institutional Header -->
@@ -84,107 +162,150 @@
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <h1 class="font-headline-md text-headline-md text-on-surface">THÔNG TIN CĂN CƯỚC
                                         CÔNG DÂN</h1>
+                                    <span
+                                        class="px-2.5 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-wide">
+                                        Chuẩn VNeID C06
+                                    </span>
                                 </div>
                                 <p class="font-body-md text-body-md text-secondary max-w-2xl">
-                                    Nhập đúng thông tin theo thẻ Căn cước công dân, hoặc tải ảnh 2 mặt thẻ để hệ thống đọc tự động bằng OCR
-                                    rồi kiểm tra lại trước khi lưu.
+                                    Vui lòng cung cấp dữ liệu chính xác theo Thẻ Căn cước công dân gắn chip hoặc sử dụng
+                                    công cụ nạp thông tin tự động qua QR/OCR để tránh sai lệch hồ sơ pháp lý.
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <!-- Ảnh CCCD hai mặt: OCR đọc và điền sẵn các mục bên dưới -->
-                    <div class="px-6 sm:px-8 py-6 bg-surface-subtle">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-primary-container/10 flex items-center justify-center text-primary-container shrink-0">
-                                    <span class="material-symbols-outlined text-2xl">credit_card</span></div>
-                                <div>
-                                    <span class="font-label-lg text-label-lg font-bold text-on-surface uppercase">1. Ảnh
-                                        chụp thẻ Căn cước công dân</span>
-                                    <p class="font-body-sm text-body-sm text-secondary">Chọn ảnh JPEG hoặc PNG rõ nét cả 2
-                                        mặt, mỗi ảnh tối đa 4 MB, đúng chiều, không chói sáng, không bị che góc.</p>
-                                </div>
-                            </div>
+                        <!-- Quick OCR / QR Action Triggers -->
+                        <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-2.5 shrink-0">
                             <button
-                                class="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-                                id="btn-read-ocr" type="button" disabled>
-                                <span class="material-symbols-outlined text-xl">document_scanner</span>
-                                <span id="btn-read-ocr-label">Đọc thông tin bằng OCR</span>
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-subtle hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all shadow-sm"
+                                id="btn-scan-qr" type="button">
+                                <span
+                                    class="material-symbols-outlined text-primary-container text-xl">qr_code_scanner</span>
+                                <span>Quét mã QR từ CCCD</span>
+                            </button>
+                            <button
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-subtle hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all shadow-sm"
+                                id="btn-scan-ocr" type="button">
+                                <span
+                                    class="material-symbols-outlined text-primary-container text-xl">document_scanner</span>
+                                <span>Tải ảnh CCCD (OCR tự động)</span>
                             </button>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <label
-                                class="group bg-surface-panel rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col gap-3 border border-border-subtle cursor-pointer focus-within:ring-2 focus-within:ring-primary-container">
-                                <span class="flex items-center gap-2"><span
-                                        class="w-6 h-6 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">A</span><span
-                                        class="font-label-md text-label-md font-semibold text-on-surface">Ảnh mặt trước
-                                        (ảnh chân dung và số CCCD)</span></span>
+                    </div>
+                    <!-- Quick Upload & Card Preview Grid -->
+                    <div class="px-6 sm:px-8 py-6 bg-surface-subtle">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
                                 <span
-                                    class="h-48 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center border border-dashed border-border-subtle group-hover:border-primary-container transition">
-                                    <img class="hidden w-full h-full object-contain" id="preview-front"
-                                        alt="Ảnh mặt trước CCCD đã chọn">
-                                    <span class="flex flex-col items-center gap-1 text-secondary" id="placeholder-front">
-                                        <span class="material-symbols-outlined text-3xl">upload_file</span>
-                                        <span class="font-label-md text-label-md">Bấm để chọn ảnh mặt trước</span>
-                                    </span>
-                                </span>
-                                <span class="font-body-sm text-body-sm text-secondary" id="info-front">Chưa chọn ảnh</span>
-                                <input class="sr-only" id="file-front" type="file" accept="image/jpeg,image/png">
-                            </label>
-                            <label
-                                class="group bg-surface-panel rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col gap-3 border border-border-subtle cursor-pointer focus-within:ring-2 focus-within:ring-primary-container">
-                                <span class="flex items-center gap-2"><span
-                                        class="w-6 h-6 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">B</span><span
-                                        class="font-label-md text-label-md font-semibold text-on-surface">Ảnh mặt sau
-                                        (ngày cấp, nơi cấp)</span></span>
-                                <span
-                                    class="h-48 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center border border-dashed border-border-subtle group-hover:border-primary-container transition">
-                                    <img class="hidden w-full h-full object-contain" id="preview-back"
-                                        alt="Ảnh mặt sau CCCD đã chọn">
-                                    <span class="flex flex-col items-center gap-1 text-secondary" id="placeholder-back">
-                                        <span class="material-symbols-outlined text-3xl">upload_file</span>
-                                        <span class="font-label-md text-label-md">Bấm để chọn ảnh mặt sau</span>
-                                    </span>
-                                </span>
-                                <span class="font-body-sm text-body-sm text-secondary" id="info-back">Chưa chọn ảnh</span>
-                                <input class="sr-only" id="file-back" type="file" accept="image/jpeg,image/png">
-                            </label>
+                                    class="material-symbols-outlined text-primary-container text-lg">credit_card</span>
+                                <span class="font-label-lg text-label-lg text-on-surface uppercase">Ảnh chụp Thẻ Căn
+                                    Cước (Mặt trước &amp; Mặt sau)</span>
+                            </div>
+                            <span class="font-body-sm text-body-sm text-secondary">Định dạng hỗ trợ: JPG, PNG, WEBP (Tối
+                                đa 8MB)</span>
                         </div>
-                        <p class="mt-4 font-body-sm text-body-sm text-secondary" id="ocr-status" role="status"
-                            aria-live="polite">
-                            Chọn đủ 2 mặt rồi bấm "Đọc thông tin bằng OCR" để điền sẵn các mục bên dưới. OCR chỉ gợi ý,
-                            bạn cần kiểm tra lại trước khi lưu. Bạn cũng có thể tự nhập tay.
-                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Card Front -->
+                            <div
+                                class="group relative bg-surface-panel rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="w-6 h-6 rounded bg-surface-brand-tint text-primary-container font-label-sm text-label-sm flex items-center justify-center font-bold">1</span>
+                                        <span class="font-label-md text-label-md text-on-surface">Mặt trước (Có ảnh
+                                            &amp; số CCCD)</span>
+                                    </div>
+                                    <span
+                                        class="font-label-sm text-label-sm text-state-success flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">verified</span> Đã phân tích OCR
+                                    </span>
+                                </div>
+                                <div
+                                    class="relative h-44 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center">
+                                    <img class="w-full h-full object-cover"
+                                        data-alt="Clear high resolution photographic mockup of the front face of Vietnam national biometric citizen identity card CCCD with red emblem, gold star, portrait photo slot, chip emblem, and holographic guilloche pattern in warm neutral studio lighting."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSHUnzSNsDVlDiBBKNs_I49aNwj8s7uKgDd3UD8N_CN0pkVBTpXtGkyhJhV8tZFpmVXz9-tqc5AO8DhlqBVQZGZ2llZJtp-5oY3Lwu0XfdFI3KhTScadFpH0cdFo1T2SMbw6Xp7bHvUAK4XL5Zm64SGfcVV73CP5md5UonsaYgPoCZ3RQvZLFg6hWFpHKBGcpVZKlLzRfpWvigrvKSaBzNGTFkkhm2ykSA4bRa6z0nH6F3es21mgIl1A" />
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-on-surface/75 via-transparent to-transparent flex items-end justify-between p-3">
+                                        <div class="text-on-primary">
+                                            <p class="font-label-sm text-label-sm opacity-90">Số nhận diện phát hiện:
+                                            </p>
+                                            <p class="font-headline-sm text-headline-sm font-mono tracking-wider">001
+                                                095 012345</p>
+                                        </div>
+                                        <button
+                                            class="px-2.5 py-1 rounded bg-surface-panel/90 hover:bg-surface-panel text-on-surface font-label-sm text-label-sm backdrop-blur flex items-center gap-1 transition"
+                                            type="button">
+                                            <span class="material-symbols-outlined text-sm">cached</span> Chụp lại
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Back -->
+                            <div
+                                class="group relative bg-surface-panel rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="w-6 h-6 rounded bg-surface-brand-tint text-primary-container font-label-sm text-label-sm flex items-center justify-center font-bold">2</span>
+                                        <span class="font-label-md text-label-md text-on-surface">Mặt sau (Có chip điện
+                                            tử &amp; MRZ)</span>
+                                    </div>
+                                    <span
+                                        class="font-label-sm text-label-sm text-state-success flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">check_circle</span> Đã kiểm tra
+                                        chip
+                                    </span>
+                                </div>
+                                <div
+                                    class="relative h-44 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center">
+                                    <img class="w-full h-full object-cover"
+                                        data-alt="High quality detailed mockup photo of the back side of a Vietnamese national chip-embedded citizen identity card showing gold smart card contact chip, security finger print pattern, MRZ code strips, and official security guilloche motifs on clean light background."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOuiJyKO-IBQJRY8RFNKh2ROtKNR1bzrVTvNd9OHKFiszLfvVHxhA4SA9eIgDPGbpmZQxBbv9PLgUSCgtOzS3u7HQgaDRwchJhGZOVkbnGIPT5kNwXSZCqmp9BOtJQVbOu4MB7oNiCWdhjhXIvPFxfHyeAN5y-WZXievB1GTEb1DVUm9wi5Xip9F0LfiAO-bYJRTKsX-ObfNyJOcy34yQ1GBRlsWQji4tB2qOjoRV7_RRdXAEI8lYp9A" />
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-on-surface/75 via-transparent to-transparent flex items-end justify-between p-3">
+                                        <div class="text-on-primary">
+                                            <p class="font-label-sm text-label-sm opacity-90">Mã MRZ &amp; Chip điện tử:
+                                            </p>
+                                            <p class="font-body-sm text-body-sm font-mono tracking-widest">
+                                                IDVNM0010950123&lt;4&lt;&lt;&lt;&lt;&lt;</p>
+                                        </div>
+                                        <button
+                                            class="px-2.5 py-1 rounded bg-surface-panel/90 hover:bg-surface-panel text-on-surface font-label-sm text-label-sm backdrop-blur flex items-center gap-1 transition"
+                                            type="button">
+                                            <span class="material-symbols-outlined text-sm">cached</span> Chụp lại
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- Input Form Fields -->
                     <form class="p-6 sm:p-8 flex flex-col gap-8" id="cccd-form">
-                        <!-- Controls Bar: Trạng thái & Toggle Chỉnh sửa -->
-                        <div
-                            class="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-border-subtle">
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="hidden items-center gap-1 px-2.5 py-1 rounded-full bg-state-success/10 text-state-success font-label-sm font-semibold"
-                                    id="ocr-filled-badge">
-                                    <span class="material-symbols-outlined text-sm font-bold">verified</span> Đã điền sẵn từ OCR, hãy kiểm tra lại
-                                </span>
-                                <span class="text-secondary text-body-sm hidden sm:inline">(Bạn có thể nhấp vào bất kỳ ô
-                                    nào để chỉnh sửa trực tiếp)</span>
-                            </div>
-                        </div>
-                        <!-- MỤC 2: KHỐI ĐỊNH DANH -->
+                        <!-- Section A: Thông tin định danh chính -->
                         <div class="flex flex-col gap-4">
-                            <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-2 h-5 rounded-full bg-primary-container"></span>
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Mục 2: Thông tin Định
-                                        danh Cá nhân</h3>
-                                </div>
-                                <span
-                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Theo
-                                    thẻ CCCD</span>
+                            <div class="flex items-center gap-2 pb-2">
+                                <span class="w-2 h-5 rounded-full bg-primary-container"></span>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">1. Thông tin Định danh Cá
+                                    nhân</h3>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <!-- Số CCCD -->
+                                <div class="flex flex-col gap-1.5 md:col-span-1">
+                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
+                                        for="cccd-number">
+                                        Số CCCD / Mã định danh <span class="text-error font-bold">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-label-lg text-label-lg tracking-wider rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm font-mono"
+                                            id="cccd-number" maxlength="12" placeholder="Nhập 12 chữ số" type="text"
+                                            value="001095012345" />
+                                        <span
+                                            class="absolute right-3 top-3 material-symbols-outlined text-state-success text-xl">verified_user</span>
+                                    </div>
+                                    <span class="font-body-sm text-body-sm text-secondary">Định dạng 12 ký tự số đã khớp
+                                        dữ liệu quốc gia</span>
+                                </div>
                                 <!-- Họ và tên -->
                                 <div class="flex flex-col gap-1.5 md:col-span-2">
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
@@ -193,42 +314,27 @@
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-label-lg text-label-lg font-bold uppercase rounded-lg focus:outline-none transition shadow-sm"
-                                            id="full-name" name="full-name" placeholder="VIẾT IN HOA CÓ DẤU" type="text">
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-label-lg text-label-lg font-bold uppercase rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                            id="full-name" placeholder="VIẾT IN HOA CÓ DẤU" type="text"
+                                            value="NGUYỄN VĂN AN" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">badge</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">badge</span>
                                     </div>
                                     <span class="font-body-sm text-body-sm text-secondary">Nhập chính xác đầy đủ họ tên
                                         như trên thẻ Căn cước</span>
-                                </div>
-                                <!-- Số CCCD (12 số) -->
-                                <div class="flex flex-col gap-1.5 md:col-span-1">
-                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                        for="cccd-number">
-                                        Số CCCD (12 số) <span class="text-error font-bold">*</span>
-                                    </label>
-                                    <div class="relative">
-                                        <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-label-lg text-label-lg tracking-wider rounded-lg focus:outline-none transition shadow-sm font-mono"
-                                            id="cccd-number" maxlength="12" name="cccd-number"
-                                            placeholder="Nhập 12 chữ số" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-state-success text-xl pointer-events-none">verified</span>
-                                    </div>
-                                    <span class="font-body-sm text-body-sm text-secondary">Gồm đúng 12 chữ số</span>
                                 </div>
                                 <!-- Ngày sinh -->
                                 <div class="flex flex-col gap-1.5">
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
                                         for="dob">
-                                        Ngày sinh <span class="text-error font-bold">*</span>
+                                        Ngày, tháng, năm sinh <span class="text-error font-bold">*</span>
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="dob" name="dob" placeholder="DD/MM/YYYY" type="text">
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                            id="dob" placeholder="DD/MM/YYYY" type="text" value="15/08/1995" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">calendar_today</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">calendar_today</span>
                                     </div>
                                 </div>
                                 <!-- Giới tính -->
@@ -236,18 +342,18 @@
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1">
                                         Giới tính <span class="text-error font-bold">*</span>
                                     </label>
-                                    <div class="grid grid-cols-2 gap-2 h-12" id="gender-container">
+                                    <div class="grid grid-cols-2 gap-2 h-12">
                                         <label
-                                            class="flex items-center justify-center gap-2 rounded-lg bg-surface-brand-tint border border-primary-container/30 text-primary-container font-label-md text-label-md cursor-pointer shadow-sm transition hover:bg-surface-brand-tint/80">
-                                            <input class="accent-primary w-4 h-4 cursor-pointer"
-                                                name="gender" type="radio" value="Nam">
-                                            <span class="">Nam</span>
+                                            class="flex items-center justify-center gap-2 rounded-lg bg-surface-brand-tint text-primary-container font-label-md text-label-md cursor-pointer shadow-sm">
+                                            <input checked="" class="accent-primary w-4 h-4" name="gender" type="radio"
+                                                value="nam" />
+                                            <span>Nam</span>
                                         </label>
                                         <label
-                                            class="flex items-center justify-center gap-2 rounded-lg bg-surface-subtle border border-border-subtle text-secondary hover:bg-surface-container font-label-md text-label-md cursor-pointer transition">
-                                            <input class="accent-primary w-4 h-4 cursor-pointer" name="gender"
-                                                type="radio" value="Nữ">
-                                            <span class="">Nữ</span>
+                                            class="flex items-center justify-center gap-2 rounded-lg bg-surface-subtle text-secondary hover:bg-surface-container font-label-md text-label-md cursor-pointer transition">
+                                            <input class="accent-primary w-4 h-4" name="gender" type="radio"
+                                                value="nu" />
+                                            <span>Nữ</span>
                                         </label>
                                     </div>
                                 </div>
@@ -259,26 +365,73 @@
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-label-md text-label-md rounded-lg focus:outline-none shadow-sm transition"
-                                            id="nationality" name="nationality" placeholder="Việt Nam" type="text"
-                                            value="Việt Nam">
+                                            class="w-full h-12 px-3.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg focus:outline-none shadow-sm cursor-not-allowed"
+                                            id="nationality" readonly="" type="text" value="Việt Nam" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">flag</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">flag</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- MỤC 3: KHỐI THẺ CCCD -->
+                        <!-- Section B: Quê quán & Nơi thường trú -->
                         <div class="flex flex-col gap-4">
-                            <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-2 h-5 rounded-full bg-primary-container"></span>
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Mục 3: Thông tin Thẻ
-                                        Căn Cước Công Dân</h3>
+                            <div class="flex items-center gap-2 pb-2">
+                                <span class="w-2 h-5 rounded-full bg-primary-container"></span>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">2. Địa chỉ &amp; Nơi Cư
+                                    trú</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <!-- Quê quán -->
+                                <div class="flex flex-col gap-1.5 md:col-span-3">
+                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
+                                        for="origin-place">
+                                        Quê quán (Nguyên quán) <span class="text-error font-bold">*</span>
+                                    </label>
+                                    <input
+                                        class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                        id="origin-place" placeholder="Xã/Phường, Quận/Huyện, Tỉnh/Thành phố"
+                                        type="text" value="Xã Hải Châu, Huyện Hải Hậu, Tỉnh Nam Định" />
                                 </div>
-                                <span
-                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Mặt
-                                    sau thẻ CCCD</span>
+                                <!-- Nơi thường trú -->
+                                <div class="flex flex-col gap-1.5 md:col-span-3">
+                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
+                                        for="permanent-address">
+                                        Nơi thường trú <span class="text-error font-bold">*</span>
+                                    </label>
+                                    <input
+                                        class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                        id="permanent-address" placeholder="Số nhà, đường phố, thôn xóm theo thẻ CCCD"
+                                        type="text"
+                                        value="Số 45 ngõ 120 Hoàng Hoa Thám, Phường Thụy Khuê, Quận Tây Hồ, Thành phố Hà Nội" />
+                                </div>
+                                <!-- Nơi ở hiện tại -->
+                                <div class="flex flex-col gap-1.5 md:col-span-3">
+                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                        <label class="font-label-md text-label-md text-on-surface"
+                                            for="current-address">
+                                            Nơi ở hiện tại / Địa chỉ nhận thông báo đất đai &amp; hộ kinh doanh
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input checked="" class="w-4 h-4 accent-primary rounded"
+                                                id="chk-same-address" type="checkbox" />
+                                            <span
+                                                class="font-label-sm text-label-sm text-primary-container font-medium">Giống
+                                                nơi thường trú</span>
+                                        </label>
+                                    </div>
+                                    <input
+                                        class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                        id="current-address" type="text"
+                                        value="Số 45 ngõ 120 Hoàng Hoa Thám, Phường Thụy Khuê, Quận Tây Hồ, Thành phố Hà Nội" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Section C: Chi tiết phát hành & Thông tin pháp lý thẻ -->
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 pb-2">
+                                <span class="w-2 h-5 rounded-full bg-primary-container"></span>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">3. Thông tin Giá trị Thẻ
+                                    &amp; Liên lạc</h3>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <!-- Ngày cấp -->
@@ -289,290 +442,131 @@
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="issue-date" name="issue-date" placeholder="DD/MM/YYYY" type="text">
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                            id="issue-date" placeholder="DD/MM/YYYY" type="text" value="20/09/2021" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">event_available</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">event_available</span>
+                                    </div>
+                                </div>
+                                <!-- Ngày hết hạn -->
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
+                                        for="expiry-date">
+                                        Thời hạn giá trị thẻ <span class="text-error font-bold">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                            id="expiry-date" placeholder="DD/MM/YYYY hoặc Không thời hạn" type="text"
+                                            value="15/08/2035" />
+                                        <span
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">event_busy</span>
                                     </div>
                                 </div>
                                 <!-- Nơi cấp -->
-                                <div class="flex flex-col gap-1.5 md:col-span-1">
+                                <div class="flex flex-col gap-1.5">
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
                                         for="issue-place">
                                         Nơi cấp <span class="text-error font-bold">*</span>
                                     </label>
-                                    <div class="relative">
-                                        <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none shadow-sm transition"
-                                            id="issue-place" name="issue-place"
-                                            placeholder="Cục Cảnh sát Quản lý hành chính về trật tự xã hội" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">account_balance</span>
-                                    </div>
+                                    <input
+                                        class="w-full h-12 px-3.5 bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg focus:outline-none shadow-sm cursor-not-allowed"
+                                        id="issue-place" readonly="" type="text" value="Cục Cảnh sát QLHC về TTXH" />
                                 </div>
-                                <!-- Hạn thẻ (Giá trị đến) -->
+                                <!-- Đặc điểm nhân dạng -->
                                 <div class="flex flex-col gap-1.5 md:col-span-1">
-                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                        for="expiry-date">
-                                        Hạn thẻ (Giá trị đến) <span class="text-error font-bold">*</span>
+                                    <label class="font-label-md text-label-md text-on-surface" for="id-feature">
+                                        Đặc điểm nhận dạng (Mặt sau CCCD)
                                     </label>
-                                    <div class="relative">
-                                        <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="expiry-date" name="expiry-date"
-                                            placeholder="DD/MM/YYYY hoặc Không thời hạn" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">event_busy</span>
-                                    </div>
+                                    <input
+                                        class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                        id="id-feature" placeholder="Theo thông tin trên thẻ" type="text"
+                                        value="Nốt ruồi cách 1cm dưới sau đuôi mắt trái" />
                                 </div>
-                            </div>
-                        </div>
-                        <!-- MỤC 4: KHỐI ĐỊA CHỈ -->
-                        <div class="flex flex-col gap-5">
-                            <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-2 h-5 rounded-full bg-primary-container"></span>
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Mục 4: Địa chỉ &amp;
-                                        Cư trú</h3>
-                                </div>
-                                <span
-                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Phân
-                                    rã hành chính 3 cấp</span>
-                            </div>
-                            <!-- Quê quán -->
-                            <div class="flex flex-col gap-1.5">
-                                <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                    for="origin-place">
-                                    Quê quán (Nguyên quán) <span class="text-error font-bold">*</span>
-                                </label>
-                                <input
-                                    class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                    id="origin-place" name="origin-place"
-                                    placeholder="Xã/Phường, Huyện/Quận, Tỉnh/Thành phố" type="text">
-                            </div>
-                            <!-- Nơi thường trú (Phân rã 3 trường) -->
-                            <div
-                                class="flex flex-col gap-2 p-4 rounded-xl bg-surface-subtle border border-border-subtle">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span
-                                        class="material-symbols-outlined text-primary-container text-lg">home_pin</span>
-                                    <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Nơi thường trú
-                                        (Theo thẻ CCCD) <span class="text-error font-bold">*</span></h4>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-street">Chi tiết địa chỉ</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-street" name="perm-street"
-                                            placeholder="Số nhà, đường phố hoặc quận/huyện" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-ward">Xã / Phường,
-                                            Quận / Huyện</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-ward" name="perm-ward" placeholder="Phường / Xã, Quận / Huyện" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary"
-                                            for="perm-province">Tỉnh / Thành phố</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-province" name="perm-province"
-                                            placeholder="Tỉnh / Thành phố trực thuộc" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Nơi ở hiện tại (Phân rã 3 trường + Checkbox đồng bộ) -->
-                            <div
-                                class="flex flex-col gap-2 p-4 rounded-xl bg-surface-subtle border border-border-subtle">
-                                <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <span
-                                            class="material-symbols-outlined text-primary-container text-lg">location_on</span>
-                                        <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Nơi ở hiện tại
-                                            / Địa chỉ nhận thông báo <span class="text-error font-bold">*</span></h4>
-                                    </div>
-                                    <label
-                                        class="flex items-center gap-2 cursor-pointer bg-surface-panel px-3 py-1.5 rounded-lg border border-border-subtle hover:border-primary-container transition">
-                                        <input checked="" class="w-4 h-4 accent-primary rounded cursor-pointer"
-                                            id="chk-same-address" onchange="handleSameAddressToggle(this)"
-                                            type="checkbox">
-                                        <span class="font-label-sm text-label-sm text-primary font-bold">Giống nơi
-                                            thường trú</span>
-                                    </label>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="current-address-fields">
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="curr-street">Số
-                                            nhà / Tên đường</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="curr-street" name="curr-street"
-                                            placeholder="Số nhà, ngõ/ngách, đường phố" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="curr-ward">Xã /
-                                            Phường / Thị trấn</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="curr-ward" name="curr-ward" placeholder="Phường / Xã" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary"
-                                            for="curr-province">Tỉnh / Thành phố</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="curr-province" name="curr-province"
-                                            placeholder="Tỉnh / Thành phố trực thuộc" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- MỤC 5: KHỐI NHẬP TAY & THÔNG TIN BỔ SUNG -->
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-2 h-5 rounded-full bg-primary-container"></span>
-                                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Mục 5: Thông tin Bổ
-                                        sung &amp; Liên lạc (Người dùng nhập)</h3>
-                                </div>
-                                <span
-                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Nhập
-                                    tay &amp; Xác thực</span>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                                <!-- Số điện thoại (Nhập tay) -->
-                                <div class="flex flex-col gap-1.5">
+                                <!-- Số điện thoại -->
+                                <div class="flex flex-col gap-1.5 md:col-span-1">
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
                                         for="phone-number">
                                         Số điện thoại liên hệ <span class="text-error font-bold">*</span>
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-label-lg text-label-lg rounded-lg focus:outline-none transition shadow-sm font-mono"
-                                            id="phone-number" name="phone-number" placeholder="09xx xxx xxx" type="tel">
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-label-lg text-label-lg rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm font-mono"
+                                            id="phone-number" placeholder="09xx xxx xxx" type="tel"
+                                            value="0912 345 678" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">phone_iphone</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">phone_iphone</span>
                                     </div>
-                                    <span class="font-body-sm text-body-sm text-secondary">Dùng nhận OTP xác thực hồ
-                                        sơ</span>
+                                    <span class="font-body-sm text-body-sm text-secondary">Số thuê bao chính chủ dùng
+                                        nhận OTP hồ sơ</span>
                                 </div>
-                                <!-- Email (Chỉ xem, không sửa - readonly kèm lock icon) -->
-                                <div class="flex flex-col gap-1.5">
-                                    <div class="flex items-center justify-between">
-                                        <label
-                                            class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                            for="email-address">
-                                            Email cá nhân <span class="text-error font-bold">*</span>
-                                        </label>
-                                        <span
-                                            class="inline-flex items-center gap-0.5 text-xs text-secondary font-medium bg-surface-container px-1.5 py-0.5 rounded">
-                                            <span class="material-symbols-outlined text-xs">lock</span> Chỉ xem
-                                        </span>
-                                    </div>
-                                    <div class="relative">
-                                        <input
-                                            class="w-full h-12 px-3.5 bg-surface-container-low border border-border-subtle text-secondary font-body-md rounded-lg focus:outline-none cursor-not-allowed select-none shadow-sm"
-                                            id="email-address" name="email-address" readonly="" type="email">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">lock</span>
-                                    </div>
-                                    <span class="font-body-sm text-body-sm text-secondary">Email tài khoản đã liên kết
-                                        (không được sửa)</span>
-                                </div>
-                                <!-- Dân tộc (Nhập tay) -->
-                                <div class="flex flex-col gap-1.5">
+                                <!-- Email liên hệ -->
+                                <div class="flex flex-col gap-1.5 md:col-span-1">
                                     <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                        for="ethnicity">
-                                        Dân tộc <span class="text-error font-bold">*</span>
+                                        for="email-address">
+                                        Email nhận kết quả hồ sơ <span class="text-error font-bold">*</span>
                                     </label>
                                     <div class="relative">
                                         <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="ethnicity" name="ethnicity" placeholder="VD: Kinh, Tày, Thái, Mường..."
-                                            type="text">
+                                            class="w-full h-12 px-3.5 bg-surface-subtle text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:bg-surface-panel transition shadow-sm"
+                                            id="email-address" placeholder="email@domain.vn" type="email"
+                                            value="nguyenvanan.hn@gmail.com" />
                                         <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">diversity_3</span>
+                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl">mail</span>
                                     </div>
-                                    <span class="font-body-sm text-body-sm text-secondary">Nhập theo giấy khai sinh /
-                                        CCCD</span>
-                                </div>
-                                <!-- Mã số thuế cá nhân (nếu có - Nhập tay) -->
-                                <div class="flex flex-col gap-1.5">
-                                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                        for="tax-id">
-                                        Mã số thuế (nếu có)
-                                    </label>
-                                    <div class="relative">
-                                        <input
-                                            class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md font-mono rounded-lg focus:outline-none transition shadow-sm"
-                                            id="tax-id" maxlength="13" name="tax-id" placeholder="10 hoặc 13 chữ số MST"
-                                            type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">receipt_long</span>
-                                    </div>
-                                    <span class="font-body-sm text-body-sm text-secondary">Mã số thuế thu nhập cá
-                                        nhân</span>
+                                    <span class="font-body-sm text-body-sm text-secondary">Nhận thông báo giải quyết
+                                        hành chính công</span>
                                 </div>
                             </div>
                         </div>
-                        <!-- MỤC 6: KHỐI XÁC NHẬN & LƯU HỒ SƠ -->
-                        <div class="rounded-xl p-5 bg-surface-subtle flex flex-col gap-4 border border-border-subtle">
-                            <div class="flex flex-col gap-3">
-                                <!-- Checkbox 1 -->
-                                <label class="flex items-start gap-3 cursor-pointer group">
-                                    <input class="mt-1 w-5 h-5 accent-primary rounded cursor-pointer"
-                                        id="legal-agreement-1" type="checkbox">
-                                    <span
-                                        class="font-label-md text-label-md text-on-surface leading-snug group-hover:text-primary transition">
-                                        Tôi xin cam đoan các thông tin kê khai trên là hoàn toàn đúng sự thật.
-                                    </span>
-                                </label>
-                                <!-- Checkbox 2 -->
-                                <label class="flex items-start gap-3 cursor-pointer group">
-                                    <input class="mt-1 w-5 h-5 accent-primary rounded cursor-pointer"
-                                        id="legal-agreement-2" type="checkbox">
-                                    <span
-                                        class="font-label-md text-label-md text-on-surface leading-snug group-hover:text-primary transition">
-                                        Tôi đồng ý cho hệ thống lưu trữ và xử lý thông tin cá nhân theo quy định.
-                                    </span>
-                                </label>
-                            </div>
-                            <div
-                                class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-panel shadow-sm border border-border-subtle">
+                        <!-- Section D: Cam kết pháp lý & Bảo mật NĐ 13/2023 -->
+                        <div class="rounded-xl p-5 bg-surface-subtle flex flex-col gap-4">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input checked="" class="mt-1 w-5 h-5 accent-primary rounded" id="legal-agreement"
+                                    type="checkbox" />
+                                <span class="font-label-md text-label-md text-on-surface leading-snug">
+                                    Tôi xin cam đoan các thông tin kê khai trên là hoàn toàn chính xác, trung thực và
+                                    thống nhất với Thẻ Căn cước công dân gắn chip do cơ quan Công an có thẩm quyền cấp.
+                                    Tôi xin chịu hoàn toàn trách nhiệm trước pháp luật về tính pháp lý của thông tin đã
+                                    cung cấp.
+                                </span>
+                            </label>
+                            <div class="flex items-start gap-3 p-3.5 rounded-lg bg-surface-panel shadow-sm">
                                 <span
-                                    class="material-symbols-outlined text-primary-container text-2xl shrink-0">shield_locked</span>
-                                <div class="flex flex-col gap-0.5">
-                                    <span class="font-label-md text-label-md font-semibold text-on-surface">Bảo mật
-                                        thông tin công dân cấp độ 3</span>
+                                    class="material-symbols-outlined text-primary-container text-2xl shrink-0">shield</span>
+                                <div class="flex flex-col gap-1">
+                                    <span class="font-label-md text-label-md font-semibold text-on-surface">Cam kết bảo
+                                        vệ dữ liệu cá nhân theo Nghị định số 13/2023/NĐ-CP</span>
                                     <p class="font-body-sm text-body-sm text-secondary">
-                                        Dữ liệu được mã hóa đầu cuối tuân thủ Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu
-                                        cá nhân.
+                                        Toàn bộ dữ liệu sinh trắc học và căn cước công dân được mã hóa theo tiêu chuẩn
+                                        an toàn thông tin cấp độ 3 và chỉ phục vụ cho quy trình xác thực quyền sử dụng
+                                        đất, đăng ký hộ kinh doanh cá thể trên Cổng dịch vụ công trực tuyến.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <!-- Action Bar: Quay lại & Nút Lưu hồ sơ nổi bật màu đỏ đậm -->
-                        <div
-                            class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border-subtle">
-                            <button
-                                class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-surface-subtle hover:bg-surface-container text-secondary hover:text-on-surface font-label-lg text-label-lg transition flex items-center justify-center gap-2 border border-border-subtle"
-                                onclick="window.history.back()" type="button">
-                                <span class="material-symbols-outlined text-lg">arrow_back</span>
-                                <span class="">Quay lại</span>
-                            </button>
+                        <!-- Section E: Actions / Stepper Nav -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                             <div class="flex items-center gap-3 w-full sm:w-auto">
-
                                 <button
-                                    class="w-full sm:w-auto px-9 py-3.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5 transform active:scale-95 duration-200"
-                                    id="btn-save-record" type="submit">
-
-                                    <span class="">Lưu hồ sơ</span>
-
+                                    class="w-full sm:w-auto px-5 py-3 rounded-lg bg-surface-subtle hover:bg-surface-container text-secondary hover:text-on-surface font-label-lg text-label-lg transition flex items-center justify-center gap-2"
+                                    type="button">
+                                    <span class="material-symbols-outlined text-lg">arrow_back</span>
+                                    <span>Quay lại Bước 1</span>
+                                </button>
+                                <button
+                                    class="w-full sm:w-auto px-5 py-3 rounded-lg bg-surface-subtle hover:bg-surface-container text-on-surface font-label-lg text-label-lg transition flex items-center justify-center gap-2"
+                                    id="btn-save-draft" type="button">
+                                    <span class="material-symbols-outlined text-lg">save</span>
+                                    <span>Lưu hồ sơ nháp</span>
                                 </button>
                             </div>
+                            <button
+                                class="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2 transform active:scale-95"
+                                id="btn-submit-step2" type="submit">
+                                <span>Lưu và Tiếp tục xác thực VNeID</span>
+                                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -581,362 +575,57 @@
                     class="flex flex-col sm:flex-row items-center justify-between text-secondary font-body-sm text-body-sm px-2 gap-2">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary-container text-base">security</span>
-                        <span class="">Hệ thống bảo vệ bởi Trung tâm Chứng thực Chữ ký số Quốc gia &amp; C06</span>
+                        <span>Hệ thống bảo vệ bởi Trung tâm Chứng thực Chữ ký số Quốc gia &amp; C06</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <span class="">Tổng đài hỗ trợ pháp lý: <strong>1900 1234</strong></span>
-                        <span class="">Phiên bản v2.4.1</span>
-                    </div>
-                </div>
-                <!-- Toast Thông báo trạng thái -->
-                <div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl bg-inverse-surface text-inverse-on-surface shadow-xl max-w-md"
-                    id="toast-notification">
-                    <span class="material-symbols-outlined text-state-success text-2xl"
-                        id="toast-icon">check_circle</span>
-                    <div class="flex flex-col">
-                        <span class="font-label-md text-label-md font-bold" id="toast-title">Thông báo</span>
-                        <span class="font-body-sm text-body-sm text-inverse-on-surface/80" id="toast-message">Thao tác
-                            thành công.</span>
+                        <span>Tổng đài hỗ trợ pháp lý: <strong>1900 6868</strong></span>
+                        <span>Phiên bản v2.4.1</span>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="module">
-            import {
-                fetchMyCitizenProfile,
-                protectPage,
-                readIdentityCardOcr,
-                saveIdentityProfileFromOcr,
-                saveMyCitizenProfile
-            } from '/auth-api.js';
-
-            const form = document.getElementById('cccd-form');
-            const saveButton = document.getElementById('btn-save-record');
-            const sameAddress = document.getElementById('chk-same-address');
-            const currentFields = document.getElementById('current-address-fields');
-            const cameForApplication = new URLSearchParams(location.search).has('required');
-            const field = (id) => document.getElementById(id);
-            const text = (id) => field(id).value.trim();
-
-            // DD/MM/YYYY <-> YYYY-MM-DD (định dạng ngày của Backend)
-            const toIsoDate = (value) => {
-                const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-                return match ? `${match[3]}-${match[2].padStart(2, '0')}-${match[1].padStart(2, '0')}` : null;
-            };
-            const fromIsoDate = (value) => (value ? value.split('-').reverse().join('/') : '');
-
-            const showToast = (title, message, isError = false) => {
-                const toast = field('toast-notification');
-                field('toast-title').textContent = title;
-                field('toast-message').textContent = message;
-                field('toast-icon').textContent = isError ? 'error' : 'check_circle';
-                field('toast-icon').classList.toggle('text-state-success', !isError);
-                field('toast-icon').classList.toggle('text-state-error', isError);
-                toast.classList.remove('translate-y-24', 'opacity-0');
-                clearTimeout(showToast.timer);
-                showToast.timer = setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 4000);
-            };
-
-            window.handleSameAddressToggle = (checkbox) => {
-                currentFields.classList.toggle('hidden', checkbox.checked);
-            };
-
-            // ===== OCR CCCD: chọn 2 ảnh → Document service đọc → điền sẵn để người dùng kiểm tra =====
-            const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
-            const ocrButton = field('btn-read-ocr');
-            const ocrLabel = field('btn-read-ocr-label');
-            const ocrStatus = field('ocr-status');
-            const images = { front: null, back: null };
-            let ocrSessionId = null; // phiên OCR đã dùng để điền form, gửi kèm khi lưu
-            let ocrHasStarted = false;
-
-            const setOcrStatus = (message, isError = false) => {
-                ocrStatus.textContent = message;
-                ocrStatus.classList.toggle('text-state-error', isError);
-                ocrStatus.classList.toggle('text-secondary', !isError);
-            };
-
-            for (const side of ['front', 'back']) {
-                field(`file-${side}`).addEventListener('change', (event) => {
-                    ocrSessionId = null;
-                    field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
-                    const file = event.target.files[0];
-                    const preview = field(`preview-${side}`);
-                    if (preview.src) URL.revokeObjectURL(preview.src);
-                    images[side] = null;
-                    preview.removeAttribute('src');
-                    preview.classList.add('hidden');
-                    field(`placeholder-${side}`).classList.remove('hidden');
-                    field(`info-${side}`).textContent = 'Chưa chọn ảnh';
-
-                    if (file) {
-                        if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                            setOcrStatus('Chỉ nhận ảnh JPEG hoặc PNG.', true);
-                        } else if (file.size > MAX_IMAGE_BYTES) {
-                            setOcrStatus('Mỗi ảnh tối đa 4 MB. Hãy chọn ảnh nhỏ hơn.', true);
-                        } else {
-                            images[side] = file;
-                            preview.src = URL.createObjectURL(file);
-                            preview.classList.remove('hidden');
-                            field(`placeholder-${side}`).classList.add('hidden');
-                            field(`info-${side}`).textContent =
-                                `${file.name} · ${(file.size / 1024 / 1024).toFixed(1)} MB`;
-                            setOcrStatus(images.front && images.back
-                                ? 'Đã đủ 2 mặt. Bấm "Đọc thông tin bằng OCR" để điền sẵn các mục bên dưới.'
-                                : 'Hãy chọn thêm ảnh mặt còn lại.');
-                        }
-                    }
-                    if (!images[side]) event.target.value = '';
-                    ocrButton.disabled = !(images.front && images.back);
-                });
-            }
-
-            // First comma: detail boundary; last comma: province boundary.
-            const fillAddress = (address) => {
-                const parts = address.split(',').map((part) => part.trim()).filter(Boolean);
-                const street = parts[0] || '';
-                const province = parts.length > 1 ? parts.at(-1) : '';
-                const ward = parts.slice(1, -1).join(', ');
-                field('perm-street').value = street;
-                field('perm-ward').value = ward;
-                field('perm-province').value = province;
-            };
-
-            const OCR_FIELD_LABELS = {
-                full_name: 'Họ và tên',
-                identity_number: 'Số CCCD',
-                date_of_birth: 'Ngày sinh',
-                issue_date: 'Ngày cấp',
-                issue_place: 'Nơi cấp',
-                permanent_address: 'Nơi thường trú',
-                sex: 'Giới tính',
-                nationality: 'Quốc tịch',
-                expiry_date: 'Hạn thẻ',
-                place_of_origin: 'Quê quán'
-            };
-
-            const applyOcrFields = (fields, additional = {}) => {
-                const address = fields.permanent_address || additional.residence_address;
-                const origin = additional.place_of_origin || additional.registered_birth_place;
-                if (fields.full_name) field('full-name').value = fields.full_name.normalize('NFC');
-                if (fields.identity_number) field('cccd-number').value = fields.identity_number;
-                if (fields.date_of_birth) field('dob').value = fromIsoDate(fields.date_of_birth);
-                if (fields.issue_date) field('issue-date').value = fromIsoDate(fields.issue_date);
-                if (fields.issue_place) field('issue-place').value = fields.issue_place;
-                if (address) fillAddress(address);
-                const gender = { male: 'Nam', female: 'Nữ' }[additional.sex];
-                if (gender) {
-                    form.querySelectorAll('input[name="gender"]').forEach((radio) => {
-                        radio.checked = radio.value === gender;
-                    });
-                }
-                if (additional.nationality) field('nationality').value = additional.nationality;
-                if (additional.expiry_date) field('expiry-date').value = fromIsoDate(additional.expiry_date);
-                if (origin) field('origin-place').value = origin;
-                const available = { ...fields, ...additional, sex: gender, permanent_address: address, place_of_origin: origin };
-                return Object.keys(OCR_FIELD_LABELS).filter((key) => !available[key]).map((key) => OCR_FIELD_LABELS[key]);
-            };
-
-            ocrButton.addEventListener('click', async () => {
-                ocrHasStarted = true;
-                ocrSessionId = null;
-                field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
-                ocrButton.disabled = true;
-                ocrButton.setAttribute('aria-busy', 'true');
-                ocrLabel.textContent = 'Đang đọc...';
-                setOcrStatus('Đang đọc ảnh CCCD, có thể mất đến 1 phút...');
-                try {
-                    const result = await readIdentityCardOcr(images.front, images.back);
-                    ocrSessionId = result.session_id;
-                    const missing = applyOcrFields(result.fields || {}, result.additional_fields || {});
-                    field('ocr-filled-badge').classList.replace('hidden', 'inline-flex');
-                    setOcrStatus(missing.length
-                        ? `Đã điền sẵn. Chưa đọc chắc chắn: ${missing.join(', ')}. Hãy nhập tay các mục này và kiểm tra lại toàn bộ trước khi lưu.`
-                        : 'Đã điền sẵn từ OCR. Hãy kiểm tra lại toàn bộ thông tin trước khi lưu.');
-                    field('full-name').focus();
-                } catch (error) {
-                    setOcrStatus(error.code === 'OCR_UNREADABLE'
-                        ? 'Không đọc được ảnh. Hãy chụp lại rõ nét, đúng chiều, đủ 4 góc thẻ rồi thử lại, hoặc tự nhập tay.'
-                        : error.backendMessage || 'Không đọc được thông tin lúc này. Bạn có thể thử lại hoặc tự nhập tay.', true);
-                } finally {
-                    ocrButton.disabled = !(images.front && images.back);
-                    ocrButton.setAttribute('aria-busy', 'false');
-                    ocrLabel.textContent = 'Đọc thông tin bằng OCR';
+        <script>
+            // Simple Micro-interactions for interactive feedback
+            document.getElementById('chk-same-address')?.addEventListener('change', function (e) {
+                const curAddr = document.getElementById('current-address');
+                const permAddr = document.getElementById('permanent-address');
+                if (e.target.checked) {
+                    curAddr.value = permAddr.value;
+                    curAddr.classList.add('bg-surface-subtle');
+                } else {
+                    curAddr.value = '';
+                    curAddr.focus();
                 }
             });
 
-            const fillForm = (profile, user) => {
-                field('email-address').value = user.email || '';
-                if (!profile) {
-                    field('full-name').value = user.full_name || '';
-                    field('phone-number').value = user.phone || '';
-                    return;
-                }
-                field('full-name').value = profile.full_name;
-                field('cccd-number').value = profile.id_number;
-                field('dob').value = fromIsoDate(profile.date_of_birth);
-                form.querySelectorAll('input[name="gender"]').forEach((radio) => {
-                    radio.checked = radio.value === profile.gender;
-                });
-                field('nationality').value = profile.nationality;
-                field('issue-date').value = fromIsoDate(profile.issue_date);
-                field('issue-place').value = profile.issue_place;
-                field('expiry-date').value = profile.expiry_date ? fromIsoDate(profile.expiry_date) : 'Không thời hạn';
-                field('origin-place').value = profile.place_of_origin || '';
-                field('perm-street').value = profile.permanent_address.detail;
-                field('perm-ward').value = profile.permanent_address.ward;
-                field('perm-province').value = profile.permanent_address.province;
-                sameAddress.checked = profile.current_same_as_permanent;
-                field('curr-street').value = profile.current_address?.detail || '';
-                field('curr-ward').value = profile.current_address?.ward || '';
-                field('curr-province').value = profile.current_address?.province || '';
-                field('phone-number').value = profile.phone || '';
-                field('ethnicity').value = profile.ethnicity || '';
-                field('tax-id').value = profile.tax_code || '';
-            };
-
-            const REQUIRED_FIELDS = {
-                'full-name': 'Họ và tên',
-                'cccd-number': 'Số CCCD',
-                dob: 'Ngày sinh',
-                nationality: 'Quốc tịch',
-                'issue-date': 'Ngày cấp',
-                'issue-place': 'Nơi cấp',
-                'perm-street': 'Số nhà / Tên đường thường trú',
-                'perm-ward': 'Phường / Xã thường trú',
-                'perm-province': 'Tỉnh / Thành phố thường trú',
-                'phone-number': 'Số điện thoại'
-            };
-            const CURRENT_ADDRESS_FIELDS = {
-                'curr-street': 'Số nhà / Tên đường nơi ở hiện tại',
-                'curr-ward': 'Phường / Xã nơi ở hiện tại',
-                'curr-province': 'Tỉnh / Thành phố nơi ở hiện tại'
-            };
-
-            // Đọc form thành dữ liệu gửi Backend. Thiếu hoặc sai thì trả về thông báo lỗi.
-            const readForm = () => {
-                const required = sameAddress.checked ? REQUIRED_FIELDS : { ...REQUIRED_FIELDS, ...CURRENT_ADDRESS_FIELDS };
-                const missing = Object.entries(required).find(([id]) => !text(id));
-                if (missing) return { error: `Vui lòng nhập ${missing[1]}.`, focus: missing[0] };
-                if (!/^\d{12}$/.test(text('cccd-number'))) {
-                    return { error: 'Số CCCD phải gồm đúng 12 chữ số.', focus: 'cccd-number' };
-                }
-
-                const gender = form.querySelector('input[name="gender"]:checked')?.value;
-                if (!gender) return { error: 'Vui lòng chọn giới tính.' };
-
-                const dateOfBirth = toIsoDate(text('dob'));
-                if (!dateOfBirth) return { error: 'Ngày sinh phải theo dạng DD/MM/YYYY.', focus: 'dob' };
-                const issueDate = toIsoDate(text('issue-date'));
-                if (!issueDate) return { error: 'Ngày cấp phải theo dạng DD/MM/YYYY.', focus: 'issue-date' };
-                const expiryText = text('expiry-date');
-                const noExpiry = !expiryText || /không thời hạn/i.test(expiryText);
-                const expiryDate = noExpiry ? null : toIsoDate(expiryText);
-                if (!noExpiry && !expiryDate) {
-                    return { error: 'Có giá trị đến phải theo dạng DD/MM/YYYY hoặc "Không thời hạn".', focus: 'expiry-date' };
-                }
-
-                if (!field('legal-agreement-1').checked || !field('legal-agreement-2').checked) {
-                    return { error: 'Vui lòng tick cam đoan thông tin đúng sự thật và đồng ý lưu thông tin cá nhân.' };
-                }
-
-                const address = (prefix) => ({
-                    detail: text(`${prefix}-street`),
-                    ward: text(`${prefix}-ward`),
-                    province: text(`${prefix}-province`)
-                });
-                return {
-                    data: {
-                        id_number: text('cccd-number'),
-                        full_name: text('full-name'),
-                        date_of_birth: dateOfBirth,
-                        gender,
-                        nationality: text('nationality'),
-                        issue_date: issueDate,
-                        issue_place: text('issue-place'),
-                        expiry_date: expiryDate,
-                        place_of_origin: text('origin-place') || null,
-                        permanent_address: address('perm'),
-                        current_same_as_permanent: sameAddress.checked,
-                        current_address: sameAddress.checked ? null : address('curr'),
-                        phone: text('phone-number'),
-                        ethnicity: text('ethnicity') || null,
-                        tax_code: text('tax-id') || null,
-                        source: 'manual',
-                        declared: true,
-                        consented: true
-                    }
-                };
-            };
-
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const { data, error, focus } = readForm();
-                if (error) {
-                    showToast('Chưa thể lưu hồ sơ', error, true);
-                    if (focus) field(focus).focus();
-                    return;
-                }
-                saveButton.disabled = true;
-                saveButton.setAttribute('aria-busy', 'true');
-                try {
-                    await saveMyCitizenProfile(data);
-                } catch (saveError) {
-                    showToast('Chưa thể lưu hồ sơ', saveError.backendMessage || 'Vui lòng thử lại sau.', true);
-                    saveButton.disabled = false;
-                    saveButton.setAttribute('aria-busy', 'false');
-                    return;
-                }
-
-                // Có dùng OCR → lưu thêm 6 trường CCCD đã kiểm tra để hợp đồng dùng lại.
-                // Lỗi ở bước này không chặn tạo hồ sơ vì thông tin cá nhân đã lưu xong.
-                let identityWarning = '';
-                if (ocrSessionId) {
-                    const { permanent_address: address } = data;
-                    try {
-                        await saveIdentityProfileFromOcr(ocrSessionId, {
-                            full_name: data.full_name,
-                            date_of_birth: data.date_of_birth,
-                            identity_number: data.id_number,
-                            issue_date: data.issue_date,
-                            issue_place: data.issue_place,
-                            permanent_address: [address.detail, address.ward, address.province].join(', ')
-                        });
-                    } catch (identityError) {
-                        identityWarning = `Chưa lưu được bản CCCD dùng cho hợp đồng: ${identityError.backendMessage || 'lỗi máy chủ'}.`;
-                    }
-                }
-
-                if (identityWarning) showToast('Đã lưu thông tin cá nhân', identityWarning, true);
-                else if (!cameForApplication) {
-                    showToast('Đã lưu hồ sơ', 'Thông tin cá nhân đã được cập nhật. Bạn có thể tạo hồ sơ ngay bây giờ.');
-                }
-                if (cameForApplication) {
-                    // Đủ thông tin rồi → quay lại trang Tạo hồ sơ (chờ chút nếu có cảnh báo để kịp đọc)
-                    setTimeout(() => location.assign('/applicationSubmission'), identityWarning ? 3000 : 0);
-                    return;
-                }
-                saveButton.disabled = false;
-                saveButton.setAttribute('aria-busy', 'false');
+            document.getElementById('btn-scan-qr')?.addEventListener('click', function () {
+                alert('Tính năng quét QR: Đang mở máy quét hình ảnh camera hoặc tải ảnh QR từ thẻ CCCD gắn chip...');
             });
 
-            const user = await protectPage(['citizen', 'lawyer']);
-            const notice = field('profile-required-notice');
-            notice.classList.toggle('hidden', !cameForApplication);
-            notice.classList.toggle('flex', cameForApplication);
-            const initialProfile = await fetchMyCitizenProfile().catch(() => null);
-            if (!ocrHasStarted) {
-                fillForm(initialProfile, user);
-            } else {
-                // A slow profile request must not overwrite fresh OCR results.
-                field('email-address').value = user.email || '';
-                if (!field('phone-number').value) field('phone-number').value = user.phone || '';
-            }
-            window.handleSameAddressToggle(sameAddress);
+            document.getElementById('btn-scan-ocr')?.addEventListener('click', function () {
+                alert('Hệ thống OCR nhận diện tài liệu: Đang trích xuất lại thông tin từ ảnh 2 mặt CCCD...');
+            });
+
+            document.getElementById('btn-save-draft')?.addEventListener('click', function () {
+                alert('Đã lưu dữ liệu nháp của Bước 2 vào phiên làm việc bảo mật!');
+            });
+
+            document.getElementById('cccd-form')?.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const legalAgree = document.getElementById('legal-agreement');
+                if (!legalAgree.checked) {
+                    alert('Vui lòng tích xác nhận cam kết tính chính xác và pháp lý của thông tin CCCD trước khi chuyển bước xác thực VNeID.');
+                    return;
+                }
+                alert('Thông tin CCCD hợp lệ! Đang chuyển hướng sang Bước 3: Xác thực khuôn mặt sinh trắc học và liên kết tài khoản VNeID cấp độ 2.');
+            });
         </script>
     </main>
-
-
+<script type="module">
+  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
+  import { protectPage } from '/auth-api.js';
+  protectPage();
+</script>
 </body>
 
 </html>
