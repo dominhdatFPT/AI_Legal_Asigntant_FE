@@ -12,34 +12,30 @@ export const getApiBaseUrl = () => {
   return configPromise;
 };
 
-// body: object → gửi JSON; FormData → gửi multipart (trình duyệt tự đặt Content-Type).
-const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
+const request = async (path, { method = 'GET', body } = {}) => {
   const baseUrl = await getApiBaseUrl();
-  const isJson = body !== undefined && !(body instanceof FormData);
   try {
     return await fetch(`${baseUrl}${path}`, {
       method,
       credentials: 'include',
-      headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
-      body: isJson ? JSON.stringify(body) : body
+      headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body)
     });
   } catch {
     throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
   }
 };
 
-const apiError = (response, payload) => {
-  const error = payload?.error || {};
-  return Object.assign(new Error(error.message || 'backend-error'), {
-    code: error.code || `backend/http-${response.status}`,
-    status: response.status,
-    backendMessage: error.message
-  });
-};
-
 const readData = async (response) => {
   const payload = await response.json().catch(() => null);
-  if (!response.ok || !payload?.data) throw apiError(response, payload);
+  if (!response.ok || !payload?.data) {
+    const error = payload?.error || {};
+    throw Object.assign(new Error(error.message || 'backend-error'), {
+      code: error.code || `backend/http-${response.status}`,
+      status: response.status,
+      backendMessage: error.message
+    });
+  }
   return payload.data;
 };
 
@@ -75,52 +71,6 @@ export const fetchCurrentUser = async () => {
   const response = await authRequest('/api/users/me');
   if (!response.ok) return null;
   return readData(response);
-};
-
-// Hồ sơ cá nhân theo CCCD của user đang đăng nhập. Chưa khai → null.
-export const fetchMyCitizenProfile = async () => {
-  const response = await authRequest('/api/users/me/citizen-profile');
-  if (!response.ok) return readData(response); // ném lỗi kèm mã từ Backend
-  const payload = await response.json().catch(() => null);
-  return payload?.data ?? null;
-};
-
-export const saveMyCitizenProfile = async (profile) =>
-  readData(await authRequest('/api/users/me/citizen-profile', { method: 'PUT', body: profile }));
-
-// OCR CCCD hai mặt (Document service). Trả về { session_id, fields, warnings }.
-// fields: full_name, identity_number, date_of_birth, issue_date, issue_place, permanent_address (đọc không chắc → null).
-export const readIdentityCardOcr = async (front, back) => {
-  const form = new FormData();
-  form.append('front', front);
-  form.append('back', back);
-  return readData(await authRequest('/api/documents/identity-ocr', {
-    method: 'POST',
-    body: form,
-    headers: { 'Idempotency-Key': crypto.randomUUID() }
-  }));
-};
-
-// Lưu 6 trường CCCD người dùng đã kiểm tra vào Document (nguồn: phiên OCR) để hợp đồng dùng lại.
-export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
-  const current = await authRequest('/api/documents/identity-profile/me');
-  const payload = await current.json().catch(() => null);
-  if (!current.ok && current.status !== 404) throw apiError(current, payload);
-  const revision = current.ok ? payload?.data?.revision : payload?.error?.current_revision;
-  return readData(await authRequest('/api/documents/identity-profile/me', {
-    method: 'PUT',
-    body: { source_session_id: sessionId, expected_revision: revision ?? 0, fields }
-  }));
-};
-
-export const PROFILE_PATH = '/detail-information';
-
-// Muốn tạo hồ sơ phải cập nhật thông tin cá nhân trước. Chưa có → chuyển sang trang cập nhật.
-const requireCitizenProfile = async () => {
-  const profile = await fetchMyCitizenProfile().catch(() => null);
-  if (profile) return profile;
-  window.location.replace(`${PROFILE_PATH}?required=1`);
-  return new Promise(() => {}); // dừng code phía sau trong lúc chuyển trang
 };
 
 // Chặn trang cần đăng nhập. Chưa đăng nhập → /login. Sai vai trò → trang chủ đúng vai trò.
@@ -172,10 +122,8 @@ export const displayName = (user) => user?.full_name || user?.username || user?.
 // Gắn trang: ẩn nội dung tới khi xác thực xong, điền thông tin user, gắn nút đăng xuất.
 //   <element data-user-field="name|email|role">   → thay bằng dữ liệu thật
 //   <element data-logout>                         → bấm để đăng xuất
-// requireProfile: trang tạo hồ sơ → bắt buộc đã cập nhật thông tin cá nhân.
-export const protectPage = async (allowedRoles, { requireProfile = false } = {}) => {
+export const protectPage = async (allowedRoles) => {
   const user = await requireLogin(allowedRoles);
-  if (requireProfile) await requireCitizenProfile();
   const values = { name: displayName(user), email: user.email || '', role: roleLabel(user.role) };
   document.querySelectorAll('[data-user-field]').forEach((element) => {
     const value = values[element.dataset.userField];

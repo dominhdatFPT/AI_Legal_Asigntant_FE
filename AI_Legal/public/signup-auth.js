@@ -73,15 +73,14 @@ form.addEventListener('submit', async (event) => {
   try {
     const services = await getFirebaseServices();
     auth = services.auth;
-    const email = document.getElementById('email').value.trim();
     const credential = await createUserWithEmailAndPassword(
       auth,
-      email,
+      document.getElementById('email').value.trim(),
       passwordInput.value
     );
     user = credential.user;
 
-    const username = email.split('@')[0];
+    const username = document.getElementById('username').value.trim();
     const phone = document.getElementById('phone').value.trim();
     await updateProfile(user, { displayName: username });
 
