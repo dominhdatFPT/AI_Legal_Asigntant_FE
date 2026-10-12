@@ -42,6 +42,14 @@
         ::-webkit-scrollbar {
             display: none;
         }
+        /* Vietnamese uppercase vowels can stack two marks above a letter.
+           Do not clip the tilde on Ễ to a short label-font line box. */
+        #full-name {
+            font-family: Arial, "Segoe UI", sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 32px;
+        }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
