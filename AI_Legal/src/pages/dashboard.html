@@ -5,16 +5,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="web_dashboard" name="shell-type">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    rel="stylesheet">
+  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,support_agent,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap"
     rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-    rel="stylesheet">
+  
   <style>
     @layer base {
 
@@ -159,6 +155,7 @@
       }
     };
   </script>
+<link rel="stylesheet" href="/admin-ai-chat.css">
 <style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 
@@ -193,32 +190,32 @@
       </div>
 
       <!-- Navigation Links -->
-      <nav class="flex flex-col gap-1.5 px-space-md"
+      <nav class="flex flex-col gap-1.5 px-space-md" id="sidebar-nav"
         data-active-classes="bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-label-md shadow-lg shadow-amber-950/40 border-l-4 border-white">
         <a aria-current="page"
-          class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
-          data-path="tong-quan" href="#">
+          class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
+          data-path="tong-quan" href="/dashboard">
           <span class="material-symbols-outlined text-[20px] text-stone-950 group-hover:scale-110 transition-transform"
             style="font-variation-settings: 'FILL' 1;">grid_view</span>
           <span class="font-label-md text-label-md tracking-wide">Tổng quan</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
           data-path="ho-so-dat-dai" href="#">
           <span
             class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">landscape</span>
           <span class="font-label-md text-label-md">Hồ sơ đất đai</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
           data-path="ho-so-ho-kinh-doanh" href="#">
           <span
             class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">storefront</span>
           <span class="font-label-md text-label-md">Hồ sơ hộ kinh doanh</span>
         </a>
-        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="cai-dat-he-thong" href="#">
+        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
+          data-path="quan-ly-nguoi-dung" href="/user-management">
           <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">tune</span>
-          <span class="font-label-md text-label-md">Cài đặt hệ thống</span>
+            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">group</span>
+          <span class="font-label-md text-label-md">Quản lí người dùng</span>
         </a>
       </nav>
     </div>
@@ -227,8 +224,7 @@
     <div class="p-space-md bg-black/25 border-t border-white/10">
       <div
         class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <a class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1 hover:bg-white/10 transition-colors"
-          href="/detail-information" title="Xem thông tin chi tiết">
+        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
           <div
             class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
@@ -239,7 +235,7 @@
               <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
             </span>
           </div>
-        </a>
+        </div>
         <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
           href="/login" title="Đăng xuất" data-logout>
           <span class="material-symbols-outlined text-[19px]">logout</span>
@@ -255,9 +251,8 @@
       class="fixed top-0 left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between">
       <div class="flex items-center gap-space-md">
         <div class="flex items-center gap-space-xs text-stone-500">
-          <span class="font-body-sm text-body-sm text-stone-600 font-medium">Cổng hành chính</span>
-          <span class="material-symbols-outlined text-[16px] text-amber-600">chevron_right</span>
-          <span class="font-label-md text-label-md text-red-800 font-bold">Hệ thống nghiệp vụ</span>
+          <span class="font-label-md text-label-md text-red-800 font-bold"">Cổng hành chính</span>
+
         </div>
         <div
           class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-900 shadow-2xs">
@@ -273,12 +268,6 @@
           <span class="font-label-md text-label-md font-bold text-stone-800">Văn phòng Đăng ký Đất đai</span>
           <span class="material-symbols-outlined text-amber-700 text-[16px]">expand_more</span>
 
-          <button
-            class="relative w-9 h-9 flex items-center justify-center rounded-lg text-stone-600 hover:text-red-700 hover:bg-white transition-colors"
-            title="Thông báo hệ thống" type="button">
-            <span class="material-symbols-outlined text-[20px]">notifications</span>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-600 rounded-full ring-2 ring-white"></span>
-          </button>
           <div class="h-5 w-px bg-stone-300"></div>
           <div
             class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs">
@@ -373,43 +362,6 @@
                 <span class="">Tìm kiếm</span>
               </button>
             </div>
-          </div>
-        </section>
-        <!-- 2. AI ASSISTANT CARD -->
-        <section
-          class="rounded-2xl bg-white p-4 border border-stone-300/80 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white shrink-0 shadow-sm ring-2 ring-amber-300">
-              <span class="material-symbols-outlined text-[22px]">psychology</span>
-            </div>
-            <div class="flex flex-col">
-              <div class="flex items-center gap-1.5">
-                <span class="font-label-lg text-stone-900 font-bold">Trợ Lý AI Thẩm Định Hồ Sơ</span>
-                <span
-                  class="px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-2xs">Smart
-                  OCR</span>
-              </div>
-              <span class="text-xs text-stone-500">Nhấp chọn gợi ý nghiệp vụ hoặc nhập yêu cầu để AI tự động tra cứu
-                nhanh:</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <button type="button"
-              class="ai-prompt-pill px-3 py-1.5 rounded-lg bg-amber-50/60 hover:bg-amber-100 border border-amber-200 hover:border-amber-400 text-stone-800 hover:text-red-700 text-xs font-semibold shadow-2xs transition-all flex items-center gap-1.5 active:scale-95">
-              <span class="material-symbols-outlined text-[15px] text-red-600">verified</span>
-              <span>⚡ Tra cứu thửa 128 Tờ 42 Bến Nghé</span>
-            </button>
-            <button type="button"
-              class="ai-prompt-pill px-3 py-1.5 rounded-lg bg-amber-50/60 hover:bg-amber-100 border border-amber-200 hover:border-amber-400 text-stone-800 hover:text-red-700 text-xs font-semibold shadow-2xs transition-all flex items-center gap-1.5 active:scale-95">
-              <span class="material-symbols-outlined text-[15px] text-amber-600">assignment_turned_in</span>
-              <span>🔍 Rà soát HKD Tạp Hóa An Nhiên</span>
-            </button>
-            <button type="button"
-              class="ai-prompt-pill px-3 py-1.5 rounded-lg bg-amber-50/60 hover:bg-amber-100 border border-amber-200 hover:border-amber-400 text-stone-800 hover:text-red-700 text-xs font-semibold shadow-2xs transition-all flex items-center gap-1.5 active:scale-95">
-              <span class="material-symbols-outlined text-[15px] text-red-600">policy</span>
-              <span>📑 Tra bảng giá đất mới nhất</span>
-            </button>
           </div>
         </section>
 
@@ -1011,138 +963,46 @@
     </main>
   </div>
 
-  <!-- AI CHAT WIDGET -->
-  <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none">
-    <div id="ai-chat-window"
-      class="w-[380px] sm:w-[420px] bg-white rounded-2xl shadow-2xl border-2 border-amber-400 flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right">
-      <div
-        class="bg-gradient-to-r from-red-800 via-red-700 to-amber-700 text-white px-4 py-3 flex items-center justify-between shadow-md border-b border-amber-400/30">
-        <div class="flex items-center gap-2.5">
-          <div
-            class="w-9 h-9 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-amber-200 border border-white/20">
-            <span class="material-symbols-outlined text-[20px]">smart_toy</span>
-          </div>
-          <div class="flex flex-col">
-            <div class="flex items-center gap-1.5">
-              <span class="font-label-lg text-label-lg font-bold tracking-tight text-white">Trợ lý AI Hỗ trợ &amp; Thẩm
-                định</span>
-              <span class="flex h-2 w-2 relative">
-                <span
-                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-            </div>
-            <div class="flex items-center gap-1 text-[11px] text-amber-200 font-medium">
-              <span>Chuyên viên ảo</span>
-              <span>•</span>
-              <span class="text-emerald-300 font-bold">Online 24/7</span>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center gap-0.5">
-          <button type="button" id="ai-chat-close-btn"
-            class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/20 transition-colors text-white"
-            title="Đóng chatbox">
-            <span class="material-symbols-outlined text-[18px]">close</span>
-          </button>
-        </div>
-      </div>
 
-      <div class="p-4 max-h-[360px] overflow-y-auto flex flex-col gap-3 bg-gradient-to-b from-amber-50/40 to-stone-50">
-        <div class="flex items-start gap-2.5">
-          <div
-            class="w-7 h-7 rounded-full bg-gradient-to-br from-red-600 to-amber-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs ring-1 ring-amber-300">
-            <span class="material-symbols-outlined text-[16px]">smart_toy</span>
-          </div>
-          <div class="flex flex-col gap-1.5 max-w-[85%]">
-            <div
-              class="bg-white p-3 rounded-2xl rounded-tl-xs shadow-xs text-stone-800 text-body-sm leading-relaxed border border-amber-200/80 border-l-4 border-l-red-600">
-              <p class="font-bold text-red-700 mb-1 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[16px] text-amber-500">verified</span> Xin chào cán bộ &amp;
-                công dân!
-              </p>
-              <p class="">Tôi là Trợ lý AI hỗ trợ rà soát hồ sơ Đất đai &amp; Hộ kinh doanh. Bạn cần hỗ trợ kiểm tra
-                tính pháp lý hay hướng dẫn thủ tục nào hôm nay?</p>
-            </div>
-            <span class="text-[11px] text-stone-400 px-1 font-medium">Vừa xong</span>
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-1.5 pt-1 pl-9">
-          <span class="text-[11px] font-label-sm uppercase tracking-wider text-amber-900 font-bold">Gợi ý câu hỏi
-            nhanh:</span>
-          <div class="flex flex-wrap gap-1.5">
-            <button type="button"
-              class="chat-chip px-2.5 py-1 rounded-full bg-white hover:bg-amber-50 border border-amber-200 hover:border-red-400 text-stone-800 text-body-sm transition-all text-left flex items-center gap-1 shadow-2xs hover:text-red-700 font-semibold">
-              <span class="material-symbols-outlined text-[14px] text-red-600">search_check</span>
-              <span>Kiểm tra tính hợp lệ sổ đỏ</span>
-            </button>
-            <button type="button"
-              class="chat-chip px-2.5 py-1 rounded-full bg-white hover:bg-amber-50 border border-amber-200 hover:border-red-400 text-stone-800 text-body-sm transition-all text-left flex items-center gap-1 shadow-2xs hover:text-red-700 font-semibold">
-              <span class="material-symbols-outlined text-[14px] text-amber-600">assignment</span>
-              <span>Thủ tục sang tên chuyển nhượng</span>
-            </button>
-            <button type="button"
-              class="chat-chip px-2.5 py-1 rounded-full bg-white hover:bg-amber-50 border border-amber-200 hover:border-red-400 text-stone-800 text-body-sm transition-all text-left flex items-center gap-1 shadow-2xs hover:text-red-700 font-semibold">
-              <span class="material-symbols-outlined text-[14px] text-red-600">store</span>
-              <span>Đổi tên hộ kinh doanh</span>
-            </button>
-            <button type="button"
-              class="chat-chip px-2.5 py-1 rounded-full bg-white hover:bg-amber-50 border border-amber-200 hover:border-red-400 text-stone-800 text-body-sm transition-all text-left flex items-center gap-1 shadow-2xs hover:text-red-700 font-semibold">
-              <span class="material-symbols-outlined text-[14px] text-amber-600">map</span>
-              <span>Tra cứu bảng giá đất</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="p-3 bg-white border-t border-amber-100 flex flex-col gap-2">
-        <div
-          class="flex items-center gap-2 bg-amber-50/50 rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-red-600/20 border border-amber-300 focus-within:border-red-600 transition-all">
-          <button type="button"
-            class="text-stone-400 hover:text-red-600 transition-colors shrink-0 p-1 rounded-lg hover:bg-amber-100/50"
-            title="Đính kèm tệp / OCR tài liệu">
-            <span class="material-symbols-outlined text-[20px]">attach_file</span>
-          </button>
-          <input id="ai-chat-input" type="text" placeholder="Nhập câu hỏi hoặc đính kèm hồ sơ..."
-            class="w-full bg-transparent text-stone-800 text-body-sm placeholder:text-stone-400 focus:outline-none py-1 font-medium">
-          <button type="button"
-            class="w-8 h-8 rounded-lg bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white flex items-center justify-center shrink-0 shadow-xs transition-transform active:scale-95"
-            title="Gửi yêu cầu">
-            <span class="material-symbols-outlined text-[18px]">send</span>
-          </button>
-        </div>
-        <div class="flex items-center justify-between text-[11px] text-stone-500 px-1 font-medium">
-          <span class="flex items-center gap-1">
-            <span class="material-symbols-outlined text-[13px] text-emerald-600">security</span> Mã hoá bảo mật hành
-            chính
-          </span>
-          <span>Enter để gửi</span>
-        </div>
-      </div>
-    </div>
-
-    <button type="button" id="ai-chat-toggle-btn" aria-controls="ai-chat-window" aria-expanded="true"
-      aria-label="Hỗ trợ AI Trực tuyến"
-      class="h-14 px-5 rounded-full bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white shadow-2xl hover:shadow-red-700/40 flex items-center gap-2.5 transition-all duration-200 active:scale-95 group ring-4 ring-amber-400/40 hover:ring-amber-400/60 font-bold">
-      <div
-        class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:rotate-12 transition-transform shadow-inner">
-        <span class="material-symbols-outlined text-[22px] text-amber-200">support_agent</span>
-      </div>
-      <span class="font-label-lg text-label-lg font-bold hidden sm:inline-block pr-1 tracking-wide">Hỗ trợ AI Trực
-        tuyến</span>
-      <span class="relative flex h-2.5 w-2.5">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-300"></span>
-      </span>
-    </button>
-  </div>
 
 <script type="module">
   // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
   import { protectPage } from '/auth-api.js';
   protectPage(['admin']);
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && href !== '#' && href.startsWith('/')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+
+    const logoutBtn = document.querySelector('[data-logout]');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+          if (typeof auth !== 'undefined' && auth.signOut) {
+            auth.signOut().then(() => {
+              window.location.href = '/login';
+            }).catch(() => {
+              window.location.href = '/login';
+            });
+          } else {
+            window.location.href = '/login';
+          }
+        }
+      });
+    }
+  });
+</script>
+<script src="/admin-ai-chat.js" defer></script>
 </body>
 
 </html>

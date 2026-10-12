@@ -19,9 +19,14 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
+app.get('/forgot-password', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
+});
+
 // Địa chỉ Backend (Gateway) mà trình duyệt sẽ gọi. Đổi bằng biến môi trường BACKEND_URL.
 app.get('/api/app-config', (req, res) => {
-  res.json({ apiBaseUrl: process.env.BACKEND_URL || 'http://localhost:8080' });
+  const apiBaseUrl = process.env.BACKEND_URL || `${req.protocol}://${req.hostname}:8080`;
+  res.json({ apiBaseUrl });
 });
 
 app.get('/api/firebase-config', (req, res) => {
@@ -69,7 +74,19 @@ app.get('/detail-information', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
+app.get('/user-management', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-management.html'));
+});
+
 app.get('/user-dashboard', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
+});
+
+app.get('/api/application-submission-view', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+});
+
+app.get('/applicationSubmission', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
