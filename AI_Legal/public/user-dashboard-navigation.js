@@ -8,12 +8,12 @@ const dashboardNavLinks = dashboardNav
       markup: [...link.classList]
         .filter((className) => !dashboardActiveClasses.includes(className))
         .join(' '),
-      active: link.dataset.path === 'tong-quan-ho-so'
+      path: link.dataset.path
     }))
   : [];
 
 let applicationViewPromise;
-let applicationViewOpen = false;
+let activeContentView = 'tong-quan-ho-so';
 let applicationInteractionsLoaded = false;
 
 const applicationColorClasses = {
@@ -36,12 +36,10 @@ const applicationColorClasses = {
   'text-tertiary-fixed': 'text-amber-400'
 };
 
-function setActiveNavigation(isApplicationView) {
-  dashboardNavLinks.forEach(({ link, markup, active }) => {
+function setActiveNavigation(activePath = 'tong-quan-ho-so') {
+  dashboardNavLinks.forEach(({ link, markup, path }) => {
     link.className = markup;
-    const isCurrent = isApplicationView
-      ? link.dataset.path === 'nop-ho-so-truc-tuyen'
-      : active;
+    const isCurrent = path === activePath;
 
     if (isCurrent) {
       link.classList.add(...dashboardActiveClasses);
@@ -98,14 +96,16 @@ async function loadApplicationView() {
 async function showApplicationView() {
   if (!dashboardMain) return;
 
-  setActiveNavigation(true);
+  activeContentView = 'nop-ho-so-truc-tuyen';
+  document.title = 'Tạo hồ sơ - Cổng Dịch vụ công Quốc gia';
+  setActiveNavigation('nop-ho-so-truc-tuyen');
   dashboardMain.innerHTML = '<div class="mx-auto max-w-7xl px-4 py-12 text-center text-slate-600">Đang mở biểu mẫu nộp hồ sơ...</div>';
 
   try {
     const view = await loadApplicationView();
     dashboardMain.innerHTML = `<div class="mx-auto w-full max-w-7xl px-4 py-6 lg:px-8">${view.content}</div>${view.modal}`;
     recolorApplicationMarkup(dashboardMain);
-    applicationViewOpen = true;
+    activeContentView = 'nop-ho-so-truc-tuyen';
 
     if (!applicationInteractionsLoaded) {
       const script = document.createElement('script');
@@ -117,25 +117,26 @@ async function showApplicationView() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     dashboardMain.innerHTML = `<div role="alert" class="mx-auto max-w-7xl px-4 py-12 text-center text-red-700">${error.message}</div>`;
-    applicationViewOpen = false;
+    activeContentView = 'nop-ho-so-truc-tuyen';
   }
 }
 
 function showDashboardView() {
-  if (!dashboardMain || !applicationViewOpen) return;
-  if (window.location.pathname === '/applicationSubmission') {
+  if (!dashboardMain || activeContentView === 'tong-quan-ho-so') return;
+  if (window.location.pathname !== '/user-dashboard') {
     window.location.assign('/user-dashboard');
     return;
   }
   dashboardMain.innerHTML = dashboardHomeMarkup;
-  applicationViewOpen = false;
-  setActiveNavigation(false);
+  activeContentView = 'tong-quan-ho-so';
+  document.title = 'Tổng quan hồ sơ - Cổng Dịch vụ công Quốc gia';
+  setActiveNavigation('tong-quan-ho-so');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 document.addEventListener('click', (event) => {
   const dashboardLink = event.target.closest('a[href="/user-dashboard"]');
-  if (dashboardLink && dashboardMain && applicationViewOpen) {
+  if (dashboardLink && dashboardMain && activeContentView !== 'tong-quan-ho-so') {
     event.preventDefault();
     showDashboardView();
   }

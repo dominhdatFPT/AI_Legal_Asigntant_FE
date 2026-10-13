@@ -5,7 +5,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,support_agent,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
+  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -155,14 +155,7 @@
         <div class="flex items-center gap-1 h-full overflow-x-auto">
           <a href="/user-dashboard" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Tổng quan hồ sơ</a>
           <a href="/applicationSubmission" aria-current="page" class="h-8 px-3 flex items-center rounded-lg bg-primary text-white text-xs font-semibold whitespace-nowrap shadow-sm">Tạo hồ sơ</a>
-          <a href="#" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Tra cứu tiến độ</a>
-          <a href="#" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Kho tài liệu điện tử</a>
-          <a href="#" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Thanh toán nghĩa vụ tài chính</a>
-          <a href="#" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Phản ánh &amp; Kiến nghị</a>
-        </div>
-        <div class="hidden lg:flex items-center gap-1.5 text-xs text-secondary whitespace-nowrap">
-          <span class="material-symbols-outlined text-sm">schedule</span>
-          <span>Hỗ trợ kỹ thuật 24/7</span>
+          <a href="/kho-mau-don-tham-khao" class="h-8 px-3 flex items-center rounded-lg text-secondary hover:bg-surface-subtle hover:text-on-surface text-xs font-medium whitespace-nowrap transition">Kho mẫu đơn tham khảo</a>
         </div>
       </div>
     </nav>
@@ -173,40 +166,40 @@
   <main id="application-submission-main" class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 pt-6 pb-24 sm:pb-8">
 
     <section id="template-browser" class="space-y-6" aria-labelledby="template-browser-title">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <div class="rounded-2xl border border-red-700 bg-red-700 p-6 shadow-sm sm:p-8">
         <div class="mx-auto max-w-3xl text-center">
           <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base">folder_shared</span> HỒ SƠ TRỰC TUYẾN</span>
-          <h1 id="template-browser-title" class="mt-3 text-2xl font-bold text-on-surface sm:text-3xl">Bạn cần làm thủ tục nào?</h1>
-          <p class="mt-2 text-sm text-secondary">Chọn lĩnh vực để xem các mẫu hồ sơ. Bạn có thể tự điền biểu mẫu hoặc nhờ trợ lý AI hướng dẫn.</p>
+          <h1 id="template-browser-title" class="mt-3 text-2xl font-bold text-white sm:text-3xl">Bạn cần làm thủ tục nào?</h1>
+          <p class="mt-2 text-sm text-white/80">Chọn lĩnh vực để xem các mẫu hồ sơ. Bạn có thể tự điền biểu mẫu hoặc nhờ trợ lý AI hướng dẫn.</p>
         </div>
         <div id="law-category-cards" class="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2">
-          <button type="button" data-law-category="dat-dai" class="group rounded-2xl border border-slate-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
+          <button type="button" data-law-category="dat-dai" class="group rounded-2xl border border-slate-200 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
             <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-primary"><span class="material-symbols-outlined text-2xl">real_estate_agent</span></span>
             <span class="mt-4 block text-lg font-bold text-on-surface">Luật Đất đai</span>
             <span class="mt-1 block text-sm leading-relaxed text-secondary">Đăng ký đất đai, cấp đổi giấy chứng nhận, sang tên, tách thửa và các thủ tục liên quan.</span>
             <span class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Xem biểu mẫu <span class="material-symbols-outlined text-base">arrow_forward</span></span>
           </button>
-          <button type="button" data-law-category="ho-kinh-doanh" class="group rounded-2xl border border-slate-200 p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
+          <button type="button" data-law-category="ho-kinh-doanh" class="group rounded-2xl border border-slate-200 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-6">
             <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><span class="material-symbols-outlined text-2xl">storefront</span></span>
             <span class="mt-4 block text-lg font-bold text-on-surface">Luật Kinh doanh</span>
             <span class="mt-1 block text-sm leading-relaxed text-secondary">Thành lập hộ kinh doanh, thay đổi thông tin, tạm ngừng hoặc chấm dứt hoạt động.</span>
             <span class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Xem biểu mẫu <span class="material-symbols-outlined text-base">arrow_forward</span></span>
           </button>
         </div>
-        <div id="template-list-panel" class="mt-7 hidden">
+        <div id="template-list-panel" class="mt-7 hidden rounded-2xl bg-white p-5">
           <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div><p class="text-xs font-semibold uppercase tracking-wide text-primary">Danh mục biểu mẫu</p><h2 id="template-list-title" class="mt-1 text-xl font-bold text-on-surface"></h2><p id="template-list-description" class="mt-1 text-sm text-secondary"></p></div>
             <button id="back-to-law-categories" type="button" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-on-surface hover:bg-slate-50"><span class="material-symbols-outlined text-base">arrow_back</span> Chọn lĩnh vực khác</button>
           </div>
           <div id="procedure-template-list" class="grid grid-cols-1 gap-3"></div>
         </div>
-        <p class="mt-5 text-center text-xs text-secondary">Biểu mẫu đang ở chế độ xem trước. Vui lòng kiểm tra thông tin và căn cứ áp dụng trước khi nộp thực tế.</p>
+        <p class="mt-5 text-center text-xs text-white/80">Biểu mẫu đang ở chế độ xem trước. Vui lòng kiểm tra thông tin và căn cứ áp dụng trước khi nộp thực tế.</p>
       </div>
     </section>
 
     <!-- HERO / AUTO-FILL TRIGGER BANNER -->
   <div id="application-form-help" class="hidden bg-white rounded-2xl p-5 mb-6 shadow-sm border border-slate-200/80 relative overflow-hidden">
-  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4"><div><p class="text-[11px] font-bold uppercase tracking-wide text-primary">Mẫu hồ sơ đang chọn</p><h2 id="application-template-name" class="mt-1 text-base font-bold text-on-surface">Chưa chọn mẫu</h2></div><div class="flex flex-wrap gap-2"><button id="back-to-template-list" type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-on-surface hover:bg-slate-50"><span class="material-symbols-outlined text-base">arrow_back</span> Danh sách mẫu</button><button id="btn-ai-fill-support" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-bold text-white shadow-sm hover:bg-indigo-700"><span class="material-symbols-outlined text-base">auto_awesome</span> AI hỗ trợ điền</button></div></div>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4"><div><p class="text-[11px] font-bold uppercase tracking-wide text-primary">Mẫu hồ sơ đang chọn</p><h2 id="application-template-name" class="mt-1 text-base font-bold text-on-surface">Chưa chọn mẫu</h2></div><div class="flex flex-wrap gap-2"><button id="back-to-template-list" type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-on-surface hover:bg-slate-50"><span class="material-symbols-outlined text-base">arrow_back</span> Danh sách mẫu</button></div></div>
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex items-center gap-3.5">
       <div class="w-11 h-11 rounded-xl bg-red-50 text-primary flex items-center justify-center shrink-0 border border-red-100">
@@ -574,7 +567,6 @@
 
   <!-- HOTLINE & SUPPORT CARD -->
   <div class="p-3.5 rounded-2xl bg-slate-100 border border-slate-200/80 text-xs text-secondary flex items-center gap-3">
-    <span class="material-symbols-outlined text-primary text-2xl shrink-0">support_agent</span>
     <div>
       <div class="font-bold text-on-surface">Cần hỗ trợ hồ sơ trực tuyến?</div>
       <div class="text-[11px]">Tổng đài Dịch vụ công Quốc gia: <strong class="text-primary">1900 6886</strong> (24/7)</div>
@@ -1010,10 +1002,6 @@
           workspace?.classList.add('hidden');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        const aiButton = document.getElementById('btn-ai-fill-support');
-        if (aiButton) aiButton.onclick = () => window.dispatchEvent(new CustomEvent('admin-ai:open', {
-          detail: { prompt: `Tôi đang điền mẫu "${procedure.name}" thuộc lĩnh vực ${isBusiness ? 'Luật Kinh doanh' : 'Luật Đất đai'}. Hãy hướng dẫn tôi cần chuẩn bị và điền thông tin nào vào biểu mẫu này.` }
-        }));
         updateApplicationProgress();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -1024,6 +1012,13 @@
         categoryCards.classList.remove('hidden');
         document.getElementById('template-browser-title').textContent = 'Bạn cần làm thủ tục nào?';
       });
+
+      window.openApplicationTemplateById = (procedureId) => {
+        const procedure = procedureCatalog.find((item) => item.id === procedureId);
+        if (!procedure) return false;
+        openTemplateForm(procedure);
+        return true;
+      };
     }
 
     const personalProgressFields = [
@@ -1203,6 +1198,8 @@
     updateProcedureTypes();
     setupTemplateBrowser();
     initializeApplicationFormUi();
+    const requestedTemplateId = new URLSearchParams(window.location.search).get('templateId');
+    if (requestedTemplateId) window.openApplicationTemplateById?.(requestedTemplateId);
   </script>
 
   <!-- AUTH: bảo vệ trang, điền thông tin người dùng, nút đăng xuất -->
