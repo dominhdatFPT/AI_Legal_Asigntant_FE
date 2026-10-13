@@ -617,6 +617,7 @@
     // Script này cũng được user-dashboard-navigation.js nhúng lại dạng script thường nên dùng import() động.
     const applicationApi = import('/auth-api.js');
     let procedureCatalog = []; // [{ id: mã thủ tục, category: 'land' | 'business', name, keywords }]
+    let procedureCatalogFailed = false;
 
     const businessProgressFields = ['business-name', 'business-type', 'business-industry', 'business-capital', 'business-address', 'business-owner', 'business-phone', 'business-notes'];
     let activeProcedureSuggestionIndex = -1;
@@ -989,6 +990,15 @@
           ? 'Chọn thủ tục phù hợp để mở biểu mẫu kê khai thông tin đất đai.'
           : 'Chọn thủ tục phù hợp để mở biểu mẫu thông tin đăng ký kinh doanh.';
         list.replaceChildren();
+        if (!procedures.length) {
+          const empty = document.createElement('p');
+          empty.setAttribute('role', procedureCatalogFailed ? 'alert' : 'status');
+          empty.className = `rounded-xl border p-4 text-sm ${procedureCatalogFailed ? 'border-red-200 bg-red-50 font-semibold text-red-700' : 'border-slate-200 bg-slate-50 text-slate-600'}`;
+          empty.textContent = procedureCatalogFailed
+            ? 'Không tải được danh mục thủ tục từ máy chủ. Vui lòng thử lại sau hoặc báo quản trị viên.'
+            : 'Lĩnh vực này chưa có thủ tục nào.';
+          list.append(empty);
+        }
         procedures.forEach((procedure) => {
           const item = document.createElement('button');
           item.type = 'button';
@@ -1247,6 +1257,7 @@
           keywords: procedure.description || ''
         }));
       } catch {
+        procedureCatalogFailed = true;
         cards?.insertAdjacentHTML('beforebegin', '<p role="alert" class="mb-3 text-sm font-semibold text-red-700">Không tải được danh mục thủ tục, vui lòng tải lại trang.</p>');
         return;
       }
