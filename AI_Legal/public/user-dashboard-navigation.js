@@ -70,9 +70,7 @@ async function loadApplicationView() {
         const documentPage = new DOMParser().parseFromString(await response.text(), 'text/html');
         const submissionMain = documentPage.getElementById('application-submission-main');
         const successModal = documentPage.getElementById('success-modal');
-        const interactions = [...documentPage.scripts].find((script) =>
-          script.textContent.includes('const citizenDatabase')
-        );
+        const interactions = documentPage.querySelector('script[data-application-interactions]');
 
         if (!submissionMain || !successModal || !interactions) {
           throw new Error('Nội dung nộp hồ sơ chưa sẵn sàng.');
