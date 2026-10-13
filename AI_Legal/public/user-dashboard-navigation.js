@@ -131,6 +131,8 @@ function showDashboardView() {
   activeContentView = 'tong-quan-ho-so';
   document.title = 'Tổng quan hồ sơ - Cổng Dịch vụ công Quốc gia';
   setActiveNavigation('tong-quan-ho-so');
+  // Khung HTML vừa được thay lại: báo user-dashboard-data.js điền dữ liệu thật.
+  window.dispatchEvent(new Event('user-dashboard:shown'));
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
