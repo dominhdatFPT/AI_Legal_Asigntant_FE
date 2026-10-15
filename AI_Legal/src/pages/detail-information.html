@@ -10,8 +10,8 @@
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap"
         rel="stylesheet">
-    <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
-    
+    <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,support_agent,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
+
     <style>
         @layer base {
 
@@ -36,6 +36,14 @@
 
         ::-webkit-scrollbar {
             display: none;
+        }
+        /* Vietnamese uppercase vowels can stack two marks above a letter.
+           Do not clip the tilde on Ễ to a short label-font line box. */
+        #full-name {
+            font-family: Arial, "Segoe UI", sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 32px;
         }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -218,9 +226,7 @@
                                     <div class="relative">
                                         <input
                                             class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="dob" name="dob" placeholder="DD/MM/YYYY" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">calendar_today</span>
+                                            id="dob" name="dob" type="date" min="1900-01-01">
                                     </div>
                                 </div>
                                 <!-- Giới tính -->
@@ -282,9 +288,7 @@
                                     <div class="relative">
                                         <input
                                             class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="issue-date" name="issue-date" placeholder="DD/MM/YYYY" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">event_available</span>
+                                            id="issue-date" name="issue-date" type="date" min="1900-01-01">
                                     </div>
                                 </div>
                                 <!-- Nơi cấp -->
@@ -311,10 +315,7 @@
                                     <div class="relative">
                                         <input
                                             class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="expiry-date" name="expiry-date"
-                                            placeholder="DD/MM/YYYY hoặc Không thời hạn" type="text">
-                                        <span
-                                            class="absolute right-3 top-3 material-symbols-outlined text-secondary text-xl pointer-events-none">event_busy</span>
+                                            id="expiry-date" name="expiry-date" type="date" min="1900-01-01">
                                     </div>
                                 </div>
                             </div>
@@ -328,21 +329,31 @@
                                         Cư trú</h3>
                                 </div>
                                 <span
-                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Phân
-                                    rã hành chính 3 cấp</span>
+                                    class="font-label-sm text-label-sm text-secondary bg-surface-subtle px-2.5 py-1 rounded border border-border-subtle">Hỗ
+                                    trợ địa chỉ 2–3 cấp</span>
                             </div>
-                            <!-- Quê quán -->
-                            <div class="flex flex-col gap-1.5">
-                                <label class="font-label-md text-label-md text-on-surface flex items-center gap-1"
-                                    for="origin-place">
-                                    Quê quán (Nguyên quán) <span class="text-error font-bold">*</span>
-                                </label>
-                                <input
-                                    class="cccd-input w-full h-12 px-3.5 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md text-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                    id="origin-place" name="origin-place"
-                                    placeholder="Xã/Phường, Huyện/Quận, Tỉnh/Thành phố" type="text">
+                            <!-- Quê quán: CCCD có thể in 2 hoặc 3 cấp hành chính -->
+                            <div class="flex flex-col gap-2 p-4 rounded-xl bg-surface-subtle border border-border-subtle">
+                                <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Quê quán (Nguyên quán)
+                                    <span class="text-error font-bold">*</span></h4>
+                                <input id="origin-place" name="origin-place" type="hidden">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="origin-province">Tỉnh / Thành phố</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="origin-province"><option value="">Chọn tỉnh / thành phố</option></select>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="origin-district">Quận / Huyện / Thị xã</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="origin-district" disabled><option value="">Chọn quận / huyện</option></select>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="origin-ward">Xã / Phường / Thị trấn (nếu có)</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="origin-ward" disabled><option value="">Không ghi trên CCCD</option></select>
+                                    </div>
+                                </div>
+                                <span class="font-body-sm text-body-sm text-secondary">Chỉ cần chọn tỉnh và quận/huyện nếu CCCD không ghi xã/phường.</span>
                             </div>
-                            <!-- Nơi thường trú (Phân rã 3 trường) -->
+                            <!-- Nơi thường trú (danh mục 3 cấp trên CCCD) -->
                             <div
                                 class="flex flex-col gap-2 p-4 rounded-xl bg-surface-subtle border border-border-subtle">
                                 <div class="flex items-center gap-2 mb-1">
@@ -351,29 +362,26 @@
                                     <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Nơi thường trú
                                         (Theo thẻ CCCD) <span class="text-error font-bold">*</span></h4>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                     <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-street">Số
-                                            nhà / Tên đường</label>
+                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-street">Chi tiết địa chỉ</label>
                                         <input
                                             class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
                                             id="perm-street" name="perm-street"
-                                            placeholder="Số nhà, ngõ/ngách, đường phố" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-ward">Xã /
-                                            Phường / Thị trấn</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-ward" name="perm-ward" placeholder="Phường / Xã" type="text">
+                                            placeholder="Số nhà, thôn/xóm, đường phố" type="text">
                                     </div>
                                     <div class="flex flex-col gap-1">
                                         <label class="font-label-sm text-label-sm text-secondary"
                                             for="perm-province">Tỉnh / Thành phố</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="perm-province" name="perm-province"
-                                            placeholder="Tỉnh / Thành phố trực thuộc" type="text">
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="perm-province"><option value="">Chọn tỉnh / thành phố</option></select>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-district">Quận / Huyện / Thị xã</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="perm-district" disabled><option value="">Chọn quận / huyện</option></select>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="perm-ward">Xã / Phường / Thị trấn</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="perm-ward" disabled><option value="">Chọn xã / phường</option></select>
                                     </div>
                                 </div>
                             </div>
@@ -406,19 +414,13 @@
                                             placeholder="Số nhà, ngõ/ngách, đường phố" type="text">
                                     </div>
                                     <div class="flex flex-col gap-1">
-                                        <label class="font-label-sm text-label-sm text-secondary" for="curr-ward">Xã /
-                                            Phường / Thị trấn</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="curr-ward" name="curr-ward" placeholder="Phường / Xã" type="text">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
                                         <label class="font-label-sm text-label-sm text-secondary"
                                             for="curr-province">Tỉnh / Thành phố</label>
-                                        <input
-                                            class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle hover:border-primary-container focus:border-border-focus text-on-surface font-body-md rounded-lg focus:outline-none transition shadow-sm"
-                                            id="curr-province" name="curr-province"
-                                            placeholder="Tỉnh / Thành phố trực thuộc" type="text">
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="curr-province"><option value="">Chọn tỉnh / thành phố</option></select>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="font-label-sm text-label-sm text-secondary" for="curr-ward">Xã / Phường / Đặc khu</label>
+                                        <select class="cccd-input w-full h-11 px-3 bg-surface-panel border border-border-subtle rounded-lg" id="curr-ward" disabled><option value="">Chọn xã / phường</option></select>
                                     </div>
                                 </div>
                             </div>
@@ -597,6 +599,7 @@
         <script type="module">
             import {
                 fetchMyCitizenProfile,
+                fetchAdministrativeUnits,
                 protectPage,
                 readIdentityCardOcr,
                 saveIdentityProfileFromOcr,
@@ -610,13 +613,123 @@
             const cameForApplication = new URLSearchParams(location.search).has('required');
             const field = (id) => document.getElementById(id);
             const text = (id) => field(id).value.trim();
+            const selectedText = (id) => field(id).selectedOptions[0]?.dataset.name || '';
 
-            // DD/MM/YYYY <-> YYYY-MM-DD (định dạng ngày của Backend)
-            const toIsoDate = (value) => {
-                const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-                return match ? `${match[3]}-${match[2].padStart(2, '0')}-${match[1].padStart(2, '0')}` : null;
+            // input[type=date] dùng ISO YYYY-MM-DD, cùng định dạng với Backend.
+            const toIsoDate = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+            const fromIsoDate = (value) => value || '';
+
+            const normalizeAdmin = (value) => value.normalize('NFD').replace(/\p{M}/gu, '')
+                .toLowerCase().replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, ' ').trim()
+                .replace(/^(tinh|thanh pho|quan|huyen|thi xa|thi tran|phuong|xa|dac khu)\s+/, '');
+            const stripTrailingAdministrativeParts = (value, administrativeNames) => {
+                let parts = splitParts(value);
+                const names = new Set(administrativeNames.map(normalizeAdmin).filter(Boolean));
+
+                // Dữ liệu OCR/hồ sơ cũ thường để đơn vị hành chính ở các phần cuối,
+                // ví dụ "16 Hòa Mỹ 3, Hòa Minh" trong khi phường đã có ô riêng.
+                while (parts.length > 1 && names.has(normalizeAdmin(parts.at(-1)))) parts.pop();
+
+                let detail = parts.join(', ').trim();
+                // Một số CCCD in liền tên khu với đơn vị hành chính, không có dấu phẩy.
+                // Chỉ bỏ tên đầy đủ (có loại đơn vị) để không xóa nhầm tên đường trùng tên phường.
+                const fullNames = administrativeNames.filter(Boolean).sort((a, b) => b.length - a.length);
+                let changed = true;
+                while (changed && detail) {
+                    changed = false;
+                    for (const name of fullNames) {
+                        const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const cleaned = detail.replace(new RegExp(`(?:\\s*,\\s*|\\s+)${escaped}\\s*$`, 'iu'), '')
+                            .trim().replace(/,$/, '').trim();
+                        if (cleaned !== detail) {
+                            detail = cleaned;
+                            changed = true;
+                            break;
+                        }
+                    }
+                }
+                return detail;
             };
-            const fromIsoDate = (value) => (value ? value.split('-').reverse().join('/') : '');
+            const cleanAddressDetail = (prefix) => {
+                const street = field(`${prefix}-street`);
+                if (!street) return;
+                const administrativeNames = prefix === 'perm'
+                    ? [selectedText('perm-ward'), selectedText('perm-district'), selectedText('perm-province')]
+                    : [selectedText('curr-ward'), selectedText('curr-province')];
+                street.value = stripTrailingAdministrativeParts(street.value, administrativeNames);
+            };
+            const setOptions = (id, items, placeholder) => {
+                const select = field(id);
+                select.replaceChildren(new Option(placeholder, ''));
+                for (const item of items) {
+                    const option = new Option(item.name, String(item.code));
+                    option.dataset.name = item.name;
+                    select.add(option);
+                }
+                select.disabled = false;
+            };
+            const resetSelect = (id, placeholder) => {
+                field(id).replaceChildren(new Option(placeholder, ''));
+                field(id).disabled = true;
+            };
+            const chooseByName = (id, name) => {
+                const wanted = normalizeAdmin(name || '');
+                if (!wanted) return false;
+                const option = [...field(id).options].find((item) => normalizeAdmin(item.dataset.name || item.text) === wanted);
+                if (!option) return false;
+                field(id).value = option.value;
+                return true;
+            };
+            const loadLegacyDistricts = async (prefix) => {
+                resetSelect(`${prefix}-district`, 'Chọn quận / huyện');
+                resetSelect(`${prefix}-ward`, prefix === 'origin' ? 'Không ghi trên CCCD' : 'Chọn xã / phường');
+                if (!field(`${prefix}-province`).value) return;
+                const result = await fetchAdministrativeUnits(`legacy/provinces/${field(`${prefix}-province`).value}/districts`);
+                setOptions(`${prefix}-district`, result.items, 'Chọn quận / huyện');
+            };
+            const loadLegacyWards = async (prefix) => {
+                const placeholder = prefix === 'origin' ? 'Không ghi trên CCCD' : 'Chọn xã / phường';
+                resetSelect(`${prefix}-ward`, placeholder);
+                if (!field(`${prefix}-district`).value) return;
+                const result = await fetchAdministrativeUnits(`legacy/districts/${field(`${prefix}-district`).value}/wards`);
+                setOptions(`${prefix}-ward`, result.items, placeholder);
+            };
+            const loadCurrentWards = async () => {
+                resetSelect('curr-ward', 'Chọn xã / phường');
+                if (!field('curr-province').value) return;
+                const result = await fetchAdministrativeUnits(`current/provinces/${field('curr-province').value}/wards`);
+                setOptions('curr-ward', result.items, 'Chọn xã / phường');
+            };
+            const syncOriginValue = () => {
+                field('origin-place').value = [selectedText('origin-ward'), selectedText('origin-district'),
+                    selectedText('origin-province')].filter(Boolean).join(', ');
+            };
+            const initializeAdministrativeSelectors = async () => {
+                const [legacy, current] = await Promise.all([
+                    fetchAdministrativeUnits('legacy/provinces'),
+                    fetchAdministrativeUnits('current/provinces')
+                ]);
+                for (const id of ['origin-province', 'perm-province']) setOptions(id, legacy.items, 'Chọn tỉnh / thành phố');
+                setOptions('curr-province', current.items, 'Chọn tỉnh / thành phố');
+            };
+
+            for (const prefix of ['origin', 'perm']) {
+                field(`${prefix}-province`).addEventListener('change', async () => { await loadLegacyDistricts(prefix); syncOriginValue(); });
+                field(`${prefix}-district`).addEventListener('change', async () => { await loadLegacyWards(prefix); syncOriginValue(); });
+                field(`${prefix}-ward`).addEventListener('change', syncOriginValue);
+            }
+            field('curr-province').addEventListener('change', loadCurrentWards);
+            for (const id of ['perm-province', 'perm-district', 'perm-ward']) {
+                field(id).addEventListener('change', () => cleanAddressDetail('perm'));
+            }
+            for (const id of ['curr-province', 'curr-ward']) {
+                field(id).addEventListener('change', () => cleanAddressDetail('curr'));
+            }
+            field('perm-street').addEventListener('blur', () => cleanAddressDetail('perm'));
+            field('curr-street').addEventListener('blur', () => cleanAddressDetail('curr'));
+            const todayIso = new Date().toISOString().slice(0, 10);
+            field('dob').max = todayIso;
+            field('issue-date').max = todayIso;
 
             const showToast = (title, message, isError = false) => {
                 const toast = field('toast-notification');
@@ -641,6 +754,28 @@
             const ocrStatus = field('ocr-status');
             const images = { front: null, back: null };
             let ocrSessionId = null; // phiên OCR đã dùng để điền form, gửi kèm khi lưu
+            let ocrHasStarted = false;
+            let identityImageGeneration = 0;
+            const identityAutofillIds = ['full-name', 'cccd-number', 'dob', 'issue-date', 'issue-place',
+                'nationality', 'expiry-date', 'origin-place', 'origin-province', 'origin-district', 'origin-ward',
+                'perm-street', 'perm-province', 'perm-district', 'perm-ward'];
+            let identityAutofill = new Map();
+            let identityGenderAutofill = null;
+            const rememberIdentityAutofill = () => {
+                identityAutofill = new Map(identityAutofillIds.map((id) => [id, field(id).value]));
+                identityGenderAutofill = form.querySelector('input[name="gender"]:checked')?.value || null;
+            };
+            const clearIdentityAutofill = () => {
+                // Remove old suggestions, but preserve values the user edited.
+                for (const [id, value] of identityAutofill) {
+                    if (field(id).value === value) field(id).value = '';
+                }
+                identityAutofill.clear();
+                if (identityGenderAutofill && form.querySelector('input[name="gender"]:checked')?.value === identityGenderAutofill) {
+                    form.querySelectorAll('input[name="gender"]').forEach((radio) => { radio.checked = false; });
+                }
+                identityGenderAutofill = null;
+            };
 
             const setOcrStatus = (message, isError = false) => {
                 ocrStatus.textContent = message;
@@ -650,6 +785,13 @@
 
             for (const side of ['front', 'back']) {
                 field(`file-${side}`).addEventListener('change', (event) => {
+                    identityImageGeneration += 1;
+                    clearIdentityAutofill();
+                    ocrSessionId = null;
+                    field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
+                    ocrButton.setAttribute('aria-busy', 'false');
+                    ocrLabel.textContent = 'Đọc thông tin bằng OCR';
+                    setOcrStatus('Đã thay ảnh. Bấm OCR để đọc thông tin của ảnh mới.');
                     const file = event.target.files[0];
                     const preview = field(`preview-${side}`);
                     if (preview.src) URL.revokeObjectURL(preview.src);
@@ -681,15 +823,55 @@
                 });
             }
 
-            // "Số nhà, Phường/Xã, Tỉnh/Thành phố" → 3 ô địa chỉ; không tách được thì để cả chuỗi ở ô đầu.
-            const fillAddress = (address) => {
-                const parts = address.split(',').map((part) => part.trim()).filter(Boolean);
-                const [street, ward, province] = parts.length >= 3
-                    ? [parts.slice(0, -2).join(', '), parts.at(-2), parts.at(-1)]
-                    : [address, '', ''];
-                field('perm-street').value = street;
-                field('perm-ward').value = ward;
-                field('perm-province').value = province;
+            const splitParts = (value) => (value || '').split(',').map((part) => part.trim()).filter(Boolean);
+            const fillLegacySelection = async (prefix, value) => {
+                const parts = splitParts(value);
+                if (parts.length < 2 || !chooseByName(`${prefix}-province`, parts.at(-1))) return false;
+                await loadLegacyDistricts(prefix);
+                if (!chooseByName(`${prefix}-district`, parts.at(-2))) return false;
+                await loadLegacyWards(prefix);
+                // Một số CCCD chỉ ghi huyện/thị xã và tỉnh, không có cấp xã/phường.
+                if (parts.length >= 3 && !chooseByName(`${prefix}-ward`, parts.at(-3))) return false;
+                if (prefix === 'origin') syncOriginValue();
+                return true;
+            };
+            const fillPermanentAddress = async (address, components) => {
+                const raw = components && ['detail', 'ward', 'province'].every((key) =>
+                    typeof components[key] === 'string' && components[key].trim())
+                    ? [components.detail, components.ward, components.province].join(', ') : address;
+                const parts = splitParts(raw);
+                if (parts.length < 3 || !chooseByName('perm-province', parts.at(-1))) {
+                    field('perm-street').value = address.trim();
+                    return false;
+                }
+                await loadLegacyDistricts('perm');
+                if (!chooseByName('perm-district', parts.at(-2))) {
+                    field('perm-street').value = parts.slice(0, -2).join(', ');
+                    return false;
+                }
+                await loadLegacyWards('perm');
+                let detail = parts.slice(0, -2).join(', ');
+                const ward = [...field('perm-ward').options]
+                    .filter((option) => option.value && normalizeAdmin(detail).endsWith(normalizeAdmin(option.dataset.name || option.text)))
+                    .sort((a, b) => b.text.length - a.text.length)[0];
+                if (!ward) {
+                    field('perm-street').value = detail;
+                    return false;
+                }
+                field('perm-ward').value = ward.value;
+                field('perm-street').value = stripTrailingAdministrativeParts(detail, [
+                    ward.text, selectedText('perm-district'), selectedText('perm-province')
+                ]);
+                return Boolean(field('perm-street').value);
+            };
+            const fillCurrentAddress = async (address) => {
+                if (!address || !chooseByName('curr-province', address.province)) return false;
+                await loadCurrentWards();
+                const parts = splitParts(address.ward);
+                if (!chooseByName('curr-ward', parts[0] || address.ward)) return false;
+                field('curr-street').value = address.detail || '';
+                cleanAddressDetail('curr');
+                return true;
             };
 
             const OCR_FIELD_LABELS = {
@@ -698,45 +880,75 @@
                 date_of_birth: 'Ngày sinh',
                 issue_date: 'Ngày cấp',
                 issue_place: 'Nơi cấp',
-                permanent_address: 'Nơi thường trú'
+                permanent_address: 'Nơi thường trú',
+                sex: 'Giới tính',
+                nationality: 'Quốc tịch',
+                expiry_date: 'Hạn thẻ',
+                place_of_origin: 'Quê quán'
             };
 
-            const applyOcrFields = (fields) => {
-                if (fields.full_name) field('full-name').value = fields.full_name;
+            const applyOcrFields = async (fields, additional = {}) => {
+                const address = fields.permanent_address || additional.residence_address;
+                const origin = additional.place_of_origin || additional.registered_birth_place;
+                if (fields.full_name) field('full-name').value = fields.full_name.normalize('NFC');
                 if (fields.identity_number) field('cccd-number').value = fields.identity_number;
                 if (fields.date_of_birth) field('dob').value = fromIsoDate(fields.date_of_birth);
                 if (fields.issue_date) field('issue-date').value = fromIsoDate(fields.issue_date);
                 if (fields.issue_place) field('issue-place').value = fields.issue_place;
-                if (fields.permanent_address) fillAddress(fields.permanent_address);
-                return Object.keys(OCR_FIELD_LABELS).filter((key) => !fields[key]).map((key) => OCR_FIELD_LABELS[key]);
+                const addressComplete = address && await fillPermanentAddress(address,
+                    !fields.permanent_address ? additional.residence_address_components : null);
+                const gender = { male: 'Nam', female: 'Nữ' }[additional.sex];
+                if (gender) {
+                    form.querySelectorAll('input[name="gender"]').forEach((radio) => {
+                        radio.checked = radio.value === gender;
+                    });
+                }
+                if (additional.nationality) field('nationality').value = additional.nationality;
+                if (additional.expiry_date) {
+                    field('expiry-date').value = fromIsoDate(additional.expiry_date);
+                }
+                const originComplete = origin && await fillLegacySelection('origin', origin);
+                const available = { ...fields, ...additional, sex: gender,
+                    permanent_address: addressComplete ? address : null,
+                    place_of_origin: originComplete ? field('origin-place').value : null };
+                return Object.keys(OCR_FIELD_LABELS).filter((key) => !available[key]).map((key) => OCR_FIELD_LABELS[key]);
             };
 
             ocrButton.addEventListener('click', async () => {
+                const generation = ++identityImageGeneration;
+                ocrHasStarted = true;
+                clearIdentityAutofill();
+                ocrSessionId = null;
+                field('ocr-filled-badge').classList.replace('inline-flex', 'hidden');
                 ocrButton.disabled = true;
                 ocrButton.setAttribute('aria-busy', 'true');
                 ocrLabel.textContent = 'Đang đọc...';
                 setOcrStatus('Đang đọc ảnh CCCD, có thể mất đến 1 phút...');
                 try {
                     const result = await readIdentityCardOcr(images.front, images.back);
+                    if (generation !== identityImageGeneration) return;
                     ocrSessionId = result.session_id;
-                    const missing = applyOcrFields(result.fields || {});
+                    const missing = await applyOcrFields(result.fields || {}, result.additional_fields || {});
+                    rememberIdentityAutofill();
                     field('ocr-filled-badge').classList.replace('hidden', 'inline-flex');
                     setOcrStatus(missing.length
                         ? `Đã điền sẵn. Chưa đọc chắc chắn: ${missing.join(', ')}. Hãy nhập tay các mục này và kiểm tra lại toàn bộ trước khi lưu.`
                         : 'Đã điền sẵn từ OCR. Hãy kiểm tra lại toàn bộ thông tin trước khi lưu.');
                     field('full-name').focus();
                 } catch (error) {
+                    if (generation !== identityImageGeneration) return;
                     setOcrStatus(error.code === 'OCR_UNREADABLE'
                         ? 'Không đọc được ảnh. Hãy chụp lại rõ nét, đúng chiều, đủ 4 góc thẻ rồi thử lại, hoặc tự nhập tay.'
                         : error.backendMessage || 'Không đọc được thông tin lúc này. Bạn có thể thử lại hoặc tự nhập tay.', true);
                 } finally {
+                    if (generation !== identityImageGeneration) return;
                     ocrButton.disabled = !(images.front && images.back);
                     ocrButton.setAttribute('aria-busy', 'false');
                     ocrLabel.textContent = 'Đọc thông tin bằng OCR';
                 }
             });
 
-            const fillForm = (profile, user) => {
+            const fillForm = async (profile, user) => {
                 field('email-address').value = user.email || '';
                 if (!profile) {
                     field('full-name').value = user.full_name || '';
@@ -752,15 +964,15 @@
                 field('nationality').value = profile.nationality;
                 field('issue-date').value = fromIsoDate(profile.issue_date);
                 field('issue-place').value = profile.issue_place;
-                field('expiry-date').value = profile.expiry_date ? fromIsoDate(profile.expiry_date) : 'Không thời hạn';
-                field('origin-place').value = profile.place_of_origin || '';
-                field('perm-street').value = profile.permanent_address.detail;
-                field('perm-ward').value = profile.permanent_address.ward;
-                field('perm-province').value = profile.permanent_address.province;
+                field('expiry-date').value = fromIsoDate(profile.expiry_date);
+                if (profile.place_of_origin) await fillLegacySelection('origin', profile.place_of_origin);
+                await fillPermanentAddress([
+                    profile.permanent_address.detail,
+                    profile.permanent_address.ward,
+                    profile.permanent_address.province
+                ].filter(Boolean).join(', '));
                 sameAddress.checked = profile.current_same_as_permanent;
-                field('curr-street').value = profile.current_address?.detail || '';
-                field('curr-ward').value = profile.current_address?.ward || '';
-                field('curr-province').value = profile.current_address?.province || '';
+                if (profile.current_address) await fillCurrentAddress(profile.current_address);
                 field('phone-number').value = profile.phone || '';
                 field('ethnicity').value = profile.ethnicity || '';
                 field('tax-id').value = profile.tax_code || '';
@@ -773,9 +985,12 @@
                 nationality: 'Quốc tịch',
                 'issue-date': 'Ngày cấp',
                 'issue-place': 'Nơi cấp',
+                'origin-province': 'Tỉnh / Thành phố quê quán',
+                'origin-district': 'Quận / Huyện quê quán',
                 'perm-street': 'Số nhà / Tên đường thường trú',
-                'perm-ward': 'Phường / Xã thường trú',
                 'perm-province': 'Tỉnh / Thành phố thường trú',
+                'perm-district': 'Quận / Huyện thường trú',
+                'perm-ward': 'Phường / Xã thường trú',
                 'phone-number': 'Số điện thoại'
             };
             const CURRENT_ADDRESS_FIELDS = {
@@ -786,6 +1001,9 @@
 
             // Đọc form thành dữ liệu gửi Backend. Thiếu hoặc sai thì trả về thông báo lỗi.
             const readForm = () => {
+                // Chặn dữ liệu trùng dù nguồn là OCR, hồ sơ cũ hay người dùng nhập tay.
+                cleanAddressDetail('perm');
+                cleanAddressDetail('curr');
                 const required = sameAddress.checked ? REQUIRED_FIELDS : { ...REQUIRED_FIELDS, ...CURRENT_ADDRESS_FIELDS };
                 const missing = Object.entries(required).find(([id]) => !text(id));
                 if (missing) return { error: `Vui lòng nhập ${missing[1]}.`, focus: missing[0] };
@@ -797,15 +1015,15 @@
                 if (!gender) return { error: 'Vui lòng chọn giới tính.' };
 
                 const dateOfBirth = toIsoDate(text('dob'));
-                if (!dateOfBirth) return { error: 'Ngày sinh phải theo dạng DD/MM/YYYY.', focus: 'dob' };
+                if (!dateOfBirth) return { error: 'Vui lòng chọn ngày sinh.', focus: 'dob' };
                 const issueDate = toIsoDate(text('issue-date'));
-                if (!issueDate) return { error: 'Ngày cấp phải theo dạng DD/MM/YYYY.', focus: 'issue-date' };
-                const expiryText = text('expiry-date');
-                const noExpiry = !expiryText || /không thời hạn/i.test(expiryText);
-                const expiryDate = noExpiry ? null : toIsoDate(expiryText);
-                if (!noExpiry && !expiryDate) {
-                    return { error: 'Có giá trị đến phải theo dạng DD/MM/YYYY hoặc "Không thời hạn".', focus: 'expiry-date' };
-                }
+                if (!issueDate) return { error: 'Vui lòng chọn ngày cấp.', focus: 'issue-date' };
+                const expiryDate = toIsoDate(text('expiry-date'));
+                if (!expiryDate) return { error: 'Vui lòng chọn hạn thẻ.', focus: 'expiry-date' };
+                const today = new Date().toISOString().slice(0, 10);
+                if (dateOfBirth > today) return { error: 'Ngày sinh không được ở tương lai.', focus: 'dob' };
+                if (issueDate < dateOfBirth || issueDate > today) return { error: 'Ngày cấp không hợp lệ.', focus: 'issue-date' };
+                if (expiryDate && expiryDate < issueDate) return { error: 'Hạn thẻ phải sau ngày cấp.', focus: 'expiry-date' };
 
                 if (!field('legal-agreement-1').checked || !field('legal-agreement-2').checked) {
                     return { error: 'Vui lòng tick cam đoan thông tin đúng sự thật và đồng ý lưu thông tin cá nhân.' };
@@ -813,8 +1031,10 @@
 
                 const address = (prefix) => ({
                     detail: text(`${prefix}-street`),
-                    ward: text(`${prefix}-ward`),
-                    province: text(`${prefix}-province`)
+                    ward: prefix === 'perm'
+                        ? [selectedText('perm-ward'), selectedText('perm-district')].filter(Boolean).join(', ')
+                        : selectedText('curr-ward'),
+                    province: selectedText(`${prefix}-province`)
                 });
                 return {
                     data: {
@@ -892,10 +1112,23 @@
             });
 
             const user = await protectPage(['citizen', 'lawyer']);
+            try {
+                await initializeAdministrativeSelectors();
+            } catch (catalogError) {
+                showToast('Không tải được danh mục địa chỉ', catalogError.backendMessage || 'Vui lòng tải lại trang.', true);
+            }
             const notice = field('profile-required-notice');
             notice.classList.toggle('hidden', !cameForApplication);
             notice.classList.toggle('flex', cameForApplication);
-            fillForm(await fetchMyCitizenProfile().catch(() => null), user);
+            const initialProfile = await fetchMyCitizenProfile().catch(() => null);
+            if (!ocrHasStarted) {
+                await fillForm(initialProfile, user);
+                rememberIdentityAutofill();
+            } else {
+                // A slow profile request must not overwrite fresh OCR results.
+                field('email-address').value = user.email || '';
+                if (!field('phone-number').value) field('phone-number').value = user.phone || '';
+            }
             window.handleSameAddressToggle(sameAddress);
         </script>
     </main>
