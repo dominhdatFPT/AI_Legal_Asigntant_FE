@@ -33,7 +33,8 @@ const apiError = (response, payload) => {
   return Object.assign(new Error(error.message || 'backend-error'), {
     code: error.code || `backend/http-${response.status}`,
     status: response.status,
-    backendMessage: error.message
+    backendMessage: error.message,
+    details: error.details // 422: [{ field, message }] theo từng ô
   });
 };
 
@@ -215,3 +216,67 @@ export const describeLoginError = (error) => {
   };
   return messages[error?.code] || error?.backendMessage || 'Không thể đăng nhập. Vui lòng thử lại.';
 };
+
+// ===== Hồ sơ, thủ tục, tài liệu (dữ liệu thật từ Backend) =====
+// Không bao giờ gửi user_id: Backend lấy chủ hồ sơ từ token.
+
+const withQuery = (path, params = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== '')
+  ).toString();
+  return query ? `${path}?${query}` : path;
+};
+
+const getData = async (path) => readData(await authRequest(path));
+
+// Hồ sơ của người đang đăng nhập → { items, pagination }
+export const fetchMyApplications = ({ domain, status, page = 1, pageSize = 10 } = {}) =>
+  getData(withQuery('/api/procedures/applications/me', { domain, status, page, page_size: pageSize }));
+
+// Admin: hồ sơ của mọi người; q tìm theo tên, CCCD hoặc mã thủ tục → { items, pagination }
+export const fetchAllApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
+  getData(withQuery('/api/procedures/applications', { domain, status, q, page, page_size: pageSize }));
+
+// Admin: { total, by_domain: { land, business }, by_status: { draft, submitted, processing, completed, cancelled } }
+export const fetchApplicationSummary = () => getData('/api/procedures/applications/summary');
+
+// Danh mục thủ tục công khai theo lĩnh vực ('land' | 'business') → mảng thủ tục
+export const fetchProcedures = async (domain) =>
+  (await readData(await request(`/api/procedures/domains/${domain}/procedures?include_details=false`))).items;
+
+// Biểu mẫu riêng của một thủ tục (công khai) → { procedure_code, template_filename, sections, fields }
+export const fetchFormSchema = async (code) =>
+  readData(await request(`/api/procedures/form-schema/${encodeURIComponent(code)}`));
+
+// Nộp/lưu nháp hồ sơ → bản ghi đã lưu
+export const submitApplication = async ({ procedureCode, status = 'submitted', formData = {} }) =>
+  readData(await authRequest('/api/procedures/applications', {
+    method: 'POST',
+    body: { procedure_code: procedureCode, status, form_data: formData }
+  }));
+
+// File người dùng đã upload → { items, pagination }
+export const fetchMyDocuments = () => getData('/api/documents/');
+
+export const STATUS_LABELS = {
+  draft: 'Bản nháp',
+  submitted: 'Đã nộp',
+  processing: 'Đang xử lý',
+  completed: 'Đã hoàn tất',
+  cancelled: 'Đã hủy'
+};
+
+export const AGENCY_LABELS = { commune: 'UBND cấp xã', district: 'UBND cấp huyện', province: 'UBND cấp tỉnh' };
+
+export const COMING_SOON_HTML =
+  '<span class="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800"><span class="material-symbols-outlined text-sm" aria-hidden="true">schedule</span>Sắp ra mắt</span>';
+
+// Chèn chữ người dùng/DB vào HTML an toàn
+export const escapeHtml = (value) =>
+  String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+// '2026-10-13T08:00:00+00:00' → '13/10/2026'
+export const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString('vi-VN') : '—');
+
+// 100000 → '100.000 đ'; 0 → 'Miễn phí'; null → '—'
+export const formatFee = (fee) => (fee === null || fee === undefined ? '—' : fee === 0 ? 'Miễn phí' : `${fee.toLocaleString('vi-VN')} đ`);
