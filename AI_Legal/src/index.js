@@ -82,6 +82,10 @@ app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });
 
+app.get('/account', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'account.html'));
+});
+
 app.get('/api/application-submission-view', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
 });
