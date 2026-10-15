@@ -101,6 +101,9 @@ export const readIdentityCardOcr = async (front, back) => {
   }));
 };
 
+export const fetchAdministrativeUnits = async (path) =>
+  readData(await request(`/api/locations/administrative/${path}`));
+
 // Lưu 6 trường CCCD người dùng đã kiểm tra vào Document (nguồn: phiên OCR) để hợp đồng dùng lại.
 export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
   const current = await authRequest('/api/documents/identity-profile/me');
