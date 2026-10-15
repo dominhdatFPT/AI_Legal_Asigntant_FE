@@ -33,7 +33,8 @@ const apiError = (response, payload) => {
   return Object.assign(new Error(error.message || 'backend-error'), {
     code: error.code || `backend/http-${response.status}`,
     status: response.status,
-    backendMessage: error.message
+    backendMessage: error.message,
+    details: error.details // 422: [{ field, message }] theo từng ô
   });
 };
 
@@ -239,6 +240,10 @@ export const fetchApplicationSummary = () => getData('/api/procedures/applicatio
 // Danh mục thủ tục công khai theo lĩnh vực ('land' | 'business') → mảng thủ tục
 export const fetchProcedures = async (domain) =>
   (await readData(await request(`/api/procedures/domains/${domain}/procedures?include_details=false`))).items;
+
+// Biểu mẫu riêng của một thủ tục (công khai) → { procedure_code, template_filename, sections, fields }
+export const fetchFormSchema = async (code) =>
+  readData(await request(`/api/procedures/form-schema/${encodeURIComponent(code)}`));
 
 // Nộp/lưu nháp hồ sơ → bản ghi đã lưu
 export const submitApplication = async ({ procedureCode, status = 'submitted', formData = {} }) =>

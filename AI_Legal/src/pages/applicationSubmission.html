@@ -339,14 +339,11 @@
         <span class="material-symbols-outlined filled text-lg">badge</span>
       </span>
       <div>
-        <h3 class="font-bold text-sm sm:text-base text-on-surface">1. Thông tin người làm hồ sơ</h3>
-        <p class="text-xs text-secondary">Lấy từ hồ sơ CCCD đã xác nhận. Bấm Cập nhật thông tin để sửa.</p>      </div>
+        <h3 id="personal-step-title" class="font-bold text-sm sm:text-base text-on-surface">1. Thông tin người làm hồ sơ</h3>
+        <p class="text-xs text-secondary">Điền theo giấy tờ của bạn. Các mục có dấu * là bắt buộc.</p>      </div>
     </div>
     <div class="flex items-center gap-2">
       <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full"><span class="material-symbols-outlined text-xs filled">info</span> Từ hồ sơ CCCD</span>
-      <button type="button" onclick="toggleEditMode()" id="btn-toggle-edit" aria-expanded="false" aria-controls="citizen-fields-container" class="text-xs text-secondary hover:text-primary transition underline font-medium">
-        Cập nhật thông tin
-      </button>
     </div>
   </div>
 
@@ -396,71 +393,11 @@
   </div>
 
   <!-- Detailed Form Fields (collapsible/editable when needed) -->
-  <div id="citizen-fields-container" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2 border-t border-slate-100">
-    <div class="sm:col-span-2 md:col-span-1">
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-fullname">
-        Họ và tên người làm hồ sơ <span class="text-primary">*</span>
-      </label>
-      <div class="relative">
-        <input type="text" id="citizen-fullname" required="" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none uppercase transition">
-      </div>
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-id">
-        Số CCCD / Mã định danh cá nhân <span class="text-primary">*</span>
-      </label>
-      <input type="text" id="citizen-id" required="" maxlength="12" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono font-bold text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-id-date">
-        Ngày cấp CCCD <span class="text-primary">*</span>
-      </label>
-      <input type="date" id="citizen-id-date" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface outline-none transition">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-dob">
-        Ngày sinh <span class="text-primary">*</span>
-      </label>
-      <input type="date" id="citizen-dob" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface outline-none transition">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-gender">
-        Giới tính <span class="text-primary">*</span>
-      </label>
-      <select id="citizen-gender" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface outline-none transition">
-        <option selected="" value="Nam">Nam</option>
-        <option value="Nữ">Nữ</option>
-      </select>
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-nationality">
-        Quốc tịch <span class="text-primary">*</span>
-      </label>
-      <input type="text" id="citizen-nationality" readonly="" value="Việt Nam" class="w-full h-10 px-3 bg-slate-100 border border-slate-200 rounded-xl text-xs text-secondary font-medium outline-none">
-    </div>
-    <div>
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-phone">
-        Số điện thoại liên lạc <span class="text-primary">*</span>
-      </label>
-      <input type="tel" id="citizen-phone" required="" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition">
-    </div>
-    <div class="sm:col-span-2">
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-email">
-        Email nhận thông báo và kết quả <span class="text-primary">*</span>
-      </label>
-      <input type="email" id="citizen-email" required="" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition">
-    </div>
-    <div class="sm:col-span-3">
-      <label class="block text-xs font-semibold text-on-surface mb-1.5" for="citizen-address">
-        Nơi đăng ký thường trú theo CCCD <span class="text-primary">*</span>
-      </label>
-      <input type="text" id="citizen-address" required="" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition">
-    </div>
-  </div>
+  <div id="citizen-fields-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100"></div>
 </div>
 
           <!-- STEP 2: THÔNG TIN CHI TIẾT THỦ TỤC & ĐẤT ĐAI / HỘ KINH DOANH -->
-          <div id="form-step-details" class="bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4"><div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-subtle pb-3 gap-2"><div class="flex items-center gap-2.5"><span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined filled text-lg">description</span></span><div><div class="flex flex-wrap items-center gap-2"><h3 class="font-bold text-base text-on-surface">2. Thông tin về đất, nhà ở và tài sản trên đất</h3><span class="text-[11px] font-bold bg-red-100 text-primary px-2.5 py-0.5 rounded-full border border-red-200">Mẫu số 04/ĐK</span></div><p class="text-xs text-secondary mt-0.5">Biểu mẫu theo quy định của Luật Đất đai 2024. Hãy điền theo giấy tờ về đất và nhà ở của bạn.</p><p class="text-[11px] text-secondary mt-1">Các mục có dấu * là bắt buộc. Bạn có thể xem số liệu trên giấy chứng nhận hoặc giấy tờ liên quan.</p></div></div><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold self-start sm:self-center"><span class="material-symbols-outlined text-sm filled text-amber-600">verified</span>Mẫu theo quy định</div></div><div class="space-y-5"><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex items-center justify-between border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">map</span>Phần A. Kê khai Thửa đất (Mục 2 theo Mẫu 04/ĐK)</h4><span class="text-[11px] text-secondary font-medium">Số thửa, số tờ thường có trên giấy chứng nhận.</span></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-lot">Thửa đất số <span class="text-primary">*</span></label><input type="text" id="land-lot" placeholder="VD: 128" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-map">Tờ bản đồ số <span class="text-primary">*</span></label><input type="text" id="land-map" placeholder="VD: 14" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-cadastral-sheet">Số mảnh trích đo địa chính (nếu có)</label><input type="text" id="land-cadastral-sheet" placeholder="(Nếu có)" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area">Tổng diện tích (m²) <span class="text-primary">*</span></label><input type="text" id="land-area" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-private">Sử dụng riêng (m²) <span class="text-primary">*</span></label><input type="text" id="land-area-private" placeholder="VD: 85.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-area-common">Sử dụng chung (m²)</label><input type="text" id="land-area-common" placeholder="VD: 0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-location">Địa chỉ thửa đất <span class="text-primary">*</span> (Số nhà/đường, Thôn/Tổ, Phường/Xã, Quận/Huyện, Tỉnh/TP)</label><input type="text" id="land-location" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-purpose">Mục đích sử dụng đất <span class="text-primary">*</span></label><select id="land-purpose" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Đất ở tại đô thị (ODT)</option><option>Đất ở tại nông thôn (ONT)</option><option>Đất thương mại, dịch vụ (TMD)</option><option>Đất trồng cây lâu năm (CLN)</option><option>Đất sản xuất kinh doanh phi nông nghiệp (SKC)</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-start-time">Thời điểm bắt đầu sử dụng đất</label><input type="text" id="land-start-time" placeholder="VD: Tháng 03/2005" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-duration">Thời hạn đề nghị sử dụng đất <span class="text-primary">*</span></label><select id="land-duration" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Lâu dài</option><option>Có thời hạn đến 50 năm</option><option>Đến ngày cụ thể theo dự án</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-origin">Nguồn gốc sử dụng đất <span class="text-primary">*</span></label><select id="land-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Công nhận quyền sử dụng đất như giao đất có thu tiền sử dụng đất</option><option>Nhận chuyển nhượng quyền sử dụng đất hợp pháp</option><option>Được tặng cho quyền sử dụng đất</option><option>Nhận thừa kế quyền sử dụng đất</option><option>Nhà nước giao đất có thu tiền sử dụng đất</option></select></div></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-easement">Quyền hoặc hạn chế liên quan đến thửa đất liền kề (nếu có)</label><input type="text" id="land-easement" placeholder="Lối đi chung, cấp thoát nước, đường dây điện qua thửa..." class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-2 gap-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">home</span>Phần B. Nhà ở, công trình xây dựng gắn liền với đất (Mục 3 theo Mẫu 04/ĐK)</h4><label class="flex items-center gap-2 cursor-pointer select-none text-xs text-on-surface font-semibold"><input type="checkbox" id="check-has-asset" checked="" class="w-4 h-4 rounded text-primary accent-primary cursor-pointer">Thửa đất có nhà ở hoặc công trình cần đăng ký</label></div><div id="section-asset-fields" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-type">Loại công trình / Nhà ở <span class="text-primary">*</span></label><select id="asset-type" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Nhà ở riêng lẻ đô thị</option><option>Căn hộ nhà chung cư</option><option>Công trình xây dựng hỗn hợp</option><option>Nhà xưởng, nhà kho gắn liền</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-build-area">Diện tích xây dựng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-build-area" placeholder="VD: 72.0 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floor-area">Diện tích sàn xây dựng/sử dụng (m²) <span class="text-primary">*</span></label><input type="text" id="asset-floor-area" placeholder="VD: 216.5 m²" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-ownership">Hình thức sở hữu <span class="text-primary">*</span></label><select id="asset-ownership" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Sở hữu riêng (toàn bộ diện tích)</option><option>Sở hữu chung hợp nhất</option><option>Sở hữu chung theo phần</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-floors">Kết cấu &amp; Số tầng <span class="text-primary">*</span></label><input type="text" id="asset-floors" placeholder="VD: 03 tầng nổi, 0 hầm" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-duration">Thời hạn sở hữu <span class="text-primary">*</span></label><input type="text" id="asset-duration" placeholder="VD: Lâu dài" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-origin">Nguồn gốc tạo lập tài sản <span class="text-primary">*</span></label><select id="asset-origin" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"><option selected="">Tự đầu tư xây dựng (Có Giấy phép xây dựng)</option><option>Mua bán nhà ở có sẵn</option><option>Được tặng cho nhà ở gắn liền với đất</option><option>Thừa kế nhà ở</option></select></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="asset-permit">Giấy phép xây dựng / Giấy tờ pháp lý</label><input type="text" id="asset-permit" placeholder="Số GPXD hoặc văn bản hoàn công" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"></div></div></div></div><div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3"><div class="border-b border-slate-200 pb-2"><h4 class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm filled">check_circle</span>Phần C. Bạn muốn cơ quan giải quyết nội dung nào? (Mục 4, Mẫu 04/ĐK)</h4><p class="text-[11px] text-secondary mt-0.5">Chọn một hoặc nhiều nội dung phù hợp với nhu cầu của bạn.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1"><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-1" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.1.</strong> Đề nghị đăng ký đất đai, tài sản gắn liền với đất</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-2" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="font-medium text-on-surface"><strong>4.2.</strong> Đề nghị cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản (Sổ đỏ/Sổ hồng)</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-3" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.3.</strong> Đề nghị ghi nợ tiền sử dụng đất, lệ phí trước bạ</span></label><label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer text-xs"><input type="checkbox" id="req-4-4" class="w-4 h-4 mt-0.5 text-primary accent-primary rounded cursor-pointer"><span class="text-secondary"><strong>4.4.</strong> Đề nghị khác (yêu cầu riêng theo hồ sơ)</span></label></div><div><label class="block text-xs font-semibold text-on-surface mb-1" for="land-notes">Nội dung đề nghị thêm (nếu có)</label><textarea id="land-notes" rows="2" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition" placeholder="Bạn có thể ghi thêm yêu cầu hoặc thông tin cần lưu ý..."></textarea></div></div></div></div>
+          <div id="form-step-details" class="bg-surface-panel p-6 rounded-2xl border border-border-subtle shadow-sm space-y-4"><div class="flex items-center gap-2.5 border-b border-border-subtle pb-3"><span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined filled text-lg">description</span></span><div><h3 class="font-bold text-base text-on-surface">2. Thông tin thủ tục</h3><p class="text-xs text-secondary mt-0.5">Biểu mẫu riêng của thủ tục đã chọn. Các mục có dấu * là bắt buộc.</p></div></div><div id="schema-details-fields" class="space-y-5"></div></div>
 
           <!-- STEP 3: TRA CỨU & XEM LẠI HỒ SƠ -->
           <section id="form-step-review" class="rounded-2xl border border-red-200 bg-white p-6 shadow-sm space-y-4 scroll-mt-6">
@@ -619,7 +556,8 @@
     let procedureCatalog = []; // [{ id: mã thủ tục, category: 'land' | 'business', name, keywords }]
     let procedureCatalogFailed = false;
 
-    const businessProgressFields = ['business-name', 'business-type', 'business-industry', 'business-capital', 'business-address', 'business-owner', 'business-phone', 'business-notes'];
+    let currentFormSchema = null; // form schema của thủ tục đang mở (GET /api/procedures/form-schema/{code})
+    const formSchemaCache = new Map();
     let activeProcedureSuggestionIndex = -1;
 
     function normalizeProcedureText(value) {
@@ -741,129 +679,188 @@
     }
 
     // Điền thông tin người làm hồ sơ từ hồ sơ CCCD đã xác nhận (GET /api/users/me/citizen-profile).
+    // Chỉ thủ tục có khối "applicant" mới tự điền; DN-001/DN-006 (bên ủy quyền, bên cho thuê) người dùng tự nhập.
     async function fillFromCitizenProfile() {
+      if (!document.getElementById('field-applicant_name')) return;
       const { fetchMyCitizenProfile, fetchCurrentUser } = await applicationApi;
       const [profile, user] = await Promise.all([
         fetchMyCitizenProfile().catch(() => null),
         fetchCurrentUser().catch(() => null)
       ]);
       if (!profile) return;
-      const address = profile.permanent_address;
+      const joinAddress = (address) => (address ? [address.detail, address.ward, address.province].filter(Boolean).join(', ') : '');
+      const permanentAddress = joinAddress(profile.permanent_address);
       const values = {
-        'citizen-fullname': profile.full_name,
-        'citizen-id': profile.id_number,
-        'citizen-id-date': profile.issue_date,
-        'citizen-dob': profile.date_of_birth,
-        'citizen-gender': profile.gender,
-        'citizen-phone': profile.phone,
-        'citizen-email': profile.email || user?.email,
-        'citizen-address': address ? [address.detail, address.ward, address.province].filter(Boolean).join(', ') : ''
+        applicant_name: profile.full_name,
+        applicant_gender: profile.gender,
+        applicant_dob: profile.date_of_birth,
+        applicant_id_type: 'CCCD',
+        applicant_id_number: profile.id_number,
+        applicant_id_issue_date: profile.issue_date,
+        applicant_id_issue_place: profile.issue_place,
+        applicant_phone: profile.phone,
+        applicant_email: profile.email || user?.email,
+        applicant_permanent_address: permanentAddress,
+        applicant_current_address: profile.current_same_as_permanent ? permanentAddress : joinAddress(profile.current_address)
       };
-      Object.entries(values).forEach(([id, value]) => {
-        const field = document.getElementById(id);
-        if (field && value) field.value = value;
+      Object.entries(values).forEach(([name, value]) => {
+        const field = document.getElementById(`field-${name}`);
+        if (field && value) field.value = value; // select chỉ nhận giá trị có trong options
       });
       updateApplicationSummary();
       updateApplicationProgress();
       document.getElementById('autofill-alert')?.classList.remove('hidden');
     }
 
-    // Clear personal fields
     function clearPersonalFields() {
-      document.getElementById('citizen-fullname').value = '';
-      document.getElementById('citizen-id').value = '';
-      document.getElementById('citizen-id-date').value = '';
-      document.getElementById('citizen-dob').value = '';
-      document.getElementById('citizen-gender').value = '';
-      document.getElementById('citizen-phone').value = '';
-      document.getElementById('citizen-email').value = '';
-      document.getElementById('citizen-address').value = '';
+      document.querySelectorAll('#citizen-fields-container input, #citizen-fields-container select, #citizen-fields-container textarea')
+        .forEach((field) => {
+          if (field.type === 'checkbox') field.checked = false;
+          else field.value = '';
+        });
       updateApplicationSummary();
       updateApplicationProgress();
     }
 
-    function toggleEditMode() {
-      const fields = document.getElementById('citizen-fields-container');
-      const button = document.getElementById('btn-toggle-edit');
-      const shouldShow = fields.classList.contains('hidden');
-      fields.classList.toggle('hidden', !shouldShow);
-      button.textContent = shouldShow ? 'Ẩn chỉnh sửa' : 'Chỉnh sửa';
-      button.setAttribute('aria-expanded', String(shouldShow));
-      if (shouldShow) fields.querySelector('input')?.focus();
-    }
-
-    // Diện tích kiểu Việt Nam: '85,5' / '85.5' → 85.5; '1.000' / '1.250,5' (dấu chấm ngăn nghìn) → 1000 / 1250.5.
+    // Số kiểu Việt Nam: '85,5' / '85.5' → 85.5; '1.000' / '1.250,5' / '100.000.000 đồng' (dấu chấm ngăn nghìn) → 1000 / 1250.5 / 100000000.
     // Cách viết mơ hồ như '1,000' hoặc chữ → null để hỏi lại người dùng, không đoán.
-    function parseArea(text) {
-      const t = String(text ?? '').replace(/m²|m2/gi, '').replace(/\s/g, '');
+    function parseVietnameseNumber(text) {
+      const t = String(text ?? '').replace(/m²|m2|đồng|vnđ|vnd|đ/gi, '').replace(/\s/g, '');
       if (/^\d+([.,]\d{1,2})?$/.test(t)) return Number(t.replace(',', '.'));
       if (/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(t)) return Number(t.replace(/\./g, '').replace(',', '.'));
       return null;
     }
 
-    // Tiền (số nguyên đồng): '100.000.000 đồng' → 100000000; bỏ phần lẻ ',50'; không có chữ số → null
-    function parseMoney(text) {
-      const digits = String(text ?? '').replace(/,\d{1,2}\s*(đồng|đ|vnd)?\s*$/i, '').replace(/\D/g, '');
-      return digits ? Number(digits) : null;
+    console.assert(parseVietnameseNumber('85,5 m²') === 85.5 && parseVietnameseNumber('1.000 m²') === 1000
+      && parseVietnameseNumber('1.250,5') === 1250.5 && parseVietnameseNumber('100.000.000 đồng') === 100000000
+      && parseVietnameseNumber('1,000') === null && parseVietnameseNumber('abc') === null && parseVietnameseNumber('') === null,
+      'parseVietnameseNumber');
+
+    function requiredMark() {
+      const mark = document.createElement('span');
+      mark.className = 'text-red-700';
+      mark.setAttribute('aria-hidden', 'true');
+      mark.textContent = '*';
+      return mark;
     }
 
-    // Ô có chữ nhưng không đọc được thành số → báo ngay ở ô đó, không lưu giá trị sai.
-    function numberFieldIsValid(id, parse, example) {
-      const field = document.getElementById(id);
-      if (!field || field.closest('.hidden') || !field.value.trim() || parse(field.value) !== null) return true;
-      field.setCustomValidity(`Giá trị chưa đúng, ví dụ: ${example}`);
-      field.reportValidity();
-      field.addEventListener('input', () => field.setCustomValidity(''), { once: true });
-      return false;
+    // Một ô nhập theo field của form schema: id = field-<name>, name = tên biến backend nhận trong form_data.
+    function createSchemaField(field) {
+      const id = `field-${field.name}`;
+      const kind = field.field_type;
+      const wrapper = document.createElement('div');
+      if (kind === 'textarea' || kind === 'checkbox') wrapper.className = 'sm:col-span-2';
+      let control;
+      if (kind === 'textarea') {
+        control = document.createElement('textarea');
+        control.rows = 3;
+      } else if (kind === 'select' || kind === 'radio') {
+        control = document.createElement('select');
+        control.append(new Option('— Chọn —', ''));
+        (field.options || []).forEach((option) => control.append(new Option(option.label, option.value)));
+      } else {
+        control = document.createElement('input');
+        control.type = kind === 'date' || kind === 'checkbox' ? kind : 'text';
+        if (kind === 'number') control.inputMode = 'decimal';
+        if (field.validation_regex) control.pattern = field.validation_regex.replace(/^\^|\$$/g, '');
+      }
+      control.id = id;
+      control.name = field.name;
+      control.required = field.required;
+      if (field.placeholder) control.placeholder = field.placeholder;
+
+      const label = document.createElement('label');
+      label.htmlFor = id;
+      if (kind === 'checkbox') {
+        control.className = 'mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-red-700';
+        control.checked = field.default_value === true;
+        label.className = 'flex cursor-pointer items-start gap-2.5 rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900';
+        label.append(control, document.createTextNode(field.label));
+        if (field.required) label.append(' ', requiredMark());
+        wrapper.append(label);
+      } else {
+        control.className = 'w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-red-700 focus:ring-2 focus:ring-red-100';
+        if (field.default_value != null) control.value = String(field.default_value);
+        label.className = 'mb-1.5 block text-xs font-semibold text-slate-900';
+        label.textContent = field.label;
+        if (field.required) label.append(' ', requiredMark());
+        wrapper.append(label, control);
+      }
+      if (field.description) {
+        const help = document.createElement('p');
+        help.id = `${id}-help`;
+        help.className = 'mt-1 text-[11px] text-slate-600';
+        help.textContent = field.description;
+        control.setAttribute('aria-describedby', help.id);
+        wrapper.append(help);
+      }
+      return wrapper;
     }
 
-    console.assert(parseArea('85,5 m²') === 85.5 && parseArea('1.000 m²') === 1000 && parseArea('1.250,5') === 1250.5
-      && parseArea('1,000') === null && parseArea('abc') === null && parseArea('') === null, 'parseArea');
-    console.assert(parseMoney('100.000.000 đồng') === 100000000 && parseMoney('100.000.000,50') === 100000000
-      && parseMoney('') === null, 'parseMoney');
+    // Bước 1 = khối đầu tiên của schema (người làm đơn / bên ủy quyền / bên cho thuê), bước 2 = các khối còn lại.
+    function renderSchemaForm(schema) {
+      currentFormSchema = schema;
+      const [first, ...rest] = schema.sections;
+      const fieldsOf = (section) => schema.fields.filter((field) => field.section === section.key);
+      document.getElementById('citizen-fields-container').replaceChildren(...fieldsOf(first).map(createSchemaField));
+      document.getElementById('personal-step-title').textContent = first.title;
+      const isApplicant = first.key === 'applicant';
+      document.getElementById('verified-id-card')?.classList.toggle('hidden', !isApplicant);
+      document.getElementById('btn-autofill-citizen-data')?.classList.toggle('hidden', !isApplicant);
+      document.getElementById('autofill-alert')?.classList.add('hidden');
+      document.getElementById('schema-details-fields').replaceChildren(...rest.map((section) => {
+        const box = document.createElement('section');
+        box.className = 'space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
+        const title = document.createElement('h4');
+        title.className = 'border-b border-slate-200 pb-2 text-xs font-bold uppercase tracking-wider text-red-700';
+        title.textContent = section.title;
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 gap-3 sm:grid-cols-2';
+        grid.append(...fieldsOf(section).map(createSchemaField));
+        box.append(title, grid);
+        return box;
+      }));
+    }
 
-    // Giá trị các ô trong một khu vực, khóa là id ô (dấu - đổi thành _).
-    function collectFields(root) {
+    function markFieldInvalid(control, message) {
+      control.setCustomValidity(message);
+      control.addEventListener('input', () => control.setCustomValidity(''), { once: true });
+    }
+
+    // form_data đúng theo name của schema; ô số viết sai → báo tại ô và trả null (không gửi).
+    function collectSchemaData() {
       const data = {};
-      root?.querySelectorAll('input[id], select[id], textarea[id]').forEach((field) => {
-        const key = field.id.replace(/-/g, '_');
-        if (field.type === 'checkbox') data[key] = field.checked;
-        else if (String(field.value).trim()) data[key] = String(field.value).trim();
-      });
+      for (const field of currentFormSchema?.fields || []) {
+        const control = document.getElementById(`field-${field.name}`);
+        if (!control) continue;
+        if (field.field_type === 'checkbox') {
+          data[field.name] = control.checked;
+          continue;
+        }
+        const value = control.value.trim();
+        if (!value) continue;
+        if (field.field_type === 'number') {
+          const number = parseVietnameseNumber(value);
+          if (number === null) {
+            markFieldInvalid(control, 'Giá trị chưa đúng, ví dụ: 85,5 hoặc 1.250.000');
+            control.reportValidity();
+            return null;
+          }
+          data[field.name] = number;
+        } else {
+          data[field.name] = value;
+        }
+      }
       return data;
     }
 
-    function buildFormData(isBusiness) {
-      const value = (id) => document.getElementById(id)?.value.trim() || null;
-      const personal = collectFields(document.getElementById('form-step-personal'));
-      if (isBusiness) {
-        return {
-          ...personal,
-          ...collectFields(document.getElementById('business-details-panel')),
-          applicant_name: value('business-owner') || value('citizen-fullname'),
-          applicant_id_number: value('citizen-id'),
-          applicant_phone: value('business-phone') || value('citizen-phone'),
-          business_name_vn: value('business-name'),
-          business_type: value('business-type'),
-          headquarters_address: value('business-address'),
-          charter_capital: parseMoney(value('business-capital'))
-        };
-      }
-      const landFields = {};
-      [...document.getElementById('form-step-details').children]
-        .filter((child) => child.id !== 'business-details-panel')
-        .forEach((child) => Object.assign(landFields, collectFields(child)));
-      return {
-        ...personal,
-        ...landFields,
-        applicant_name: value('citizen-fullname'),
-        applicant_id_number: value('citizen-id'),
-        applicant_phone: value('citizen-phone'),
-        plot_number: value('land-lot'),
-        map_sheet_number: value('land-map'),
-        land_area: parseArea(value('land-area')),
-        land_address: value('land-location')
-      };
+    // Lỗi 422 từ backend: details [{field, message}] → báo ngay tại ô tương ứng.
+    function showFieldErrors(details = []) {
+      const controls = details
+        .map((detail) => [document.getElementById(`field-${detail.field}`), detail.message])
+        .filter(([control]) => control);
+      controls.forEach(([control, message]) => markFieldInvalid(control, message));
+      controls[0]?.[0].reportValidity();
     }
 
     // Nộp hồ sơ thật: POST /api/procedures/applications (chủ hồ sơ lấy từ token).
@@ -875,8 +872,8 @@
         procedureInput.reportValidity();
         return;
       }
-      if (!numberFieldIsValid('land-area', parseArea, '85,5 hoặc 1.250,5')
-        || !numberFieldIsValid('business-capital', parseMoney, '100.000.000')) return;
+      const formData = collectSchemaData();
+      if (!formData) return;
       const button = document.getElementById('btn-submit-form');
       const errorBox = document.getElementById('submit-error');
       if (button.disabled) return; // đang gửi hoặc đã tạo xong: không tạo trùng hồ sơ
@@ -885,11 +882,10 @@
       errorBox.classList.add('hidden');
       try {
         const { submitApplication } = await applicationApi;
-        const isBusiness = document.getElementById('proc-category').value === 'business';
         const record = await submitApplication({
           procedureCode: procedureSelect.value,
           status: 'submitted',
-          formData: buildFormData(isBusiness)
+          formData
         });
         document.getElementById('modal-application-code').textContent = `${record.procedure_code}-${record.id.slice(0, 8).toUpperCase()}`;
         activeFormStep = 3;
@@ -901,6 +897,7 @@
       } catch (error) {
         errorBox.textContent = error.backendMessage || 'Không tạo được hồ sơ, vui lòng thử lại.';
         errorBox.classList.remove('hidden');
+        showFieldErrors(error.details);
         button.disabled = false;
       } finally {
         button.removeAttribute('aria-busy');
@@ -957,29 +954,6 @@
         personalSection.append(locationPanel);
       }
 
-      if (!document.getElementById('business-details-panel')) {
-        const businessPanel = document.createElement('div');
-        businessPanel.id = 'business-details-panel';
-        businessPanel.className = 'hidden space-y-4';
-        businessPanel.innerHTML = `<div class="flex flex-wrap items-start justify-between gap-3 border-b border-border-subtle pb-4"><div><h3 class="text-base font-bold text-on-surface">2. Thông tin đăng ký hộ kinh doanh</h3><p class="mt-1 text-xs leading-relaxed text-secondary">Biểu mẫu xem trước để bạn khai thông tin cơ bản. Cơ quan tiếp nhận có thể yêu cầu mẫu và giấy tờ theo thủ tục cụ thể.</p></div><span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Mẫu tham khảo</span></div>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2"><div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-name">Tên hộ kinh doanh <span class="text-primary">*</span></label><input id="business-name" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ví dụ: Hộ kinh doanh An Phát"></div>
-          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-type">Loại hình đăng ký</label><select id="business-type" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm"><option>Hộ kinh doanh</option><option>Doanh nghiệp tư nhân</option><option>Công ty trách nhiệm hữu hạn</option><option>Công ty cổ phần</option></select></div>
-          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-industry">Ngành, nghề kinh doanh <span class="text-primary">*</span></label><input id="business-industry" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Mô tả ngành nghề kinh doanh"></div>
-          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-capital">Vốn kinh doanh dự kiến</label><input id="business-capital" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ví dụ: 100.000.000 đồng"></div>
-          <div class="sm:col-span-2"><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-address">Địa điểm kinh doanh <span class="text-primary">*</span></label><input id="business-address" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố"></div>
-          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-owner">Người đại diện/chủ hộ</label><input id="business-owner" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Họ và tên"></div>
-          <div><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-phone">Số điện thoại liên hệ</label><input id="business-phone" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Số điện thoại"></div>
-          <div class="sm:col-span-2"><label class="mb-1.5 block text-xs font-semibold text-on-surface" for="business-notes">Nội dung cần thay đổi/ghi chú</label><textarea id="business-notes" rows="3" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm" placeholder="Ghi nội dung đăng ký, thay đổi hoặc lưu ý khác"></textarea></div></div>
-          <div class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-xs leading-relaxed text-blue-900">Đây là giao diện xem thử để nhập thông tin. Việc tạo hồ sơ chính thức cần đối chiếu biểu mẫu và yêu cầu hiện hành của cơ quan đăng ký kinh doanh tại địa phương.</div>`;
-        details.append(businessPanel);
-        businessPanel.querySelectorAll('input, select, textarea').forEach((field) => {
-          ['input', 'change'].forEach((eventName) => field.addEventListener(eventName, () => {
-            updateApplicationSummary();
-            updateApplicationProgress();
-          }));
-        });
-      }
-
       function chooseCategory(category) {
         document.getElementById('proc-category').value = category;
         updateProcedureTypes();
@@ -1027,21 +1001,40 @@
         document.getElementById('template-browser-title').textContent = 'Chọn mẫu hồ sơ';
       }
 
-      function openTemplateForm(procedure) {
+      async function openTemplateForm(procedure) {
+        let schema = formSchemaCache.get(procedure.id);
+        if (!schema) {
+          list.setAttribute('aria-busy', 'true');
+          try {
+            const { fetchFormSchema } = await applicationApi;
+            schema = await fetchFormSchema(procedure.id);
+            formSchemaCache.set(procedure.id, schema);
+          } catch {
+            let alert = document.getElementById('template-load-error');
+            if (!alert) {
+              alert = document.createElement('p');
+              alert.id = 'template-load-error';
+              alert.setAttribute('role', 'alert');
+              alert.className = 'mb-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700';
+              list.before(alert);
+            }
+            alert.textContent = `Không tải được biểu mẫu "${procedure.name}". Vui lòng thử lại sau.`;
+            return;
+          } finally {
+            list.removeAttribute('aria-busy');
+          }
+        }
+        document.getElementById('template-load-error')?.remove();
         document.getElementById('proc-category').value = procedure.category;
         updateProcedureTypes();
         selectProcedure(procedure.id);
+        renderSchemaForm(schema);
+        fillFromCitizenProfile();
         browser.classList.add('hidden');
         formHelp?.classList.remove('hidden');
         workspace?.classList.remove('hidden');
         document.getElementById('application-template-name')?.replaceChildren(document.createTextNode(procedure.name));
-        const businessPanel = document.getElementById('business-details-panel');
-        const isBusiness = procedure.category === 'business';
-        [...details.children].forEach((child) => {
-          if (child === businessPanel) return;
-          child.classList.toggle('hidden', isBusiness);
-        });
-        businessPanel?.classList.toggle('hidden', !isBusiness);
+        updateApplicationSummary();
         const backButton = document.getElementById('back-to-template-list');
         if (backButton) backButton.onclick = () => {
           browser.classList.remove('hidden');
@@ -1060,6 +1053,11 @@
         document.getElementById('template-browser-title').textContent = 'Bạn cần làm thủ tục nào?';
       });
 
+      // Danh mục tải xong sau khi người dùng đã mở một lĩnh vực: vẽ lại để không kẹt ở "chưa có thủ tục".
+      window.rerenderApplicationTemplateList = () => {
+        if (!listPanel.classList.contains('hidden')) chooseCategory(document.getElementById('proc-category').value);
+      };
+
       window.openApplicationTemplateById = (procedureId) => {
         const procedure = procedureCatalog.find((item) => item.id === procedureId);
         if (!procedure) return false;
@@ -1068,36 +1066,27 @@
       };
     }
 
-    const personalProgressFields = [
-      'citizen-fullname', 'citizen-id', 'citizen-id-date', 'citizen-dob',
-      'citizen-gender', 'citizen-phone', 'citizen-email', 'citizen-address'
-    ];
-    const procedureProgressFields = [
-      'land-lot', 'land-map', 'land-area', 'land-area-private',
-      'land-location', 'land-purpose', 'land-duration', 'land-origin'
-    ];
     let activeFormStep = 1;
     let formStepScrollTimer;
     let formStepScrollHandler;
     let formStepHighlightTimer;
 
-    function valueIsPresent(id) {
-      const field = document.getElementById(id);
-      return Boolean(field && String(field.value || '').trim());
+    // Số ô bắt buộc đã điền / tổng số ô bắt buộc trong một bước.
+    function requiredProgress(containerId) {
+      const required = [...(document.getElementById(containerId)?.querySelectorAll('[required]') || [])];
+      const done = required.filter((field) => (field.type === 'checkbox' ? field.checked : String(field.value).trim())).length;
+      return { done, total: required.length };
     }
 
     function updateApplicationProgress() {
-      const personalCompleted = personalProgressFields.filter(valueIsPresent).length;
-      const activeProcedureFields = document.getElementById('proc-category')?.value === 'business'
-        ? businessProgressFields
-        : procedureProgressFields;
-      const procedureCompleted = activeProcedureFields.filter(valueIsPresent).length;
-      const groupStates = [personalCompleted === personalProgressFields.length, procedureCompleted === activeProcedureFields.length];
+      const personal = requiredProgress('citizen-fields-container');
+      const procedure = requiredProgress('schema-details-fields');
+      const groupStates = [personal.done === personal.total, procedure.done === procedure.total];
       const completedGroups = groupStates.filter(Boolean).length;
       const progress = Math.round((completedGroups / groupStates.length) * 100);
 
-      document.getElementById('step-status-1').textContent = `${personalCompleted}/${personalProgressFields.length} mục`;
-      document.getElementById('step-status-2').textContent = `${procedureCompleted}/${activeProcedureFields.length} mục`;
+      document.getElementById('step-status-1').textContent = `${personal.done}/${personal.total} mục`;
+      document.getElementById('step-status-2').textContent = `${procedure.done}/${procedure.total} mục`;
       document.getElementById('step-status-3').textContent = completedGroups === 2 ? 'Sẵn sàng xem lại' : 'Còn thiếu thông tin';
       document.getElementById('form-progress-label').textContent = `Hoàn thành thông tin hồ sơ: ${progress}%`;
 
@@ -1179,45 +1168,38 @@
       const city = document.getElementById('sel-city')?.selectedOptions[0]?.textContent;
       const district = document.getElementById('sel-district')?.selectedOptions[0]?.textContent;
 
-      setText('sum-name', document.getElementById('citizen-fullname')?.value.trim());
-      setText('sum-id', document.getElementById('citizen-id')?.value.trim());
+      const fieldValue = (name) => (name ? document.getElementById(`field-${name}`)?.value.trim() : '');
+      const firstField = (suffix) => currentFormSchema?.fields.find((field) => field.name.endsWith(suffix))?.name;
+      setText('sum-name', fieldValue(firstField('_name')));
+      setText('sum-id', fieldValue(firstField('_id_number')));
       const isBusiness = category === 'business';
       setText('sum-land-reference', isBusiness
-        ? (document.getElementById('business-name')?.value.trim() || 'Chưa nhập tên hộ kinh doanh')
-        : `Thửa ${document.getElementById('land-lot')?.value.trim() || '—'} / Bản đồ ${document.getElementById('land-map')?.value.trim() || '—'}`);
+        ? (fieldValue('business_name_vn') || 'Chưa nhập tên doanh nghiệp/hộ kinh doanh')
+        : `Thửa ${fieldValue('plot_number') || '—'} / Bản đồ ${fieldValue('map_sheet_number') || '—'}`);
       const referenceLabel = document.getElementById('sum-land-reference')?.previousElementSibling;
-      if (referenceLabel) referenceLabel.textContent = isBusiness ? 'Tên hộ kinh doanh:' : 'Thửa đất / Tờ bản đồ:';
+      if (referenceLabel) referenceLabel.textContent = isBusiness ? 'Tên doanh nghiệp/hộ KD:' : 'Thửa đất / Tờ bản đồ:';
       setText('sum-procedure', procedure || 'Bạn chưa chọn thủ tục');
-      setText('sum-form-template', category === 'land' ? 'Mẫu số 04/ĐK' : 'Theo thủ tục đã chọn');
+      setText('sum-form-template', currentFormSchema?.template_filename || 'Theo thủ tục đã chọn');
       setText('sum-office', [district, city].filter(Boolean).join(', '));
-      setText('card-name', document.getElementById('citizen-fullname')?.value.trim());
-      setText('card-id', document.getElementById('citizen-id')?.value.trim());
-      const issueDate = document.getElementById('citizen-id-date')?.value;
-      setText('card-id-date', issueDate ? new Date(`${issueDate}T00:00:00`).toLocaleDateString('vi-VN') : 'Chưa nhập');
-      setText('card-phone', document.getElementById('citizen-phone')?.value.trim());
-      setText('card-email', document.getElementById('citizen-email')?.value.trim());
-      setText('card-address', document.getElementById('citizen-address')?.value.trim());
-      const dob = document.getElementById('citizen-dob')?.value;
-      const gender = document.getElementById('citizen-gender')?.value;
-      const dobDisplay = dob ? new Date(`${dob}T00:00:00`).toLocaleDateString('vi-VN') : 'Chưa nhập';
-      setText('card-dob-gender', `${dobDisplay} • ${gender || 'Chưa nhập'}`);
-      const initials = (document.getElementById('citizen-fullname')?.value.trim() || '')
+      const formatDate = (value) => (value ? new Date(`${value}T00:00:00`).toLocaleDateString('vi-VN') : 'Chưa nhập');
+      setText('card-name', fieldValue('applicant_name'));
+      setText('card-id', fieldValue('applicant_id_number'));
+      setText('card-id-date', formatDate(fieldValue('applicant_id_issue_date')));
+      setText('card-phone', fieldValue('applicant_phone'));
+      setText('card-email', fieldValue('applicant_email'));
+      setText('card-address', fieldValue('applicant_permanent_address'));
+      setText('card-dob-gender', `${formatDate(fieldValue('applicant_dob'))} • ${fieldValue('applicant_gender') || 'Chưa nhập'}`);
+      const initials = (fieldValue('applicant_name') || '')
         .split(/\s+/).filter(Boolean).slice(-2).map((part) => part[0]).join('').toUpperCase();
       setText('id-card-avatar', initials || '—');
     }
 
     function initializeApplicationFormUi() {
-      document.querySelectorAll('#form-step-personal input, #form-step-details input, #form-step-details select, #form-step-details textarea, #sel-city, #sel-district')
-        .forEach((field) => {
-          field.addEventListener('input', () => {
-            updateApplicationSummary();
-            updateApplicationProgress();
-          });
-          field.addEventListener('change', () => {
-            updateApplicationSummary();
-            updateApplicationProgress();
-          });
-        });
+      // Ô của form schema được vẽ lại mỗi lần chọn mẫu nên nghe sự kiện ở cấp form.
+      ['input', 'change'].forEach((eventName) => document.getElementById('submission-form')?.addEventListener(eventName, () => {
+        updateApplicationSummary();
+        updateApplicationProgress();
+      }));
       if ('IntersectionObserver' in window) {
         const stepObserver = new IntersectionObserver((entries) => {
           const visibleStep = entries
@@ -1259,10 +1241,11 @@
       } catch {
         procedureCatalogFailed = true;
         cards?.insertAdjacentHTML('beforebegin', '<p role="alert" class="mb-3 text-sm font-semibold text-red-700">Không tải được danh mục thủ tục, vui lòng tải lại trang.</p>');
+        window.rerenderApplicationTemplateList?.();
         return;
       }
       updateProcedureTypes();
-      await fillFromCitizenProfile();
+      window.rerenderApplicationTemplateList?.();
       const params = new URLSearchParams(window.location.search);
       const requested = params.get('procedure') || params.get('templateId');
       if (requested) window.openApplicationTemplateById?.(requested);
