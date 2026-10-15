@@ -70,6 +70,10 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
 });
 
+app.get('/landforms', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'LandForms-admin.html'));
+});
+
 app.get('/detail-information', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
