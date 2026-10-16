@@ -29,18 +29,33 @@ app.get('/api/app-config', (req, res) => {
   res.json({ apiBaseUrl });
 });
 
-app.get('/api/firebase-config', (req, res) => {
+// Cấu hình Firebase (web config, công khai, không phải bí mật). Thứ tự ưu tiên:
+//   1. Biến môi trường FIREBASE_CONFIG (JSON)
+//   2. `const firebaseConfig = {...};` trong file .env (chạy local)
+//   3. firebase-config.json đi kèm code (bản deploy Vercel không có .env)
+const loadFirebaseConfig = () => {
+  if (process.env.FIREBASE_CONFIG) {
+    return JSON.parse(process.env.FIREBASE_CONFIG);
+  }
   try {
     const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
     const configMatch = configSource.match(/const\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;/);
+    if (configMatch) {
+      return JSON.parse(configMatch[1].replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":'));
+    }
+  } catch {
+    // Không có .env (vd. trên Vercel) → dùng file cấu hình đi kèm
+  }
+  return require('./firebase-config.json');
+};
 
-    if (!configMatch) {
+app.get('/api/firebase-config', (req, res) => {
+  try {
+    const configObject = loadFirebaseConfig();
+
+    if (!configObject) {
       return res.status(503).json({ error: 'Firebase configuration is unavailable.' });
     }
-
-    const configObject = JSON.parse(
-      configMatch[1].replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
-    );
     const publicKeys = [
       'apiKey',
       'authDomain',
