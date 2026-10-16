@@ -16,15 +16,24 @@ export const getApiBaseUrl = () => {
 const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
   const baseUrl = await getApiBaseUrl();
   const isJson = body !== undefined && !(body instanceof FormData);
-  try {
-    return await fetch(`${baseUrl}${path}`, {
-      method,
-      credentials: 'include',
-      headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
-      body: isJson ? JSON.stringify(body) : body
-    });
-  } catch {
-    throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
+  // Render gói free ngủ sau 15 phút: lúc đang thức dậy, Render trả 502/503/504 dạng HTML (không phải JSON của Backend).
+  // Gặp trường hợp đó thì chờ rồi gửi lại, tối đa khoảng 90 giây.
+  for (let attempt = 0; ; attempt += 1) {
+    let response;
+    try {
+      response = await fetch(`${baseUrl}${path}`, {
+        method,
+        credentials: 'include',
+        headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
+        body: isJson ? JSON.stringify(body) : body
+      });
+    } catch {
+      throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
+    }
+    const waking = [502, 503, 504].includes(response.status)
+      && !(response.headers.get('content-type') || '').includes('application/json');
+    if (!waking || attempt >= 9) return response;
+    await new Promise((resolve) => setTimeout(resolve, 10000));
   }
 };
 
