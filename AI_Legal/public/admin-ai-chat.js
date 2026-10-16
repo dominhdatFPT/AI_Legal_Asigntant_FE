@@ -58,7 +58,7 @@
 
     const root = document.createElement('section');
     root.className = 'admin-ai-chat';
-    root.setAttribute('aria-label', 'Trợ lý AI tra cứu thủ tục');
+    root.setAttribute('aria-label', 'Chatbot hỗ trợ tra cứu thủ tục');
 
     const launcher = document.createElement('button');
     launcher.type = 'button';
@@ -66,7 +66,30 @@
     launcher.id = 'admin-ai-chat-toggle';
     launcher.setAttribute('aria-expanded', 'false');
     launcher.setAttribute('aria-controls', 'admin-ai-panel');
-    launcher.innerHTML = '<span class="admin-ai-launcher-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2m0 14v2M4.2 5.6l1.4 1.4m12.8 10 1.4 1.4M3 12h2m14 0h2M4.2 18.4l1.4-1.4m12.8-10 1.4-1.4"/><circle cx="12" cy="12" r="5"/><path d="M10 12h4m-2-2v4"/></svg></span><span class="admin-ai-launcher-copy"><strong>Trợ lý AI tra cứu thủ tục</strong><small>Hỏi nhanh theo từ khóa</small></span>';
+    launcher.setAttribute('aria-label', 'Mở chatbot hỗ trợ tra cứu thủ tục');
+    launcher.title = 'Chatbot hỗ trợ';
+
+    const launcherIcon = document.createElement('span');
+    launcherIcon.className = 'admin-ai-launcher-icon';
+    launcherIcon.setAttribute('aria-hidden', 'true');
+    launcherIcon.append(createIcon('M4 5h16v11H8l-4 4V5Z M9 10h6'));
+
+    const launcherCopy = document.createElement('span');
+    launcherCopy.className = 'admin-ai-launcher-copy';
+    const launcherTitle = document.createElement('span');
+    launcherTitle.className = 'admin-ai-launcher-title';
+    launcherTitle.textContent = 'Chatbot hỗ trợ';
+    const launcherHint = document.createElement('span');
+    launcherHint.className = 'admin-ai-launcher-hint';
+    launcherHint.textContent = 'Tra cứu thủ tục, chuẩn bị hồ sơ';
+    launcherCopy.append(launcherTitle, launcherHint);
+
+    const launcherChevron = document.createElement('span');
+    launcherChevron.className = 'admin-ai-launcher-chevron';
+    launcherChevron.setAttribute('aria-hidden', 'true');
+    launcherChevron.append(createIcon('M6 15l6-6 6 6'));
+
+    launcher.append(launcherIcon, launcherCopy, launcherChevron);
 
     const panel = document.createElement('div');
     panel.className = 'admin-ai-panel';
@@ -83,7 +106,7 @@
     headerIcon.append(createIcon('M4 5h16v11H8l-4 4V5Z M8 9h8M8 12h5'));
     const heading = document.createElement('div');
     heading.className = 'admin-ai-header-copy';
-    heading.innerHTML = '<strong id="admin-ai-title">Trợ lý AI tra cứu thủ tục</strong><small>Tra cứu theo tên hoặc nhu cầu của bạn</small>';
+    heading.innerHTML = '<strong id="admin-ai-title">Chatbot hỗ trợ</strong><small>Tra cứu thủ tục đất đai và hộ kinh doanh</small>';
     const close = makeButton('admin-ai-close', 'Đóng cửa sổ trợ lý', 'M6 6l12 12M18 6 6 18');
     header.append(headerIcon, heading, close);
 

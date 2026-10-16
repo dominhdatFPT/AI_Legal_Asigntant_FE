@@ -82,6 +82,10 @@ app.get('/user-management', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-management.html'));
 });
 
+app.get('/business-form-templates', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'business-form-templates.html'));
+});
+
 app.get('/user-dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
 });

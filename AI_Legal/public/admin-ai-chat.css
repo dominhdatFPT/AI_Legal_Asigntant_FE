@@ -13,8 +13,9 @@
   --admin-ai-shadow: 0 24px 70px rgba(48, 18, 24, .22), 0 4px 14px rgba(30, 20, 20, .12);
   position: fixed;
   z-index: 90;
-  right: max(24px, env(safe-area-inset-right));
-  bottom: max(24px, env(safe-area-inset-bottom));
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
   color: var(--admin-ai-ink);
   font-family: inherit;
 }
@@ -25,23 +26,81 @@
 }
 
 .admin-ai-launcher {
-  display: flex;
+  display: inline-flex;
+  width: min(390px, calc(100vw - 32px));
+  height: 54px;
   align-items: center;
   gap: 11px;
-  min-height: 58px;
-  padding: 8px 17px 8px 9px;
+  padding: 0 14px 0 8px;
   color: #fff;
-  background: linear-gradient(135deg, var(--admin-ai-red), #c51b27);
-  border: 1px solid rgba(255, 255, 255, .25);
+  text-align: left;
+  background: linear-gradient(120deg, #760c16, #a5111d 68%, #bd1824);
+  border: 1px solid rgba(255, 226, 164, .28);
   border-radius: 999px;
-  box-shadow: 0 10px 28px rgba(126, 11, 20, .32);
+  box-shadow: 0 14px 34px rgba(48, 18, 24, .28);
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .admin-ai-launcher:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(126, 11, 20, .4);
+  box-shadow: 0 18px 40px rgba(126, 11, 20, .36);
+}
+
+.admin-ai-launcher-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #7e1019;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(126, 11, 20, .28);
+}
+
+.admin-ai-launcher-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.admin-ai-launcher-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.admin-ai-launcher-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.admin-ai-launcher-hint {
+  margin-top: 1px;
+  color: rgba(255, 255, 255, .74);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.admin-ai-launcher-chevron {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #ffe09a;
+  transition: transform .2s ease;
+}
+
+.admin-ai-launcher[aria-expanded="true"] .admin-ai-launcher-chevron {
+  transform: rotate(180deg);
+}
+
+.admin-ai-launcher-chevron svg {
+  width: 18px;
+  height: 18px;
 }
 
 .admin-ai-launcher:focus-visible,
@@ -56,18 +115,6 @@
   outline-offset: 0;
 }
 
-.admin-ai-launcher-icon {
-  display: grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  color: #ffdc83;
-  background: rgba(255, 255, 255, .13);
-  border: 1px solid rgba(255, 235, 190, .25);
-  border-radius: 50%;
-}
-
-.admin-ai-launcher-icon svg,
 .admin-ai-header-icon svg,
 .admin-ai-send svg,
 .admin-ai-close svg,
@@ -76,28 +123,10 @@
   height: 21px;
 }
 
-.admin-ai-launcher-copy {
-  display: grid;
-  gap: 2px;
-  text-align: left;
-}
-
-.admin-ai-launcher-copy strong {
-  font-size: 13px;
-  line-height: 17px;
-  font-weight: 700;
-}
-
-.admin-ai-launcher-copy small {
-  color: rgba(255, 255, 255, .78);
-  font-size: 11px;
-  line-height: 14px;
-}
-
 .admin-ai-panel {
   position: absolute;
-  right: 0;
-  bottom: 72px;
+  left: 50%;
+  bottom: 66px;
   display: flex;
   width: min(390px, calc(100vw - 32px));
   height: min(570px, calc(100dvh - 120px));
@@ -108,7 +137,8 @@
   border: 1px solid rgba(132, 24, 32, .13);
   border-radius: 20px;
   box-shadow: var(--admin-ai-shadow);
-  transform-origin: bottom right;
+  transform: translateX(-50%);
+  transform-origin: bottom center;
   animation: admin-ai-enter .2s ease-out both;
 }
 
@@ -370,25 +400,26 @@
 }
 
 @keyframes admin-ai-enter {
-  from { opacity: 0; transform: translateY(8px) scale(.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translate(-50%, 8px) scale(.985); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 
 @media (max-width: 640px) {
   .admin-ai-chat {
-    right: max(14px, env(safe-area-inset-right));
-    bottom: max(14px, env(safe-area-inset-bottom));
+    left: 50%;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: calc(100vw - 20px);
   }
 
   .admin-ai-launcher {
-    min-height: 54px;
-    padding-right: 13px;
+    width: 100%;
+    height: 52px;
   }
 
   .admin-ai-panel {
     position: fixed;
-    right: max(10px, env(safe-area-inset-right));
-    bottom: max(78px, calc(env(safe-area-inset-bottom) + 68px));
+    left: 50%;
+    bottom: max(76px, calc(env(safe-area-inset-bottom) + 68px));
     width: min(390px, calc(100vw - 20px));
     height: min(590px, calc(100dvh - 108px - env(safe-area-inset-bottom)));
     min-height: 360px;
