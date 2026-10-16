@@ -234,15 +234,8 @@
 
     try {
       let data;
-      if (identifier.includes('@')) {
-        // Có "@" → tài khoản email Firebase (đăng ký ở trang /signup).
-        const auth = await getFirebaseAuth();
-        const credential = await signInWithEmailAndPassword(auth, identifier, password);
-        data = await loginWithFirebaseToken(await credential.user.getIdToken());
-      } else {
-        // Không có "@" → tên đăng nhập lưu trong database của Backend (vd: admin2026).
-        data = await loginWithPassword(identifier, password);
-      }
+      // Email hoặc tên đăng nhập đều xác thực ở Backend (tài khoản đăng ký ở /signup có username = email).
+      data = await loginWithPassword(identifier, password);
       finishLogin(data);
     } catch (error) {
       googleMessage.textContent = describeLoginError(error);
