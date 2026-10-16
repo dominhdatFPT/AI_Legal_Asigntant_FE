@@ -2,8 +2,18 @@
 const LEGACY_SESSION_KEY = 'ai_legal_session'; // bản cũ lưu token trong localStorage
 let configPromise;
 
+// Backend trên Render gói free ngủ sau 15 phút, và request đi qua Gateway KHÔNG đánh thức được nó.
+// Gọi thẳng URL của Backend (no-cors, không đọc kết quả) để Render khởi động lại service.
+const BACKEND_WAKE_URLS = ['https://ai-legal-asigntant-be.onrender.com/api/v1/users/health'];
+const wakeBackend = () => {
+  BACKEND_WAKE_URLS.forEach((url) => {
+    fetch(url, { mode: 'no-cors', cache: 'no-store' }).catch(() => {});
+  });
+};
+
 export const getApiBaseUrl = () => {
   if (!configPromise) {
+    wakeBackend();
     configPromise = fetch('/api/app-config')
       .then((response) => (response.ok ? response.json() : {}))
       .then((config) => (config.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, ''))
@@ -33,6 +43,7 @@ const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
     const waking = [502, 503, 504].includes(response.status)
       && !(response.headers.get('content-type') || '').includes('application/json');
     if (!waking || attempt >= 9) return response;
+    wakeBackend();
     await new Promise((resolve) => setTimeout(resolve, 10000));
   }
 };
