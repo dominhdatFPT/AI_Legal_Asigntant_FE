@@ -59,6 +59,9 @@ const authRequest = async (path, options) => {
 export const loginWithPassword = (username, password) =>
   postJson('/api/users/auth/login', { username, password });
 
+// Tự đăng ký tài khoản local ở Backend: { email, phone, password, confirm_password }.
+export const registerAccount = (body) => postJson('/api/users/auth/register', body);
+
 export const loginWithFirebaseToken = (idToken) =>
   postJson('/api/users/auth/firebase', { id_token: idToken });
 
