@@ -248,6 +248,10 @@ export const fetchProcedures = async (domain) =>
 export const fetchFormSchema = async (code) =>
   readData(await request(`/api/procedures/form-schema/${encodeURIComponent(code)}`));
 
+// Kho mẫu đơn tham khảo (công khai) → { items: [{ id, name, procedure, domain, domain_label, format, size, ... }], total }
+export const fetchFormTemplates = async ({ domain, q } = {}) =>
+  readData(await request(withQuery('/api/procedures/templates', { domain, q })));
+
 // Nộp/lưu nháp hồ sơ → bản ghi đã lưu
 export const submitApplication = async ({ procedureCode, status = 'submitted', formData = {} }) =>
   readData(await authRequest('/api/procedures/applications', {
