@@ -94,6 +94,10 @@ app.get('/account', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'account.html'));
 });
 
+app.get('/lawyer-registration', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'lawyer-registration.html'));
+});
+
 app.get('/api/application-submission-view', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
 });

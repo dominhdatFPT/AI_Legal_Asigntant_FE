@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Mẫu đơn hộ kinh doanh - Quản trị</title>
+<<<<<<< HEAD
   <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,arrow_forward_ios,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,first_page,flag,folder,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,hourglass_top,id_card,info,landscape,last_page,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,sort,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning&amp;display=block" rel="stylesheet">
+=======
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=add_circle,badge,check_circle,chevron_right,close,cloud_done,cloud_off,delete,delete_forever,description,domain,edit,edit_document,error,expand_more,folder_open,grid_view,group,history_edu,info,landscape,logout,person,restart_alt,save,search,storefront,sync,upload_file,warning&amp;display=block" rel="stylesheet">
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
+<<<<<<< HEAD
     @layer base {
       html, body { margin: 0; padding: 0; }
       body { overscroll-behavior: none; }
@@ -18,6 +23,9 @@
       main> :last-child { margin-bottom: 0 !important; }
     }
     ::-webkit-scrollbar { display: none; }
+=======
+    html, body { margin: 0; padding: 0; }
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
     /* Lớp "flex" của Tailwind đè thuộc tính hidden, nên ép ẩn ở đây */
     [hidden] { display: none !important; }
     .tabular { font-variant-numeric: tabular-nums; }
@@ -28,6 +36,7 @@
     }
     :focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
   </style>
+<<<<<<< HEAD
 
   <!-- Script Tailwind của LandForms -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -37,12 +46,18 @@
   <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
+=======
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
       theme: {
         extend: {
           colors: {
             "primary": "#b91c1c",
             "primary-container": "#c5161d",
             "primary-dark": "#881337",
+<<<<<<< HEAD
             "on-primary": "#ffffff",
             "on-primary-container": "#fff1f2",
             "primary-fixed": "#fee2e2",
@@ -60,10 +75,14 @@
             "on-tertiary-fixed-variant": "#92400e",
             "on-tertiary-container": "#fffbeb",
 
+=======
+            "primary-fixed": "#fee2e2",
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
             "surface": "#EAE5DC",
             "surface-panel": "#FFFFFF",
             "surface-subtle": "#F4F0E8",
             "surface-brand-tint": "#FFF5F5",
+<<<<<<< HEAD
             "surface-container-lowest": "#FFFFFF",
             "surface-container-low": "#E5DFD4",
             "surface-container": "#DCD5C8",
@@ -138,12 +157,40 @@
             "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
             "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
             "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+=======
+            "on-surface": "#1C1917",
+            "on-surface-variant": "#44403C",
+            "secondary": "#78716C",
+            "border-subtle": "#D5CEBF",
+            "outline": "#C8C0B0",
+            "state-success": "#15803d",
+            "error": "#b91c1c"
+          },
+          spacing: {
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem"
+          },
+          fontFamily: {
+            "body-md": ["Be Vietnam Pro", "system-ui", "sans-serif"]
+          },
+          fontSize: {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
           }
         }
       }
     };
   </script>
   <link rel="stylesheet" href="/admin-ai-chat.css">
+<<<<<<< HEAD
   <!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
   <script type="speculationrules">
     {
@@ -155,10 +202,14 @@
       ]
     }
   </script>
+=======
+  <style id="auth-pending">body{visibility:hidden!important}</style>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950">
 
+<<<<<<< HEAD
   <!-- SIDEBAR (đồng bộ với LandForms-admin.html, mục "Hồ sơ hộ kinh doanh" đang chọn) -->
   <aside class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-[#6e0d16] via-[#7d141e] to-[#4c070e] text-white z-50 hidden lg:flex flex-col justify-between border-r border-red-900/60 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
     <div class="flex flex-col">
@@ -215,11 +266,67 @@
           <div class="flex flex-col min-w-0">
             <span class="font-label-md text-label-md text-white font-bold truncate" data-user-field="name">Quản trị viên hệ thống</span>
             <span class="font-label-sm text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
+=======
+  <!-- SIDEBAR (giống dashboard.html, mục "Hồ sơ hộ kinh doanh" đang chọn) -->
+  <aside class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-[#6e0d16] via-[#7d141e] to-[#4c070e] text-white z-50 hidden lg:flex flex-col justify-between border-r border-red-900/60 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
+    <div class="flex flex-col">
+      <div class="h-16 px-space-md flex items-center gap-space-sm bg-black/20 border-b border-white/10">
+        <div class="relative p-0.5 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-500 shrink-0 shadow-md" data-brand-logo>
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKMs-RKhOfSqrKLcmsX9wkVzHjnXtjnibm5wH5SsQdHWxuMFswwZGfrkNMaeyljQ1DtjYTBCIaRqePhCzO_om-lJ7SX1IOElJ2uf5pXbZozTDQfUuYVGRMbGr9fWHDFuedNDu-XoMAi4Py8KRIjA28VeIeiefjnDBjhYrrkxncsMYDzalHRpG6vFL5XXI4SBUPLeDyE7PGQU4AvH-BXaVbVCXqediLNtyp2Oj6EFePYu37YYrtyaBGxizg_xjpwrDxQVw" alt="Logo" class="w-9 h-9 object-contain rounded-[10px] bg-white">
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-[17px] text-white truncate leading-tight tracking-tight font-extrabold">Hồ sơ đất &amp; HKD</span>
+          <span class="text-[10px] text-amber-300 truncate tracking-widest font-bold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Cổng dịch vụ hành chính
+          </span>
+        </div>
+      </div>
+      <div class="px-space-md py-space-sm">
+        <div class="h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent w-full"></div>
+      </div>
+      <nav class="flex flex-col gap-1.5 px-space-md" id="sidebar-nav" aria-label="Điều hướng quản trị">
+        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white transition-colors font-medium" href="/dashboard">
+          <span class="material-symbols-outlined text-[20px] text-amber-300/80" aria-hidden="true">grid_view</span>
+          <span class="text-label-md">Tổng quan</span>
+        </a>
+        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white transition-colors font-medium" href="#">
+          <span class="material-symbols-outlined text-[20px] text-amber-300/80" aria-hidden="true">landscape</span>
+          <span class="text-label-md">Hồ sơ đất đai</span>
+        </a>
+        <div class="flex flex-col gap-1">
+          <a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 shadow-lg shadow-black/25 border-l-4 border-white font-bold" href="/business-form-templates">
+            <span class="material-symbols-outlined text-[20px] text-stone-950" style="font-variation-settings: 'FILL' 1;" aria-hidden="true">storefront</span>
+            <span class="text-label-md font-bold">Hồ sơ hộ kinh doanh</span>
+          </a>
+          <a class="ml-9 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 text-white text-label-md font-semibold" href="/business-form-templates" aria-current="page">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-300" aria-hidden="true"></span> Mẫu đơn
+          </a>
+        </div>
+        <a class="group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white transition-colors font-medium" href="/user-management">
+          <span class="material-symbols-outlined text-[20px] text-amber-300/80" aria-hidden="true">group</span>
+          <span class="text-label-md">Quản lí người dùng</span>
+        </a>
+      </nav>
+    </div>
+    <div class="p-space-md bg-black/25 border-t border-white/10">
+      <div class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs">
+        <div class="flex items-center gap-space-sm min-w-0 flex-1">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 ring-2 ring-amber-300">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;" aria-hidden="true">person</span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="text-label-md text-white font-bold truncate" data-user-field="name">Quản trị viên</span>
+            <span class="text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
               <span class="material-symbols-outlined text-[12px] text-amber-300" aria-hidden="true">badge</span> <span data-user-field="role">Quản trị viên</span>
             </span>
           </div>
         </div>
+<<<<<<< HEAD
         <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0" href="/login" title="Đăng xuất" aria-label="Đăng xuất" data-logout>
+=======
+        <a class="w-10 h-10 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0" href="/login" title="Đăng xuất" aria-label="Đăng xuất" data-logout>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
           <span class="material-symbols-outlined text-[19px]" aria-hidden="true">logout</span>
         </a>
       </div>
@@ -227,6 +334,7 @@
   </aside>
 
   <div class="lg:pl-72">
+<<<<<<< HEAD
     <!-- TOP HEADER (đồng bộ với LandForms-admin.html) -->
     <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] z-40 px-4 lg:px-space-lg flex items-center justify-between gap-3">
       <div class="flex items-center gap-space-md min-w-0">
@@ -355,6 +463,62 @@
                 <option class="text-stone-900" value="code">Mã mẫu A → Z</option>
                 <option class="text-stone-900" value="name">Tên mẫu A → Z</option>
               </select>
+=======
+    <!-- TOP HEADER -->
+    <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 z-40 px-4 lg:px-space-lg flex items-center justify-between gap-3">
+      <nav aria-label="Vị trí trang" class="flex items-center gap-1 text-label-md min-w-0">
+        <span class="text-red-800 font-bold truncate">Hồ sơ hộ kinh doanh</span>
+        <span class="material-symbols-outlined text-[18px] text-stone-400" aria-hidden="true">chevron_right</span>
+        <span class="text-stone-700 font-semibold truncate">Mẫu đơn</span>
+      </nav>
+    </header>
+
+    <main class="w-full pt-16 bg-surface min-h-screen">
+      <div class="flex flex-col gap-space-lg px-4 lg:px-space-lg py-space-lg max-w-[1400px] mx-auto">
+
+        <!-- TITLE -->
+        <section class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-space-md">
+          <div class="flex-1 min-w-0">
+            <p class="inline-flex items-center gap-1.5 text-label-sm tracking-wider text-red-800">
+              <span class="material-symbols-outlined text-[16px]" aria-hidden="true">history_edu</span> Kho biểu mẫu
+            </p>
+            <h1 class="text-headline-md text-stone-900 mt-1" style="text-wrap: balance;">Mẫu đơn hộ kinh doanh</h1>
+            <p class="text-body-md text-on-surface-variant mt-1">Mẫu đơn đang lưu trên máy chủ. Tải tệp lên để thêm mẫu, hoặc xóa mẫu không còn dùng.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-space-sm shrink-0">
+            <button id="reload-btn" type="button" class="h-11 inline-flex items-center gap-2 px-4 rounded-xl bg-white border border-stone-300 text-stone-800 font-semibold hover:border-amber-500 hover:bg-amber-50 transition-colors">
+              <span class="material-symbols-outlined text-[20px] text-red-700" aria-hidden="true">sync</span> Tải lại
+            </button>
+            <button id="create-btn" type="button" class="h-11 inline-flex items-center gap-2 px-5 rounded-xl bg-gradient-to-r from-red-700 to-red-800 text-white font-bold shadow-[0_4px_20px_-2px_rgba(185,28,28,0.35)] hover:from-red-800 hover:to-red-900 transition-colors">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">add_circle</span> Thêm mẫu đơn
+            </button>
+          </div>
+        </section>
+
+
+        <!-- TABLE CARD -->
+        <section class="rounded-2xl bg-surface-panel border border-border-subtle shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden">
+          <!-- Toolbar -->
+          <div class="flex flex-col lg:flex-row lg:items-center gap-space-sm p-space-md border-b border-border-subtle bg-surface-subtle/60">
+            <label class="relative flex-1 min-w-0">
+              <span class="sr-only">Tìm mẫu đơn</span>
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-red-700 text-[20px]" aria-hidden="true">search</span>
+              <input id="search-input" type="search" placeholder="Tìm theo mã, tên mẫu đơn hoặc tên tệp" class="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-300 bg-white text-body-md placeholder:text-stone-500 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none">
+            </label>
+            <div class="flex flex-wrap gap-space-sm">
+              <label class="flex flex-col">
+                <span class="sr-only">Lọc theo thủ tục</span>
+                <select id="procedure-filter" class="h-11 rounded-xl border border-stone-300 bg-white px-3 text-body-md text-stone-800 focus:border-red-700 outline-none max-w-[16rem]"></select>
+              </label>
+              <label class="flex flex-col">
+                <span class="sr-only">Sắp xếp</span>
+                <select id="sort-select" class="h-11 rounded-xl border border-stone-300 bg-white px-3 text-body-md text-stone-800 focus:border-red-700 outline-none">
+                  <option value="created">Mới tải lên trước</option>
+                  <option value="code">Mã mẫu A → Z</option>
+                  <option value="name">Tên mẫu A → Z</option>
+                </select>
+              </label>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
             </div>
           </div>
 
@@ -370,6 +534,7 @@
           </div>
 
           <div class="relative overflow-x-auto">
+<<<<<<< HEAD
             <table class="w-full min-w-[820px] text-left font-body-sm text-body-sm">
               <caption class="sr-only">Danh sách mẫu đơn hộ kinh doanh đang lưu trên máy chủ</caption>
               <thead>
@@ -385,6 +550,23 @@
                 </tr>
               </thead>
               <tbody id="table-body" class="divide-y divide-surface-container-high/40"></tbody>
+=======
+            <table class="w-full min-w-[820px] text-left text-body-md">
+              <caption class="sr-only">Danh sách mẫu đơn hộ kinh doanh đang lưu trên máy chủ</caption>
+              <thead class="bg-surface-subtle text-label-sm text-stone-600">
+                <tr>
+                  <th scope="col" class="w-12 px-4 py-3">
+                    <input id="select-all" type="checkbox" aria-label="Chọn tất cả mẫu đơn đang hiển thị" class="w-4 h-4 accent-red-700">
+                  </th>
+                  <th scope="col" class="px-3 py-3">Mã mẫu</th>
+                  <th scope="col" class="px-3 py-3">Tên mẫu đơn</th>
+                  <th scope="col" class="px-3 py-3">Tệp lưu trữ</th>
+                  <th scope="col" class="px-3 py-3">Ngày tải lên</th>
+                  <th scope="col" class="px-3 py-3 text-right"><span class="sr-only">Thao tác</span></th>
+                </tr>
+              </thead>
+              <tbody id="table-body" class="divide-y divide-stone-200"></tbody>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
             </table>
           </div>
 
@@ -399,13 +581,20 @@
             </button>
           </div>
 
+<<<<<<< HEAD
           <div class="p-space-md bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-stone-600">
             <p id="result-count" class="tabular" aria-live="polite"></p>
             <p class="text-on-surface-variant">Kho lưu trữ biểu mẫu chuẩn hóa cấp quốc gia</p>
+=======
+          <div class="flex items-center justify-between px-space-md py-3 border-t border-border-subtle text-label-md text-stone-600">
+            <p id="result-count" class="tabular" aria-live="polite"></p>
+            <p id="last-sync" class="tabular"></p>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
           </div>
         </section>
       </div>
     </main>
+<<<<<<< HEAD
 
     <!-- FOOTER -->
     <footer class="w-full bg-surface-container-low py-space-md px-margin text-on-surface-variant font-label-md text-label-md">
@@ -421,6 +610,8 @@
         </div>
       </div>
     </footer>
+=======
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
   </div>
 
   <!-- DRAWER: THÊM MẪU ĐƠN -->
@@ -607,7 +798,11 @@
   function renderSkeleton() {
     $('empty-state').hidden = true;
     $('table-body').innerHTML = Array.from({ length: 4 }, () => `
+<<<<<<< HEAD
       <tr>${Array.from({ length: 6 }, (_, i) => `<td class="px-space-md py-4"><div class="h-4 rounded bg-stone-200 animate-pulse ${i === 2 ? 'w-56' : 'w-16'}"></div></td>`).join('')}</tr>`).join('');
+=======
+      <tr>${Array.from({ length: 6 }, (_, i) => `<td class="px-3 py-4"><div class="h-4 rounded bg-stone-200 animate-pulse ${i === 2 ? 'w-56' : 'w-16'}"></div></td>`).join('')}</tr>`).join('');
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
   }
 
   function renderTable() {
@@ -618,6 +813,7 @@
       const fileName = item.file_url
         ? `<a href="${esc(item.file_url)}" target="_blank" rel="noopener" class="font-semibold text-stone-900 underline decoration-dotted underline-offset-2 hover:text-red-800 break-all">${esc(item.file_name)}</a>`
         : `<span class="font-semibold text-stone-900 break-all">${esc(item.file_name || 'Chưa có tệp')}</span>`;
+<<<<<<< HEAD
       return `<tr class="${checked ? 'bg-red-50/60' : 'hover:bg-surface-container-low/60'} transition-colors group">
         <td class="py-3.5 px-space-md align-top"><input type="checkbox" data-select="${esc(item.id)}" ${checked ? 'checked' : ''} aria-label="Chọn ${esc(item.code)}" class="rounded accent-primary w-4 h-4 cursor-pointer mt-1"></td>
         <td class="py-3.5 px-space-md align-top"><span class="font-label-lg text-label-lg font-bold text-primary font-mono tracking-tight whitespace-nowrap">${esc(item.code)}</span></td>
@@ -626,10 +822,21 @@
           <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">${esc(item.procedure)}</p>
         </td>
         <td class="py-3.5 px-space-md align-top min-w-[200px]">
+=======
+      return `<tr class="${checked ? 'bg-red-50/60' : 'hover:bg-amber-50/40'} transition-colors">
+        <td class="px-4 py-3 align-top"><input type="checkbox" data-select="${esc(item.id)}" ${checked ? 'checked' : ''} aria-label="Chọn ${esc(item.code)}" class="w-4 h-4 accent-red-700 mt-1"></td>
+        <td class="px-3 py-3 align-top"><span class="inline-flex px-2 py-1 rounded-md bg-red-50 border border-red-200 text-red-900 text-label-md font-bold tabular whitespace-nowrap">${esc(item.code)}</span></td>
+        <td class="px-3 py-3 align-top min-w-[240px]">
+          <p class="font-semibold text-stone-900">${esc(item.name)}</p>
+          <p class="text-[12px] text-stone-600 mt-0.5">${esc(item.procedure)}</p>
+        </td>
+        <td class="px-3 py-3 align-top min-w-[200px]">
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
           <div class="flex items-start gap-2">
             <span class="shrink-0 mt-0.5 inline-flex items-center justify-center min-w-[2.75rem] h-6 px-1.5 rounded text-[11px] font-bold ${type === 'PDF' ? 'bg-red-100 text-red-800' : 'bg-sky-100 text-sky-900'}">${esc(type || 'TỆP')}</span>
             <div class="min-w-0">
               ${fileName}
+<<<<<<< HEAD
               <p class="font-body-sm text-body-sm text-on-surface-variant tabular mt-0.5">${formatSize(item.file_size)}</p>
             </div>
           </div>
@@ -638,6 +845,16 @@
         <td class="py-3.5 px-space-md align-top text-right">
           <div class="flex justify-end">
             <button type="button" data-delete="${esc(item.id)}" title="Xóa" aria-label="Xóa ${esc(item.code)}" class="p-1.5 rounded-lg text-error hover:bg-error-container/20 transition-colors"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">delete</span></button>
+=======
+              <p class="text-[12px] text-stone-500 tabular">${formatSize(item.file_size)}</p>
+            </div>
+          </div>
+        </td>
+        <td class="px-3 py-3 align-top text-stone-600 tabular whitespace-nowrap text-[12px]">${formatDateTime(item.created_at)}</td>
+        <td class="px-3 py-3 align-top">
+          <div class="flex justify-end">
+            <button type="button" data-delete="${esc(item.id)}" title="Xóa" aria-label="Xóa ${esc(item.code)}" class="w-10 h-10 rounded-lg flex items-center justify-center text-stone-700 hover:bg-red-100 hover:text-red-800"><span class="material-symbols-outlined text-[20px]" aria-hidden="true">delete</span></button>
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
           </div>
         </td>
       </tr>`;
@@ -652,6 +869,10 @@
     $('empty-icon-box').className = `w-14 h-14 rounded-2xl flex items-center justify-center ${failed ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}`;
     $('retry-btn').hidden = !failed;
     $('result-count').textContent = `Hiển thị ${rows.length} / ${state.items.length} mẫu đơn`;
+<<<<<<< HEAD
+=======
+    $('last-sync').textContent = state.lastSync ? `Đồng bộ lúc ${state.lastSync.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}` : '';
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
 
     const visibleIds = rows.map((r) => r.id);
     const selectedVisible = visibleIds.filter((id) => state.selected.has(id)).length;
@@ -869,6 +1090,7 @@
   });
   $('bulk-clear').addEventListener('click', () => { state.selected.clear(); renderTable(); });
   $('bulk-delete').addEventListener('click', () => openDelete([...state.selected]));
+<<<<<<< HEAD
   $('add-template-card').addEventListener('click', openDrawer);
   $('reload-btn').addEventListener('click', loadItems);
   $('retry-btn').addEventListener('click', loadItems);
@@ -878,6 +1100,12 @@
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('search-input').focus(); }
   });
+=======
+  $('create-btn').addEventListener('click', openDrawer);
+  $('reload-btn').addEventListener('click', loadItems);
+  $('retry-btn').addEventListener('click', loadItems);
+  $('search-input').addEventListener('input', (e) => { state.filter.q = e.target.value; renderTable(); });
+>>>>>>> 74eaa1e51d01f0a5671ae4529a82731e386a4458
   $('procedure-filter').addEventListener('change', (e) => { state.filter.procedure = e.target.value; renderTable(); });
   $('sort-select').addEventListener('change', (e) => { state.filter.sort = e.target.value; renderTable(); });
 

@@ -244,9 +244,17 @@ export const fetchApplicationSummary = () => getData('/api/procedures/applicatio
 export const fetchProcedures = async (domain) =>
   (await readData(await request(`/api/procedures/domains/${domain}/procedures?include_details=false`))).items;
 
+// Tên & mã thủ tục rút gọn theo lĩnh vực (cho Dropdown select) → [{ id, code, name, domain }]
+export const fetchProcedureNames = async (domain = 'all') =>
+  (await readData(await request(`/api/procedures/domains/${encodeURIComponent(domain)}/names`))).items;
+
 // Biểu mẫu riêng của một thủ tục (công khai) → { procedure_code, template_filename, sections, fields }
 export const fetchFormSchema = async (code) =>
   readData(await request(`/api/procedures/form-schema/${encodeURIComponent(code)}`));
+
+// Kho mẫu đơn tham khảo (công khai) → { items: [{ id, name, procedure, domain, domain_label, format, size, ... }], total }
+export const fetchFormTemplates = async ({ domain, procedure_code, q } = {}) =>
+  readData(await request(withQuery('/api/procedures/templates', { domain, procedure_code, q })));
 
 // Nộp/lưu nháp hồ sơ → bản ghi đã lưu
 export const submitApplication = async ({ procedureCode, status = 'submitted', formData = {} }) =>
