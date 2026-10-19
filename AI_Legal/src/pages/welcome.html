@@ -1133,7 +1133,7 @@
         </svg>
       </span>
       <span class="hidden sm:inline" data-launcher-label aria-hidden="true">Hỏi trợ lý AI</span>
-    </button>
+    </button> -->
   </div>
 
   <script>
@@ -1619,26 +1619,26 @@
       }
     });
 
-    // Câu hỏi gợi ý theo chủ đề
-    const SUGGESTIONS = {
-      land: [
-        'Tôi muốn sang tên quyền sử dụng đất cần làm gì?',
-        'Cấp sổ đỏ lần đầu cần giấy tờ gì?',
-        'Nộp hồ sơ đất đai ở đâu?'
-      ],
-      business: [
-        'Đăng ký hộ kinh doanh cần giấy tờ gì?',
-        'Thành lập công ty TNHH một thành viên cần gì?',
-        'Tạm ngừng kinh doanh cần thông báo trước bao lâu?'
-      ],
-      legal: [
-        'Căn cứ pháp lý của thủ tục tách thửa đất là gì?',
-        'Văn bản nào quy định thủ tục đăng ký hộ kinh doanh?',
-        'Quy định nào về thời hạn giải quyết đăng ký biến động đất đai?'
-      ]
-    };
-    const suggestionBox = document.getElementById('suggested-buttons');
-    const topicTabs = Array.from(document.querySelectorAll('.topic-tab'));
+    // // Câu hỏi gợi ý theo chủ đề
+    // const SUGGESTIONS = {
+    //   land: [
+    //     'Tôi muốn sang tên quyền sử dụng đất cần làm gì?',
+    //     'Cấp sổ đỏ lần đầu cần giấy tờ gì?',
+    //     'Nộp hồ sơ đất đai ở đâu?'
+    //   ],
+    //   business: [
+    //     'Đăng ký hộ kinh doanh cần giấy tờ gì?',
+    //     'Thành lập công ty TNHH một thành viên cần gì?',
+    //     'Tạm ngừng kinh doanh cần thông báo trước bao lâu?'
+    //   ],
+    //   legal: [
+    //     'Căn cứ pháp lý của thủ tục tách thửa đất là gì?',
+    //     'Văn bản nào quy định thủ tục đăng ký hộ kinh doanh?',
+    //     'Quy định nào về thời hạn giải quyết đăng ký biến động đất đai?'
+    //   ]
+    // };
+    // const suggestionBox = document.getElementById('suggested-buttons');
+    // const topicTabs = Array.from(document.querySelectorAll('.topic-tab'));
 
     const renderSuggestions = (topic) => {
       if (!suggestionBox) return;
@@ -1656,36 +1656,36 @@
       });
     };
 
-    const selectTopic = (tab, moveFocus) => {
-      topicTabs.forEach(t => {
-        const active = t === tab;
-        t.setAttribute('aria-selected', String(active));
-        t.tabIndex = active ? 0 : -1;
-      });
-      if (moveFocus) tab.focus();
-      suggestionBox?.setAttribute('aria-labelledby', tab.id);
-      renderSuggestions(tab.dataset.topic);
-    };
+    // const selectTopic = (tab, moveFocus) => {
+    //   topicTabs.forEach(t => {
+    //     const active = t === tab;
+    //     t.setAttribute('aria-selected', String(active));
+    //     t.tabIndex = active ? 0 : -1;
+    //   });
+    //   if (moveFocus) tab.focus();
+    //   suggestionBox?.setAttribute('aria-labelledby', tab.id);
+    //   renderSuggestions(tab.dataset.topic);
+    // };
 
-    topicTabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => selectTopic(tab, false));
-      tab.addEventListener('keydown', (e) => {
-        let next;
-        if (e.key === 'ArrowRight') next = (index + 1) % topicTabs.length;
-        else if (e.key === 'ArrowLeft') next = (index - 1 + topicTabs.length) % topicTabs.length;
-        else if (e.key === 'Home') next = 0;
-        else if (e.key === 'End') next = topicTabs.length - 1;
-        else return;
-        e.preventDefault();
-        selectTopic(topicTabs[next], true);
-      });
-    });
-    renderSuggestions('land');
+    // topicTabs.forEach((tab, index) => {
+    //   tab.addEventListener('click', () => selectTopic(tab, false));
+    //   tab.addEventListener('keydown', (e) => {
+    //     let next;
+    //     if (e.key === 'ArrowRight') next = (index + 1) % topicTabs.length;
+    //     else if (e.key === 'ArrowLeft') next = (index - 1 + topicTabs.length) % topicTabs.length;
+    //     else if (e.key === 'Home') next = 0;
+    //     else if (e.key === 'End') next = topicTabs.length - 1;
+    //     else return;
+    //     e.preventDefault();
+    //     selectTopic(topicTabs[next], true);
+    //   });
+    // });
+    // renderSuggestions('land');
 
-    // Chat thật: gọi POST /api/agent/chat qua Gateway, KHÔNG cần đăng nhập
-    const chatForm = document.getElementById('chat-form');
-    const chatSend = document.getElementById('chat-send');
-    const typingIndicator = document.getElementById('typing-indicator');
+    // // Chat thật: gọi POST /api/agent/chat qua Gateway, KHÔNG cần đăng nhập
+    // const chatForm = document.getElementById('chat-form');
+    // const chatSend = document.getElementById('chat-send');
+    // const typingIndicator = document.getElementById('typing-indicator');
 
     const renderAnswer = (bubble, text) => {
       bubble.textContent = '';
@@ -1718,20 +1718,20 @@
       return bubble;
     };
 
-    const scrollChat = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
+    // const scrollChat = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
 
-    if (chatForm && chatInput && chatMessages) {
-      chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const val = chatInput.value.trim();
-        if (!val || chatForm.dataset.busy) return;
-        chatForm.dataset.busy = '1';
-        if (chatSend) chatSend.disabled = true;
+    // if (chatForm && chatInput && chatMessages) {
+    //   chatForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
+    //     const val = chatInput.value.trim();
+    //     if (!val || chatForm.dataset.busy) return;
+    //     chatForm.dataset.busy = '1';
+    //     if (chatSend) chatSend.disabled = true;
 
-        appendBubble('user').textContent = val;
-        chatInput.value = '';
-        if (typingIndicator) typingIndicator.classList.remove('hidden');
-        scrollChat();
+    //     appendBubble('user').textContent = val;
+    //     chatInput.value = '';
+    //     if (typingIndicator) typingIndicator.classList.remove('hidden');
+    //     scrollChat();
 
         let reply;
         try {
