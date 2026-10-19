@@ -19,6 +19,11 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
+// Điều khoản sử dụng & Chính sách bảo vệ dữ liệu cá nhân (link từ trang Đăng ký).
+app.get('/dieu-khoan', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'dieu-khoan.html'));
+});
+
 app.get('/forgot-password', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
 });
@@ -80,6 +85,11 @@ app.get('/detail-information', (req, res) => {
 
 app.get('/user-management', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-management.html'));
+});
+
+// Kho mẫu đơn tham khảo cho công dân/luật sư. Thanh điều hướng dùng /kho-mau-don-tham-khao.
+app.get(['/kho-mau-don-tham-khao', '/form-library'], (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'form-library.html'));
 });
 
 app.get('/business-form-templates', (req, res) => {
