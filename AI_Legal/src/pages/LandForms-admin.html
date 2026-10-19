@@ -137,6 +137,7 @@
       }
     };
   </script>
+  <style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 
 <!-- THÊM CLASS ĐỒNG BỘ BODY TỪ DASHBOARD -->
@@ -357,6 +358,9 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-surface-container-high/40">
+              </tbody>
+            </table>
+          </div>
 
           <!-- Pagination & Template Count -->
           <div class="p-space-md bg-surface-container-low/70 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-on-surface-variant">
@@ -386,7 +390,6 @@
               </button>
             </div>
           </div>
-        </div>
       </div>
     </main>
 
@@ -741,5 +744,10 @@
     });
   </script>
 
+<script type="module">
+  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user và gắn nút đăng xuất.
+  import { protectPage } from '/auth-api.js';
+  await protectPage(['admin']);
+</script>
 </body>
 </html>

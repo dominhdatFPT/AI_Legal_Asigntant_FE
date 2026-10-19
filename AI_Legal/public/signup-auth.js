@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   getAuth,
+  sendEmailVerification,
   signOut,
   updateProfile
 } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
@@ -21,6 +22,34 @@ const submitLabel = document.getElementById('signup-submit-label');
 const submitSpinner = document.getElementById('signup-auth-spinner');
 const passwordInput = document.getElementById('password');
 const confirmationInput = document.getElementById('confirm-password');
+const fullNameInput = document.getElementById('full-name');
+const phoneInput = document.getElementById('phone');
+const emailInput = document.getElementById('email');
+const termsInput = document.getElementById('terms');
+const privacyInput = document.getElementById('privacy-consent');
+
+// Phiên bản điều khoản/chính sách người dùng đã đồng ý. Đổi nội dung trang /dieu-khoan thì tăng số này.
+const CONSENT_VERSION = '2026-10-19';
+
+// "0901 234 567", "+84 901.234.567" → "0901234567". Sai định dạng → null.
+const normalizePhone = (value) => {
+  let digits = value.replace(/[\s.\-()]/g, '');
+  if (digits.startsWith('+84')) digits = `0${digits.slice(3)}`;
+  else if (digits.startsWith('84') && digits.length === 11) digits = `0${digits.slice(2)}`;
+  return /^0[35789]\d{8}$/.test(digits) ? digits : null;
+};
+
+// Gộp khoảng trắng thừa; tên phải có chữ cái và không chứa số.
+const normalizeFullName = (value) => {
+  const name = value.replace(/\s+/g, ' ').trim();
+  return name.length >= 2 && /\p{L}/u.test(name) && !/\d/.test(name) ? name : null;
+};
+
+const showError = (text, input) => {
+  message.textContent = text;
+  message.dataset.state = 'error';
+  input?.focus();
+};
 let servicesPromise;
 
 const getFirebaseServices = () => {
@@ -53,12 +82,18 @@ const messages = {
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   message.textContent = '';
+  message.dataset.state = '';
 
-  if (passwordInput.value !== confirmationInput.value) {
-    message.textContent = 'Mật khẩu xác nhận không khớp.';
-    message.dataset.state = 'error';
-    return;
-  }
+  const fullName = normalizeFullName(fullNameInput.value);
+  const phone = normalizePhone(phoneInput.value);
+  const email = emailInput.value.trim();
+  if (!fullName) return showError('Vui lòng nhập họ và tên (chỉ gồm chữ cái).', fullNameInput);
+  if (!phone) return showError('Số điện thoại chưa đúng. Hãy nhập 10 số, bắt đầu bằng 0 (vd: 0901234567).', phoneInput);
+  if (!email || !emailInput.validity.valid) return showError('Địa chỉ email không hợp lệ.', emailInput);
+  if (passwordInput.value.length < 8) return showError('Mật khẩu cần có ít nhất 8 ký tự.', passwordInput);
+  if (passwordInput.value !== confirmationInput.value) return showError('Mật khẩu xác nhận không khớp.', confirmationInput);
+  if (!termsInput.checked) return showError('Bạn cần đồng ý với Điều khoản sử dụng.', termsInput);
+  if (!privacyInput.checked) return showError('Bạn cần đồng ý với Chính sách bảo vệ dữ liệu cá nhân để tạo tài khoản.', privacyInput);
 
   submitButton.disabled = true;
   submitButton.setAttribute('aria-busy', 'true');
@@ -73,7 +108,6 @@ form.addEventListener('submit', async (event) => {
   try {
     const services = await getFirebaseServices();
     auth = services.auth;
-    const email = document.getElementById('email').value.trim();
     const credential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -82,21 +116,31 @@ form.addEventListener('submit', async (event) => {
     user = credential.user;
 
     const username = email.split('@')[0];
-    const phone = document.getElementById('phone').value.trim();
-    await updateProfile(user, { displayName: username });
+    // displayName đi vào ID token (claim "name"); Backend lấy làm full_name khi tạo user lần đầu.
+    await updateProfile(user, { displayName: fullName });
 
     profileReference = doc(services.database, 'userProfiles', user.uid);
     await setDoc(profileReference, {
       username,
+      fullName,
       phone,
       email: user.email,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
+      termsAcceptedAt: serverTimestamp(),
+      privacyConsentAt: serverTimestamp(),
+      consentVersion: CONSENT_VERSION
     });
     profileSaved = true;
+
+    // Gửi email xác minh; lỗi gửi không huỷ tài khoản, người dùng gửi lại được ở trang đăng nhập.
+    let verificationSent = true;
+    await sendEmailVerification(user, { url: `${window.location.origin}/login?verified=1` }).catch(() => { verificationSent = false; });
     await signOut(auth);
 
     form.reset();
-    message.textContent = 'Tài khoản đã tạo thành công. Bạn có thể đăng nhập ngay bây giờ.';
+    message.textContent = verificationSent
+      ? `Đã tạo tài khoản. Hãy mở email xác minh vừa gửi tới ${email} rồi đăng nhập.`
+      : 'Đã tạo tài khoản nhưng chưa gửi được email xác minh. Hãy đăng nhập để hệ thống gửi lại.';
     message.dataset.state = 'success';
   } catch (error) {
     if (user) {

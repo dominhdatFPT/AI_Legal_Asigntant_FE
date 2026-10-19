@@ -2911,23 +2911,7 @@
         });
       });
 
-      const logoutBtn = document.querySelector('[data-logout]');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?')) {
-            if (typeof auth !== 'undefined' && auth.signOut) {
-              auth.signOut().then(() => {
-                window.location.href = '/login';
-              }).catch(() => {
-                window.location.href = '/login';
-              });
-            } else {
-              window.location.href = '/login';
-            }
-          }
-        });
-      }
+      // Nút đăng xuất [data-logout] do protectPage (auth-api.js) gắn: mở hộp thoại xác nhận rồi mới đăng xuất.
     });
   </script>
 
