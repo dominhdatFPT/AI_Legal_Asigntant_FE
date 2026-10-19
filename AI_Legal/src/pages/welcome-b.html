@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="theme-color" content="#140405">
+  <title>AI Legal Assistant - Hỏi đúng thủ tục, chuẩn bị đủ hồ sơ</title>
+  <meta name="description"
+    content="Trợ lý AI hướng dẫn thủ tục đất đai, hộ kinh doanh và doanh nghiệp cho công dân, doanh nghiệp và luật sư: giấy tờ cần chuẩn bị, mẫu đơn có sẵn, nơi nộp và các bước thực hiện.">
+  <!-- Một họ chữ duy nhất (Inter, hỗ trợ đầy đủ tiếng Việt): tiêu đề nét 400 cỡ lớn, nội dung nét 200 -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
+  <link href="/tailwind.css" rel="stylesheet">
+  <style>
+    /* Bố cục theo mẫu Dala (nền tối, chữ lớn, một nút chính), màu giữ theo dự án: sơn mài, đỏ son, vàng nghệ */
+    :root {
+      --void: #140405;
+      --surface: #1F0809;
+      --bone: #ffffff;
+      --ash: #A8948F;
+      --mist: #CDBCB6;
+      --son: #B4161B;
+      --son-hover: #C9221F;
+      --nghe: #F2B544;
+      --cam: #E4572E;
+    }
+
+    html {
+      scroll-padding-top: 88px;
+      background: var(--void);
+    }
+
+    body {
+      background: var(--void);
+      color: var(--bone);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-feature-settings: "ss01" on;
+    }
+
+    a,
+    button {
+      touch-action: manipulation;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--nghe);
+      outline-offset: 3px;
+    }
+
+    /* Thang chữ: tiêu đề nét 400, khoảng chữ âm 0.04em; nội dung 18px nét 200 */
+    .t-display {
+      font-weight: 400;
+      font-size: clamp(2.35rem, 1rem + 4.9vw, 5.6rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+
+    .t-heading {
+      font-weight: 400;
+      font-size: clamp(2.25rem, 1rem + 3.2vw, 4.25rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .t-heading-sm {
+      font-weight: 400;
+      font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.625rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .t-heading-xs {
+      font-weight: 400;
+      font-size: 1.6875rem;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .t-body {
+      font-weight: 200;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    .t-label {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Thanh điều hướng: trong suốt, đổi sang nền tối khi cuộn ---------- */
+    .site-header {
+      transition: background-color 0.3s ease;
+    }
+
+    .site-header.is-scrolled {
+      background-color: rgba(20, 4, 5, 0.94);
+    }
+
+    .nav-link {
+      color: var(--ash);
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link[aria-current="true"] {
+      color: var(--bone);
+    }
+
+    /* ---------- Nút: một nút viên thuốc đỏ son cho hành động chính, còn lại là link chữ ---------- */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 46px;
+      padding: 0 1.5rem;
+      border-radius: 999px;
+      background: var(--son);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-pill:hover {
+      background: var(--son-hover);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 46px;
+      color: var(--bone);
+      font-weight: 400;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .btn-ghost span {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      padding-bottom: 2px;
+      transition: border-color 0.2s ease;
+    }
+
+    .btn-ghost:hover span {
+      border-color: var(--nghe);
+    }
+
+    .btn-ghost svg {
+      transition: transform 0.2s ease;
+    }
+
+    .btn-ghost:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* Dấu đầu dòng hình tam giác, lặp lại hình hạt trong chòm sao */
+    .tri {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 8px solid var(--nghe);
+      flex-shrink: 0;
+    }
+
+    .constellation {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ---------- Box chat nổi góc dưới bên phải ---------- */
+    .chat-panel {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      transform-origin: bottom right;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+    }
+
+    .chat-panel.is-open {
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .topic-tab {
+      color: var(--mist);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .topic-tab:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .topic-tab[aria-selected="true"] {
+      background: #fff;
+      color: var(--void);
+      border-color: #fff;
+    }
+
+    .bubble-bot {
+      background: rgba(255, 255, 255, 0.06);
+      color: #F3E9E6;
+      border-radius: 6px 18px 18px 18px;
+    }
+
+    .bubble-user {
+      background: var(--son);
+      color: #fff;
+      border-radius: 18px 6px 18px 18px;
+    }
+
+    .bubble-bot,
+    .bubble-user {
+      overflow-wrap: anywhere;
+    }
+
+    .chat-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    }
+
+    @keyframes typing-dot {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .typing-dot {
+      animation: typing-dot 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .typing-dot {
+        animation: none;
+      }
+
+      .chat-panel,
+      .chat-panel.is-open,
+      .site-header,
+      .btn-ghost svg {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#F2B544]/40 selection:text-white">
+  <a href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-white focus:text-[#140405] focus:px-4 focus:py-2 focus:rounded-[999px]">Bỏ
+    qua đến nội dung chính</a>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header fixed top-0 inset-x-0 z-50" id="site-header">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 h-16 sm:h-[76px] flex items-center justify-between gap-6">
+      <a class="flex items-center gap-3 shrink-0" href="#top" aria-label="AI Legal Assistant, về đầu trang">
+        <img alt="" class="w-9 h-9 rounded-[10px] object-cover" width="36" height="36"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnlkQoeQ9cz3O0zHezfnJW4i8PbOqNuqCM_y55TX3U1BXwu363H9aKum-CzoC6jH3E8KgRmTnjg6ahp1_0U4Uu7KlgoL-NddAXz2D2XhnbRhUHSynxMXspIRWCp6gO9GfE0mPu7xSV2yXkstnSI-UqyLL9cUZYchWEE_xXHwAcKYC8mOAVROpEiOiEoUh4IIBkqehqRVdGI1SJcTeCy9fwRTkBk3nvQPwTzqMV5ckvIWSpXGRWVNBSEZ2AgnWqrWF4-gE">
+        <span class="text-[15px] font-normal tracking-[-0.01em] text-white" translate="no">AI Legal Assistant</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 t-label" aria-label="Điều hướng chính">
+        <a class="nav-link" href="#procedures">Thủ tục</a>
+        <a class="nav-link" href="#audiences">Dành cho ai</a>
+        <a class="nav-link" href="#workflow">Cách làm</a>
+        <button class="nav-link uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
+      </nav>
+
+      <div class="hidden sm:flex items-center gap-6">
+        <a class="nav-link t-label" href="/login">Đăng nhập</a>
+        <a class="btn-pill !min-h-[42px] !px-5" href="/signup">Đăng ký</a>
+      </div>
+
+      <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Mở menu"
+        class="md:hidden inline-flex items-center justify-center w-11 h-11 -mr-2 rounded-[999px] text-white hover:bg-white/10"
+        id="mobile-toggle" type="button">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="hidden md:hidden bg-[#140405] px-5 pt-2 pb-6" id="mobile-menu">
+      <nav class="flex flex-col t-label text-[15px]" aria-label="Điều hướng trên di động">
+        <a class="nav-link py-3.5" href="#procedures">Thủ tục</a>
+        <a class="nav-link py-3.5" href="#audiences">Dành cho ai</a>
+        <a class="nav-link py-3.5" href="#workflow">Cách làm</a>
+        <button class="nav-link py-3.5 text-left uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
+      </nav>
+      <div class="pt-4 flex items-center gap-6 sm:hidden">
+        <a class="btn-pill" href="/signup">Đăng ký</a>
+        <a class="btn-ghost" href="/login"><span>Đăng nhập</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1" id="main">
+    <!-- ================= HERO: tiêu đề lớn bên trái, chòm sao trống đồng bên phải ================= -->
+    <section class="relative overflow-hidden" id="top" aria-label="Giới thiệu">
+      <div class="relative max-w-[1280px] mx-auto px-5 sm:px-8 pt-28 sm:pt-32 lg:pt-28 pb-16 lg:pb-16 lg:min-h-[max(100svh,720px)] grid lg:grid-cols-12 gap-10 lg:gap-6 items-center">
+        <div class="lg:col-span-7 relative z-10">
+          <p class="t-label text-[#F2B544]">Trợ lý thủ tục pháp lý · Đất đai · Kinh doanh</p>
+          <h1 class="t-display mt-6 text-white">
+            <span class="block lg:whitespace-nowrap">Hỏi đúng thủ tục.</span>
+            <span class="block lg:whitespace-nowrap text-[#A8948F]">Chuẩn bị đủ hồ sơ.</span>
+          </h1>
+          <p class="t-body mt-8 max-w-[30rem] text-[#CDBCB6]">
+            Kể tình huống của bạn, trợ lý AI chỉ ra thủ tục cần làm, giấy tờ cần chuẩn bị và nơi nộp hồ sơ
+            cho các việc về đất đai, hộ kinh doanh và doanh nghiệp.
+          </p>
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <a class="btn-pill" href="/login">Bắt đầu làm hồ sơ</a>
+            <button class="btn-ghost" type="button" data-open-chat>
+              <span>Hỏi trợ lý AI</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </button>
+          </div>
+
+          <dl class="mt-16 grid grid-cols-3 gap-6 max-w-[36rem]">
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Luật sư hoạt động</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums">120+</dd>
+            </div>
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Khách hàng tin cậy</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums">15k+</dd>
+            </div>
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Đánh giá chuẩn xác</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums">4.9/5</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Chòm sao: hàng nghìn tam giác nhỏ xếp thành mặt trống đồng Đông Sơn -->
+        <div class="lg:col-span-5 relative lg:-mr-24 xl:-mr-32">
+          <div class="relative mx-auto w-full max-w-[360px] sm:max-w-[520px] lg:max-w-none aspect-square">
+            <canvas class="constellation" data-constellation="hero" aria-hidden="true"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= THỦ TỤC ĐANG ĐƯỢC HỖ TRỢ ================= -->
+    <section class="py-24 sm:py-[120px]" id="procedures">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-12 lg:gap-6">
+        <div class="lg:col-span-5">
+          <p class="t-label text-[#F2B544]">01 · Thủ tục</p>
+          <h2 class="t-heading mt-6 text-white">Thủ tục đang được hỗ trợ</h2>
+          <p class="t-body mt-6 max-w-[26rem] text-[#CDBCB6]">
+            Các thủ tục đất đai, hộ kinh doanh và doanh nghiệp mà trợ lý AI đang hướng dẫn.
+          </p>
+          <p class="mt-8 text-sm text-[#A8948F]">
+            Để tạo hồ sơ, bạn cần đăng nhập và cập nhật thông tin cá nhân trước.
+          </p>
+          <a class="btn-ghost mt-2" href="/login">
+            <span>Đăng nhập để bắt đầu</span>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7 space-y-16">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h3 class="t-heading-xs text-white">Đất đai</h3>
+              <span class="inline-flex items-center h-7 px-3 rounded-[999px] border border-[#F2B544]/50 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#F2B544]">Được hỏi nhiều nhất</span>
+            </div>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#A8948F] max-w-[30rem]">
+              Từ chuẩn bị giấy tờ, hợp đồng, kê khai thuế đến cơ quan tiếp nhận hồ sơ tại địa phương.
+            </p>
+            <ul class="mt-6 space-y-4 t-body text-white">
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Mua bán, chuyển nhượng quyền sử dụng đất</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Sang tên đổi chủ: tặng cho, thừa kế, mua bán</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tách thửa, hợp thửa và đăng ký biến động đất đai</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Giao đất, thuê đất và gia hạn sử dụng đất</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thế chấp và tranh chấp đất đai</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="t-heading-xs text-white">Hộ kinh doanh và doanh nghiệp</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#A8948F] max-w-[30rem]">
+              Điền sẵn tờ khai, tra cứu mã ngành nghề phù hợp và hướng dẫn nộp đúng cơ quan có thẩm quyền.
+            </p>
+            <ul class="mt-6 space-y-4 t-body text-white">
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập hộ kinh doanh mới</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập doanh nghiệp</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thay đổi nội dung đăng ký: địa điểm, ngành nghề, vốn</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tạm ngừng kinh doanh theo quy định</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Chấm dứt hoạt động hộ kinh doanh, giải thể doanh nghiệp</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Hợp tác kinh doanh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DÀNH CHO AI: mỗi đối tượng một hàng hai cột ================= -->
+    <section class="py-24 sm:py-[120px]" id="audiences">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8">
+            <p class="t-label text-[#F2B544]">02 · Dành cho ai</p>
+            <h2 class="t-heading mt-6 text-white">Một nơi cho cả người làm hồ sơ và người tư vấn</h2>
+          </div>
+          <p class="t-body lg:col-span-4 lg:self-end text-[#CDBCB6]">
+            Công dân và doanh nghiệp dùng tài khoản người dùng. Tài khoản luật sư do quản trị viên cấp.
+          </p>
+        </div>
+
+        <div class="mt-20 space-y-20">
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Người dùng</p>
+              <h3 class="t-heading-sm mt-3 text-white">Công dân</h3>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7">
+              <p class="t-body text-[#CDBCB6]">Làm thủ tục đất đai cho gia đình mà không cần am hiểu luật.</p>
+              <ul class="mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết giấy nào cần bản chính, giấy nào cần bản sao công chứng</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết nộp ở bộ phận một cửa nào</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Theo dõi tiến độ xử lý hồ sơ sau khi nộp</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5 lg:order-2 lg:col-start-8">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Người dùng</p>
+              <h3 class="t-heading-sm mt-3 text-white">Doanh nghiệp và hộ kinh doanh</h3>
+            </div>
+            <div class="lg:col-span-6 lg:order-1 lg:col-start-1 lg:row-start-1">
+              <p class="t-body text-[#CDBCB6]">Đăng ký, thay đổi, tạm ngừng hay chấm dứt hoạt động đúng quy định.</p>
+              <ul class="mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tờ khai được điền sẵn từ thông tin bạn cung cấp</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tra cứu mã ngành nghề phù hợp</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Hướng dẫn nộp đúng cơ quan có thẩm quyền</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Tài khoản do quản trị viên cấp</p>
+              <h3 class="t-heading-sm mt-3 text-white">Luật sư</h3>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7">
+              <p class="t-body text-[#CDBCB6]">Tra cứu nhanh căn cứ pháp lý và danh mục hồ sơ khi tư vấn khách hàng.</p>
+              <ul class="mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Câu trả lời dẫn văn bản pháp luật liên quan</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Danh mục giấy tờ theo từng thủ tục để đối chiếu</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng nhập bằng tài khoản luật sư</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CÁCH LÀM: 3 bước ================= -->
+    <section class="py-24 sm:py-[120px]" id="workflow">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <p class="t-label text-[#F2B544]">03 · Cách làm</p>
+        <h2 class="t-heading mt-6 text-white max-w-[52rem]">Ba bước để có bộ hồ sơ hoàn chỉnh</h2>
+
+        <ol class="mt-20 grid md:grid-cols-3 gap-14 md:gap-10">
+          <li>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true">01</span>
+            <h3 class="t-heading-xs mt-8 text-white">Chọn thủ tục</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Chọn thủ tục đất đai, hộ kinh doanh hoặc doanh nghiệp từ danh sách, hoặc tìm bằng từ khóa.
+            </p>
+          </li>
+          <li>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true">02</span>
+            <h3 class="t-heading-xs mt-8 text-white">Trao đổi với trợ lý AI</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Mô tả tình trạng hồ sơ hiện tại. Trợ lý giải đáp thắc mắc và chỉ ra giấy tờ còn thiếu.
+            </p>
+          </li>
+          <li>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true">03</span>
+            <h3 class="t-heading-xs mt-8 text-white">Chuẩn bị và nộp hồ sơ</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Nhận bộ tài liệu đã điền sẵn cùng hướng dẫn nơi nộp, lệ phí và cách nộp trực tiếp hoặc trực tuyến.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= LỜI MỜI CUỐI ================= -->
+    <section class="relative overflow-hidden" id="get-started">
+      <div class="pointer-events-none absolute -right-48 sm:-right-32 top-1/2 -translate-y-1/2 w-[560px] h-[560px] opacity-60" aria-hidden="true">
+        <canvas class="constellation" data-constellation="cta"></canvas>
+      </div>
+      <div class="relative max-w-[1280px] mx-auto px-5 sm:px-8 py-28 sm:py-[160px]">
+        <h2 class="t-heading text-white max-w-[44rem]">Bắt đầu hồ sơ đầu tiên của bạn</h2>
+        <p class="t-body mt-6 max-w-[30rem] text-[#CDBCB6]">
+          Tra cứu ban đầu miễn phí. Tạo tài khoản để lưu hồ sơ và theo dõi tiến độ xử lý.
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a class="btn-pill" href="/signup">Tạo tài khoản miễn phí</a>
+          <a class="btn-ghost" href="/login"><span>Tôi đã có tài khoản</span></a>
+        </div>
+        <p class="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">
+          <span class="tri" aria-hidden="true"></span>
+          Dữ liệu cá nhân được bảo mật
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="text-sm text-[#A8948F]">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pt-16 pb-12 grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <a class="inline-flex items-center gap-3" href="#top">
+          <img alt="" class="w-9 h-9 rounded-[10px] object-cover" width="36" height="36" loading="lazy"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSTtZViAPrdvLgwlXrraqYyxYu77OyhJx-IxvOSeX3LOh_zSt4tL2eWmLFqogC6qDfMKw22GeoLNnkUa0kq4rIK7tHqFND_BwUtMQKmVH4s7hCcToCkvmOHKFoyr8jgRAeJcAAWsPke34s3eEZVKdV-vuXYuIflXO0soosD0ZsEhpNIbD4VBvmAWGk5t_iPdCtV7mfYrRSHSGTo7AmmWs5Mbo6lWqJurbEeDOYo5XhHJF09xpEAeH1KNIk-HUGmmzWk50">
+          <span class="text-[15px] text-white" translate="no">AI Legal Assistant</span>
+        </a>
+        <p class="mt-5 max-w-sm font-light leading-relaxed">
+          Ứng dụng trí tuệ nhân tạo giúp người dân, hộ kinh doanh và luật sư tiếp cận thủ tục pháp lý Việt Nam
+          minh bạch, tiện lợi và tiết kiệm thời gian.
+        </p>
+      </div>
+      <div class="lg:col-span-2">
+        <h2 class="t-label text-white">Thủ tục</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><a class="hover:text-white" href="#procedures">Sang tên đất đai</a></li>
+          <li><a class="hover:text-white" href="#procedures">Chuyển nhượng nhà đất</a></li>
+          <li><a class="hover:text-white" href="#procedures">Đăng ký hộ kinh doanh</a></li>
+          <li><a class="hover:text-white" href="#procedures">Thành lập doanh nghiệp</a></li>
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <h2 class="t-label text-white">Trợ lý AI</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><button class="hover:text-white text-left" type="button" data-open-chat>Hỏi đáp pháp lý</button></li>
+          <li><a class="hover:text-white" href="#workflow">Hướng dẫn từng bước</a></li>
+          <li><a class="hover:text-white" href="#audiences">Dành cho ai</a></li>
+        </ul>
+      </div>
+      <div class="lg:col-span-3">
+        <h2 class="t-label text-white">Liên hệ</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><a class="hover:text-white" href="mailto:support@legalai.vn">support@legalai.vn</a></li>
+          <li><a class="hover:text-white" href="tel:19001234">Hotline 1900 1234</a></li>
+          <li><a class="hover:text-white" href="/dieu-khoan#dieu-khoan-su-dung">Điều khoản sử dụng</a></li>
+          <li><a class="hover:text-white" href="/dieu-khoan#bao-ve-du-lieu">Chính sách bảo mật</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pb-10 flex flex-col sm:flex-row gap-3 justify-between text-xs">
+      <div>
+        <p>© 2026 AI Legal Assistant. Bản quyền thuộc về đội ngũ phát triển.</p>
+        <p class="mt-1">Hoa văn trống đồng Đông Sơn: Wikimedia Commons, phạm vi công cộng.</p>
+      </div>
+      <div class="flex gap-6 uppercase tracking-[0.06em]">
+        <a class="hover:text-white" href="#">Facebook</a>
+        <a class="hover:text-white" href="#">Zalo OA</a>
+        <a class="hover:text-white" href="mailto:support@legalai.vn">Gửi phản hồi</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= BOX CHAT NỔI (chat thật với /api/agent/chat) ================= -->
+  <div class="fixed z-[60] right-4 bottom-4 sm:right-6 sm:bottom-6 flex flex-col items-end gap-3">
+    <section
+      class="chat-panel w-[calc(100vw-2rem)] sm:w-[390px] h-[min(580px,calc(100dvh-6.5rem))] bg-[#1F0809] text-white rounded-[24px] overflow-hidden flex flex-col"
+      id="chat-panel" role="dialog" aria-modal="false" aria-labelledby="chat-title">
+      <div class="px-5 pt-5 pb-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-[1.375rem] font-normal tracking-[-0.02em] text-white" id="chat-title">Trợ lý AI pháp lý</h2>
+            <p class="flex items-center gap-1.5 text-xs text-[#A8948F] mt-1">
+              <span class="w-2 h-2 rounded-[999px] bg-[#3FBF7F]" aria-hidden="true"></span>
+              Không cần đăng nhập
+            </p>
+          </div>
+          <button class="w-9 h-9 -mr-1.5 rounded-[999px] hover:bg-white/10 flex items-center justify-center text-[#CDBCB6]" type="button"
+            id="chat-close" aria-label="Đóng box chat">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="mt-4 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Chủ đề câu hỏi gợi ý" id="topic-tabs">
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
+            role="tab" type="button" aria-selected="true" aria-controls="suggested-buttons" data-topic="land" id="topic-land">Đất đai</button>
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
+            role="tab" type="button" aria-selected="false" tabindex="-1" aria-controls="suggested-buttons" data-topic="business" id="topic-business">Kinh doanh</button>
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
+            role="tab" type="button" aria-selected="false" tabindex="-1" aria-controls="suggested-buttons" data-topic="legal" id="topic-legal">Căn cứ pháp lý</button>
+        </div>
+      </div>
+
+      <div class="chat-scroll flex-1 overflow-y-auto overscroll-contain px-5 py-2 space-y-3 text-sm leading-relaxed"
+        id="chat-messages" role="log" aria-live="polite" aria-label="Hội thoại với trợ lý AI">
+        <div class="flex">
+          <div class="bubble-bot px-3.5 py-2.5 max-w-[92%] font-light">
+            Xin chào! Hãy cho tôi biết bạn đang cần làm thủ tục <strong class="font-semibold">đất đai</strong>, <strong class="font-semibold">hộ kinh doanh</strong>
+            hay <strong class="font-semibold">doanh nghiệp</strong>, tôi sẽ hướng dẫn từng bước.
+          </div>
+        </div>
+        <div class="hidden flex items-center gap-2 text-[#A8948F] text-xs" id="typing-indicator">
+          <span class="flex gap-1" aria-hidden="true">
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
+          </span>
+          Trợ lý đang soạn câu trả lời…
+        </div>
+      </div>
+
+      <div class="px-4 pt-2 pb-4">
+        <div class="flex flex-wrap gap-1.5 pt-1 pb-3" id="suggested-buttons" role="tabpanel" aria-labelledby="topic-land"></div>
+        <form class="flex gap-2" id="chat-form" novalidate onsubmit="event.preventDefault();">
+          <label class="sr-only" for="chat-input">Câu hỏi của bạn</label>
+          <input
+            class="flex-1 min-w-0 h-11 rounded-[999px] border border-white/15 bg-white/[0.04] px-4 text-sm text-white placeholder:text-[#A8948F] focus:outline-none focus:border-[#F2B544]"
+            id="chat-input" name="message" placeholder="Nhập câu hỏi của bạn…" type="text" autocomplete="off">
+          <button class="btn-pill !min-h-[44px] !px-5 shrink-0 disabled:opacity-60" id="chat-send" type="submit">Gửi</button>
+        </form>
+      </div>
+    </section>
+
+    <button
+      class="inline-flex items-center justify-center gap-2 w-14 h-14 sm:w-auto sm:px-5 rounded-[999px] bg-[#B4161B] hover:bg-[#C9221F] text-white text-sm font-semibold uppercase tracking-[0.04em] shadow-[0_16px_40px_-14px_rgba(0,0,0,0.9)] transition-colors"
+      type="button" id="chat-launcher" aria-expanded="false" aria-controls="chat-panel" aria-label="Mở trợ lý AI">
+      <span data-launcher-icon="open">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+        </svg>
+      </span>
+      <span class="hidden" data-launcher-icon="close">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </span>
+      <span class="hidden sm:inline" data-launcher-label aria-hidden="true">Hỏi trợ lý AI</span>
+    </button>
+  </div>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const header = document.getElementById('site-header');
+
+    // ================= Navbar có nền khi rời đầu trang =================
+    const syncHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 4);
+    window.addEventListener('scroll', syncHeader, { passive: true });
+    syncHeader();
+
+    // ================= Menu di động =================
+    const mobileBtn = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const setMenu = (open) => {
+      if (!mobileBtn || !mobileMenu) return;
+      mobileMenu.classList.toggle('hidden', !open);
+      header.classList.toggle('bg-[#140405]', open);
+      mobileBtn.setAttribute('aria-expanded', String(open));
+      mobileBtn.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+    };
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => setMenu(mobileMenu.classList.contains('hidden')));
+    }
+
+    // ================= Cuộn mượt tới từng mục khi bấm link trên trang =================
+    let scrollAnimation = null;
+    const cancelScroll = () => {
+      if (scrollAnimation) cancelAnimationFrame(scrollAnimation);
+      scrollAnimation = null;
+    };
+    ['wheel', 'touchstart', 'keydown'].forEach(type => window.addEventListener(type, cancelScroll, { passive: true }));
+
+    const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const scrollToY = (targetY, onDone) => {
+      cancelScroll();
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      if (reduceMotion.matches || Math.abs(distance) < 2) {
+        window.scrollTo(0, targetY);
+        onDone?.();
+        return;
+      }
+      // Quãng đường càng xa thì cuộn càng lâu một chút, nhưng không quá 1,1 giây
+      const duration = Math.min(1100, 450 + Math.abs(distance) * 0.25);
+      const startTime = performance.now();
+      const step = (now) => {
+        const progress = Math.min(1, (now - startTime) / duration);
+        window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+        if (progress < 1) {
+          scrollAnimation = requestAnimationFrame(step);
+        } else {
+          scrollAnimation = null;
+          onDone?.();
+        }
+      };
+      scrollAnimation = requestAnimationFrame(step);
+    };
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const id = link.getAttribute('href').slice(1);
+        const target = id ? document.getElementById(id) : null;
+        if (!target) return;
+        e.preventDefault();
+        setMenu(false);
+        const isTop = id === 'top';
+        const targetY = isTop ? 0 : target.getBoundingClientRect().top + window.scrollY - header.offsetHeight;
+        scrollToY(Math.max(0, targetY), () => {
+          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+        });
+        history.pushState(null, '', isTop ? location.pathname : `#${id}`);
+      });
+    });
+
+    // Làm sáng mục đang xem trên navbar
+    const navLinks = Array.from(document.querySelectorAll('.nav-link[href^="#"]'));
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === `#${entry.target.id}`;
+          if (active) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ['top', 'procedures', 'audiences', 'workflow', 'get-started'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // ================= Chòm sao trống đồng: tam giác nhỏ lấy mẫu từ hoa văn mặt trống =================
+    // Hai lớp: lớp tĩnh hàng chục nghìn tam giác li ti vẽ sẵn một lần để hoa văn (ngôi sao, các vành, hình người, chim) hiện rõ,
+    // và vài trăm tam giác lớn hơn chuyển động, lấp lánh, né con trỏ chuột. Cả mặt trống xoay rất chậm.
+    const PARTICLE_COLORS = ['#F2B544', '#F2B544', '#F7C766', '#E4572E', '#FF8A5B', '#E5484D', '#F6DCCF', '#C9221F'];
+    const drumImage = new Image();
+    drumImage.src = '/images/login/dong-son-drum-face.png';
+    const drumReady = drumImage.decode().then(() => drumImage).catch(() => null);
+
+    // Điểm thuộc hoa văn = pixel không trong suốt của ảnh mặt trống; toạ độ chuẩn hoá trong đường tròn bán kính 1
+    const sampleDrum = (img) => {
+      const size = 360;
+      const off = document.createElement('canvas');
+      off.width = size;
+      off.height = size;
+      const ctx = off.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, size, size);
+      const data = ctx.getImageData(0, 0, size, size).data;
+      const points = [];
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (data[(y * size + x) * 4 + 3] < 140) continue;
+          const nx = (x / size) * 2 - 1;
+          const ny = (y / size) * 2 - 1;
+          // Vành tối ngoài cùng là mảng đặc: chỉ giữ thưa để hoa văn bên trong nổi lên
+          if (Math.hypot(nx, ny) > 0.9 && Math.random() > 0.12) continue;
+          points.push([nx, ny]);
+        }
+      }
+      return points;
+    };
+
+    // Dự phòng khi không tải được ảnh: các vòng tròn đồng tâm và ngôi sao 14 cánh
+    const proceduralDrum = () => {
+      const points = [];
+      [0.22, 0.42, 0.6, 0.74, 0.86, 0.95].forEach(ring => {
+        for (let a = 0; a < Math.PI * 2; a += 0.004) points.push([Math.cos(a) * ring, Math.sin(a) * ring]);
+      });
+      for (let k = 0; k < 14; k++) {
+        const a = (k / 14) * Math.PI * 2;
+        for (let t = 0.03; t < 0.2; t += 0.002) points.push([Math.cos(a) * t, Math.sin(a) * t]);
+      }
+      return points;
+    };
+
+    const initConstellation = async (canvas, { fine, sparks, ambient, scale }) => {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const img = await drumReady;
+      const source = img ? sampleDrum(img) : proceduralDrum();
+      if (!source.length) return;
+
+      const factor = window.innerWidth < 640 ? 0.6 : 1;
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const fineDots = Array.from({ length: Math.round(fine * factor) }, () => {
+        const [nx, ny] = pick(source);
+        return { nx, ny, size: 0.9 + Math.random() * 1.3, rot: Math.random() * Math.PI * 2, color: pick(PARTICLE_COLORS), alpha: 0.55 + Math.random() * 0.45 };
+      });
+      const particles = Array.from({ length: Math.round(sparks * factor) }, () => {
+        const [nx, ny] = pick(source);
+        return {
+          nx,
+          ny,
+          sx: (Math.random() - 0.5) * 3,
+          sy: (Math.random() - 0.5) * 3,
+          size: 2.6 + Math.random() * 2.6,
+          rot: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.6,
+          color: pick(PARTICLE_COLORS),
+          alpha: 0.6 + Math.random() * 0.4,
+          phase: Math.random() * Math.PI * 2,
+          delay: Math.random() * 0.5
+        };
+      });
+      const dust = Array.from({ length: ambient }, () => ({
+        x: Math.random(),
+        y: Math.random(),
+        vx: (Math.random() - 0.5) * 0.004,
+        vy: (Math.random() - 0.5) * 0.004,
+        size: 1.5 + Math.random() * 3,
+        rot: Math.random() * Math.PI * 2,
+        color: pick(PARTICLE_COLORS),
+        alpha: 0.12 + Math.random() * 0.25
+      }));
+
+      const triangle = (c, x, y, size, rot) => {
+        c.moveTo(x + Math.cos(rot) * size, y + Math.sin(rot) * size);
+        c.lineTo(x + Math.cos(rot + 2.094) * size, y + Math.sin(rot + 2.094) * size);
+        c.lineTo(x + Math.cos(rot - 2.094) * size, y + Math.sin(rot - 2.094) * size);
+        c.closePath();
+      };
+
+      // Lớp tĩnh: vẽ một lần vào canvas phụ theo kích thước hiện tại, mỗi khung hình chỉ cần xoay rồi dán lại
+      const layer = document.createElement('canvas');
+      const layerCtx = layer.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let radius = 0;
+      let dpr = 1;
+      const renderLayer = () => {
+        const side = Math.ceil((radius + 6) * 2);
+        layer.width = Math.round(side * dpr);
+        layer.height = Math.round(side * dpr);
+        layerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        layerCtx.clearRect(0, 0, side, side);
+        layerCtx.lineWidth = 0.9;
+        const c = side / 2;
+        // Gom theo màu để giảm số lần đổi kiểu nét
+        PARTICLE_COLORS.forEach(color => {
+          layerCtx.strokeStyle = color;
+          [0.6, 0.8, 1].forEach(alpha => {
+            layerCtx.globalAlpha = alpha;
+            layerCtx.beginPath();
+            fineDots.forEach(d => {
+              if (d.color !== color || Math.abs(d.alpha - alpha) > 0.1) return;
+              triangle(layerCtx, c + d.nx * radius, c + d.ny * radius, d.size, d.rot);
+            });
+            layerCtx.stroke();
+          });
+        });
+        layerCtx.globalAlpha = 1;
+      };
+      const resize = () => {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        radius = Math.min(width, height) * 0.5 * scale;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        renderLayer();
+      };
+      fineDots.forEach(d => { d.alpha = d.alpha < 0.7 ? 0.6 : d.alpha < 0.9 ? 0.8 : 1; });
+      resize();
+      new ResizeObserver(() => {
+        if (canvas.clientWidth === width && canvas.clientHeight === height) return;
+        resize();
+        if (!running) draw(performance.now());
+      }).observe(canvas);
+
+      const pointer = { x: -9999, y: -9999 };
+      canvas.parentElement.addEventListener('pointermove', (e) => {
+        const box = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - box.left;
+        pointer.y = e.clientY - box.top;
+      });
+      canvas.parentElement.addEventListener('pointerleave', () => {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+
+      const start = performance.now();
+      const draw = (now) => {
+        const t = (now - start) / 1000;
+        const still = reduceMotion.matches;
+        ctx.clearRect(0, 0, width, height);
+        const cx = width / 2;
+        const cy = height / 2;
+        // Mặt trống quay rất chậm, khoảng 3 phút một vòng
+        const spin = still ? 0 : t * 0.035;
+        const cos = Math.cos(spin);
+        const sin = Math.sin(spin);
+        // Hoa văn hiện dần trong 2 giây đầu, cùng lúc các hạt lớn bay về
+        const reveal = still ? 1 : Math.min(1, t / 2);
+
+        ctx.lineWidth = 1;
+        dust.forEach(d => {
+          if (!still) {
+            d.x = (d.x + d.vx / 60 + 1) % 1;
+            d.y = (d.y + d.vy / 60 + 1) % 1;
+          }
+          ctx.globalAlpha = d.alpha;
+          ctx.strokeStyle = d.color;
+          ctx.beginPath();
+          triangle(ctx, d.x * width, d.y * height, d.size, d.rot + (still ? 0 : t * 0.2));
+          ctx.stroke();
+        });
+
+        ctx.save();
+        ctx.globalAlpha = reveal * reveal;
+        ctx.translate(cx, cy);
+        ctx.rotate(spin);
+        const half = layer.width / dpr / 2;
+        ctx.drawImage(layer, -half, -half, half * 2, half * 2);
+        ctx.restore();
+
+        particles.forEach(p => {
+          const k = still ? 1 : Math.min(1, Math.max(0, (t - p.delay) / 1.8));
+          const ease = 1 - Math.pow(1 - k, 3);
+          const rx = p.nx * cos - p.ny * sin;
+          const ry = p.nx * sin + p.ny * cos;
+          let x = cx + (rx + p.sx * (1 - ease)) * radius;
+          let y = cy + (ry + p.sy * (1 - ease)) * radius;
+          // Hạt né nhẹ con trỏ chuột
+          const dx = x - pointer.x;
+          const dy = y - pointer.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 80 && dist > 0.01) {
+            const push = (80 - dist) / 80 * 18;
+            x += (dx / dist) * push;
+            y += (dy / dist) * push;
+          }
+          ctx.globalAlpha = p.alpha * ease * (still ? 1 : 0.6 + 0.4 * Math.sin(t * 1.6 + p.phase));
+          ctx.strokeStyle = p.color;
+          ctx.beginPath();
+          triangle(ctx, x, y, p.size, p.rot + (still ? 0 : t * p.spin));
+          ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+      };
+
+      // Chỉ chạy hoạt ảnh khi canvas đang hiện trên màn hình và tab đang mở
+      let running = false;
+      let visible = false;
+      let frame = 0;
+      const loop = (now) => {
+        draw(now);
+        frame = requestAnimationFrame(loop);
+      };
+      const sync = () => {
+        const shouldRun = visible && !document.hidden && !reduceMotion.matches;
+        if (shouldRun && !running) {
+          running = true;
+          frame = requestAnimationFrame(loop);
+        } else if (!shouldRun && running) {
+          running = false;
+          cancelAnimationFrame(frame);
+        }
+      };
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        sync();
+      }).observe(canvas);
+      document.addEventListener('visibilitychange', sync);
+      reduceMotion.addEventListener?.('change', () => {
+        sync();
+        if (!running) draw(performance.now());
+      });
+      draw(performance.now());
+    };
+
+    const heroCanvas = document.querySelector('[data-constellation="hero"]');
+    const ctaCanvas = document.querySelector('[data-constellation="cta"]');
+    if (heroCanvas) initConstellation(heroCanvas, { fine: 15000, sparks: 450, ambient: 90, scale: 0.88 });
+    if (ctaCanvas) initConstellation(ctaCanvas, { fine: 9000, sparks: 0, ambient: 0, scale: 0.9 });
+
+    // ================= Box chat nổi =================
+    const chatPanel = document.getElementById('chat-panel');
+    const launcher = document.getElementById('chat-launcher');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+
+    const setChat = (open, { returnFocus = true } = {}) => {
+      chatPanel.classList.toggle('is-open', open);
+      launcher.setAttribute('aria-expanded', String(open));
+      launcher.querySelector('[data-launcher-icon="open"]').classList.toggle('hidden', open);
+      launcher.querySelector('[data-launcher-icon="close"]').classList.toggle('hidden', !open);
+      launcher.querySelector('[data-launcher-label]').textContent = open ? 'Đóng' : 'Hỏi trợ lý AI';
+      launcher.setAttribute('aria-label', open ? 'Đóng trợ lý AI' : 'Mở trợ lý AI');
+      if (open) {
+        // Đợi panel hiện (visibility) rồi mới đặt con trỏ vào ô nhập
+        requestAnimationFrame(() => chatInput.focus({ preventScroll: true }));
+      } else if (returnFocus) {
+        launcher.focus({ preventScroll: true });
+      }
+    };
+    const chatIsOpen = () => chatPanel.classList.contains('is-open');
+
+    launcher.addEventListener('click', () => setChat(!chatIsOpen()));
+    document.getElementById('chat-close').addEventListener('click', () => setChat(false));
+    document.querySelectorAll('[data-open-chat]').forEach(btn => btn.addEventListener('click', () => {
+      setMenu(false);
+      setChat(true);
+    }));
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (chatIsOpen()) {
+        setChat(false);
+      } else if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+        setMenu(false);
+        mobileBtn.focus();
+      }
+    });
+
+    // Câu hỏi gợi ý theo chủ đề
+    const SUGGESTIONS = {
+      land: [
+        'Tôi muốn sang tên quyền sử dụng đất cần làm gì?',
+        'Cấp sổ đỏ lần đầu cần giấy tờ gì?',
+        'Nộp hồ sơ đất đai ở đâu?'
+      ],
+      business: [
+        'Đăng ký hộ kinh doanh cần giấy tờ gì?',
+        'Thành lập công ty TNHH một thành viên cần gì?',
+        'Tạm ngừng kinh doanh cần thông báo trước bao lâu?'
+      ],
+      legal: [
+        'Căn cứ pháp lý của thủ tục tách thửa đất là gì?',
+        'Văn bản nào quy định thủ tục đăng ký hộ kinh doanh?',
+        'Quy định nào về thời hạn giải quyết đăng ký biến động đất đai?'
+      ]
+    };
+    const suggestionBox = document.getElementById('suggested-buttons');
+    const topicTabs = Array.from(document.querySelectorAll('.topic-tab'));
+
+    const renderSuggestions = (topic) => {
+      if (!suggestionBox) return;
+      suggestionBox.textContent = '';
+      (SUGGESTIONS[topic] || []).forEach(text => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'sample-query text-left text-xs font-light text-[#F3E9E6] border border-[#F2B544]/30 hover:border-[#F2B544] px-3 py-1.5 rounded-[999px] transition-colors';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          chatInput.value = text;
+          chatInput.focus();
+        });
+        suggestionBox.append(btn);
+      });
+    };
+
+    const selectTopic = (tab, moveFocus) => {
+      topicTabs.forEach(t => {
+        const active = t === tab;
+        t.setAttribute('aria-selected', String(active));
+        t.tabIndex = active ? 0 : -1;
+      });
+      if (moveFocus) tab.focus();
+      suggestionBox?.setAttribute('aria-labelledby', tab.id);
+      renderSuggestions(tab.dataset.topic);
+    };
+
+    topicTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectTopic(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        let next;
+        if (e.key === 'ArrowRight') next = (index + 1) % topicTabs.length;
+        else if (e.key === 'ArrowLeft') next = (index - 1 + topicTabs.length) % topicTabs.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = topicTabs.length - 1;
+        else return;
+        e.preventDefault();
+        selectTopic(topicTabs[next], true);
+      });
+    });
+    renderSuggestions('land');
+
+    // Chat thật: gọi POST /api/agent/chat qua Gateway, KHÔNG cần đăng nhập
+    const chatForm = document.getElementById('chat-form');
+    const chatSend = document.getElementById('chat-send');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    const renderAnswer = (bubble, text) => {
+      bubble.textContent = '';
+      const lines = String(text).split('\n');
+      lines.forEach((line, index) => {
+        line.replace(/^(\s*)[*-]\s+/, '$1• ').split(/\*\*(.+?)\*\*/g).forEach((part, partIndex) => {
+          if (!part) return;
+          if (partIndex % 2 === 1) {
+            const strong = document.createElement('strong');
+            strong.className = 'font-semibold';
+            strong.textContent = part;
+            bubble.append(strong);
+          } else {
+            bubble.append(document.createTextNode(part));
+          }
+        });
+        if (index < lines.length - 1) bubble.append(document.createTextNode('\n'));
+      });
+    };
+
+    const appendBubble = (kind) => {
+      const row = document.createElement('div');
+      row.className = kind === 'user' ? 'flex justify-end' : 'flex';
+      const bubble = document.createElement('div');
+      bubble.className = kind === 'user'
+        ? 'bubble-user px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
+        : 'bubble-bot px-3.5 py-2.5 max-w-[92%] whitespace-pre-wrap font-light';
+      row.append(bubble);
+      chatMessages.insertBefore(row, typingIndicator);
+      return bubble;
+    };
+
+    const scrollChat = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
+
+    if (chatForm && chatInput && chatMessages) {
+      chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const val = chatInput.value.trim();
+        if (!val || chatForm.dataset.busy) return;
+        chatForm.dataset.busy = '1';
+        if (chatSend) chatSend.disabled = true;
+
+        appendBubble('user').textContent = val;
+        chatInput.value = '';
+        if (typingIndicator) typingIndicator.classList.remove('hidden');
+        scrollChat();
+
+        let reply;
+        try {
+          const config = await fetch('/api/app-config').then(r => (r.ok ? r.json() : {})).catch(() => ({}));
+          const apiBaseUrl = (config.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, '');
+          const response = await fetch(`${apiBaseUrl}/api/agent/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: val }),
+            signal: AbortSignal.timeout(60000)
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result?.data) {
+            throw Object.assign(new Error(result?.error?.message || 'Trợ lý chưa thể xử lý yêu cầu này.'), { fromServer: true });
+          }
+          let answer = result.data.answer || 'Chưa tìm thấy thông tin phù hợp.';
+          if (result.data.procedure?.name) answer += `\n\nThủ tục liên quan: ${result.data.procedure.name}`;
+          reply = answer;
+        } catch (error) {
+          reply = error?.name === 'TimeoutError'
+            ? 'Yêu cầu mất nhiều thời gian hơn dự kiến. Vui lòng thử lại.'
+            : (error?.fromServer ? error.message : 'Hiện chưa kết nối được máy chủ. Vui lòng thử lại sau.');
+        } finally {
+          if (typingIndicator) typingIndicator.classList.add('hidden');
+          renderAnswer(appendBubble('bot'), reply);
+          delete chatForm.dataset.busy;
+          if (chatSend) chatSend.disabled = false;
+          if (chatIsOpen()) chatInput.focus({ preventScroll: true });
+          scrollChat();
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

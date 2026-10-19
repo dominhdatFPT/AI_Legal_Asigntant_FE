@@ -4,62 +4,43 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta name="theme-color" content="#5A0B0D">
+  <meta name="theme-color" content="#140405">
   <title>AI Legal Assistant - Hỏi đúng thủ tục, chuẩn bị đủ hồ sơ</title>
   <meta name="description"
     content="Trợ lý AI hướng dẫn thủ tục đất đai, hộ kinh doanh và doanh nghiệp cho công dân, doanh nghiệp và luật sư: giấy tờ cần chuẩn bị, mẫu đơn có sẵn, nơi nộp và các bước thực hiện.">
-  <!-- Fonts: Literata cho tiêu đề, Be Vietnam Pro cho nội dung (cả hai hỗ trợ đầy đủ tiếng Việt) -->
+  <!-- Một họ chữ duy nhất (Inter, hỗ trợ đầy đủ tiếng Việt): tiêu đề nét 400 cỡ lớn, nội dung nét 200 -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&amp;display=swap"
-    rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-  <script src="https://unpkg.com/lucide@1.55.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
+  <link href="/tailwind.css" rel="stylesheet">
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
-            serif: ['Literata', 'Georgia', 'serif'],
-          },
-          colors: {
-            lacquer: '#5A0B0D',
-            lacquerDeep: '#420708',
-            son: '#B4161B',
-            sonDark: '#8E1015',
-            cam: '#E4572E',
-            camText: '#B83D15',
-            nghe: '#F2B544',
-            ink: '#2A1712',
-            muted: '#6E5249',
-            line: '#EEDFD6',
-            tint: '#FFF6E3',
-          }
-        }
-      }
-    }
+    // Bật hiệu ứng xuất hiện trước khi trang vẽ, trừ khi máy bật "giảm chuyển động"
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-anim');
   </script>
   <style>
+    /* Bố cục theo mẫu Dala (nền tối, chữ lớn, một nút chính), màu giữ theo dự án: sơn mài, đỏ son, vàng nghệ */
     :root {
-      --lacquer: #5A0B0D;
+      --void: #140405;
+      --surface: #1F0809;
+      --bone: #ffffff;
+      --ash: #A8948F;
+      --mist: #CDBCB6;
       --son: #B4161B;
-      --cam: #E4572E;
+      --son-hover: #C9221F;
       --nghe: #F2B544;
-      --ink: #2A1712;
-      --muted: #6E5249;
-      --line: #EEDFD6;
+      --cam: #E4572E;
     }
 
-    /* Bù chiều cao navbar khi trình duyệt tự nhảy tới #anchor (ví dụ mở link có sẵn hash) */
     html {
       scroll-padding-top: 88px;
+      background: var(--void);
     }
 
     body {
-      background: #ffffff;
-      color: var(--ink);
+      background: var(--void);
+      color: var(--bone);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-feature-settings: "ss01" on;
     }
 
     a,
@@ -67,144 +48,139 @@
       touch-action: manipulation;
     }
 
-    /* Viền focus rõ ràng: đỏ son trên nền sáng, vàng nghệ trên nền đỏ sơn mài */
     :focus-visible {
-      outline: 3px solid var(--son);
-      outline-offset: 2px;
+      outline: 2px solid var(--nghe);
+      outline-offset: 3px;
     }
 
-    .on-dark :focus-visible,
-    .site-header.is-scrolled .nav-bar :focus-visible {
-      outline-color: var(--nghe);
+    /* Thang chữ: tiêu đề nét 400, khoảng chữ âm 0.04em; nội dung 18px nét 200 */
+    .t-display {
+      font-weight: 400;
+      font-size: clamp(2.35rem, 1rem + 4.9vw, 5.6rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
     }
 
-    /* ---------- Navbar: trắng ở đầu trang, đỏ sơn mài khi đã cuộn xuống ---------- */
+    .t-heading {
+      font-weight: 400;
+      font-size: clamp(2.25rem, 1rem + 3.2vw, 4.25rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .t-heading-sm {
+      font-weight: 400;
+      font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.625rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .t-heading-xs {
+      font-weight: 400;
+      font-size: 1.6875rem;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .t-body {
+      font-weight: 200;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    .t-label {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Thanh điều hướng: trong suốt, đổi sang nền tối khi cuộn ---------- */
     .site-header {
-      background-color: #ffffff;
-      border-bottom: 1px solid var(--line);
-      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
     .site-header.is-scrolled {
-      background-color: rgba(90, 11, 13, 0.97);
-      border-bottom-color: rgba(242, 181, 68, 0.25);
-      box-shadow: 0 10px 30px -18px rgba(20, 2, 2, 0.8);
+      background-color: rgba(20, 4, 5, 0.94);
     }
 
-    .nav-brand,
-    .nav-link,
-    .nav-toggle {
-      color: var(--ink);
-      transition: color 0.3s ease;
-    }
-
-    .nav-sub {
-      color: var(--muted);
-      transition: color 0.3s ease;
+    .nav-link {
+      color: var(--ash);
+      transition: color 0.2s ease;
     }
 
     .nav-link:hover,
     .nav-link[aria-current="true"] {
-      color: var(--son);
+      color: var(--bone);
     }
 
-    .nav-link {
-      position: relative;
+    /* ---------- Nút: một nút viên thuốc đỏ son cho hành động chính, còn lại là link chữ ---------- */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 46px;
+      padding: 0 1.5rem;
+      border-radius: 999px;
+      background: var(--son);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background-color 0.2s ease;
     }
 
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -6px;
-      height: 2px;
-      background: currentColor;
-      transform: scaleX(0);
-      transition: transform 0.25s ease;
+    .btn-pill:hover {
+      background: var(--son-hover);
     }
 
-    .nav-link[aria-current="true"]::after {
-      transform: scaleX(1);
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 46px;
+      color: var(--bone);
+      font-weight: 400;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
-    .nav-signup {
-      color: var(--son);
-      transition: color 0.3s ease, background-color 0.2s ease;
+    .btn-ghost span {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      padding-bottom: 2px;
+      transition: border-color 0.2s ease;
     }
 
-    .nav-signup:hover {
-      background-color: var(--tint, #FFF6E3);
+    .btn-ghost:hover span {
+      border-color: var(--nghe);
     }
 
-    .nav-login {
-      background-color: var(--son);
-      color: #ffffff;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    .btn-ghost svg {
+      transition: transform 0.2s ease;
     }
 
-    .nav-login:hover {
-      background-color: #8E1015;
+    .btn-ghost:hover svg {
+      transform: translateX(3px);
     }
 
-    .site-header.is-scrolled .nav-brand,
-    .site-header.is-scrolled .nav-link,
-    .site-header.is-scrolled .nav-toggle,
-    .site-header.is-scrolled .nav-signup {
-      color: #ffffff;
+    /* Dấu đầu dòng hình tam giác, lặp lại hình hạt trong chòm sao */
+    .tri {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 8px solid var(--nghe);
+      flex-shrink: 0;
     }
 
-    .site-header.is-scrolled .nav-sub {
-      color: #E9C3B6;
-    }
-
-    .site-header.is-scrolled .nav-link:hover,
-    .site-header.is-scrolled .nav-link[aria-current="true"] {
-      color: var(--nghe);
-    }
-
-    .site-header.is-scrolled .nav-signup:hover,
-    .site-header.is-scrolled .nav-toggle:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .site-header.is-scrolled .nav-login {
-      background-color: var(--nghe);
-      color: var(--ink);
-    }
-
-    .site-header.is-scrolled .nav-login:hover {
-      background-color: #F7C766;
-    }
-
-    /* ---------- Hero: trình chiếu ảnh nền, đổi ảnh mỗi 3 giây ---------- */
-    .hero-slide {
-      opacity: 0;
-      transform: scale(1.08);
-      transition: opacity 1s ease, transform 4s ease-out;
-    }
-
-    .hero-slide.is-active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .slide-dot {
-      width: 8px;
-      background: rgba(255, 255, 255, 0.45);
-      transition: width 0.3s ease, background-color 0.3s ease;
-    }
-
-    .slide-dot[aria-current="true"] {
-      width: 28px;
-      background: var(--nghe);
-    }
-
-    /* Mặt trống đồng Đông Sơn tô màu vàng nghệ qua mask */
-    .drum {
-      background-color: var(--nghe);
-      -webkit-mask: url('/images/login/dong-son-drum-face.png') center / contain no-repeat;
-      mask: url('/images/login/dong-son-drum-face.png') center / contain no-repeat;
+    .constellation {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
     /* ---------- Box chat nổi góc dưới bên phải ---------- */
@@ -214,7 +190,7 @@
       transform-origin: bottom right;
       visibility: hidden;
       transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
-      box-shadow: 0 24px 60px -20px rgba(42, 23, 18, 0.45), 0 0 0 1px rgba(42, 23, 18, 0.08);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 80px -30px rgba(0, 0, 0, 0.9);
     }
 
     .chat-panel.is-open {
@@ -224,32 +200,42 @@
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .sheet-margin {
-      background-image: linear-gradient(to right, transparent 23px, rgba(180, 22, 27, 0.3) 23px, rgba(180, 22, 27, 0.3) 24px, transparent 24px);
+    .topic-tab {
+      color: var(--mist);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .topic-tab:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     .topic-tab[aria-selected="true"] {
-      background: var(--son);
-      color: #fff;
-      border-color: var(--son);
+      background: #fff;
+      color: var(--void);
+      border-color: #fff;
     }
 
     .bubble-bot {
-      background: #fff;
-      border: 1px solid var(--line);
-      color: var(--ink);
-      border-radius: 4px 14px 14px 14px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #F3E9E6;
+      border-radius: 6px 18px 18px 18px;
     }
 
     .bubble-user {
       background: var(--son);
       color: #fff;
-      border-radius: 14px 4px 14px 14px;
+      border-radius: 18px 6px 18px 18px;
     }
 
     .bubble-bot,
     .bubble-user {
       overflow-wrap: anywhere;
+    }
+
+    .chat-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
     }
 
     @keyframes typing-dot {
@@ -279,12 +265,364 @@
       animation-delay: 0.4s;
     }
 
-    @media (prefers-reduced-motion: reduce) {
+    /* ---------- Hiệu ứng: chỉ bật khi JS chạy và máy không bật "giảm chuyển động" (lớp js-anim trên thẻ html) ---------- */
+    /* 1. Tiêu đề trượt lên từng dòng từ sau lớp che; chừa khoảng trên dưới để dấu tiếng Việt không bị cắt */
+    .line-mask {
+      display: block;
+      overflow: hidden;
+      padding: 0.16em 0 0.08em;
+      margin: -0.16em 0 -0.08em;
+    }
 
-      .hero-slide,
-      .hero-slide.is-active {
-        transform: none;
-        transition: opacity 0.3s linear;
+    .line-inner {
+      display: block;
+    }
+
+    .js-anim .line-inner {
+      transform: translateY(110%);
+      transition: transform 1.05s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .js-anim .line-mask + .line-mask .line-inner {
+      transition-delay: 0.12s;
+    }
+
+    .js-anim .hero-in .line-inner {
+      transform: none;
+    }
+
+    .js-anim [data-hero-fade] {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease var(--d, 0s), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s);
+    }
+
+    .js-anim .hero-in [data-hero-fade] {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* 3. Khối trống đồng thu nhỏ, mờ dần khi cuộn qua hero */
+    .hero-drum {
+      will-change: transform, opacity;
+    }
+
+    /* 4. Các mục hiện dần khi cuộn tới; phần tử cùng nhóm lệch nhau 70ms */
+    .js-anim [data-reveal] {
+      --dl: calc(var(--i, 0) * 70ms);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease var(--dl), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--dl), translate 0.3s ease 0s, color 0.3s ease 0s;
+    }
+
+    .js-anim [data-reveal].is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-anim li[data-reveal] .tri:not(.step-mark) {
+      transform: rotate(-90deg) scale(0.2);
+      transition: transform 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) calc(var(--dl) + 0.15s);
+    }
+
+    .js-anim li[data-reveal].is-in .tri:not(.step-mark) {
+      transform: none;
+    }
+
+    /* 5. Đường vàng nối ba bước, chạy theo cuộn trang */
+    .steps-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 5.5rem;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .steps-fill {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--son), var(--nghe));
+      transform-origin: left;
+      transform: scaleX(var(--p, 1));
+    }
+
+    .step-mark {
+      position: absolute;
+      top: calc(5.5rem - 4px);
+      left: 0;
+      transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.4s ease;
+    }
+
+    .js-anim .step-mark {
+      opacity: 0.25;
+      transform: rotate(-90deg);
+    }
+
+    .js-anim .is-lit .step-mark {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+
+    /* 6. Hover: tam giác đầu dòng xoay, dòng chữ nhích sang phải; nút chính có vệt sáng vàng lướt qua */
+    @media (hover: hover) {
+      .hover-list li {
+        transition: translate 0.3s ease, color 0.3s ease;
+        cursor: default;
+      }
+
+      .hover-list li .tri {
+        transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1);
+      }
+
+      .hover-list li:hover {
+        translate: 6px 0;
+        color: #FCE7BF;
+      }
+
+      .hover-list li:hover .tri,
+      .js-anim .hover-list li[data-reveal].is-in:hover .tri {
+        transform: rotate(90deg);
+        transition-delay: 0s;
+      }
+    }
+
+    .btn-pill {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .btn-pill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(105deg, transparent 30%, rgba(242, 181, 68, 0.55) 50%, transparent 70%);
+      transform: translateX(-120%);
+      transition: transform 0.75s ease;
+    }
+
+    .btn-pill:hover::after {
+      transform: translateX(120%);
+    }
+
+    /* ---------- Yếu tố Việt Nam ---------- */
+    /* 1. Nền sơn mài: vài quầng đỏ trầm và vảy vàng dát rải rác, cố định sau nội dung */
+    body {
+      background: transparent;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' fill='%23F2B544'%3E%3Cpolygon points='155.9,72.8 155.3,72.7 155.0,72.4 155.3,72.1 155.9,72.0' fill-opacity='0.23'/%3E%3Cpolygon points='280.5,29.8 279.6,29.9 279.7,29.1' fill-opacity='0.12'/%3E%3Cpolygon points='279.9,307.0 279.1,307.9 278.1,307.0 278.5,305.8 280.2,305.5' fill-opacity='0.14'/%3E%3Cpolygon points='275.2,253.2 274.2,251.6 276.0,250.5 276.7,252.5' fill-opacity='0.26'/%3E%3Cpolygon points='273.5,419.3 276.3,418.3 276.4,421.3 274.5,421.9' fill-opacity='0.24'/%3E%3Cpolygon points='475.9,395.3 475.6,394.2 476.7,393.7 477.8,394.2 477.5,395.3' fill-opacity='0.12'/%3E%3Cpolygon points='192.6,134.2 191.5,133.6 192.5,132.7 193.4,132.8 193.7,133.9' fill-opacity='0.14'/%3E%3Cpolygon points='3.4,200.7 2.4,202.5 1.2,201.6 1.5,199.5' fill-opacity='0.27'/%3E%3Cpolygon points='190.1,194.5 186.1,191.0 189.7,188.7' fill-opacity='0.09'/%3E%3Cpolygon points='456.8,296.6 453.5,295.8 453.3,291.4 457.7,292.9' fill-opacity='0.06'/%3E%3Cpolygon points='49.8,167.0 47.6,165.7 46.9,164.0 49.2,161.4 51.8,163.8' fill-opacity='0.14'/%3E%3Cpolygon points='176.2,79.2 177.6,79.9 176.7,81.6 174.9,81.2 175.1,79.6' fill-opacity='0.17'/%3E%3Cpolygon points='13.5,12.6 15.1,13.6 13.2,14.0' fill-opacity='0.13'/%3E%3Cpolygon points='109.6,93.2 110.4,94.6 109.0,96.1 107.4,95.0 108.1,93.7' fill-opacity='0.27'/%3E%3Cpolygon points='158.5,385.1 159.2,383.8 160.2,383.6 160.4,385.0' fill-opacity='0.28'/%3E%3Cpolygon points='471.1,316.8 469.9,316.6 468.8,315.3 470.3,313.9 471.4,315.1' fill-opacity='0.15'/%3E%3Cpolygon points='116.6,282.0 114.5,282.3 115.3,280.2' fill-opacity='0.29'/%3E%3Cpolygon points='63.2,70.2 64.3,73.1 62.4,74.4 61.4,72.5' fill-opacity='0.21'/%3E%3Cpolygon points='231.7,373.0 231.1,372.7 232.0,372.5' fill-opacity='0.16'/%3E%3Cpolygon points='466.1,290.9 467.2,290.1 468.3,291.0 467.2,292.1' fill-opacity='0.13'/%3E%3Cpolygon points='214.4,199.4 215.5,200.0 214.3,201.0' fill-opacity='0.23'/%3E%3Cpolygon points='175.8,120.1 176.4,122.0 175.1,122.1' fill-opacity='0.32'/%3E%3Cpolygon points='193.5,202.6 193.3,202.0 193.9,201.8 194.5,202.1 194.2,202.6' fill-opacity='0.29'/%3E%3Cpolygon points='40.4,129.6 41.1,130.6 40.3,131.2 39.7,130.5' fill-opacity='0.16'/%3E%3Cpolygon points='134.5,383.6 134.1,384.4 133.6,384.1 133.8,383.4' fill-opacity='0.21'/%3E%3Cpolygon points='444.9,129.5 444.1,128.9 444.1,127.8 445.6,127.7 446.0,128.8' fill-opacity='0.16'/%3E%3Cpolygon points='12.2,119.8 10.2,123.8 5.9,123.0 5.5,118.1 9.5,117.3' fill-opacity='0.07'/%3E%3Cpolygon points='111.7,97.2 109.0,96.2 108.4,94.8 110.1,94.3 112.0,94.8' fill-opacity='0.20'/%3E%3Cpolygon points='466.2,287.7 465.6,287.6 465.8,287.0 466.3,287.1' fill-opacity='0.13'/%3E%3Cpolygon points='88.7,162.6 85.9,162.1 85.7,159.9 88.4,158.6 90.1,161.0' fill-opacity='0.09'/%3E%3Cpolygon points='360.4,314.4 361.3,315.7 360.2,317.2 358.8,315.5' fill-opacity='0.18'/%3E%3Cpolygon points='334.0,242.1 336.8,239.9 339.0,242.1 337.7,243.9 335.6,244.5' fill-opacity='0.31'/%3E%3Cpolygon points='179.7,215.3 183.1,214.5 183.0,217.9 180.2,218.3 177.7,216.9' fill-opacity='0.06'/%3E%3Cpolygon points='129.1,349.8 128.2,351.8 126.0,351.4 125.8,349.6 127.7,348.7' fill-opacity='0.26'/%3E%3Cpolygon points='147.9,272.2 146.6,275.6 144.0,273.0 145.6,268.9' fill-opacity='0.09'/%3E%3Cpolygon points='150.4,41.8 149.1,41.9 148.6,40.7 149.9,40.7' fill-opacity='0.26'/%3E%3Cpolygon points='125.5,174.1 124.0,172.9 125.0,171.5 127.4,171.2 127.0,173.5' fill-opacity='0.18'/%3E%3Cpolygon points='180.8,57.1 181.4,58.6 180.2,58.7 179.9,57.4' fill-opacity='0.22'/%3E%3Cpolygon points='173.7,205.7 172.7,205.8 172.8,205.2 173.4,205.1' fill-opacity='0.31'/%3E%3Cpolygon points='424.7,391.4 423.5,390.5 423.7,388.7 424.9,388.1 425.8,389.8' fill-opacity='0.18'/%3E%3Cpolygon points='134.1,123.7 134.2,121.8 136.8,122.1 136.2,124.5' fill-opacity='0.21'/%3E%3Cpolygon points='216.7,159.5 218.2,159.2 217.6,161.0' fill-opacity='0.13'/%3E%3Cpolygon points='10.0,419.9 8.2,418.9 8.5,416.6 10.3,415.9 11.8,418.0' fill-opacity='0.30'/%3E%3Cpolygon points='185.1,310.7 183.6,310.3 184.8,309.4' fill-opacity='0.30'/%3E%3Cpolygon points='445.7,252.7 446.6,253.8 444.3,253.7' fill-opacity='0.28'/%3E%3Cpolygon points='429.6,41.4 429.2,40.7 429.9,40.5' fill-opacity='0.25'/%3E%3C/svg%3E") 0 0 / 480px 480px,
+        radial-gradient(ellipse 55% 45% at 12% 8%, rgba(180, 22, 27, 0.16), transparent 70%),
+        radial-gradient(ellipse 45% 40% at 92% 55%, rgba(122, 24, 14, 0.2), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 40% 105%, rgba(242, 181, 68, 0.05), transparent 70%),
+        var(--void);
+    }
+
+    /* 2. Dải hoa văn trống đồng giữa các mục: răng cưa và vòng tròn tiếp tuyến */
+    .drum-band {
+      height: 28px;
+      max-width: 1216px;
+      margin: 0 auto;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='28' fill='none' stroke='%23F2B544' stroke-width='1'%3E%3Cpath d='M0 4.5 L5 0.5 L10 4.5 L15 0.5 L20 4.5 L25 0.5 L30 4.5 L35 0.5 L40 4.5'/%3E%3Cpath d='M0 23.5 L5 27.5 L10 23.5 L15 27.5 L20 23.5 L25 27.5 L30 23.5 L35 27.5 L40 23.5'/%3E%3Ccircle cx='20' cy='14' r='6'/%3E%3Ccircle cx='20' cy='14' r='2.6'/%3E%3Ccircle cx='20' cy='14' r='0.9' fill='%23F2B544' stroke='none'/%3E%3Cpath d='M0 8 L20 8 M20 20 L40 20 M0 20 L4 20 M36 8 L40 8'/%3E%3C/svg%3E") 0 0 / 40px 28px repeat-x;
+      opacity: 0.32;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    }
+
+    .js-anim .drum-band[data-reveal] {
+      opacity: 0;
+      transform: none;
+      clip-path: inset(0 50% 0 50%);
+      transition: opacity 0.9s ease, clip-path 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .js-anim .drum-band[data-reveal].is-in {
+      opacity: 0.32;
+      clip-path: inset(0 0 0 0);
+    }
+
+    /* 3. Đàn chim Lạc bay ngang mục cuối; không có hiệu ứng thì đứng yên một hàng */
+    .lac-flock {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .lac {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w, 120px);
+      color: var(--nghe);
+      opacity: var(--o, 0.55);
+    }
+
+    .lac svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .js-anim .lac {
+      left: 100%;
+      animation: lac-fly var(--t, 26s) linear var(--delay, 0s) infinite;
+      animation-play-state: paused;
+    }
+
+    .js-anim .lac .lac-wing {
+      transform-origin: 62px 20px;
+      animation: lac-flap 1.6s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      animation-play-state: paused;
+    }
+
+    .js-anim .birds-on .lac,
+    .js-anim .birds-on .lac .lac-wing {
+      animation-play-state: running;
+    }
+
+    @keyframes lac-fly {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      25% {
+        transform: translate(calc(-25vw - 60px), -14px);
+      }
+
+      50% {
+        transform: translate(calc(-50vw - 120px), 6px);
+      }
+
+      75% {
+        transform: translate(calc(-75vw - 180px), -10px);
+      }
+
+      100% {
+        transform: translate(calc(-100vw - 240px), 0);
+      }
+    }
+
+    @keyframes lac-flap {
+      0%,
+      100% {
+        transform: scaleY(1);
+      }
+
+      50% {
+        transform: scaleY(-0.55);
+      }
+    }
+
+    /* 4. Trích Hiến pháp */
+    .quote-mark {
+      display: block;
+      font-size: clamp(5rem, 3rem + 6vw, 9rem);
+      line-height: 0.6;
+      height: 0.5em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      color: var(--nghe);
+    }
+
+    /* 5. Bản đồ tam giác */
+    .vn-map {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      aspect-ratio: 300 / 330;
+      margin: 0 auto;
+    }
+
+    .vn-map canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .vn-map-label {
+      position: absolute;
+      transform: translate(var(--tx, 10px), -50%);
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+      color: var(--mist);
+      white-space: nowrap;
+      text-shadow: 0 0 6px var(--void), 0 0 2px var(--void);
+    }
+
+    .vn-map-label.is-left {
+      --tx: calc(-100% - 10px);
+    }
+
+    .vn-map-label.is-sea {
+      transform: translate(-50%, 0);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--nghe);
+      text-align: center;
+    }
+
+    /* 6. Mái đình cong đầu đao trên chân trang */
+    .dinh-roof {
+      display: block;
+      width: min(100%, 980px);
+      height: auto;
+      margin: 0 auto;
+      color: var(--nghe);
+    }
+
+    .dinh-roof path,
+    .dinh-roof circle {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 0;
+    }
+
+    .js-anim .dinh-roof[data-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-anim .dinh-roof[data-reveal] path,
+    .js-anim .dinh-roof[data-reveal] circle {
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 2.4s cubic-bezier(0.45, 0, 0.2, 1);
+    }
+
+    .js-anim .dinh-roof[data-reveal].is-in path,
+    .js-anim .dinh-roof[data-reveal].is-in circle {
+      stroke-dashoffset: 0;
+    }
+
+    /* 7. Hoa sen của trợ lý AI */
+    .lotus-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      flex: none;
+      border-radius: 999px;
+      background: rgba(180, 22, 27, 0.9);
+      color: var(--nghe);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn-pill::after {
+        display: none;
       }
 
       .typing-dot {
@@ -293,367 +631,416 @@
 
       .chat-panel,
       .chat-panel.is-open,
-      .site-header {
+      .site-header,
+      .btn-ghost svg {
         transition: none;
       }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-nghe/40 selection:text-ink">
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#F2B544]/40 selection:text-white">
   <a href="#main"
-    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-white focus:text-ink focus:px-4 focus:py-2 focus:rounded-md">Bỏ
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-white focus:text-[#140405] focus:px-4 focus:py-2 focus:rounded-[999px]">Bỏ
     qua đến nội dung chính</a>
 
   <!-- ================= HEADER ================= -->
-  <header class="site-header sticky top-0 z-50 w-full" id="site-header">
-    <div class="nav-bar max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between gap-4">
+  <header class="site-header fixed top-0 inset-x-0 z-50" id="site-header">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 h-16 sm:h-[76px] flex items-center justify-between gap-6">
       <a class="flex items-center gap-3 shrink-0" href="#top" aria-label="AI Legal Assistant, về đầu trang">
-        <img alt="" class="w-10 h-10 sm:w-11 sm:h-11 rounded-md object-cover" width="44" height="44"
+        <img alt="" class="w-9 h-9 rounded-[10px] object-cover" width="36" height="36"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnlkQoeQ9cz3O0zHezfnJW4i8PbOqNuqCM_y55TX3U1BXwu363H9aKum-CzoC6jH3E8KgRmTnjg6ahp1_0U4Uu7KlgoL-NddAXz2D2XhnbRhUHSynxMXspIRWCp6gO9GfE0mPu7xSV2yXkstnSI-UqyLL9cUZYchWEE_xXHwAcKYC8mOAVROpEiOiEoUh4IIBkqehqRVdGI1SJcTeCy9fwRTkBk3nvQPwTzqMV5ckvIWSpXGRWVNBSEZ2AgnWqrWF4-gE">
-        <span class="leading-tight">
-          <span class="nav-brand block font-serif text-lg sm:text-xl font-semibold" translate="no">AI Legal Assistant</span>
-          <span class="nav-sub block text-xs">Trợ lý thủ tục pháp lý</span>
-        </span>
+        <span class="text-[15px] font-normal tracking-[-0.01em] text-white" translate="no">AI Legal Assistant</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-7 text-sm font-medium" aria-label="Điều hướng chính">
+      <nav class="hidden md:flex items-center gap-8 t-label" aria-label="Điều hướng chính">
         <a class="nav-link" href="#procedures">Thủ tục</a>
         <a class="nav-link" href="#audiences">Dành cho ai</a>
         <a class="nav-link" href="#workflow">Cách làm</a>
-        <button class="nav-link" type="button" data-open-chat>Hỏi trợ lý AI</button>
+        <button class="nav-link uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
       </nav>
 
-      <div class="hidden sm:flex items-center gap-2">
-        <a class="nav-signup inline-flex items-center h-10 px-4 rounded-md text-sm font-semibold" href="/signup">Đăng ký</a>
-        <a class="nav-login inline-flex items-center h-10 px-5 rounded-md text-sm font-semibold" href="/login">Đăng nhập</a>
+      <div class="hidden sm:flex items-center gap-6">
+        <a class="nav-link t-label" href="/login">Đăng nhập</a>
+        <a class="btn-pill !min-h-[42px] !px-5" href="/signup">Đăng ký</a>
       </div>
 
       <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Mở menu"
-        class="nav-toggle md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md hover:bg-tint"
+        class="md:hidden inline-flex items-center justify-center w-11 h-11 -mr-2 rounded-[999px] text-white hover:bg-white/10"
         id="mobile-toggle" type="button">
-        <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
       </button>
     </div>
 
-    <div class="hidden md:hidden border-t border-line bg-white px-4 pt-2 pb-4" id="mobile-menu">
-      <nav class="flex flex-col text-base font-medium text-ink" aria-label="Điều hướng trên di động">
-        <a class="py-3 border-b border-line" href="#procedures">Thủ tục</a>
-        <a class="py-3 border-b border-line" href="#audiences">Dành cho ai</a>
-        <a class="py-3 border-b border-line" href="#workflow">Cách làm</a>
-        <button class="py-3 text-left" type="button" data-open-chat>Hỏi trợ lý AI</button>
+    <div class="hidden md:hidden bg-[#140405] px-5 pt-2 pb-6" id="mobile-menu">
+      <nav class="flex flex-col t-label text-[15px]" aria-label="Điều hướng trên di động">
+        <a class="nav-link py-3.5" href="#procedures">Thủ tục</a>
+        <a class="nav-link py-3.5" href="#audiences">Dành cho ai</a>
+        <a class="nav-link py-3.5" href="#workflow">Cách làm</a>
+        <button class="nav-link py-3.5 text-left uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
       </nav>
-      <div class="pt-3 grid grid-cols-2 gap-2 sm:hidden">
-        <a class="inline-flex items-center justify-center h-11 rounded-md text-sm font-semibold border border-son text-son"
-          href="/signup">Đăng ký</a>
-        <a class="inline-flex items-center justify-center h-11 rounded-md text-sm font-semibold bg-son text-white"
-          href="/login">Đăng nhập</a>
+      <div class="pt-4 flex items-center gap-6 sm:hidden">
+        <a class="btn-pill" href="/signup">Đăng ký</a>
+        <a class="btn-ghost" href="/login"><span>Đăng nhập</span></a>
       </div>
     </div>
   </header>
 
   <main class="flex-1" id="main">
-    <!-- ================= HERO: ảnh nền trình chiếu + lời mời ================= -->
-    <section class="on-dark relative overflow-hidden bg-lacquerDeep text-white" id="top"
-      aria-roledescription="trình chiếu" aria-label="Giới thiệu">
-      <div class="absolute inset-0" id="hero-slides" aria-hidden="true">
-        <div class="hero-slide is-active absolute inset-0" data-caption="Phố kinh doanh tại TP. Hồ Chí Minh">
-          <img class="w-full h-full object-cover" alt="" width="1376" height="768" fetchpriority="high" decoding="async"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWnfbV0wgDvtsTCdW0F9qcWhTO1VRkfvBLGOwmbE9Kn6AC7Y-J2eCC8C3PPQJW4j4s4-TS1yfLWog5PlG8zGrwiBnwZ-V1zBRVzrzuRHi3wsPkmbuNLHnLcX4b4Pyfef0LzNDp9xG2gXelrcQcAI2pcA5DZW8HwHW9E6e-Yx8akr_DHbDvoMNRYco1wThJfcf8qARLSmwSx3dWMOgOjhrEU8CmAcGJKtQkwfV0wh9K=w1600">
-        </div>
-        <div class="hero-slide absolute inset-0" data-caption="Tòa án nhân dân tối cao, Hà Nội">
-          <img class="w-full h-full object-cover" alt="" width="960" height="720" decoding="async"
-            src="/images/login/supreme-court.jpg">
-        </div>
-        <div class="hero-slide absolute inset-0" data-caption="Tòa án nhân dân thành phố Hà Nội">
-          <img class="w-full h-full object-cover" alt="" width="960" height="684" decoding="async"
-            src="/images/login/hanoi-court.jpg">
-        </div>
-        <div class="hero-slide absolute inset-0" data-caption="Tòa nhà Quốc hội, Hà Nội">
-          <img class="w-full h-full object-cover" alt="" width="960" height="720" decoding="async"
-            src="/images/login/national-assembly.jpg">
-        </div>
-        <div class="hero-slide absolute inset-0" data-caption="Tòa án nhân dân TP. Hồ Chí Minh">
-          <img class="w-full h-full object-cover" alt="" width="960" height="720" decoding="async"
-            src="/images/login/ho-chi-minh-court.jpg">
-        </div>
-      </div>
-      <!-- Lớp phủ đỏ sơn mài để chữ luôn đọc được trên mọi ảnh -->
-      <div class="absolute inset-0 bg-gradient-to-r from-lacquerDeep/95 via-lacquer/80 to-lacquer/30" aria-hidden="true"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-lacquerDeep/80 via-transparent to-transparent" aria-hidden="true"></div>
-
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 min-h-[560px] sm:min-h-[620px] lg:min-h-[680px] flex flex-col justify-center pt-14 pb-28 sm:pb-24">
-        <div class="max-w-2xl">
-          <h1 class="font-serif font-semibold text-[2.15rem] leading-[1.15] sm:text-5xl lg:text-[3.6rem] lg:leading-[1.08] text-white text-balance">
-            Hỏi đúng thủ tục. Chuẩn bị đủ hồ sơ.
+    <!-- ================= HERO: tiêu đề lớn bên trái, chòm sao trống đồng bên phải ================= -->
+    <section class="relative overflow-hidden" id="top" aria-label="Giới thiệu">
+      <div class="relative max-w-[1280px] mx-auto px-5 sm:px-8 pt-28 sm:pt-32 lg:pt-28 pb-16 lg:pb-16 lg:min-h-[max(100svh,720px)] grid lg:grid-cols-12 gap-10 lg:gap-6 items-center">
+        <div class="lg:col-span-7 relative z-10">
+          <p class="t-label text-[#F2B544]" data-hero-fade>Trợ lý thủ tục pháp lý · Đất đai · Kinh doanh</p>
+          <h1 class="t-display mt-6 text-white">
+            <span class="line-mask lg:whitespace-nowrap"><span class="line-inner">Hỏi đúng thủ tục.</span></span>
+            <span class="line-mask lg:whitespace-nowrap"><span class="line-inner text-[#A8948F]">Chuẩn bị đủ hồ sơ.</span></span>
           </h1>
-          <p class="mt-6 max-w-[34rem] text-base sm:text-lg leading-relaxed text-[#F6DCCF]">
+          <p class="t-body mt-8 max-w-[30rem] text-[#CDBCB6]" data-hero-fade style="--d: 0.4s">
             Kể tình huống của bạn, trợ lý AI chỉ ra thủ tục cần làm, giấy tờ cần chuẩn bị và nơi nộp hồ sơ
             cho các việc về đất đai, hộ kinh doanh và doanh nghiệp.
           </p>
-          <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a class="inline-flex items-center justify-center h-12 px-6 rounded-md bg-nghe hover:bg-[#F7C766] text-ink font-semibold transition-colors"
-              href="/login">Bắt đầu làm hồ sơ</a>
-            <button class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md border border-white/40 hover:border-white/80 hover:bg-white/10 text-white font-semibold transition-colors"
-              type="button" data-open-chat>
-              <i data-lucide="message-circle" class="w-5 h-5" aria-hidden="true"></i>
-              Hỏi trợ lý AI
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4" data-hero-fade style="--d: 0.55s">
+            <a class="btn-pill" href="/login">Bắt đầu làm hồ sơ</a>
+            <button class="btn-ghost" type="button" data-open-chat>
+              <span>Hỏi trợ lý AI</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
             </button>
           </div>
 
-          <dl class="mt-12 grid grid-cols-3 max-w-md border-t border-white/20 pt-6">
-            <div class="pr-4 flex flex-col-reverse justify-end">
-              <dt class="mt-1 text-xs sm:text-sm text-[#E9C3B6]">Luật sư hoạt động</dt>
-              <dd class="font-serif text-2xl sm:text-3xl font-semibold text-white tabular-nums">120+</dd>
+          <dl class="mt-16 grid grid-cols-3 gap-6 max-w-[36rem]" data-hero-fade style="--d: 0.7s">
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Luật sư hoạt động</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums" data-count="120" data-suffix="+">120+</dd>
             </div>
-            <div class="px-4 border-l border-white/20 flex flex-col-reverse justify-end">
-              <dt class="mt-1 text-xs sm:text-sm text-[#E9C3B6]">Khách hàng tin cậy</dt>
-              <dd class="font-serif text-2xl sm:text-3xl font-semibold text-white tabular-nums">15k+</dd>
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Khách hàng tin cậy</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums" data-count="15" data-suffix="k+">15k+</dd>
             </div>
-            <div class="pl-4 border-l border-white/20 flex flex-col-reverse justify-end">
-              <dt class="mt-1 text-xs sm:text-sm text-[#E9C3B6]">Đánh giá chuẩn xác</dt>
-              <dd class="font-serif text-2xl sm:text-3xl font-semibold text-white tabular-nums">4.9/5</dd>
+            <div class="flex flex-col-reverse justify-end">
+              <dt class="mt-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">Đánh giá chuẩn xác</dt>
+              <dd class="t-heading-xs sm:text-[2.25rem] text-white tabular-nums" data-count="4.9" data-decimals="1" data-suffix="/5">4.9/5</dd>
             </div>
           </dl>
         </div>
 
-        <!-- Điều khiển trình chiếu -->
-        <div class="absolute left-4 right-4 sm:left-6 sm:right-6 bottom-6 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <button class="w-9 h-9 rounded-full border border-white/40 hover:bg-white/10 flex items-center justify-center text-white"
-              type="button" id="slide-pause" aria-label="Tạm dừng trình chiếu ảnh">
-              <svg class="w-4 h-4" data-icon="pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <rect x="6" y="5" width="4" height="14" rx="1"></rect>
-                <rect x="14" y="5" width="4" height="14" rx="1"></rect>
-              </svg>
-              <svg class="w-4 h-4 hidden" data-icon="play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5Z"></path>
-              </svg>
-            </button>
-            <div class="flex items-center gap-1.5" id="slide-dots" aria-label="Chọn ảnh nền"></div>
+        <!-- Chòm sao: hàng nghìn tam giác nhỏ xếp thành mặt trống đồng Đông Sơn -->
+        <div class="lg:col-span-5 relative lg:-mr-24 xl:-mr-32">
+          <div class="hero-drum relative mx-auto w-full max-w-[360px] sm:max-w-[520px] lg:max-w-none aspect-square" id="hero-drum">
+            <canvas class="constellation" data-constellation="hero" aria-hidden="true"></canvas>
           </div>
-          <p class="hidden sm:block text-xs text-white/70 text-right" id="slide-caption" aria-live="off">Phố kinh doanh tại TP. Hồ Chí Minh</p>
         </div>
       </div>
     </section>
 
+
+    <div class="drum-band" aria-hidden="true"></div>
     <!-- ================= THỦ TỤC ĐANG ĐƯỢC HỖ TRỢ ================= -->
-    <section class="py-16 sm:py-24" id="procedures">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="max-w-2xl">
-          <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-ink leading-tight">Thủ tục đang được hỗ trợ</h2>
-          <p class="mt-4 text-base sm:text-lg text-muted leading-relaxed">
+    <section class="py-24 sm:py-[120px]" id="procedures">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-12 lg:gap-6">
+        <div class="lg:col-span-5">
+          <p class="t-label text-[#F2B544]">01 · Thủ tục</p>
+          <h2 class="t-heading mt-6 text-white">Thủ tục đang được hỗ trợ</h2>
+          <p class="t-body mt-6 max-w-[26rem] text-[#CDBCB6]">
             Các thủ tục đất đai, hộ kinh doanh và doanh nghiệp mà trợ lý AI đang hướng dẫn.
           </p>
+          <p class="mt-8 text-sm text-[#A8948F]">
+            Để tạo hồ sơ, bạn cần đăng nhập và cập nhật thông tin cá nhân trước.
+          </p>
+          <a class="btn-ghost mt-2" href="/login">
+            <span>Đăng nhập để bắt đầu</span>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
         </div>
 
-        <div class="mt-12 space-y-14">
-          <!-- ===== Đất đai ===== -->
-          <div class="grid md:grid-cols-12 gap-6 md:gap-10 border-t-2 border-ink pt-6">
-            <div class="md:col-span-4">
-              <h3 class="font-serif text-2xl font-semibold text-ink">Đất đai</h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-xs">
-                Từ chuẩn bị giấy tờ, hợp đồng, kê khai thuế đến cơ quan tiếp nhận hồ sơ tại địa phương.
-              </p>
-              <p class="mt-3 inline-block text-xs font-semibold text-camText">Được hỏi nhiều nhất</p>
+        <div class="lg:col-span-6 lg:col-start-7 space-y-16">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h3 class="t-heading-xs text-white">Đất đai</h3>
+              <span class="inline-flex items-center h-7 px-3 rounded-[999px] border border-[#F2B544]/50 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#F2B544]">Được hỏi nhiều nhất</span>
             </div>
-            <ul class="md:col-span-8 divide-y divide-line border-b border-line">
-              <li class="py-4 text-base font-medium">Mua bán, chuyển nhượng quyền sử dụng đất</li>
-              <li class="py-4 text-base font-medium">Sang tên đổi chủ: tặng cho, thừa kế, mua bán</li>
-              <li class="py-4 text-base font-medium">Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</li>
-              <li class="py-4 text-base font-medium">Tách thửa, hợp thửa và đăng ký biến động đất đai</li>
-              <li class="py-4 text-base font-medium">Giao đất, thuê đất và gia hạn sử dụng đất</li>
-              <li class="py-4 text-base font-medium">Thế chấp và tranh chấp đất đai</li>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#A8948F] max-w-[30rem]">
+              Từ chuẩn bị giấy tờ, hợp đồng, kê khai thuế đến cơ quan tiếp nhận hồ sơ tại địa phương.
+            </p>
+            <ul class="hover-list mt-6 space-y-4 t-body text-white">
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Mua bán, chuyển nhượng quyền sử dụng đất</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Sang tên đổi chủ: tặng cho, thừa kế, mua bán</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tách thửa, hợp thửa và đăng ký biến động đất đai</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Giao đất, thuê đất và gia hạn sử dụng đất</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thế chấp và tranh chấp đất đai</li>
             </ul>
           </div>
 
-          <!-- ===== Hộ kinh doanh và doanh nghiệp ===== -->
-          <div class="grid md:grid-cols-12 gap-6 md:gap-10 border-t-2 border-ink pt-6">
-            <div class="md:col-span-4">
-              <h3 class="font-serif text-2xl font-semibold text-ink">Hộ kinh doanh và doanh nghiệp</h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-xs">
-                Điền sẵn tờ khai, tra cứu mã ngành nghề phù hợp và hướng dẫn nộp đúng cơ quan có thẩm quyền.
-              </p>
-            </div>
-            <ul class="md:col-span-8 divide-y divide-line border-b border-line">
-              <li class="py-4 text-base font-medium">Đăng ký thành lập hộ kinh doanh mới</li>
-              <li class="py-4 text-base font-medium">Đăng ký thành lập doanh nghiệp</li>
-              <li class="py-4 text-base font-medium">Thay đổi nội dung đăng ký: địa điểm, ngành nghề, vốn</li>
-              <li class="py-4 text-base font-medium">Tạm ngừng kinh doanh theo quy định</li>
-              <li class="py-4 text-base font-medium">Chấm dứt hoạt động hộ kinh doanh, giải thể doanh nghiệp</li>
-              <li class="py-4 text-base font-medium">Hợp tác kinh doanh</li>
+          <div>
+            <h3 class="t-heading-xs text-white">Hộ kinh doanh và doanh nghiệp</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#A8948F] max-w-[30rem]">
+              Điền sẵn tờ khai, tra cứu mã ngành nghề phù hợp và hướng dẫn nộp đúng cơ quan có thẩm quyền.
+            </p>
+            <ul class="hover-list mt-6 space-y-4 t-body text-white">
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập hộ kinh doanh mới</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập doanh nghiệp</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thay đổi nội dung đăng ký: địa điểm, ngành nghề, vốn</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tạm ngừng kinh doanh theo quy định</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Chấm dứt hoạt động hộ kinh doanh, giải thể doanh nghiệp</li>
+              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Hợp tác kinh doanh</li>
             </ul>
           </div>
         </div>
-
-        <p class="mt-10 text-sm text-muted">
-          Để tạo hồ sơ, bạn cần đăng nhập và cập nhật thông tin cá nhân trước.
-          <a class="font-semibold text-son underline underline-offset-2 hover:text-sonDark" href="/login">Đăng nhập để bắt đầu</a>
-        </p>
       </div>
     </section>
 
-    <!-- ================= DÀNH CHO AI ================= -->
-    <section class="py-16 sm:py-24 bg-tint" id="audiences">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-ink leading-tight max-w-2xl">
-          Một nơi cho cả người làm hồ sơ và người tư vấn
-        </h2>
-        <p class="mt-4 max-w-2xl text-base sm:text-lg text-muted leading-relaxed">
-          Công dân và doanh nghiệp dùng tài khoản người dùng. Tài khoản luật sư do quản trị viên cấp.
-        </p>
-        <div class="mt-12 grid md:grid-cols-3 gap-10 md:gap-0">
-          <article class="md:pr-8">
-            <i data-lucide="house" class="w-7 h-7 text-son" aria-hidden="true"></i>
-            <h3 class="mt-4 font-serif text-xl font-semibold text-ink">Công dân</h3>
-            <p class="mt-2 text-sm text-muted leading-relaxed">Làm thủ tục đất đai cho gia đình mà không cần am hiểu luật.</p>
-            <ul class="mt-4 space-y-2 text-sm text-ink">
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Biết giấy nào cần bản chính, giấy nào cần bản sao công chứng</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Biết nộp ở bộ phận một cửa nào</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Theo dõi tiến độ xử lý hồ sơ sau khi nộp</li>
-            </ul>
+
+    <div class="drum-band" aria-hidden="true"></div>
+    <!-- ================= DÀNH CHO AI: mỗi đối tượng một hàng hai cột ================= -->
+    <section class="py-24 sm:py-[120px]" id="audiences">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8">
+            <p class="t-label text-[#F2B544]">02 · Dành cho ai</p>
+            <h2 class="t-heading mt-6 text-white">Một nơi cho cả người làm hồ sơ và người tư vấn</h2>
+          </div>
+          <p class="t-body lg:col-span-4 lg:self-end text-[#CDBCB6]">
+            Công dân và doanh nghiệp dùng tài khoản người dùng. Tài khoản luật sư do quản trị viên cấp.
+          </p>
+        </div>
+
+        <div class="mt-20 space-y-20">
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Người dùng</p>
+              <h3 class="t-heading-sm mt-3 text-white">Công dân</h3>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7">
+              <p class="t-body text-[#CDBCB6]">Làm thủ tục đất đai cho gia đình mà không cần am hiểu luật.</p>
+              <ul class="hover-list mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết giấy nào cần bản chính, giấy nào cần bản sao công chứng</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết nộp ở bộ phận một cửa nào</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Theo dõi tiến độ xử lý hồ sơ sau khi nộp</li>
+              </ul>
+            </div>
           </article>
-          <article class="md:px-8 md:border-l md:border-[#EBCFAE]">
-            <i data-lucide="store" class="w-7 h-7 text-son" aria-hidden="true"></i>
-            <h3 class="mt-4 font-serif text-xl font-semibold text-ink">Doanh nghiệp và hộ kinh doanh</h3>
-            <p class="mt-2 text-sm text-muted leading-relaxed">Đăng ký, thay đổi, tạm ngừng hay chấm dứt hoạt động đúng quy định.</p>
-            <ul class="mt-4 space-y-2 text-sm text-ink">
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Tờ khai được điền sẵn từ thông tin bạn cung cấp</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Tra cứu mã ngành nghề phù hợp</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Hướng dẫn nộp đúng cơ quan có thẩm quyền</li>
-            </ul>
+
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5 lg:order-2 lg:col-start-8">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Người dùng</p>
+              <h3 class="t-heading-sm mt-3 text-white">Doanh nghiệp và hộ kinh doanh</h3>
+            </div>
+            <div class="lg:col-span-6 lg:order-1 lg:col-start-1 lg:row-start-1">
+              <p class="t-body text-[#CDBCB6]">Đăng ký, thay đổi, tạm ngừng hay chấm dứt hoạt động đúng quy định.</p>
+              <ul class="hover-list mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tờ khai được điền sẵn từ thông tin bạn cung cấp</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tra cứu mã ngành nghề phù hợp</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Hướng dẫn nộp đúng cơ quan có thẩm quyền</li>
+              </ul>
+            </div>
           </article>
-          <article class="md:pl-8 md:border-l md:border-[#EBCFAE]">
-            <i data-lucide="scale" class="w-7 h-7 text-son" aria-hidden="true"></i>
-            <h3 class="mt-4 font-serif text-xl font-semibold text-ink">Luật sư</h3>
-            <p class="mt-2 text-sm text-muted leading-relaxed">Tra cứu nhanh căn cứ pháp lý và danh mục hồ sơ khi tư vấn khách hàng.</p>
-            <ul class="mt-4 space-y-2 text-sm text-ink">
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Câu trả lời dẫn văn bản pháp luật liên quan</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Danh mục giấy tờ theo từng thủ tục để đối chiếu</li>
-              <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-cam shrink-0" aria-hidden="true"></span>Đăng nhập bằng tài khoản luật sư</li>
-            </ul>
+
+          <article class="grid lg:grid-cols-12 gap-6 lg:gap-6">
+            <div class="lg:col-span-5">
+              <p class="text-xs uppercase tracking-[0.06em] text-[#A8948F]">Tài khoản do quản trị viên cấp</p>
+              <h3 class="t-heading-sm mt-3 text-white">Luật sư</h3>
+            </div>
+            <div class="lg:col-span-6 lg:col-start-7">
+              <p class="t-body text-[#CDBCB6]">Tra cứu nhanh căn cứ pháp lý và danh mục hồ sơ khi tư vấn khách hàng.</p>
+              <ul class="hover-list mt-5 space-y-3 text-[15px] font-light text-white">
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Câu trả lời dẫn văn bản pháp luật liên quan</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Danh mục giấy tờ theo từng thủ tục để đối chiếu</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng nhập bằng tài khoản luật sư</li>
+              </ul>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ================= CÁCH LÀM: 3 bước nối tiếp ================= -->
-    <section class="py-16 sm:py-24" id="workflow">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-ink leading-tight max-w-2xl">
-          Ba bước để có bộ hồ sơ hoàn chỉnh
-        </h2>
-        <div class="mt-12 relative isolate">
-          <!-- Đường nối giữa các bước (chỉ trên màn hình rộng), kết thúc phía sau vòng tròn số 3 -->
-          <span class="hidden md:block absolute top-6 left-12 right-[calc(33.333%-2.5rem)] h-0.5 bg-gradient-to-r from-son via-cam to-nghe -z-10"
-            aria-hidden="true"></span>
-          <ol class="grid md:grid-cols-3 gap-10 md:gap-8">
-            <li class="relative pl-16 md:pl-0">
-              <span class="absolute left-0 top-0 md:static flex items-center justify-center w-12 h-12 rounded-full bg-son text-white font-serif text-xl font-semibold"
-                aria-hidden="true">1</span>
-              <h3 class="md:mt-6 font-serif text-xl font-semibold text-ink">Chọn thủ tục</h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-xs">
-                Chọn thủ tục đất đai, hộ kinh doanh hoặc doanh nghiệp từ danh sách, hoặc tìm bằng từ khóa.
-              </p>
-            </li>
-            <li class="relative pl-16 md:pl-0">
-              <span class="absolute left-0 top-0 md:static flex items-center justify-center w-12 h-12 rounded-full bg-son text-white font-serif text-xl font-semibold"
-                aria-hidden="true">2</span>
-              <h3 class="md:mt-6 font-serif text-xl font-semibold text-ink">Trao đổi với trợ lý AI</h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-xs">
-                Mô tả tình trạng hồ sơ hiện tại. Trợ lý giải đáp thắc mắc và chỉ ra giấy tờ còn thiếu.
-              </p>
-            </li>
-            <li class="relative pl-16 md:pl-0">
-              <span class="absolute left-0 top-0 md:static flex items-center justify-center w-12 h-12 rounded-full bg-son text-white font-serif text-xl font-semibold"
-                aria-hidden="true">3</span>
-              <h3 class="md:mt-6 font-serif text-xl font-semibold text-ink">Chuẩn bị và nộp hồ sơ</h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-xs">
-                Nhận bộ tài liệu đã điền sẵn cùng hướng dẫn nơi nộp, lệ phí và cách nộp trực tiếp hoặc trực tuyến.
-              </p>
-            </li>
-          </ol>
+
+    <div class="drum-band" aria-hidden="true"></div>
+    <!-- ================= CÁCH LÀM: 3 bước ================= -->
+    <section class="py-24 sm:py-[120px]" id="workflow">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <p class="t-label text-[#F2B544]">03 · Cách làm</p>
+        <h2 class="t-heading mt-6 text-white max-w-[52rem]">Ba bước để có bộ hồ sơ hoàn chỉnh</h2>
+
+        <ol class="relative mt-20 grid md:grid-cols-3 gap-14 md:gap-10" id="steps">
+          <span class="steps-track hidden md:block" aria-hidden="true"><span class="steps-fill" id="steps-fill"></span></span>
+          <li class="relative" data-step>
+            <span class="tri step-mark hidden md:block" aria-hidden="true"></span>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true" data-step-number="1">01</span>
+            <h3 class="t-heading-xs mt-8 text-white">Chọn thủ tục</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Chọn thủ tục đất đai, hộ kinh doanh hoặc doanh nghiệp từ danh sách, hoặc tìm bằng từ khóa.
+            </p>
+          </li>
+          <li class="relative" data-step>
+            <span class="tri step-mark hidden md:block" aria-hidden="true"></span>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true" data-step-number="2">02</span>
+            <h3 class="t-heading-xs mt-8 text-white">Trao đổi với trợ lý AI</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Mô tả tình trạng hồ sơ hiện tại. Trợ lý giải đáp thắc mắc và chỉ ra giấy tờ còn thiếu.
+            </p>
+          </li>
+          <li class="relative" data-step>
+            <span class="tri step-mark hidden md:block" aria-hidden="true"></span>
+            <span class="block text-[4.5rem] leading-none font-extralight tracking-[-0.04em] text-[#F2B544] tabular-nums" aria-hidden="true" data-step-number="3">03</span>
+            <h3 class="t-heading-xs mt-8 text-white">Chuẩn bị và nộp hồ sơ</h3>
+            <p class="mt-3 text-[15px] font-light leading-relaxed text-[#CDBCB6] max-w-[22rem]">
+              Nhận bộ tài liệu đã điền sẵn cùng hướng dẫn nơi nộp, lệ phí và cách nộp trực tiếp hoặc trực tuyến.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="drum-band" aria-hidden="true"></div>
+
+    <!-- ================= NƠI NỘP: bản đồ Việt Nam ghép tam giác ================= -->
+    <section class="py-24 sm:py-[120px]" id="noi-nop">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-14 lg:gap-10 items-center">
+        <div class="lg:col-span-5">
+          <p class="t-label text-[#F2B544]">04 · Nơi nộp hồ sơ</p>
+          <h2 class="t-heading mt-6 text-white">Nộp đúng nơi, dù bạn ở đâu</h2>
+          <p class="t-body mt-6 max-w-[30rem] text-[#CDBCB6]">
+            Trợ lý chỉ ra cơ quan tiếp nhận theo từng thủ tục và địa phương của bạn, kèm cách nộp trực tiếp hoặc trực tuyến.
+          </p>
+          <ul class="hover-list mt-10 space-y-4 t-body text-white">
+            <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Trung tâm Phục vụ hành chính công cấp tỉnh</li>
+            <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Bộ phận Một cửa của Ủy ban nhân dân cấp xã</li>
+            <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Cổng Dịch vụ công quốc gia khi nộp trực tuyến</li>
+          </ul>
+        </div>
+        <div class="lg:col-span-7">
+          <figure class="vn-map" role="img" aria-label="Bản đồ Việt Nam ghép từ các hình tam giác, gồm quần đảo Hoàng Sa và quần đảo Trường Sa, đánh dấu sáu thành phố trực thuộc trung ương">
+            <canvas data-vnmap aria-hidden="true"></canvas>
+            <span class="vn-map-label is-left" style="left:25.7%;top:15.5%" aria-hidden="true">Hà Nội</span>
+            <span class="vn-map-label" style="left:31.3%;top:16.7%" aria-hidden="true">Hải Phòng</span>
+            <span class="vn-map-label is-left" style="left:37.3%;top:43.3%" aria-hidden="true">Huế</span>
+            <span class="vn-map-label" style="left:41.3%;top:45.8%" aria-hidden="true">Đà Nẵng</span>
+            <span class="vn-map-label" style="left:31.3%;top:77.6%" aria-hidden="true">TP. Hồ Chí Minh</span>
+            <span class="vn-map-label is-left" style="left:25.3%;top:82.1%" aria-hidden="true">Cần Thơ</span>
+            <span class="vn-map-label is-sea" style="left:66.7%;top:49%" aria-hidden="true">Quần đảo<br>Hoàng Sa</span>
+            <span class="vn-map-label is-sea" style="left:80%;top:68%" aria-hidden="true">Quần đảo<br>Trường Sa</span>
+          </figure>
         </div>
       </div>
     </section>
+
+    <div class="drum-band" aria-hidden="true"></div>
+
+    <!-- ================= TRÍCH HIẾN PHÁP ================= -->
+    <section class="py-24 sm:py-[140px]" id="hien-phap" aria-label="Trích Hiến pháp năm 2013">
+      <figure class="max-w-[1280px] mx-auto px-5 sm:px-8 text-center">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote class="t-heading text-white max-w-[56rem] mx-auto">
+          <p>Mọi người đều bình đẳng trước pháp luật.</p>
+        </blockquote>
+        <figcaption class="t-label mt-10 text-[#A8948F]">
+          Khoản 1, Điều 16 · Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013
+        </figcaption>
+      </figure>
+    </section>
+
+    <div class="drum-band" aria-hidden="true"></div>
 
     <!-- ================= LỜI MỜI CUỐI ================= -->
-    <section class="on-dark relative overflow-hidden bg-lacquer text-white" id="get-started">
-      <div class="drum pointer-events-none select-none absolute -right-40 top-1/2 -translate-y-1/2 w-[520px] h-[520px] opacity-[0.08]"
-        aria-hidden="true"></div>
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid md:grid-cols-12 gap-8 items-center">
-        <div class="md:col-span-8">
-          <h2 class="font-serif text-3xl sm:text-4xl font-semibold leading-tight">Bắt đầu hồ sơ đầu tiên của bạn</h2>
-          <p class="mt-4 max-w-xl text-[#F6DCCF] leading-relaxed">
-            Tra cứu ban đầu miễn phí. Tạo tài khoản để lưu hồ sơ và theo dõi tiến độ xử lý.
-          </p>
-          <p class="mt-4 flex items-center gap-2 text-sm text-[#E9C3B6]">
-            <i data-lucide="shield-check" class="w-4 h-4 text-nghe" aria-hidden="true"></i>
-            Dữ liệu cá nhân được bảo mật
-          </p>
+    <section class="relative overflow-hidden" id="get-started">
+      <div class="pointer-events-none absolute -right-48 sm:-right-32 top-1/2 -translate-y-1/2 w-[560px] h-[560px] opacity-60" aria-hidden="true">
+        <canvas class="constellation" data-constellation="cta"></canvas>
+      </div>
+      <div class="lac-flock" aria-hidden="true">
+        <span class="lac" style="--x:46%;--y:8%;--w:130px;--o:0.6;--t:27s;--delay:0s"><svg viewBox="0 0 120 48" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M0 20.5 30 18.6v3.6Z" stroke="none"/><circle cx="33.5" cy="20" r="4.2" stroke="none"/><circle cx="32.6" cy="19.2" r="1.2" fill="#140405" stroke="none"/><path d="M35 16.6C40 10 47 5.5 55 3M36 17.2C43 12.5 50 10 59 9.2M36.6 18C44 16 51 15.2 60 15.2" fill="none" stroke-width="1.4"/><path d="M31 21.5C45 29 66 30 88 24.5 72 19 52 17 35 17.2Z" stroke="none"/><path class="lac-wing" d="M46 20.5 57 2.5l4 5.4 4.2-4.6 3 6.4 5-3.6 1.8 6.8 6.2-2.4L79 20Z" stroke="none"/><path d="M86 23 119 14l-1.2 4.4ZM86 24.5l33 3.6-2.4 3.6ZM85 25.5 110 42.5l-4.2.8Z" stroke-width="0.6"/><path d="M60 26.5 66 34l4.5-.6M67 27l4.6 6" fill="none" stroke-width="1.4"/></svg></span>
+        <span class="lac" style="--x:58%;--y:4%;--w:96px;--o:0.42;--t:31s;--delay:-9s"><svg viewBox="0 0 120 48" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M0 20.5 30 18.6v3.6Z" stroke="none"/><circle cx="33.5" cy="20" r="4.2" stroke="none"/><circle cx="32.6" cy="19.2" r="1.2" fill="#140405" stroke="none"/><path d="M35 16.6C40 10 47 5.5 55 3M36 17.2C43 12.5 50 10 59 9.2M36.6 18C44 16 51 15.2 60 15.2" fill="none" stroke-width="1.4"/><path d="M31 21.5C45 29 66 30 88 24.5 72 19 52 17 35 17.2Z" stroke="none"/><path class="lac-wing" d="M46 20.5 57 2.5l4 5.4 4.2-4.6 3 6.4 5-3.6 1.8 6.8 6.2-2.4L79 20Z" stroke="none"/><path d="M86 23 119 14l-1.2 4.4ZM86 24.5l33 3.6-2.4 3.6ZM85 25.5 110 42.5l-4.2.8Z" stroke-width="0.6"/><path d="M60 26.5 66 34l4.5-.6M67 27l4.6 6" fill="none" stroke-width="1.4"/></svg></span>
+        <span class="lac" style="--x:30%;--y:12%;--w:112px;--o:0.5;--t:24s;--delay:-16s"><svg viewBox="0 0 120 48" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M0 20.5 30 18.6v3.6Z" stroke="none"/><circle cx="33.5" cy="20" r="4.2" stroke="none"/><circle cx="32.6" cy="19.2" r="1.2" fill="#140405" stroke="none"/><path d="M35 16.6C40 10 47 5.5 55 3M36 17.2C43 12.5 50 10 59 9.2M36.6 18C44 16 51 15.2 60 15.2" fill="none" stroke-width="1.4"/><path d="M31 21.5C45 29 66 30 88 24.5 72 19 52 17 35 17.2Z" stroke="none"/><path class="lac-wing" d="M46 20.5 57 2.5l4 5.4 4.2-4.6 3 6.4 5-3.6 1.8 6.8 6.2-2.4L79 20Z" stroke="none"/><path d="M86 23 119 14l-1.2 4.4ZM86 24.5l33 3.6-2.4 3.6ZM85 25.5 110 42.5l-4.2.8Z" stroke-width="0.6"/><path d="M60 26.5 66 34l4.5-.6M67 27l4.6 6" fill="none" stroke-width="1.4"/></svg></span>
+        <span class="lac" style="--x:70%;--y:14%;--w:80px;--o:0.34;--t:35s;--delay:-4s"><svg viewBox="0 0 120 48" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M0 20.5 30 18.6v3.6Z" stroke="none"/><circle cx="33.5" cy="20" r="4.2" stroke="none"/><circle cx="32.6" cy="19.2" r="1.2" fill="#140405" stroke="none"/><path d="M35 16.6C40 10 47 5.5 55 3M36 17.2C43 12.5 50 10 59 9.2M36.6 18C44 16 51 15.2 60 15.2" fill="none" stroke-width="1.4"/><path d="M31 21.5C45 29 66 30 88 24.5 72 19 52 17 35 17.2Z" stroke="none"/><path class="lac-wing" d="M46 20.5 57 2.5l4 5.4 4.2-4.6 3 6.4 5-3.6 1.8 6.8 6.2-2.4L79 20Z" stroke="none"/><path d="M86 23 119 14l-1.2 4.4ZM86 24.5l33 3.6-2.4 3.6ZM85 25.5 110 42.5l-4.2.8Z" stroke-width="0.6"/><path d="M60 26.5 66 34l4.5-.6M67 27l4.6 6" fill="none" stroke-width="1.4"/></svg></span>
+        <span class="lac" style="--x:12%;--y:6%;--w:104px;--o:0.46;--t:29s;--delay:-21s"><svg viewBox="0 0 120 48" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M0 20.5 30 18.6v3.6Z" stroke="none"/><circle cx="33.5" cy="20" r="4.2" stroke="none"/><circle cx="32.6" cy="19.2" r="1.2" fill="#140405" stroke="none"/><path d="M35 16.6C40 10 47 5.5 55 3M36 17.2C43 12.5 50 10 59 9.2M36.6 18C44 16 51 15.2 60 15.2" fill="none" stroke-width="1.4"/><path d="M31 21.5C45 29 66 30 88 24.5 72 19 52 17 35 17.2Z" stroke="none"/><path class="lac-wing" d="M46 20.5 57 2.5l4 5.4 4.2-4.6 3 6.4 5-3.6 1.8 6.8 6.2-2.4L79 20Z" stroke="none"/><path d="M86 23 119 14l-1.2 4.4ZM86 24.5l33 3.6-2.4 3.6ZM85 25.5 110 42.5l-4.2.8Z" stroke-width="0.6"/><path d="M60 26.5 66 34l4.5-.6M67 27l4.6 6" fill="none" stroke-width="1.4"/></svg></span>
+      </div>
+      <div class="relative max-w-[1280px] mx-auto px-5 sm:px-8 py-28 sm:py-[160px]">
+        <h2 class="t-heading text-white max-w-[44rem]">Bắt đầu hồ sơ đầu tiên của bạn</h2>
+        <p class="t-body mt-6 max-w-[30rem] text-[#CDBCB6]">
+          Tra cứu ban đầu miễn phí. Tạo tài khoản để lưu hồ sơ và theo dõi tiến độ xử lý.
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a class="btn-pill" href="/signup">Tạo tài khoản miễn phí</a>
+          <a class="btn-ghost" href="/login"><span>Tôi đã có tài khoản</span></a>
         </div>
-        <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-3 md:items-stretch">
-          <a class="inline-flex items-center justify-center h-12 px-6 rounded-md bg-nghe hover:bg-[#F7C766] text-ink font-semibold transition-colors"
-            href="/signup">Tạo tài khoản miễn phí</a>
-          <a class="inline-flex items-center justify-center h-12 px-6 rounded-md border border-white/35 hover:border-white/70 hover:bg-white/5 text-white font-semibold transition-colors"
-            href="/login">Tôi đã có tài khoản</a>
-        </div>
+        <p class="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.06em] text-[#A8948F]">
+          <span class="tri" aria-hidden="true"></span>
+          Dữ liệu cá nhân được bảo mật
+        </p>
       </div>
     </section>
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="bg-white border-t border-line text-sm text-muted">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
+  <footer class="text-sm text-[#A8948F]">
+  <!-- Mái đình cong đầu đao, nét vàng mảnh -->
+  <svg class="dinh-roof mt-8" viewBox="0 0 1000 112" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path pathLength="1" d="M280 30H720"/>
+    <path pathLength="1" d="M280 30C268 30 262 22 264 12C265 7 271 7 272 12"/>
+    <path pathLength="1" d="M720 30C732 30 738 22 736 12C735 7 729 7 728 12"/>
+    <circle pathLength="1" cx="500" cy="18" r="7"/>
+    <path pathLength="1" d="M462 29C470 19 480 13 490 18M538 29C530 19 520 13 510 18"/>
+    <path pathLength="1" d="M280 30C230 50 170 70 110 80C80 82 58 72 50 50C47 40 54 36 60 42"/>
+    <path pathLength="1" d="M720 30C770 50 830 70 890 80C920 82 942 72 950 50C953 40 946 36 940 42"/>
+    <path pathLength="1" d="M110 80C300 92 700 92 890 80"/>
+    <path pathLength="1" d="M122 87C300 99 700 99 878 87"/>
+    <path pathLength="1" d="M244 46H756M196 62H804" stroke-opacity="0.4"/>
+    <path pathLength="1" d="M210 108H790" stroke-opacity="0.35"/>
+  </svg>
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pt-16 pb-12 grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
       <div class="lg:col-span-5">
         <a class="inline-flex items-center gap-3" href="#top">
-          <img alt="" class="w-10 h-10 rounded-md object-cover" width="40" height="40" loading="lazy"
+          <img alt="" class="w-9 h-9 rounded-[10px] object-cover" width="36" height="36" loading="lazy"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSTtZViAPrdvLgwlXrraqYyxYu77OyhJx-IxvOSeX3LOh_zSt4tL2eWmLFqogC6qDfMKw22GeoLNnkUa0kq4rIK7tHqFND_BwUtMQKmVH4s7hCcToCkvmOHKFoyr8jgRAeJcAAWsPke34s3eEZVKdV-vuXYuIflXO0soosD0ZsEhpNIbD4VBvmAWGk5t_iPdCtV7mfYrRSHSGTo7AmmWs5Mbo6lWqJurbEeDOYo5XhHJF09xpEAeH1KNIk-HUGmmzWk50">
-          <span class="font-serif text-lg font-semibold text-ink" translate="no">AI Legal Assistant</span>
+          <span class="text-[15px] text-white" translate="no">AI Legal Assistant</span>
         </a>
-        <p class="mt-4 max-w-sm leading-relaxed">
+        <p class="mt-5 max-w-sm font-light leading-relaxed">
           Ứng dụng trí tuệ nhân tạo giúp người dân, hộ kinh doanh và luật sư tiếp cận thủ tục pháp lý Việt Nam
           minh bạch, tiện lợi và tiết kiệm thời gian.
         </p>
       </div>
       <div class="lg:col-span-2">
-        <h2 class="font-semibold text-ink">Thủ tục</h2>
-        <ul class="mt-3 space-y-2">
-          <li><a class="hover:text-son" href="#procedures">Sang tên đất đai</a></li>
-          <li><a class="hover:text-son" href="#procedures">Chuyển nhượng nhà đất</a></li>
-          <li><a class="hover:text-son" href="#procedures">Đăng ký hộ kinh doanh</a></li>
-          <li><a class="hover:text-son" href="#procedures">Thành lập doanh nghiệp</a></li>
+        <h2 class="t-label text-white">Thủ tục</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><a class="hover:text-white" href="#procedures">Sang tên đất đai</a></li>
+          <li><a class="hover:text-white" href="#procedures">Chuyển nhượng nhà đất</a></li>
+          <li><a class="hover:text-white" href="#procedures">Đăng ký hộ kinh doanh</a></li>
+          <li><a class="hover:text-white" href="#procedures">Thành lập doanh nghiệp</a></li>
         </ul>
       </div>
       <div class="lg:col-span-2">
-        <h2 class="font-semibold text-ink">Trợ lý AI</h2>
-        <ul class="mt-3 space-y-2">
-          <li><button class="hover:text-son text-left" type="button" data-open-chat>Hỏi đáp pháp lý</button></li>
-          <li><a class="hover:text-son" href="#workflow">Hướng dẫn từng bước</a></li>
-          <li><a class="hover:text-son" href="#audiences">Dành cho ai</a></li>
+        <h2 class="t-label text-white">Trợ lý AI</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><button class="hover:text-white text-left" type="button" data-open-chat>Hỏi đáp pháp lý</button></li>
+          <li><a class="hover:text-white" href="#workflow">Hướng dẫn từng bước</a></li>
+          <li><a class="hover:text-white" href="#audiences">Dành cho ai</a></li>
         </ul>
       </div>
       <div class="lg:col-span-3">
-        <h2 class="font-semibold text-ink">Liên hệ</h2>
-        <ul class="mt-3 space-y-2">
-          <li><a class="hover:text-son" href="mailto:support@legalai.vn">support@legalai.vn</a></li>
-          <li><a class="hover:text-son" href="tel:19001234">Hotline 1900 1234</a></li>
-          <li><a class="hover:text-son" href="#">Điều khoản sử dụng</a></li>
-          <li><a class="hover:text-son" href="#">Chính sách bảo mật</a></li>
+        <h2 class="t-label text-white">Liên hệ</h2>
+        <ul class="mt-4 space-y-2.5 font-light">
+          <li><a class="hover:text-white" href="mailto:support@legalai.vn">support@legalai.vn</a></li>
+          <li><a class="hover:text-white" href="tel:19001234">Hotline 1900 1234</a></li>
+          <li><a class="hover:text-white" href="/dieu-khoan#dieu-khoan-su-dung">Điều khoản sử dụng</a></li>
+          <li><a class="hover:text-white" href="/dieu-khoan#bao-ve-du-lieu">Chính sách bảo mật</a></li>
         </ul>
       </div>
     </div>
-    <div class="border-t border-line">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row gap-3 justify-between">
-        <div>
-          <p>© 2026 AI Legal Assistant. Bản quyền thuộc về đội ngũ phát triển.</p>
-          <p class="mt-1 text-xs">Ảnh tòa án và Quốc hội: Wikimedia Commons, giấy phép CC BY-SA.</p>
-        </div>
-        <div class="flex gap-5">
-          <a class="hover:text-son" href="#">Facebook</a>
-          <a class="hover:text-son" href="#">Zalo OA</a>
-          <a class="hover:text-son" href="mailto:support@legalai.vn">Gửi phản hồi</a>
-        </div>
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pb-10 flex flex-col sm:flex-row gap-3 justify-between text-xs">
+      <div>
+        <p>© 2026 AI Legal Assistant. Bản quyền thuộc về đội ngũ phát triển.</p>
+        <p class="mt-1">Hoa văn trống đồng Đông Sơn: Wikimedia Commons, phạm vi công cộng.</p>
+      </div>
+      <div class="flex gap-6 uppercase tracking-[0.06em]">
+        <a class="hover:text-white" href="#">Facebook</a>
+        <a class="hover:text-white" href="#">Zalo OA</a>
+        <a class="hover:text-white" href="mailto:support@legalai.vn">Gửi phản hồi</a>
       </div>
     </div>
   </footer>
@@ -661,82 +1048,99 @@
   <!-- ================= BOX CHAT NỔI (chat thật với /api/agent/chat) ================= -->
   <div class="fixed z-[60] right-4 bottom-4 sm:right-6 sm:bottom-6 flex flex-col items-end gap-3">
     <section
-      class="chat-panel w-[calc(100vw-2rem)] sm:w-[380px] h-[min(560px,calc(100dvh-6.5rem))] bg-[#FFFDF8] text-ink rounded-xl overflow-hidden flex flex-col"
+      class="chat-panel w-[calc(100vw-2rem)] sm:w-[390px] h-[min(580px,calc(100dvh-6.5rem))] bg-[#1F0809] text-white rounded-[24px] overflow-hidden flex flex-col"
       id="chat-panel" role="dialog" aria-modal="false" aria-labelledby="chat-title">
-      <div class="px-4 pt-4 pb-3 border-b border-line bg-white">
+      <div class="px-5 pt-5 pb-4">
         <div class="flex items-start justify-between gap-3">
-          <div>
-            <h2 class="font-serif text-lg font-semibold text-ink" id="chat-title">Trợ lý AI pháp lý</h2>
-            <p class="flex items-center gap-1.5 text-xs text-muted mt-0.5">
-              <span class="w-2 h-2 rounded-full bg-[#2F9E5B]" aria-hidden="true"></span>
+          <div class="flex items-center gap-3">
+            <span class="lotus-avatar" aria-hidden="true">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 4.5c2.1 2.2 3.1 4.6 3.1 7.1 0 2.6-1 4.8-3.1 6.4-2.1-1.6-3.1-3.8-3.1-6.4 0-2.5 1-4.9 3.1-7.1Z"></path>
+                <path d="M8.9 9.4C6.9 8.8 4.9 9 3 9.8c.7 4 3.9 7.5 9 8.2"></path>
+                <path d="M15.1 9.4c2-.6 4-.4 5.9.4-.7 4-3.9 7.5-9 8.2"></path>
+                <path d="M5.5 20.5c4-1.2 9-1.2 13 0"></path>
+              </svg>
+            </span>
+            <div>
+            <h2 class="text-[1.375rem] font-normal tracking-[-0.02em] text-white" id="chat-title">Trợ lý AI pháp lý</h2>
+            <p class="flex items-center gap-1.5 text-xs text-[#A8948F] mt-1">
+              <span class="w-2 h-2 rounded-[999px] bg-[#3FBF7F]" aria-hidden="true"></span>
               Không cần đăng nhập
             </p>
+            </div>
           </div>
-          <button class="w-9 h-9 -mr-1 rounded-md hover:bg-tint flex items-center justify-center text-muted" type="button"
+          <button class="w-9 h-9 -mr-1.5 rounded-[999px] hover:bg-white/10 flex items-center justify-center text-[#CDBCB6]" type="button"
             id="chat-close" aria-label="Đóng box chat">
-            <i data-lucide="x" class="w-5 h-5" aria-hidden="true"></i>
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
           </button>
         </div>
-        <div class="mt-3 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Chủ đề câu hỏi gợi ý" id="topic-tabs">
-          <span class="text-xs text-muted mr-1" aria-hidden="true">Gợi ý về</span>
-          <button class="topic-tab h-8 px-3 rounded-full border border-line text-xs font-medium text-ink hover:border-son transition-colors"
+        <div class="mt-4 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Chủ đề câu hỏi gợi ý" id="topic-tabs">
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
             role="tab" type="button" aria-selected="true" aria-controls="suggested-buttons" data-topic="land" id="topic-land">Đất đai</button>
-          <button class="topic-tab h-8 px-3 rounded-full border border-line text-xs font-medium text-ink hover:border-son transition-colors"
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
             role="tab" type="button" aria-selected="false" tabindex="-1" aria-controls="suggested-buttons" data-topic="business" id="topic-business">Kinh doanh</button>
-          <button class="topic-tab h-8 px-3 rounded-full border border-line text-xs font-medium text-ink hover:border-son transition-colors"
+          <button class="topic-tab h-8 px-3.5 rounded-[999px] text-xs font-medium transition-colors"
             role="tab" type="button" aria-selected="false" tabindex="-1" aria-controls="suggested-buttons" data-topic="legal" id="topic-legal">Căn cứ pháp lý</button>
         </div>
       </div>
 
-      <div class="sheet-margin flex-1 overflow-y-auto overscroll-contain pl-9 pr-4 py-4 space-y-3 text-sm leading-relaxed"
+      <div class="chat-scroll flex-1 overflow-y-auto overscroll-contain px-5 py-2 space-y-3 text-sm leading-relaxed"
         id="chat-messages" role="log" aria-live="polite" aria-label="Hội thoại với trợ lý AI">
         <div class="flex">
-          <div class="bubble-bot px-3.5 py-2.5 max-w-[92%]">
-            Xin chào! Hãy cho tôi biết bạn đang cần làm thủ tục <strong>đất đai</strong>, <strong>hộ kinh doanh</strong>
-            hay <strong>doanh nghiệp</strong>, tôi sẽ hướng dẫn từng bước.
+          <div class="bubble-bot px-3.5 py-2.5 max-w-[92%] font-light">
+            Xin chào! Hãy cho tôi biết bạn đang cần làm thủ tục <strong class="font-semibold">đất đai</strong>, <strong class="font-semibold">hộ kinh doanh</strong>
+            hay <strong class="font-semibold">doanh nghiệp</strong>, tôi sẽ hướng dẫn từng bước.
           </div>
         </div>
-        <div class="hidden flex items-center gap-2 text-muted text-xs" id="typing-indicator">
+        <div class="hidden flex items-center gap-2 text-[#A8948F] text-xs" id="typing-indicator">
           <span class="flex gap-1" aria-hidden="true">
-            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-son"></span>
-            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-son"></span>
-            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-son"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-[999px] bg-[#F2B544]"></span>
           </span>
           Trợ lý đang soạn câu trả lời…
         </div>
       </div>
 
-      <div class="border-t border-line px-3 pt-2 pb-3 bg-white">
-        <div class="flex flex-wrap gap-1.5 pt-1 pb-2.5" id="suggested-buttons" role="tabpanel" aria-labelledby="topic-land"></div>
+      <div class="px-4 pt-2 pb-4">
+        <div class="flex flex-wrap gap-1.5 pt-1 pb-3" id="suggested-buttons" role="tabpanel" aria-labelledby="topic-land"></div>
         <form class="flex gap-2" id="chat-form" novalidate onsubmit="event.preventDefault();">
           <label class="sr-only" for="chat-input">Câu hỏi của bạn</label>
           <input
-            class="flex-1 min-w-0 h-10 rounded-md border border-line bg-white px-3 text-sm text-ink placeholder:text-muted focus:border-son focus:ring-son"
+            class="flex-1 min-w-0 h-11 rounded-[999px] border border-white/15 bg-white/[0.04] px-4 text-sm text-white placeholder:text-[#A8948F] focus:outline-none focus:border-[#F2B544]"
             id="chat-input" name="message" placeholder="Nhập câu hỏi của bạn…" type="text" autocomplete="off">
-          <button
-            class="h-10 px-4 rounded-md bg-son hover:bg-sonDark text-white font-semibold text-sm shrink-0 transition-colors disabled:opacity-60"
-            id="chat-send" type="submit">Gửi</button>
+          <button class="btn-pill !min-h-[44px] !px-5 shrink-0 disabled:opacity-60" id="chat-send" type="submit">Gửi</button>
         </form>
       </div>
     </section>
 
     <button
-      class="inline-flex items-center justify-center gap-2 w-14 h-14 sm:w-auto sm:px-5 rounded-full bg-son hover:bg-sonDark text-white font-semibold shadow-[0_12px_30px_-10px_rgba(90,11,13,0.7)] transition-colors"
+      class="inline-flex items-center justify-center gap-2 w-14 h-14 sm:w-auto sm:px-5 rounded-[999px] bg-[#B4161B] hover:bg-[#C9221F] text-white text-sm font-semibold uppercase tracking-[0.04em] shadow-[0_16px_40px_-14px_rgba(0,0,0,0.9)] transition-colors"
       type="button" id="chat-launcher" aria-expanded="false" aria-controls="chat-panel" aria-label="Mở trợ lý AI">
-      <span data-launcher-icon="open"><i data-lucide="message-circle" class="w-6 h-6" aria-hidden="true"></i></span>
-      <span class="hidden" data-launcher-icon="close"><i data-lucide="x" class="w-6 h-6" aria-hidden="true"></i></span>
+      <span data-launcher-icon="open">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 4.5c2.1 2.2 3.1 4.6 3.1 7.1 0 2.6-1 4.8-3.1 6.4-2.1-1.6-3.1-3.8-3.1-6.4 0-2.5 1-4.9 3.1-7.1Z"></path>
+          <path d="M8.9 9.4C6.9 8.8 4.9 9 3 9.8c.7 4 3.9 7.5 9 8.2"></path>
+          <path d="M15.1 9.4c2-.6 4-.4 5.9.4-.7 4-3.9 7.5-9 8.2"></path>
+          <path d="M5.5 20.5c4-1.2 9-1.2 13 0"></path>
+        </svg>
+      </span>
+      <span class="hidden" data-launcher-icon="close">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </span>
       <span class="hidden sm:inline" data-launcher-label aria-hidden="true">Hỏi trợ lý AI</span>
     </button>
   </div>
 
   <script>
-    // Icon chỉ là trang trí: nếu CDN Lucide lỗi, phần còn lại của trang vẫn phải chạy
-    window.lucide?.createIcons();
-
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const header = document.getElementById('site-header');
 
-    // ================= Navbar đổi màu khi rời đầu trang =================
+    // ================= Navbar có nền khi rời đầu trang =================
     const syncHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 4);
     window.addEventListener('scroll', syncHeader, { passive: true });
     syncHeader();
@@ -747,6 +1151,7 @@
     const setMenu = (open) => {
       if (!mobileBtn || !mobileMenu) return;
       mobileMenu.classList.toggle('hidden', !open);
+      header.classList.toggle('bg-[#140405]', open);
       mobileBtn.setAttribute('aria-expanded', String(open));
       mobileBtn.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
     };
@@ -805,7 +1210,7 @@
       });
     });
 
-    // Gạch chân mục đang xem trên navbar
+    // Làm sáng mục đang xem trên navbar
     const navLinks = Array.from(document.querySelectorAll('.nav-link[href^="#"]'));
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -822,64 +1227,359 @@
       if (el) sectionObserver.observe(el);
     });
 
-    // ================= Trình chiếu ảnh nền hero: 3 giây đổi ảnh =================
-    const slides = Array.from(document.querySelectorAll('.hero-slide'));
-    const dotsBox = document.getElementById('slide-dots');
-    const captionEl = document.getElementById('slide-caption');
-    const pauseBtn = document.getElementById('slide-pause');
-    const SLIDE_MS = 3000;
-    let current = 0;
-    let slideTimer = null;
-    // Luôn tự đổi ảnh; người bật "giảm chuyển động" chỉ thấy hiệu ứng mờ dần (xem CSS) và có nút tạm dừng
-    let paused = false;
+    // ================= Chòm sao trống đồng: tam giác nhỏ lấy mẫu từ hoa văn mặt trống =================
+    // Hai lớp: lớp tĩnh hàng chục nghìn tam giác li ti vẽ sẵn một lần để hoa văn (ngôi sao, các vành, hình người, chim) hiện rõ,
+    // và vài trăm tam giác lớn hơn chuyển động, lấp lánh, né con trỏ chuột. Cả mặt trống xoay rất chậm.
+    const PARTICLE_COLORS = ['#F2B544', '#F2B544', '#F7C766', '#E4572E', '#FF8A5B', '#E5484D', '#F6DCCF', '#C9221F'];
+    const drumImage = new Image();
+    drumImage.src = '/images/login/dong-son-drum-face.png';
+    const drumReady = drumImage.decode().then(() => drumImage).catch(() => null);
 
-    const dots = slides.map((slide, index) => {
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'slide-dot h-2 rounded-full';
-      dot.setAttribute('aria-label', `Xem ảnh ${index + 1}: ${slide.dataset.caption}`);
-      dot.addEventListener('click', () => {
-        showSlide(index);
-        restartTimer();
-      });
-      dotsBox?.append(dot);
-      return dot;
-    });
-
-    function showSlide(index) {
-      current = (index + slides.length) % slides.length;
-      slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
-      dots.forEach((dot, i) => {
-        if (i === current) dot.setAttribute('aria-current', 'true');
-        else dot.removeAttribute('aria-current');
-      });
-      if (captionEl) captionEl.textContent = slides[current].dataset.caption;
-    }
-
-    function restartTimer() {
-      clearInterval(slideTimer);
-      slideTimer = null;
-      if (!paused && slides.length > 1) slideTimer = setInterval(() => showSlide(current + 1), SLIDE_MS);
-    }
-
-    function setPaused(value) {
-      paused = value;
-      if (pauseBtn) {
-        pauseBtn.setAttribute('aria-label', paused ? 'Tiếp tục trình chiếu ảnh' : 'Tạm dừng trình chiếu ảnh');
-        pauseBtn.querySelector('[data-icon="pause"]').classList.toggle('hidden', paused);
-        pauseBtn.querySelector('[data-icon="play"]').classList.toggle('hidden', !paused);
+    // Điểm thuộc hoa văn = pixel không trong suốt của ảnh mặt trống; toạ độ chuẩn hoá trong đường tròn bán kính 1
+    const sampleDrum = (img) => {
+      const size = 360;
+      const off = document.createElement('canvas');
+      off.width = size;
+      off.height = size;
+      const ctx = off.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, size, size);
+      const data = ctx.getImageData(0, 0, size, size).data;
+      const points = [];
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (data[(y * size + x) * 4 + 3] < 140) continue;
+          const nx = (x / size) * 2 - 1;
+          const ny = (y / size) * 2 - 1;
+          // Vành tối ngoài cùng là mảng đặc: chỉ giữ thưa để hoa văn bên trong nổi lên
+          if (Math.hypot(nx, ny) > 0.9 && Math.random() > 0.12) continue;
+          points.push([nx, ny]);
+        }
       }
-      restartTimer();
+      return points;
+    };
+
+    // Dự phòng khi không tải được ảnh: các vòng tròn đồng tâm và ngôi sao 14 cánh
+    const proceduralDrum = () => {
+      const points = [];
+      [0.22, 0.42, 0.6, 0.74, 0.86, 0.95].forEach(ring => {
+        for (let a = 0; a < Math.PI * 2; a += 0.004) points.push([Math.cos(a) * ring, Math.sin(a) * ring]);
+      });
+      for (let k = 0; k < 14; k++) {
+        const a = (k / 14) * Math.PI * 2;
+        for (let t = 0.03; t < 0.2; t += 0.002) points.push([Math.cos(a) * t, Math.sin(a) * t]);
+      }
+      return points;
+    };
+
+    const initConstellation = async (canvas, { fine, sparks, ambient, scale, scrollSpin = false, startOnView = false }) => {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const img = await drumReady;
+      const source = img ? sampleDrum(img) : proceduralDrum();
+      if (!source.length) return;
+
+      const factor = window.innerWidth < 640 ? 0.6 : 1;
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const fineDots = Array.from({ length: Math.round(fine * factor) }, () => {
+        const [nx, ny] = pick(source);
+        return { nx, ny, size: 0.9 + Math.random() * 1.3, rot: Math.random() * Math.PI * 2, color: pick(PARTICLE_COLORS), alpha: 0.55 + Math.random() * 0.45 };
+      });
+      const particles = Array.from({ length: Math.round(sparks * factor) }, () => {
+        const [nx, ny] = pick(source);
+        return {
+          nx,
+          ny,
+          sx: (Math.random() - 0.5) * 3,
+          sy: (Math.random() - 0.5) * 3,
+          size: 2.6 + Math.random() * 2.6,
+          rot: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.6,
+          color: pick(PARTICLE_COLORS),
+          alpha: 0.6 + Math.random() * 0.4,
+          phase: Math.random() * Math.PI * 2,
+          delay: Math.random() * 0.5
+        };
+      });
+      const dust = Array.from({ length: ambient }, () => ({
+        x: Math.random(),
+        y: Math.random(),
+        vx: (Math.random() - 0.5) * 0.004,
+        vy: (Math.random() - 0.5) * 0.004,
+        size: 1.5 + Math.random() * 3,
+        rot: Math.random() * Math.PI * 2,
+        color: pick(PARTICLE_COLORS),
+        alpha: 0.12 + Math.random() * 0.25
+      }));
+
+      const triangle = (c, x, y, size, rot) => {
+        c.moveTo(x + Math.cos(rot) * size, y + Math.sin(rot) * size);
+        c.lineTo(x + Math.cos(rot + 2.094) * size, y + Math.sin(rot + 2.094) * size);
+        c.lineTo(x + Math.cos(rot - 2.094) * size, y + Math.sin(rot - 2.094) * size);
+        c.closePath();
+      };
+
+      // Lớp tĩnh: vẽ một lần vào canvas phụ theo kích thước hiện tại, mỗi khung hình chỉ cần xoay rồi dán lại
+      const layer = document.createElement('canvas');
+      const layerCtx = layer.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let radius = 0;
+      let dpr = 1;
+      const renderLayer = () => {
+        const side = Math.ceil((radius + 6) * 2);
+        layer.width = Math.round(side * dpr);
+        layer.height = Math.round(side * dpr);
+        layerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        layerCtx.clearRect(0, 0, side, side);
+        layerCtx.lineWidth = 0.9;
+        const c = side / 2;
+        // Gom theo màu để giảm số lần đổi kiểu nét
+        PARTICLE_COLORS.forEach(color => {
+          layerCtx.strokeStyle = color;
+          [0.6, 0.8, 1].forEach(alpha => {
+            layerCtx.globalAlpha = alpha;
+            layerCtx.beginPath();
+            fineDots.forEach(d => {
+              if (d.color !== color || Math.abs(d.alpha - alpha) > 0.1) return;
+              triangle(layerCtx, c + d.nx * radius, c + d.ny * radius, d.size, d.rot);
+            });
+            layerCtx.stroke();
+          });
+        });
+        layerCtx.globalAlpha = 1;
+      };
+      const resize = () => {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        radius = Math.min(width, height) * 0.5 * scale;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        renderLayer();
+      };
+      fineDots.forEach(d => { d.alpha = d.alpha < 0.7 ? 0.6 : d.alpha < 0.9 ? 0.8 : 1; });
+      resize();
+      new ResizeObserver(() => {
+        if (canvas.clientWidth === width && canvas.clientHeight === height) return;
+        resize();
+        if (!running) draw(performance.now());
+      }).observe(canvas);
+
+      const pointer = { x: -9999, y: -9999 };
+      canvas.parentElement.addEventListener('pointermove', (e) => {
+        const box = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - box.left;
+        pointer.y = e.clientY - box.top;
+      });
+      canvas.parentElement.addEventListener('pointerleave', () => {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+
+      // Trống cuối trang chỉ bắt đầu tụ lại khi lần đầu cuộn tới
+      let start = startOnView ? null : performance.now();
+      const draw = (now) => {
+        const t = start === null ? 0 : (now - start) / 1000;
+        const still = reduceMotion.matches;
+        ctx.clearRect(0, 0, width, height);
+        const cx = width / 2;
+        const cy = height / 2;
+        // Mặt trống quay rất chậm, khoảng 3 phút một vòng; trống ở hero quay thêm theo quãng cuộn trang
+        const spin = still ? 0 : t * 0.035 + (scrollSpin ? window.scrollY * 0.0022 : 0);
+        const cos = Math.cos(spin);
+        const sin = Math.sin(spin);
+        // Hoa văn hiện dần trong 2 giây đầu, cùng lúc các hạt lớn bay về
+        const reveal = still ? 1 : Math.min(1, t / 2);
+
+        ctx.lineWidth = 1;
+        dust.forEach(d => {
+          if (!still) {
+            d.x = (d.x + d.vx / 60 + 1) % 1;
+            d.y = (d.y + d.vy / 60 + 1) % 1;
+          }
+          ctx.globalAlpha = d.alpha;
+          ctx.strokeStyle = d.color;
+          ctx.beginPath();
+          triangle(ctx, d.x * width, d.y * height, d.size, d.rot + (still ? 0 : t * 0.2));
+          ctx.stroke();
+        });
+
+        ctx.save();
+        ctx.globalAlpha = reveal * reveal;
+        ctx.translate(cx, cy);
+        ctx.rotate(spin);
+        const half = layer.width / dpr / 2;
+        ctx.drawImage(layer, -half, -half, half * 2, half * 2);
+        ctx.restore();
+
+        particles.forEach(p => {
+          const k = still ? 1 : Math.min(1, Math.max(0, (t - p.delay) / 1.8));
+          const ease = 1 - Math.pow(1 - k, 3);
+          const rx = p.nx * cos - p.ny * sin;
+          const ry = p.nx * sin + p.ny * cos;
+          let x = cx + (rx + p.sx * (1 - ease)) * radius;
+          let y = cy + (ry + p.sy * (1 - ease)) * radius;
+          // Hạt né nhẹ con trỏ chuột
+          const dx = x - pointer.x;
+          const dy = y - pointer.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 80 && dist > 0.01) {
+            const push = (80 - dist) / 80 * 18;
+            x += (dx / dist) * push;
+            y += (dy / dist) * push;
+          }
+          ctx.globalAlpha = p.alpha * ease * (still ? 1 : 0.6 + 0.4 * Math.sin(t * 1.6 + p.phase));
+          ctx.strokeStyle = p.color;
+          ctx.beginPath();
+          triangle(ctx, x, y, p.size, p.rot + (still ? 0 : t * p.spin));
+          ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+      };
+
+      // Chỉ chạy hoạt ảnh khi canvas đang hiện trên màn hình và tab đang mở
+      let running = false;
+      let visible = false;
+      let frame = 0;
+      const loop = (now) => {
+        draw(now);
+        frame = requestAnimationFrame(loop);
+      };
+      const sync = () => {
+        const shouldRun = visible && !document.hidden && !reduceMotion.matches;
+        if (shouldRun && !running) {
+          running = true;
+          frame = requestAnimationFrame(loop);
+        } else if (!shouldRun && running) {
+          running = false;
+          cancelAnimationFrame(frame);
+        }
+      };
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && start === null) start = performance.now();
+        sync();
+      }, { threshold: startOnView ? 0.35 : 0 }).observe(canvas);
+      document.addEventListener('visibilitychange', sync);
+      reduceMotion.addEventListener?.('change', () => {
+        sync();
+        if (!running) draw(performance.now());
+      });
+      draw(performance.now());
+    };
+
+    const heroCanvas = document.querySelector('[data-constellation="hero"]');
+    const ctaCanvas = document.querySelector('[data-constellation="cta"]');
+    if (heroCanvas) initConstellation(heroCanvas, { fine: 15000, sparks: 450, ambient: 90, scale: 0.88, scrollSpin: true });
+    if (ctaCanvas) initConstellation(ctaCanvas, { fine: 9000, sparks: 260, ambient: 0, scale: 0.9, startOnView: true });
+
+    // ================= Hiệu ứng xuất hiện, đếm số, cuộn trang =================
+    const animate = document.documentElement.classList.contains('js-anim');
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    // 2. Số liệu đếm lên từ 0
+    const countUp = (el, duration = 1600) => {
+      const target = parseFloat(el.dataset.count);
+      const decimals = Number(el.dataset.decimals || 0);
+      const suffix = el.dataset.suffix || '';
+      const format = (value) => value.toFixed(decimals) + suffix;
+      el.textContent = format(0);
+      const begin = performance.now();
+      const step = (now) => {
+        const k = Math.min(1, (now - begin) / duration);
+        el.textContent = format(target * easeOutCubic(k));
+        if (k < 1) requestAnimationFrame(step);
+        else el.textContent = format(target);
+      };
+      requestAnimationFrame(step);
+    };
+
+    // 1. Hero: tiêu đề trượt lên, các phần còn lại hiện nối tiếp, rồi số liệu đếm lên
+    const hero = document.getElementById('top');
+    if (animate && hero) {
+      const counters = Array.from(hero.querySelectorAll('[data-count]'));
+      counters.forEach(el => { el.textContent = (0).toFixed(Number(el.dataset.decimals || 0)) + (el.dataset.suffix || ''); });
+      requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('hero-in')));
+      setTimeout(() => counters.forEach(el => countUp(el)), 850);
     }
 
-    pauseBtn?.addEventListener('click', () => setPaused(!paused));
-    // Không đổi ảnh khi tab bị ẩn, tránh tốn tài nguyên
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) clearInterval(slideTimer);
-      else restartTimer();
-    });
-    showSlide(0);
-    setPaused(paused);
+    // 4. Các mục bên dưới hiện dần khi cuộn tới
+    if (animate) {
+      const groups = [
+        '#procedures .t-label, #procedures h2, #procedures h2 ~ p, #procedures h2 ~ a',
+        '#audiences .t-label, #audiences h2, #audiences h2 ~ p, #audiences .grid > p',
+        '#workflow .t-label, #workflow h2',
+        '#noi-nop .t-label, #noi-nop h2, #noi-nop h2 ~ p',
+        '#hien-phap .quote-mark, #hien-phap blockquote, #hien-phap figcaption',
+        '.drum-band, .dinh-roof',
+        '#get-started h2, #get-started h2 ~ p, #get-started h2 ~ div'
+      ];
+      const revealTargets = [];
+      groups.forEach(selector => document.querySelectorAll(selector).forEach((el, i) => {
+        el.style.setProperty('--i', i);
+        revealTargets.push(el);
+      }));
+      // Mỗi khối danh sách, mỗi đối tượng, mỗi bước: tiêu đề và từng dòng lệch nhau một chút
+      document.querySelectorAll('#procedures .space-y-16 > div, #audiences article, #workflow li[data-step], #noi-nop ul').forEach((block, blockIndex) => {
+        const parts = block.matches('li') ? [block] : block.querySelectorAll('h3, p, span.inline-flex, li');
+        parts.forEach((el, i) => {
+          el.style.setProperty('--i', block.matches('li') ? blockIndex * 2 : i);
+          revealTargets.push(el);
+        });
+      });
+      revealTargets.forEach(el => el.setAttribute('data-reveal', ''));
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          revealObserver.unobserve(entry.target);
+          // 5. Số bước đếm từ 00
+          const number = entry.target.querySelector?.('[data-step-number]');
+          if (number) {
+            const last = Number(number.dataset.stepNumber);
+            let current = 0;
+            const tick = setInterval(() => {
+              number.textContent = String(current).padStart(2, '0');
+              if (current++ >= last) clearInterval(tick);
+            }, 140);
+          }
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      revealTargets.forEach(el => revealObserver.observe(el));
+    }
+
+    // 3 và 5. Theo cuộn trang: trống ở hero thu nhỏ và mờ dần, đường vàng nối ba bước chạy tới đâu sáng tới đó
+    const heroDrum = document.getElementById('hero-drum');
+    const steps = document.getElementById('steps');
+    const stepsFill = document.getElementById('steps-fill');
+    const stepItems = Array.from(document.querySelectorAll('[data-step]'));
+    let scrollQueued = false;
+    const onScrollEffects = () => {
+      scrollQueued = false;
+      const vh = window.innerHeight;
+      if (heroDrum && hero) {
+        const p = Math.min(1, Math.max(0, window.scrollY / (hero.offsetHeight * 0.9)));
+        heroDrum.style.transform = p ? `translateY(${(p * 70).toFixed(1)}px) scale(${(1 - p * 0.28).toFixed(3)})` : '';
+        heroDrum.style.opacity = p ? (1 - p * 0.85).toFixed(3) : '';
+      }
+      if (steps && stepsFill) {
+        const rect = steps.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (vh * 0.85 - rect.top) / (vh * 0.55)));
+        stepsFill.style.setProperty('--p', p.toFixed(3));
+        stepItems.forEach((item, i) => item.classList.toggle('is-lit', p >= i / stepItems.length + 0.02));
+      }
+    };
+    if (animate) {
+      window.addEventListener('scroll', () => {
+        if (!scrollQueued) {
+          scrollQueued = true;
+          requestAnimationFrame(onScrollEffects);
+        }
+      }, { passive: true });
+      window.addEventListener('resize', onScrollEffects);
+      onScrollEffects();
+    }
 
     // ================= Box chat nổi =================
     const chatPanel = document.getElementById('chat-panel');
@@ -946,7 +1646,7 @@
       (SUGGESTIONS[topic] || []).forEach(text => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'sample-query text-left text-xs text-ink bg-tint hover:bg-[#FDE9C4] border border-[#F3DDB3] px-2.5 py-1 rounded-full transition-colors';
+        btn.className = 'sample-query text-left text-xs font-light text-[#F3E9E6] border border-[#F2B544]/30 hover:border-[#F2B544] px-3 py-1.5 rounded-[999px] transition-colors';
         btn.textContent = text;
         btn.addEventListener('click', () => {
           chatInput.value = text;
@@ -995,6 +1695,7 @@
           if (!part) return;
           if (partIndex % 2 === 1) {
             const strong = document.createElement('strong');
+            strong.className = 'font-semibold';
             strong.textContent = part;
             bubble.append(strong);
           } else {
@@ -1011,7 +1712,7 @@
       const bubble = document.createElement('div');
       bubble.className = kind === 'user'
         ? 'bubble-user px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
-        : 'bubble-bot px-3.5 py-2.5 max-w-[92%] whitespace-pre-wrap';
+        : 'bubble-bot px-3.5 py-2.5 max-w-[92%] whitespace-pre-wrap font-light';
       row.append(bubble);
       chatMessages.insertBefore(row, typingIndicator);
       return bubble;
@@ -1062,6 +1763,133 @@
           scrollChat();
         }
       });
+    }
+
+    const VN_MAP = {"m":[[119,42],[116,42],[108,46],[107,51],[103,53],[102,52],[98,53],[94,52],[95,57],[91,61],[91,64],[90,66],[83,72],[80,73],[76,80],[76,86],[72,93],[78,102],[90,113],[90,118],[87,117],[90,119],[95,125],[102,131],[104,134],[111,139],[117,146],[121,145],[124,150],[125,150],[126,152],[132,160],[136,164],[142,178],[142,181],[146,195],[146,197],[145,195],[145,206],[148,213],[149,220],[147,217],[144,219],[146,224],[144,224],[145,233],[145,234],[144,232],[143,234],[144,238],[143,240],[141,240],[140,245],[136,246],[125,253],[122,254],[120,258],[117,258],[105,264],[102,262],[100,259],[99,264],[96,263],[95,261],[92,263],[95,263],[95,266],[89,266],[95,268],[96,270],[92,275],[83,268],[91,278],[91,279],[90,281],[88,281],[77,272],[83,280],[84,282],[83,284],[70,290],[66,296],[62,299],[55,300],[58,297],[56,296],[57,280],[58,276],[62,274],[62,272],[56,268],[53,269],[49,264],[51,262],[57,261],[61,258],[61,254],[66,255],[68,253],[75,252],[77,255],[79,254],[83,256],[83,251],[77,246],[77,239],[80,237],[88,238],[88,233],[94,232],[95,231],[99,230],[104,226],[107,226],[108,227],[110,225],[111,221],[110,211],[112,203],[107,189],[107,185],[111,179],[110,172],[113,167],[111,164],[106,160],[103,156],[108,153],[108,151],[99,145],[97,142],[95,143],[93,142],[91,139],[90,133],[74,117],[69,109],[67,108],[62,104],[62,102],[63,99],[54,96],[38,86],[41,82],[41,78],[52,80],[59,72],[57,68],[54,68],[52,65],[47,63],[52,59],[42,53],[33,58],[22,54],[17,47],[19,38],[16,36],[15,38],[13,38],[12,34],[3,24],[9,17],[17,20],[20,23],[23,21],[27,17],[30,20],[32,16],[39,21],[41,17],[43,16],[44,16],[47,18],[51,16],[54,16],[56,14],[57,9],[66,5],[69,7],[71,11],[77,14],[83,13],[86,15],[91,14],[96,16],[91,22],[91,25],[93,27],[93,32],[99,34],[101,36],[105,38],[107,40],[115,39]],"i":[[[41,264],[41,271],[40,271],[39,267],[37,265],[40,263]],[[101,57],[98,56],[99,55],[101,55]],[[110,53],[108,54],[110,52],[111,51]],[[92,298],[91,298],[93,297]],[[103,264],[102,265],[102,264],[103,264],[104,263]],[[97,56],[95,55],[96,53]],[[112,48],[109,50],[108,50],[109,47],[110,47]]],"hs":[[207,135],[192,141],[184,156],[215,139],[190,143],[195,143],[205,133],[212,140],[199,147],[190,130]],"ts":[[247,243],[246,243],[198,299],[247,268],[247,274],[250,265],[247,264],[218,315],[226,308],[204,295],[234,293],[248,258],[246,251],[237,271],[253,295],[245,277],[278,288],[276,254],[218,281],[194,306]],"c":[[77,51],[94,55],[112,143],[124,151],[94,256],[76,271]]};
+    // Bản đồ Việt Nam ghép tam giác: lưới tam giác lấy mẫu bên trong đường bờ (Natural Earth, đã giản lược), cộng hai quần đảo
+    const initVnMap = (canvas) => {
+      const ctx = canvas.getContext('2d');
+      const W = 300, H = 330, STEP = 3.6;
+      const inside = (poly, x, y) => {
+        let hit = false;
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+          const [xi, yi] = poly[i], [xj, yj] = poly[j];
+          if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) hit = !hit;
+        }
+        return hit;
+      };
+      const tris = [];
+      for (let row = 0, y = 2; y < H; row++, y += STEP * 0.866) {
+        for (let x = (row % 2) * STEP / 2; x < 160; x += STEP) {
+          if (inside(VN_MAP.m, x, y) || VN_MAP.i.some(p => inside(p, x, y))) {
+            tris.push({ x, y, up: (row + Math.round(x / STEP)) % 2 === 0, s: 1, a: 0.32 + Math.random() * 0.4, d: Math.random() });
+          }
+        }
+      }
+      VN_MAP.i.forEach(p => {
+        const cx = p.reduce((s, q) => s + q[0], 0) / p.length, cy = p.reduce((s, q) => s + q[1], 0) / p.length;
+        tris.push({ x: cx, y: cy, up: true, s: 1, a: 0.5, d: Math.random() });
+      });
+      const seaStart = tris.length;
+      [...VN_MAP.hs, ...VN_MAP.ts].forEach(([x, y]) => tris.push({ x, y, up: Math.random() > 0.5, s: 1.25, a: 0.85, d: Math.random(), sea: true }));
+
+      let scale = 1, dpr = 1, raf = 0, running = false, started = null;
+      let pointer = null;
+      const animate = document.documentElement.classList.contains('js-anim');
+      const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        scale = rect.width / W;
+      };
+      const draw = (now) => {
+        const t = started === null ? 0 : (now - started) / 1000;
+        const grow = animate ? Math.min(1, t / 2.2) : 1;
+        ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+        const size = STEP * 0.78;
+        for (let k = 0; k < tris.length; k++) {
+          const tr = tris[k];
+          // Hiện dần từ bắc vào nam, rồi gợn sáng nhẹ chạy dọc dải đất
+          const appear = Math.min(1, Math.max(0, (grow * 1.35 - tr.y / H - tr.d * 0.25) * 4));
+          if (appear <= 0) continue;
+          let a = tr.a * appear;
+          if (animate) a *= 0.78 + 0.22 * Math.sin(t * 1.4 - tr.y * 0.045 + tr.d * 2);
+          if (pointer) {
+            const dist = Math.hypot(tr.x - pointer.x, tr.y - pointer.y);
+            if (dist < 26) a = Math.min(1, a + (1 - dist / 26) * 0.6);
+          }
+          const r = size * tr.s * (0.4 + 0.6 * appear);
+          ctx.fillStyle = tr.sea ? `rgba(242,181,68,${a})` : (k % 7 === 0 ? `rgba(228,87,46,${a * 0.9})` : `rgba(242,181,68,${a * 0.85})`);
+          ctx.beginPath();
+          if (tr.up) {
+            ctx.moveTo(tr.x, tr.y - r * 0.66);
+            ctx.lineTo(tr.x + r * 0.58, tr.y + r * 0.34);
+            ctx.lineTo(tr.x - r * 0.58, tr.y + r * 0.34);
+          } else {
+            ctx.moveTo(tr.x, tr.y + r * 0.66);
+            ctx.lineTo(tr.x + r * 0.58, tr.y - r * 0.34);
+            ctx.lineTo(tr.x - r * 0.58, tr.y - r * 0.34);
+          }
+          ctx.fill();
+        }
+        // Vòng mảnh bao hai quần đảo
+        ctx.strokeStyle = `rgba(242,181,68,${0.28 * grow})`;
+        ctx.lineWidth = 0.6;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath(); ctx.ellipse(199, 143, 24, 17, 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(238, 280, 52, 42, -0.25, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+        // Sáu thành phố trực thuộc trung ương: chấm đỏ son, sóng lan ra
+        VN_MAP.c.forEach(([x, y], i) => {
+          if (grow < 0.4 + i * 0.08) return;
+          if (animate) {
+            const p = ((t * 0.5 + i * 0.17) % 1);
+            ctx.strokeStyle = `rgba(228,87,46,${0.7 * (1 - p)})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.arc(x, y, 2.5 + p * 9, 0, Math.PI * 2); ctx.stroke();
+          }
+          ctx.fillStyle = '#E4572E';
+          ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#FFE7C2';
+          ctx.beginPath(); ctx.arc(x, y, 1, 0, Math.PI * 2); ctx.fill();
+        });
+      };
+      const loop = (now) => {
+        draw(now);
+        if (running) raf = requestAnimationFrame(loop);
+      };
+      resize();
+      new ResizeObserver(() => { resize(); if (!running) draw(performance.now()); }).observe(canvas);
+      if (!animate) { draw(0); return; }
+      canvas.parentElement.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        pointer = { x: (e.clientX - rect.left) / scale, y: (e.clientY - rect.top) / scale };
+      });
+      canvas.parentElement.addEventListener('pointerleave', () => { pointer = null; });
+      const setRunning = (on) => {
+        if (on === running) return;
+        running = on;
+        if (on) { if (started === null) started = performance.now(); raf = requestAnimationFrame(loop); }
+        else cancelAnimationFrame(raf);
+      };
+      let visible = false;
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        setRunning(visible && !document.hidden);
+      }, { threshold: 0.25 }).observe(canvas);
+      document.addEventListener('visibilitychange', () => setRunning(visible && !document.hidden));
+    };
+    const vnMapCanvas = document.querySelector('canvas[data-vnmap]');
+    if (vnMapCanvas) initVnMap(vnMapCanvas);
+
+    // Chim Lạc chỉ bay khi mục cuối nằm trong màn hình
+    const flockSection = document.getElementById('get-started');
+    if (flockSection && document.documentElement.classList.contains('js-anim')) {
+      new IntersectionObserver(([entry]) => {
+        flockSection.classList.toggle('birds-on', entry.isIntersecting);
+      }).observe(flockSection);
     }
   </script>
 </body>
