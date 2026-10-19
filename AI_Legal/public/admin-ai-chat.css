@@ -35,13 +35,24 @@
   border: 1px solid rgba(255, 255, 255, .25);
   border-radius: 999px;
   box-shadow: 0 10px 28px rgba(126, 11, 20, .32);
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none;
   transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.admin-ai-launcher.is-dragging {
+  cursor: grabbing;
+  transform: none;
+  transition: none;
 }
 
 .admin-ai-launcher:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 34px rgba(126, 11, 20, .4);
+}
+
+.admin-ai-launcher.is-dragging:hover {
+  transform: none;
 }
 
 .admin-ai-launcher:focus-visible,
@@ -95,13 +106,14 @@
 }
 
 .admin-ai-panel {
-  position: absolute;
-  right: 0;
-  bottom: 72px;
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(96px, calc(env(safe-area-inset-bottom) + 82px));
   display: flex;
   width: min(390px, calc(100vw - 32px));
-  height: min(570px, calc(100dvh - 120px));
-  min-height: 390px;
+  height: min(570px, calc(100dvh - 32px));
+  min-height: min(390px, calc(100dvh - 32px));
+  max-height: calc(100dvh - 16px);
   flex-direction: column;
   overflow: hidden;
   background: #fff;
@@ -120,9 +132,22 @@
   display: flex;
   align-items: center;
   gap: 11px;
+  flex: 0 0 auto;
   padding: 17px 16px;
   color: #fff;
   background: linear-gradient(120deg, #760c16, #a5111d 68%, #bd1824);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.admin-ai-header.is-dragging {
+  cursor: grabbing;
+}
+
+.admin-ai-header:focus-visible {
+  outline: 3px solid rgba(241, 189, 85, .85);
+  outline-offset: -4px;
 }
 
 .admin-ai-header-icon {
@@ -175,7 +200,7 @@
 .admin-ai-messages {
   display: flex;
   min-height: 0;
-  flex: 1;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 14px;
   overflow-y: auto;
@@ -292,6 +317,7 @@
 }
 
 .admin-ai-composer-wrap {
+  flex: 0 0 auto;
   padding: 11px 13px 13px;
   background: #fff;
   border-top: 1px solid var(--admin-ai-line);
@@ -386,12 +412,12 @@
   }
 
   .admin-ai-panel {
-    position: fixed;
     right: max(10px, env(safe-area-inset-right));
     bottom: max(78px, calc(env(safe-area-inset-bottom) + 68px));
     width: min(390px, calc(100vw - 20px));
-    height: min(590px, calc(100dvh - 108px - env(safe-area-inset-bottom)));
-    min-height: 360px;
+    height: min(590px, calc(100dvh - 32px));
+    min-height: min(360px, calc(100dvh - 32px));
+    max-height: calc(100dvh - 16px);
   }
 }
 
