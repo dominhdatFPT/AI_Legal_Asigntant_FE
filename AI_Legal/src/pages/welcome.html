@@ -720,13 +720,13 @@
       </div>
     </section>
 
-    <button
+    <!-- <button
       class="inline-flex items-center justify-center gap-2 w-14 h-14 sm:w-auto sm:px-5 rounded-full bg-son hover:bg-sonDark text-white font-semibold shadow-[0_12px_30px_-10px_rgba(90,11,13,0.7)] transition-colors"
       type="button" id="chat-launcher" aria-expanded="false" aria-controls="chat-panel" aria-label="Mở trợ lý AI">
       <span data-launcher-icon="open"><i data-lucide="message-circle" class="w-6 h-6" aria-hidden="true"></i></span>
       <span class="hidden" data-launcher-icon="close"><i data-lucide="x" class="w-6 h-6" aria-hidden="true"></i></span>
       <span class="hidden sm:inline" data-launcher-label aria-hidden="true">Hỏi trợ lý AI</span>
-    </button>
+    </button> -->
   </div>
 
   <script>
@@ -919,150 +919,150 @@
       }
     });
 
-    // Câu hỏi gợi ý theo chủ đề
-    const SUGGESTIONS = {
-      land: [
-        'Tôi muốn sang tên quyền sử dụng đất cần làm gì?',
-        'Cấp sổ đỏ lần đầu cần giấy tờ gì?',
-        'Nộp hồ sơ đất đai ở đâu?'
-      ],
-      business: [
-        'Đăng ký hộ kinh doanh cần giấy tờ gì?',
-        'Thành lập công ty TNHH một thành viên cần gì?',
-        'Tạm ngừng kinh doanh cần thông báo trước bao lâu?'
-      ],
-      legal: [
-        'Căn cứ pháp lý của thủ tục tách thửa đất là gì?',
-        'Văn bản nào quy định thủ tục đăng ký hộ kinh doanh?',
-        'Quy định nào về thời hạn giải quyết đăng ký biến động đất đai?'
-      ]
-    };
-    const suggestionBox = document.getElementById('suggested-buttons');
-    const topicTabs = Array.from(document.querySelectorAll('.topic-tab'));
+    // // Câu hỏi gợi ý theo chủ đề
+    // const SUGGESTIONS = {
+    //   land: [
+    //     'Tôi muốn sang tên quyền sử dụng đất cần làm gì?',
+    //     'Cấp sổ đỏ lần đầu cần giấy tờ gì?',
+    //     'Nộp hồ sơ đất đai ở đâu?'
+    //   ],
+    //   business: [
+    //     'Đăng ký hộ kinh doanh cần giấy tờ gì?',
+    //     'Thành lập công ty TNHH một thành viên cần gì?',
+    //     'Tạm ngừng kinh doanh cần thông báo trước bao lâu?'
+    //   ],
+    //   legal: [
+    //     'Căn cứ pháp lý của thủ tục tách thửa đất là gì?',
+    //     'Văn bản nào quy định thủ tục đăng ký hộ kinh doanh?',
+    //     'Quy định nào về thời hạn giải quyết đăng ký biến động đất đai?'
+    //   ]
+    // };
+    // const suggestionBox = document.getElementById('suggested-buttons');
+    // const topicTabs = Array.from(document.querySelectorAll('.topic-tab'));
 
-    const renderSuggestions = (topic) => {
-      if (!suggestionBox) return;
-      suggestionBox.textContent = '';
-      (SUGGESTIONS[topic] || []).forEach(text => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'sample-query text-left text-xs text-ink bg-tint hover:bg-[#FDE9C4] border border-[#F3DDB3] px-2.5 py-1 rounded-full transition-colors';
-        btn.textContent = text;
-        btn.addEventListener('click', () => {
-          chatInput.value = text;
-          chatInput.focus();
-        });
-        suggestionBox.append(btn);
-      });
-    };
+    // const renderSuggestions = (topic) => {
+    //   if (!suggestionBox) return;
+    //   suggestionBox.textContent = '';
+    //   (SUGGESTIONS[topic] || []).forEach(text => {
+    //     const btn = document.createElement('button');
+    //     btn.type = 'button';
+    //     btn.className = 'sample-query text-left text-xs text-ink bg-tint hover:bg-[#FDE9C4] border border-[#F3DDB3] px-2.5 py-1 rounded-full transition-colors';
+    //     btn.textContent = text;
+    //     btn.addEventListener('click', () => {
+    //       chatInput.value = text;
+    //       chatInput.focus();
+    //     });
+    //     suggestionBox.append(btn);
+    //   });
+    // };
 
-    const selectTopic = (tab, moveFocus) => {
-      topicTabs.forEach(t => {
-        const active = t === tab;
-        t.setAttribute('aria-selected', String(active));
-        t.tabIndex = active ? 0 : -1;
-      });
-      if (moveFocus) tab.focus();
-      suggestionBox?.setAttribute('aria-labelledby', tab.id);
-      renderSuggestions(tab.dataset.topic);
-    };
+    // const selectTopic = (tab, moveFocus) => {
+    //   topicTabs.forEach(t => {
+    //     const active = t === tab;
+    //     t.setAttribute('aria-selected', String(active));
+    //     t.tabIndex = active ? 0 : -1;
+    //   });
+    //   if (moveFocus) tab.focus();
+    //   suggestionBox?.setAttribute('aria-labelledby', tab.id);
+    //   renderSuggestions(tab.dataset.topic);
+    // };
 
-    topicTabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => selectTopic(tab, false));
-      tab.addEventListener('keydown', (e) => {
-        let next;
-        if (e.key === 'ArrowRight') next = (index + 1) % topicTabs.length;
-        else if (e.key === 'ArrowLeft') next = (index - 1 + topicTabs.length) % topicTabs.length;
-        else if (e.key === 'Home') next = 0;
-        else if (e.key === 'End') next = topicTabs.length - 1;
-        else return;
-        e.preventDefault();
-        selectTopic(topicTabs[next], true);
-      });
-    });
-    renderSuggestions('land');
+    // topicTabs.forEach((tab, index) => {
+    //   tab.addEventListener('click', () => selectTopic(tab, false));
+    //   tab.addEventListener('keydown', (e) => {
+    //     let next;
+    //     if (e.key === 'ArrowRight') next = (index + 1) % topicTabs.length;
+    //     else if (e.key === 'ArrowLeft') next = (index - 1 + topicTabs.length) % topicTabs.length;
+    //     else if (e.key === 'Home') next = 0;
+    //     else if (e.key === 'End') next = topicTabs.length - 1;
+    //     else return;
+    //     e.preventDefault();
+    //     selectTopic(topicTabs[next], true);
+    //   });
+    // });
+    // renderSuggestions('land');
 
-    // Chat thật: gọi POST /api/agent/chat qua Gateway, KHÔNG cần đăng nhập
-    const chatForm = document.getElementById('chat-form');
-    const chatSend = document.getElementById('chat-send');
-    const typingIndicator = document.getElementById('typing-indicator');
+    // // Chat thật: gọi POST /api/agent/chat qua Gateway, KHÔNG cần đăng nhập
+    // const chatForm = document.getElementById('chat-form');
+    // const chatSend = document.getElementById('chat-send');
+    // const typingIndicator = document.getElementById('typing-indicator');
 
-    const renderAnswer = (bubble, text) => {
-      bubble.textContent = '';
-      const lines = String(text).split('\n');
-      lines.forEach((line, index) => {
-        line.replace(/^(\s*)[*-]\s+/, '$1• ').split(/\*\*(.+?)\*\*/g).forEach((part, partIndex) => {
-          if (!part) return;
-          if (partIndex % 2 === 1) {
-            const strong = document.createElement('strong');
-            strong.textContent = part;
-            bubble.append(strong);
-          } else {
-            bubble.append(document.createTextNode(part));
-          }
-        });
-        if (index < lines.length - 1) bubble.append(document.createTextNode('\n'));
-      });
-    };
+    // const renderAnswer = (bubble, text) => {
+    //   bubble.textContent = '';
+    //   const lines = String(text).split('\n');
+    //   lines.forEach((line, index) => {
+    //     line.replace(/^(\s*)[*-]\s+/, '$1• ').split(/\*\*(.+?)\*\*/g).forEach((part, partIndex) => {
+    //       if (!part) return;
+    //       if (partIndex % 2 === 1) {
+    //         const strong = document.createElement('strong');
+    //         strong.textContent = part;
+    //         bubble.append(strong);
+    //       } else {
+    //         bubble.append(document.createTextNode(part));
+    //       }
+    //     });
+    //     if (index < lines.length - 1) bubble.append(document.createTextNode('\n'));
+    //   });
+    // };
 
-    const appendBubble = (kind) => {
-      const row = document.createElement('div');
-      row.className = kind === 'user' ? 'flex justify-end' : 'flex';
-      const bubble = document.createElement('div');
-      bubble.className = kind === 'user'
-        ? 'bubble-user px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
-        : 'bubble-bot px-3.5 py-2.5 max-w-[92%] whitespace-pre-wrap';
-      row.append(bubble);
-      chatMessages.insertBefore(row, typingIndicator);
-      return bubble;
-    };
+    // const appendBubble = (kind) => {
+    //   const row = document.createElement('div');
+    //   row.className = kind === 'user' ? 'flex justify-end' : 'flex';
+    //   const bubble = document.createElement('div');
+    //   bubble.className = kind === 'user'
+    //     ? 'bubble-user px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
+    //     : 'bubble-bot px-3.5 py-2.5 max-w-[92%] whitespace-pre-wrap';
+    //   row.append(bubble);
+    //   chatMessages.insertBefore(row, typingIndicator);
+    //   return bubble;
+    // };
 
-    const scrollChat = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
+    // const scrollChat = () => { chatMessages.scrollTop = chatMessages.scrollHeight; };
 
-    if (chatForm && chatInput && chatMessages) {
-      chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const val = chatInput.value.trim();
-        if (!val || chatForm.dataset.busy) return;
-        chatForm.dataset.busy = '1';
-        if (chatSend) chatSend.disabled = true;
+    // if (chatForm && chatInput && chatMessages) {
+    //   chatForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
+    //     const val = chatInput.value.trim();
+    //     if (!val || chatForm.dataset.busy) return;
+    //     chatForm.dataset.busy = '1';
+    //     if (chatSend) chatSend.disabled = true;
 
-        appendBubble('user').textContent = val;
-        chatInput.value = '';
-        if (typingIndicator) typingIndicator.classList.remove('hidden');
-        scrollChat();
+    //     appendBubble('user').textContent = val;
+    //     chatInput.value = '';
+    //     if (typingIndicator) typingIndicator.classList.remove('hidden');
+    //     scrollChat();
 
-        let reply;
-        try {
-          const config = await fetch('/api/app-config').then(r => (r.ok ? r.json() : {})).catch(() => ({}));
-          const apiBaseUrl = (config.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, '');
-          const response = await fetch(`${apiBaseUrl}/api/agent/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: val }),
-            signal: AbortSignal.timeout(60000)
-          });
-          const result = await response.json().catch(() => null);
-          if (!response.ok || !result?.data) {
-            throw Object.assign(new Error(result?.error?.message || 'Trợ lý chưa thể xử lý yêu cầu này.'), { fromServer: true });
-          }
-          let answer = result.data.answer || 'Chưa tìm thấy thông tin phù hợp.';
-          if (result.data.procedure?.name) answer += `\n\nThủ tục liên quan: ${result.data.procedure.name}`;
-          reply = answer;
-        } catch (error) {
-          reply = error?.name === 'TimeoutError'
-            ? 'Yêu cầu mất nhiều thời gian hơn dự kiến. Vui lòng thử lại.'
-            : (error?.fromServer ? error.message : 'Hiện chưa kết nối được máy chủ. Vui lòng thử lại sau.');
-        } finally {
-          if (typingIndicator) typingIndicator.classList.add('hidden');
-          renderAnswer(appendBubble('bot'), reply);
-          delete chatForm.dataset.busy;
-          if (chatSend) chatSend.disabled = false;
-          if (chatIsOpen()) chatInput.focus({ preventScroll: true });
-          scrollChat();
-        }
-      });
-    }
+    //     let reply;
+    //     try {
+    //       const config = await fetch('/api/app-config').then(r => (r.ok ? r.json() : {})).catch(() => ({}));
+    //       const apiBaseUrl = (config.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, '');
+    //       const response = await fetch(`${apiBaseUrl}/api/agent/chat`, {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ message: val }),
+    //         signal: AbortSignal.timeout(60000)
+    //       });
+    //       const result = await response.json().catch(() => null);
+    //       if (!response.ok || !result?.data) {
+    //         throw Object.assign(new Error(result?.error?.message || 'Trợ lý chưa thể xử lý yêu cầu này.'), { fromServer: true });
+    //       }
+    //       let answer = result.data.answer || 'Chưa tìm thấy thông tin phù hợp.';
+    //       if (result.data.procedure?.name) answer += `\n\nThủ tục liên quan: ${result.data.procedure.name}`;
+    //       reply = answer;
+    //     } catch (error) {
+    //       reply = error?.name === 'TimeoutError'
+    //         ? 'Yêu cầu mất nhiều thời gian hơn dự kiến. Vui lòng thử lại.'
+    //         : (error?.fromServer ? error.message : 'Hiện chưa kết nối được máy chủ. Vui lòng thử lại sau.');
+    //     } finally {
+    //       if (typingIndicator) typingIndicator.classList.add('hidden');
+    //       renderAnswer(appendBubble('bot'), reply);
+    //       delete chatForm.dataset.busy;
+    //       if (chatSend) chatSend.disabled = false;
+    //       if (chatIsOpen()) chatInput.focus({ preventScroll: true });
+    //       scrollChat();
+    //     }
+    //   });
+    // }
   </script>
 </body>
 
