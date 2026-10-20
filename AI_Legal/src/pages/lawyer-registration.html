@@ -283,14 +283,14 @@
   };
 
   // ===== Gọi Backend =====
-  async function api(path, { method = 'GET', body } = {}) {
+  async function api(path, { method = 'GET', body, headers = {} } = {}) {
     if (!auth) throw Object.assign(new Error('Chưa kết nối được Backend.'), { status: 0 });
     const base = await auth.getApiBaseUrl();
     const isJson = body !== undefined && !(body instanceof FormData);
     const send = () => fetch(base + path, {
       method,
       credentials: 'include',
-      headers: isJson ? { 'Content-Type': 'application/json' } : {},
+      headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
       body: isJson ? JSON.stringify(body) : body
     });
     let res;
@@ -572,9 +572,11 @@
         $('lr-submit-label').textContent = `Đang tải giấy tờ ${i + 1}/${uploads.length}…`;
         const form = new FormData();
         form.append('file', item.file);
-        form.append('type', item.type);
-        const doc = await api('/api/documents/', { method: 'POST', body: form });
-        credentials.push({ document_id: doc.id, type: item.type });
+        // Document Service chỉ nhận đúng 3 trường: file, purpose, document_type; loại giấy tờ lưu ở Lawyer Service.
+        form.append('purpose', 'supporting_document');
+        form.append('document_type', 'other');
+        const doc = await api('/api/documents/', { method: 'POST', body: form, headers: { 'Idempotency-Key': crypto.randomUUID() } });
+        credentials.push({ document_id: doc.document_id, type: item.type });
       }
       // 2. Gửi hồ sơ cho Lawyer Service
       $('lr-submit-label').textContent = 'Đang gửi hồ sơ…';
