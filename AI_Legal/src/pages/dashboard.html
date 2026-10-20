@@ -1,162 +1,23 @@
 <!DOCTYPE html>
-<html lang="vi" style="">
-
+<html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="web_dashboard" name="shell-type">
-  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning,hourglass_top&amp;display=block" rel="stylesheet">
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap"
-    rel="stylesheet">
-  
-  <style>
-    @layer base {
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        overscroll-behavior: none;
-      }
-
-      main> :first-child {
-        margin-top: 0 !important;
-      }
-
-      main> :last-child {
-        margin-bottom: 0 !important;
-      }
-    }
-
-    ::-webkit-scrollbar {
-      display: none;
-    }
-
-    .gold-glow {
-      box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.35);
-    }
-
-    .red-glow {
-      box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35);
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="shell-type" content="web_dashboard">
+  <title>Tổng quan quản trị | Hồ sơ đất &amp; HKD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300..600,0..1,0&icon_names=add_business,add_location_alt,assignment_late,badge,calendar_month,chat,chevron_left,chevron_right,domain,document_scanner,expand_more,folder_open,grid_view,group,landscape,logout,map,person,print,schedule,search,star,storefront,travel_explore,verified&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script id="tailwind-config">
+  <script>
     tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#b91c1c",
-            "primary-container": "#c5161d",
-            "primary-dark": "#881337",
-            "on-primary": "#ffffff",
-            "on-primary-container": "#fff1f2",
-            "primary-fixed": "#fee2e2",
-            "primary-fixed-dim": "#fecaca",
-            "on-primary-fixed-variant": "#991b1b",
-            "on-primary-fixed": "#450a0a",
-            "inverse-primary": "#fca5a5",
-
-            "tertiary": "#b45309",
-            "tertiary-container": "#d97706",
-            "tertiary-fixed": "#fef3c7",
-            "tertiary-fixed-dim": "#fde68a",
-            "on-tertiary": "#ffffff",
-            "on-tertiary-fixed": "#78350f",
-            "on-tertiary-fixed-variant": "#92400e",
-            "on-tertiary-container": "#fffbeb",
-
-            "surface": "#EAE5DC",
-            "surface-panel": "#FFFFFF",
-            "surface-subtle": "#F4F0E8",
-            "surface-brand-tint": "#FFF5F5",
-            "surface-container-lowest": "#FFFFFF",
-            "surface-container-low": "#E5DFD4",
-            "surface-container": "#DCD5C8",
-            "surface-container-high": "#D2CABE",
-            "surface-container-highest": "#C7BEB0",
-            "surface-dim": "#DDD6C9",
-            "surface-bright": "#FFFFFF",
-            "surface-variant": "#E8E2D6",
-            "surface-tint": "#b91c1c",
-
-            "on-surface": "#1C1917",
-            "on-surface-variant": "#44403C",
-            "secondary": "#78716C",
-            "secondary-container": "#E5DFD4",
-            "secondary-fixed": "#E5DFD4",
-            "secondary-fixed-dim": "#D2CABE",
-            "on-secondary": "#ffffff",
-            "on-secondary-container": "#44403C",
-            "on-secondary-fixed": "#1C1917",
-            "on-secondary-fixed-variant": "#44403C",
-
-            "border-subtle": "#D5CEBF",
-            "border-focus": "#b91c1c",
-            "outline": "#C8C0B0",
-            "outline-variant": "#DCD5C8",
-
-            "state-success": "#15803d",
-            "state-error": "#b91c1c",
-            "error": "#b91c1c",
-            "error-container": "#fee2e2",
-            "on-error": "#ffffff",
-            "on-error-container": "#991b1b"
-          },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "2xl": "1rem",
-            "full": "9999px"
-          },
-          spacing: {
-            "gutter": "1.5rem",
-            "margin": "2rem",
-            "space-xl": "2.5rem",
-            "space-lg": "1.5rem",
-            "space-sm": "0.5rem",
-            "space-xs": "0.25rem",
-            "space-md": "1rem"
-          },
-          fontFamily: {
-            "body-md": ["Be Vietnam Pro", "sans-serif"],
-            "display-hero": ["Be Vietnam Pro", "sans-serif"],
-            "label-sm": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg-mobile": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg": ["Be Vietnam Pro", "sans-serif"],
-            "body-sm": ["Be Vietnam Pro", "sans-serif"],
-            "body-lg": ["Be Vietnam Pro", "sans-serif"],
-            "label-lg": ["Be Vietnam Pro", "sans-serif"],
-            "headline-sm": ["Be Vietnam Pro", "sans-serif"],
-            "label-md": ["Be Vietnam Pro", "sans-serif"],
-            "headline-md": ["Be Vietnam Pro", "sans-serif"]
-          },
-          fontSize: {
-            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
-            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
-            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
-            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
-            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
-            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
-            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
-            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
-          }
-        }
-      }
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] } } }
     };
   </script>
-<link rel="stylesheet" href="/admin-ai-chat.css">
-<style id="auth-pending">body{visibility:hidden!important}</style>
+  <link rel="stylesheet" href="/admin-ai-chat.css">
+  <link rel="stylesheet" href="/admin-dashboard.css">
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950">
@@ -198,11 +59,8 @@
             style="font-variation-settings: 'FILL' 1;">grid_view</span>
           <span class="font-label-md text-label-md tracking-wide">Tổng quan</span>
         </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="ho-so-dat-dai" href="/landforms">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">landscape</span>
-          <span class="font-label-md text-label-md">Hồ sơ đất đai</span>
+        <a class="admin-nav__link nav-item" data-path="ho-so-dat-dai" href="/landforms" title="Hồ sơ đất đai">
+          <span class="material-symbols-outlined" aria-hidden="true">landscape</span><span class="admin-nav__label">Hồ sơ đất đai</span>
         </a>
         <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
           data-path="ho-so-ho-kinh-doanh" href="/business-form-templates">
@@ -210,89 +68,68 @@
             class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">storefront</span>
           <span class="font-label-md text-label-md">Hồ sơ hộ kinh doanh</span>
         </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="quan-ly-nguoi-dung" href="/user-management">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">group</span>
-          <span class="font-label-md text-label-md">Quản lí người dùng</span>
+        <a class="admin-nav__link nav-item" data-path="quan-ly-nguoi-dung" href="/user-management" title="Quản lí người dùng">
+          <span class="material-symbols-outlined" aria-hidden="true">group</span><span class="admin-nav__label">Quản lí người dùng</span>
         </a>
       </nav>
     </div>
-
-    <!-- User Profile in Sidebar -->
-    <div class="p-space-md bg-black/25 border-t border-white/10">
-      <div
-        class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
-          <div
-            class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
-            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
-          </div>
-          <div class="flex flex-col min-w-0">
-            <span class="font-label-md text-label-md text-white font-bold truncate" data-user-field="name">Người dùng</span>
-            <span class="font-label-sm text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
-              <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
-            </span>
-          </div>
-        </div>
-        <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
-          href="/login" title="Đăng xuất" data-logout>
-          <span class="material-symbols-outlined text-[19px]">logout</span>
-        </a>
+    <div class="admin-sidebar__footer">
+      <div class="admin-user-card">
+        <span class="admin-user-card__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
+        <span class="admin-user-card__copy"><strong data-user-field="name">Người dùng</strong><small><span class="material-symbols-outlined" aria-hidden="true">badge</span><span data-user-field="role">Quản trị viên</span></small></span>
+        <a class="admin-user-card__logout" href="/login" title="Đăng xuất" aria-label="Đăng xuất" data-logout><span class="material-symbols-outlined" aria-hidden="true">logout</span></a>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN CONTAINER -->
-  <div class="pl-72">
-    <!-- TOP HEADER -->
-    <header
-      class="fixed top-0 left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between">
-      <div class="flex items-center gap-space-md">
-        <div class="flex items-center gap-space-xs text-stone-500">
-          <span class="font-label-md text-label-md text-red-800 font-bold"">Cổng hành chính</span>
-
-        </div>
-        <div
-          class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-900 shadow-2xs">
-          <span class="w-2 h-2 rounded-full bg-state-success animate-pulse"></span>
-          <span class="font-label-sm text-label-sm font-bold">Hệ thống trực tuyến</span>
-        </div>
+  <div class="admin-layout">
+    <header class="admin-topbar">
+      <div class="admin-topbar__context">
+        <span class="admin-topbar__section">Cổng hành chính</span>
+        <span class="admin-system-status"><span class="admin-system-status__dot"></span>Hệ thống trực tuyến</span>
       </div>
-      <div class="flex items-center gap-space-md">
-        <button
-          class="flex items-center gap-space-xs px-3.5 py-1.5 rounded-lg bg-white border border-stone-300 hover:bg-amber-50 hover:border-amber-400 transition-colors text-stone-800 font-medium shadow-xs"
-          type="button">
-          <span class="material-symbols-outlined text-red-600 text-[18px]">domain</span>
-          <span class="font-label-md text-label-md font-bold text-stone-800">Văn phòng Đăng ký Đất đai</span>
-          <span class="material-symbols-outlined text-amber-700 text-[16px]">expand_more</span>
-
-          <div class="h-5 w-px bg-stone-300"></div>
-          <div
-            class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs">
-            <span class="material-symbols-outlined text-white text-[18px]">person</span>
-          </div>
-      </div>
+      <button class="admin-agency" type="button" aria-label="Văn phòng Đăng ký Đất đai">
+        <span class="material-symbols-outlined" aria-hidden="true">domain</span>
+        <span class="admin-agency__name">Văn phòng Đăng ký Đất đai</span>
+        <span class="material-symbols-outlined admin-agency__chevron" aria-hidden="true">expand_more</span>
+        <span class="admin-agency__separator"></span>
+        <span class="admin-agency__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
+      </button>
     </header>
 
-    <!-- MAIN VIEWPORT -->
-    <main class="w-full pt-16 px-space-lg py-space-lg bg-surface min-h-screen">
-      <div class="flex flex-col w-full gap-space-lg">
-
-        <!-- 1. WELCOME & SEARCH BANNER -->
-        <section
-          class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-800 via-red-700 to-red-900 p-space-lg shadow-xl shadow-red-950/20 border border-red-600/40 text-white">
-          <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-amber-400/25 blur-3xl pointer-events-none">
-          </div>
-          <div
-            class="absolute right-40 -bottom-20 w-72 h-72 rounded-full bg-yellow-500/20 blur-2xl pointer-events-none">
-          </div>
-          <div class="absolute left-1/3 -top-24 w-60 h-60 rounded-full bg-red-500/20 blur-3xl pointer-events-none">
-          </div>
-
-          <div class="relative z-10 flex flex-col gap-space-md">
-            <!-- Greeting and Quick Meta -->
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-sm">
+    <main class="admin-main">
+      <div class="admin-content">
+        <div class="admin-bento-grid admin-bento-grid--redesign">
+          <section class="admin-overview" aria-labelledby="admin-welcome-title">
+            <div class="admin-overview__top">
+              <div class="admin-overview__intro">
+                <span class="admin-overview__eyebrow">People Operations · Dashboard</span>
+                <h1 id="admin-welcome-title">Xin chào, <span data-user-field="name">Người dùng</span></h1>
+                <p>Toàn cảnh tiếp nhận hồ sơ và vận hành xử lý trong ngày.</p>
+              </div>
+              <div class="admin-overview__stats" aria-label="Số liệu tổng quan">
+                <div class="admin-overview__stat"><span>Tổng hồ sơ</span><strong data-admin-stat="total">—</strong></div>
+                <div class="admin-overview__stat"><span>Đất đai</span><strong data-admin-stat="land">—</strong></div>
+                <div class="admin-overview__stat"><span>Hộ kinh doanh</span><strong data-admin-stat="business">—</strong></div>
+                <div class="admin-overview__stat"><span>Đang xử lý</span><strong data-admin-stat="in_progress">—</strong></div>
+              </div>
+            </div>
+            <div class="admin-search admin-search--canvas" role="search">
+              <label class="sr-only" for="searchTypeFilter">Lĩnh vực hồ sơ</label>
+              <div class="admin-search__select-wrap">
+                <select id="searchTypeFilter" aria-label="Lọc theo lĩnh vực hồ sơ"><option value="all">Tất cả hồ sơ</option><option value="land">Hồ sơ đất đai</option><option value="business">Hộ kinh doanh</option><option value="owner">Chủ sở hữu / CCCD</option></select>
+                <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+              </div>
+              <label class="admin-search__input-wrap" for="globalSearchInput">
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                <input id="globalSearchInput" type="search" autocomplete="off" aria-label="Tìm hồ sơ theo mã, CCCD, tên hoặc thửa đất" placeholder="Tìm mã hồ sơ, CCCD, tên người nộp hoặc địa chỉ...">
+                <kbd><span>Ctrl</span><span>+</span><span>K</span></kbd>
+              </label>
+              <button id="admin-search-btn" type="button" class="admin-search__submit"><span class="material-symbols-outlined" aria-hidden="true">travel_explore</span>Tra cứu</button>
+            </div>
+          </section>
+          <section class="admin-card admin-orchard" aria-labelledby="admin-orchard-title">
+            <div class="admin-orchard__head">
               <div>
                 <div
                   class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/40 text-amber-200 font-label-sm tracking-wider backdrop-blur-sm shadow-xs">
@@ -364,31 +201,16 @@
           </div>
         </section>
 
-        <!-- 3. QUICK STATS (Grid 4 thẻ) -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
-          <!-- Stat 1 -->
-          <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-red-800 text-white p-space-md shadow-lg shadow-red-950/20 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between border border-red-500/50 group">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl pointer-events-none">
+        <section class="admin-card admin-records" aria-labelledby="admin-records-title">
+          <div class="admin-records__head">
+            <div class="admin-section-heading admin-section-heading--records">
+              <div><span class="admin-eyebrow">Danh sách hồ sơ</span><h2 id="admin-records-title">Cập nhật gần đây</h2></div>
+              <span class="admin-live-badge"><span></span>Dữ liệu thật</span>
             </div>
-            <div class="flex items-start justify-between">
-              <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-red-100 font-medium">Tổng hồ sơ tiếp nhận</span>
-                <span
-                  class="font-headline-lg text-headline-lg text-white font-extrabold mt-1 tracking-tight" data-admin-stat="total">—</span>
-              </div>
-              <div
-                class="w-12 h-12 rounded-xl bg-white/20 text-white border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                <span class="material-symbols-outlined text-[26px]">folder_open</span>
-              </div>
-            </div>
-            <div class="mt-space-md pt-2.5 flex items-center justify-between border-t border-white/15">
-              <span data-coming-soon></span>
-
-
-
-
-              <span class="font-body-sm text-body-sm text-red-100/90 font-medium">So với tháng trước</span>
+            <div class="admin-filter-tabs" role="group" aria-label="Lọc hồ sơ theo lĩnh vực">
+              <button class="admin-filter-tab is-active" type="button" data-domain="" aria-pressed="true">Tất cả (<span data-domain-count="all">—</span>)</button>
+              <button class="admin-filter-tab" type="button" data-domain="land" aria-pressed="false">Đất đai (<span data-domain-count="land">—</span>)</button>
+              <button class="admin-filter-tab" type="button" data-domain="business" aria-pressed="false">Hộ kinh doanh (<span data-domain-count="business">—</span>)</button>
             </div>
           </div>
           <!-- Stat 2 -->
@@ -607,97 +429,42 @@
               </tbody>
             </table>
           </div>
-          <!-- Table Footer / Pagination -->
-          <div
-            class="pt-space-sm flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-t border-stone-200">
-            <span class="font-body-sm text-body-sm text-stone-600 font-semibold">
-              <span id="admin-applications-range"></span>
-            </span>
-            <div class="flex items-center gap-space-sm">
-              <button class="w-8 h-8 rounded-lg border border-stone-300 flex items-center justify-center hover:bg-stone-100 disabled:opacity-40" type="button" id="admin-applications-prev" aria-label="Trang trước"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
-              <span class="font-label-md text-label-md text-stone-700" id="admin-applications-page"></span>
-              <button class="w-8 h-8 rounded-lg border border-stone-300 flex items-center justify-center hover:bg-stone-100 disabled:opacity-40" type="button" id="admin-applications-next" aria-label="Trang sau"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+          <div class="admin-records__footer">
+            <span class="admin-records__range"><span id="admin-applications-range"></span></span>
+            <div class="admin-pagination">
+              <button type="button" id="admin-applications-prev" aria-label="Trang trước" disabled><span class="material-symbols-outlined" aria-hidden="true">chevron_left</span></button>
+              <span id="admin-applications-page" aria-live="polite"></span>
+              <button type="button" id="admin-applications-next" aria-label="Trang sau" disabled><span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
             </div>
           </div>
         </section>
-
-        <!-- Interactive Sandbox Script -->
-        <script>
-          // Keyboard shortcut Ctrl + K focus search bar
-          document.addEventListener('keydown', function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-              e.preventDefault();
-              const searchInput = document.getElementById('globalSearchInput');
-              if (searchInput) searchInput.focus();
-            }
-          });
-
-          // Suggested prompt click helper
-          document.querySelectorAll('.ai-prompt-pill').forEach(pill => {
-            pill.addEventListener('click', function () {
-              const text = this.innerText.replace(/^[^\\w\\s\\u00C0-\\u1EF9]+/u, '').trim();
-              const aiInput = document.getElementById('aiQueryInput');
-              if (aiInput) {
-                aiInput.value = text;
-                aiInput.focus();
-              }
-              const globalSearch = document.getElementById('globalSearchInput');
-              if (globalSearch && !aiInput) {
-                globalSearch.value = text;
-                globalSearch.focus();
-              }
-            });
-          });
-
-
-          // AI Chat widget toggle logic
-          document.addEventListener('DOMContentLoaded', () => {
-            const chatWindow = document.getElementById('ai-chat-window');
-            const chatToggleBtn = document.getElementById('ai-chat-toggle-btn');
-            const chatCloseBtn = document.getElementById('ai-chat-close-btn');
-
-            if (!chatWindow || !chatToggleBtn) return;
-
-            chatToggleBtn.addEventListener('click', () => {
-              const isVisible = chatWindow.classList.contains('hidden');
-              chatWindow.classList.toggle('hidden', !isVisible);
-              chatToggleBtn.setAttribute('aria-expanded', String(isVisible));
-            });
-            chatCloseBtn?.addEventListener('click', () => {
-              chatWindow.classList.add('hidden');
-              chatToggleBtn.setAttribute('aria-expanded', 'false');
-            });
-          });
-        </script>
       </div>
     </main>
   </div>
 
+  <script>
+    document.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        document.getElementById('globalSearchInput')?.focus();
+      }
+    });
 
-
-<script type="module">
-  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
-  import { protectPage } from '/auth-api.js';
-  await protectPage(['admin']);
-  await import('/admin-dashboard-data.js');
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
-    navItems.forEach(item => {
-      item.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
+    document.querySelectorAll('#sidebar-nav .nav-item').forEach((item) => {
+      item.addEventListener('click', (event) => {
+        const href = item.getAttribute('href');
         if (href && href !== '#' && href.startsWith('/')) {
-          e.preventDefault();
+          event.preventDefault();
           window.location.href = href;
         }
       });
     });
-
-    // Nút đăng xuất [data-logout] do protectPage (auth-api.js) gắn: mở hộp thoại xác nhận rồi mới đăng xuất.
-  });
-</script>
-<script src="/admin-ai-chat.js" defer></script>
+  </script>
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['admin']);
+    await import('/admin-dashboard-data.js');
+  </script>
+  <script src="/admin-ai-chat.js" defer></script>
 </body>
-
 </html>
