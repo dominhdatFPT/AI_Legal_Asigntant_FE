@@ -101,6 +101,9 @@
 
     const header = document.createElement('div');
     header.className = 'admin-ai-header';
+    header.tabIndex = 0;
+    header.setAttribute('role', 'group');
+    header.setAttribute('aria-label', 'Pindahkan jendela dengan menyeret header atau gunakan tombol panah');
     const headerIcon = document.createElement('span');
     headerIcon.className = 'admin-ai-header-icon';
     headerIcon.append(createIcon('M4 5h16v11H8l-4 4V5Z M8 9h8M8 12h5'));
@@ -164,14 +167,125 @@
     root.append(panel, launcher);
     document.body.append(root);
 
+    let dragState;
+    let launcherDragState;
+    let suppressLauncherClick = false;
+    let panelMoved = false;
+    const clampPanelPosition = (left, top) => ({
+      left: Math.min(Math.max(8, left), Math.max(8, window.innerWidth - panel.offsetWidth - 8)),
+      top: Math.min(Math.max(8, top), Math.max(8, window.innerHeight - panel.offsetHeight - 8))
+    });
+    const movePanelTo = (left, top) => {
+      const position = clampPanelPosition(left, top);
+      panel.style.left = `${position.left}px`;
+      panel.style.top = `${position.top}px`;
+      panel.style.right = 'auto';
+      panel.style.bottom = 'auto';
+    };
+    const positionPanelAboveLauncher = () => {
+      const launcherRect = launcher.getBoundingClientRect();
+      const aboveTop = launcherRect.top - panel.offsetHeight - 12;
+      movePanelTo(
+        launcherRect.right - panel.offsetWidth,
+        aboveTop >= 8 ? aboveTop : launcherRect.bottom + 12
+      );
+    };
     const setOpen = (open) => {
       panel.hidden = !open;
       launcher.setAttribute('aria-expanded', String(open));
-      if (open) input.focus();
-      else launcher.focus();
+      if (open) {
+        if (!panelMoved) positionPanelAboveLauncher();
+        input.focus();
+      } else {
+        launcher.focus();
+      }
     };
 
-    launcher.addEventListener('click', () => setOpen(panel.hidden));
+    header.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0 || event.target.closest('button')) return;
+      const rect = panel.getBoundingClientRect();
+      dragState = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top };
+      header.setPointerCapture(event.pointerId);
+      header.classList.add('is-dragging');
+      event.preventDefault();
+    });
+    header.addEventListener('pointermove', (event) => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      panelMoved = true;
+      movePanelTo(dragState.left + event.clientX - dragState.startX, dragState.top + event.clientY - dragState.startY);
+    });
+    const stopDragging = (event) => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState = null;
+      header.classList.remove('is-dragging');
+      if (header.hasPointerCapture(event.pointerId)) header.releasePointerCapture(event.pointerId);
+    };
+    header.addEventListener('pointerup', stopDragging);
+    header.addEventListener('pointercancel', stopDragging);
+    header.addEventListener('keydown', (event) => {
+      const offsets = { ArrowUp: [0, -24], ArrowDown: [0, 24], ArrowLeft: [-24, 0], ArrowRight: [24, 0] };
+      const offset = offsets[event.key];
+      if (!offset || panel.hidden || event.target !== header) return;
+      event.preventDefault();
+      const rect = panel.getBoundingClientRect();
+      movePanelTo(rect.left + offset[0], rect.top + offset[1]);
+    });
+    launcher.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      const rect = root.getBoundingClientRect();
+      launcherDragState = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
+      launcher.setPointerCapture(event.pointerId);
+      launcher.classList.add('is-dragging');
+    });
+    launcher.addEventListener('pointermove', (event) => {
+      if (!launcherDragState || event.pointerId !== launcherDragState.pointerId) return;
+      const deltaX = event.clientX - launcherDragState.startX;
+      const deltaY = event.clientY - launcherDragState.startY;
+      if (!launcherDragState.moved && Math.hypot(deltaX, deltaY) < 5) return;
+      launcherDragState.moved = true;
+      const left = Math.min(Math.max(8, launcherDragState.left + deltaX), Math.max(8, window.innerWidth - root.offsetWidth - 8));
+      const top = Math.min(Math.max(8, launcherDragState.top + deltaY), Math.max(8, window.innerHeight - root.offsetHeight - 8));
+      root.style.left = `${left}px`;
+      root.style.top = `${top}px`;
+      root.style.right = 'auto';
+      root.style.bottom = 'auto';
+    });
+    const stopDraggingLauncher = (event) => {
+      if (!launcherDragState || event.pointerId !== launcherDragState.pointerId) return;
+      const wasMoved = launcherDragState.moved;
+      launcherDragState = null;
+      launcher.classList.remove('is-dragging');
+      if (launcher.hasPointerCapture(event.pointerId)) launcher.releasePointerCapture(event.pointerId);
+      if (wasMoved) {
+        suppressLauncherClick = true;
+        panelMoved = false;
+        if (!panel.hidden) positionPanelAboveLauncher();
+      }
+    };
+    launcher.addEventListener('pointerup', stopDraggingLauncher);
+    launcher.addEventListener('pointercancel', stopDraggingLauncher);
+    window.addEventListener('resize', () => {
+      if (root.style.left && root.style.top) {
+        const rootRect = root.getBoundingClientRect();
+        const left = Math.min(rootRect.left, Math.max(8, window.innerWidth - root.offsetWidth - 8));
+        const top = Math.min(rootRect.top, Math.max(8, window.innerHeight - root.offsetHeight - 8));
+        root.style.left = `${left}px`;
+        root.style.top = `${top}px`;
+      }
+      if (!panel.hidden && panel.style.left && panel.style.top) {
+        const rect = panel.getBoundingClientRect();
+        movePanelTo(rect.left, rect.top);
+      }
+    });
+
+    launcher.addEventListener('click', (event) => {
+      if (suppressLauncherClick) {
+        suppressLauncherClick = false;
+        event.preventDefault();
+        return;
+      }
+      setOpen(panel.hidden);
+    });
     close.addEventListener('click', () => setOpen(false));
     document.addEventListener('admin-ai:open', (event) => {
       if (event.detail?.prompt) input.value = event.detail.prompt;

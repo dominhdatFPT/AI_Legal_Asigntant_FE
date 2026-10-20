@@ -105,6 +105,10 @@ export const readIdentityCardOcr = async (front, back) => {
 export const fetchAdministrativeUnits = async (path) =>
   readData(await request(`/api/locations/administrative/${path}`));
 
+// Location search dùng cùng cookie/refresh flow; không đưa Goong key ra frontend.
+export const searchNearbyOffices = async (payload) =>
+  readData(await authRequest('/api/locations/offices/search', { method: 'POST', body: payload }));
+
 // Lưu 6 trường CCCD người dùng đã kiểm tra vào Document (nguồn: phiên OCR) để hợp đồng dùng lại.
 export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
   const current = await authRequest('/api/documents/identity-profile/me');
@@ -147,7 +151,7 @@ export const requireLogin = async (allowedRoles) => {
   return user;
 };
 
-// Đăng xuất: thu hồi refresh token + xoá cookie ở Backend, đăng xuất Firebase, về /login.
+// Đăng xuất: thu hồi refresh token + xoá cookie ở Backend, đăng xuất Firebase, về /login?loggedOut=1.
 export const logout = async () => {
   try {
     await authRequest('/api/users/auth/logout', { method: 'POST' });
@@ -165,7 +169,121 @@ export const logout = async () => {
     // Không tải được Firebase thì bỏ qua, phiên của hệ thống đã bị thu hồi ở trên
   }
   clearSession();
-  window.location.replace('/login');
+  window.location.replace('/login?loggedOut=1');
+};
+
+// Hộp thoại xác nhận đăng xuất (thay cho confirm() của trình duyệt).
+// CSS viết sẵn ở đây vì file trong public/ không được Tailwind quét.
+const LOGOUT_DIALOG_CSS = `
+.logout-dialog{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(28,19,18,.65);font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.logout-dialog__card{width:100%;max-width:480px;border-radius:16px;background:#fff;color:#1c1917;border:1px solid #e7e5e4;box-shadow:0 28px 80px rgba(18,10,9,.45);overflow:hidden}
+.logout-dialog__bar{height:8px;background:linear-gradient(90deg,#8a1538,#b40006,#ecc15a)}
+.logout-dialog__body{padding:24px 28px}
+.logout-dialog__head{display:flex;align-items:center;gap:14px}
+.logout-dialog__icon{width:48px;height:48px;border-radius:16px;background:#fff1f0;border:1px solid #ffdad5;color:#b40006;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logout-dialog__eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#930004}
+.logout-dialog__title{margin:2px 0 0;font-size:20px;font-weight:700;color:#1c1917}
+.logout-dialog__user{margin-top:20px;padding:14px 16px;border-radius:12px;background:#faf6f0;border:1px solid #e9dec9;display:flex;align-items:center;gap:12px}
+.logout-dialog__avatar{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#b40006,#8a1538);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logout-dialog__name{font-size:14px;font-weight:700;color:#1c1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-dialog__role{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:6px;background:#ffdf99;color:#5a4300;font-size:11px;font-weight:700;vertical-align:middle}
+.logout-dialog__email{margin-top:2px;font-size:12px;color:#57534e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-dialog__list{margin:16px 0 0;padding:14px;list-style:none;border-radius:12px;background:#fafaf9;border:1px solid #e7e5e4;font-size:12.5px;line-height:1.55;color:#57534e}
+.logout-dialog__list li+li{margin-top:8px}
+.logout-dialog__actions{margin-top:24px;display:flex;gap:12px}
+.logout-dialog__btn{flex:1;height:48px;padding:0 20px;border-radius:12px;font:600 14px/1 inherit;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background-color .15s}
+.logout-dialog__btn--cancel{background:#fff;color:#292524;border:1px solid #d6d3d1}
+.logout-dialog__btn--cancel:hover{background:#f5f5f4}
+.logout-dialog__btn--confirm{background:#b40006;color:#fff;border:0;box-shadow:0 6px 20px rgba(180,0,6,.28)}
+.logout-dialog__btn--confirm:hover{background:#930004}
+.logout-dialog__btn:disabled{opacity:.75;cursor:wait}
+.logout-dialog__btn:focus-visible{outline:3px solid #ecc15a;outline-offset:2px}
+.logout-dialog__spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:logout-spin .8s linear infinite}
+@keyframes logout-spin{to{transform:rotate(360deg)}}
+@media (max-width:480px){.logout-dialog__actions{flex-direction:column-reverse}.logout-dialog__body{padding:20px}}
+@media (prefers-reduced-motion:reduce){.logout-dialog__spinner{animation-duration:2s}}
+`;
+
+const initialsOf = (name) =>
+  name.split(/\s+/).filter(Boolean).slice(-2).map((word) => word[0]).join('').toUpperCase() || 'ND';
+
+// Mở hộp thoại; bấm "Xác nhận đăng xuất" thì gọi logout(). Esc, bấm nền hoặc "Ở lại trang" thì đóng.
+export const confirmLogout = (user) => {
+  if (document.querySelector('.logout-dialog')) return;
+  if (!document.getElementById('logout-dialog-style')) {
+    const style = document.createElement('style');
+    style.id = 'logout-dialog-style';
+    style.textContent = LOGOUT_DIALOG_CSS;
+    document.head.append(style);
+  }
+  const name = displayName(user);
+  const previousFocus = document.activeElement;
+  const dialog = document.createElement('div');
+  dialog.className = 'logout-dialog';
+  dialog.innerHTML = `
+    <div class="logout-dialog__card" role="dialog" aria-modal="true" aria-labelledby="logout-dialog-title">
+      <div class="logout-dialog__bar"></div>
+      <div class="logout-dialog__body">
+        <div class="logout-dialog__head">
+          <div class="logout-dialog__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+          </div>
+          <div>
+            <div class="logout-dialog__eyebrow">Bảo mật phiên làm việc</div>
+            <h2 class="logout-dialog__title" id="logout-dialog-title">Xác nhận đăng xuất?</h2>
+          </div>
+        </div>
+        <div class="logout-dialog__user">
+          <div class="logout-dialog__avatar" aria-hidden="true">${escapeHtml(initialsOf(name))}</div>
+          <div style="min-width:0">
+            <div class="logout-dialog__name">${escapeHtml(name)}<span class="logout-dialog__role">${escapeHtml(roleLabel(user?.role))}</span></div>
+            <div class="logout-dialog__email">${escapeHtml(user?.email || user?.username || '')}</div>
+          </div>
+        </div>
+        <ul class="logout-dialog__list">
+          <li>Phiên đăng nhập trên thiết bị này sẽ được đóng an toàn.</li>
+          <li>Hồ sơ nháp và thông tin cá nhân đã lưu vẫn còn cho lần đăng nhập sau.</li>
+        </ul>
+        <div class="logout-dialog__actions">
+          <button type="button" class="logout-dialog__btn logout-dialog__btn--cancel" data-logout-cancel>Ở lại trang</button>
+          <button type="button" class="logout-dialog__btn logout-dialog__btn--confirm" data-logout-confirm>
+            <span data-logout-label>Xác nhận đăng xuất</span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+  const confirmButton = dialog.querySelector('[data-logout-confirm]');
+  const cancelButton = dialog.querySelector('[data-logout-cancel]');
+  let busy = false;
+  const close = () => {
+    if (busy) return;
+    dialog.remove();
+    document.removeEventListener('keydown', onKeydown);
+    previousFocus?.focus?.();
+  };
+  const onKeydown = (event) => {
+    if (event.key === 'Escape') close();
+    if (event.key === 'Tab') {
+      // Giữ Tab trong hộp thoại
+      const first = cancelButton;
+      const last = confirmButton;
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  };
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  cancelButton.addEventListener('click', close);
+  confirmButton.addEventListener('click', () => {
+    busy = true;
+    confirmButton.disabled = true;
+    cancelButton.disabled = true;
+    confirmButton.innerHTML = '<span class="logout-dialog__spinner" aria-hidden="true"></span><span>Đang đăng xuất...</span>';
+    logout();
+  });
+  document.addEventListener('keydown', onKeydown);
+  document.body.append(dialog);
+  cancelButton.focus();
 };
 
 export const roleLabel = (role) =>
@@ -175,7 +293,7 @@ export const displayName = (user) => user?.full_name || user?.username || user?.
 
 // Gắn trang: ẩn nội dung tới khi xác thực xong, điền thông tin user, gắn nút đăng xuất.
 //   <element data-user-field="name|email|role">   → thay bằng dữ liệu thật
-//   <element data-logout>                         → bấm để đăng xuất
+//   <element data-logout>                         → bấm để mở hộp thoại xác nhận đăng xuất
 // requireProfile: trang tạo hồ sơ → bắt buộc đã cập nhật thông tin cá nhân.
 export const protectPage = async (allowedRoles, { requireProfile = false } = {}) => {
   const user = await requireLogin(allowedRoles);
@@ -188,8 +306,7 @@ export const protectPage = async (allowedRoles, { requireProfile = false } = {})
   document.querySelectorAll('[data-logout]').forEach((element) => {
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      element.setAttribute('aria-busy', 'true');
-      logout();
+      confirmLogout(user);
     });
   });
   document.getElementById('auth-pending')?.remove();

@@ -1,6 +1,13 @@
 const dashboardMain = document.getElementById('user-dashboard-main');
 const dashboardHomeMarkup = dashboardMain?.innerHTML;
 const dashboardNav = document.querySelector('nav[data-active-classes]');
+if (dashboardNav && !dashboardNav.querySelector('a[href="/location-search"]')) {
+  const link = document.createElement('a');
+  link.href = '/location-search';
+  link.textContent = 'Tìm nơi nộp';
+  link.className = 'h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors';
+  dashboardNav.append(link);
+}
 const dashboardActiveClasses = dashboardNav?.dataset.activeClasses.split(/\s+/) ?? [];
 const dashboardNavLinks = dashboardNav
   ? [...dashboardNav.querySelectorAll('[data-path]')].map((link) => ({

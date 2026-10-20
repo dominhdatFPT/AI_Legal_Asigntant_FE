@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kho biểu mẫu</title>
+  <meta name="description" content="Tra cứu và xem mẫu đơn, hợp đồng theo lĩnh vực.">
+  <link rel="stylesheet" href="/contract-catalog.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Đến nội dung chính</a>
+  <header class="site-header"><div class="shell header-inner">
+    <a class="brand" href="/user-dashboard"><img src="/images/national-service-logo.png" width="52" height="52" alt="">
+      <span><strong>Cổng Dịch vụ công Quốc gia</strong><small>Hệ thống thông tin giải quyết thủ tục hành chính</small></span>
+    </a><a class="account-link" href="/account">Tài khoản <span aria-hidden="true">↗</span></a>
+  </div></header>
+  <div class="nav-bar"><nav class="shell main-nav" aria-label="Điều hướng chính">
+    <a href="/user-dashboard">Tổng quan hồ sơ</a><a href="/applicationSubmission">Tạo hồ sơ</a>
+    <a href="/kho-mau-don-tham-khao" aria-current="page">Kho biểu mẫu</a><a href="/account">Tài khoản</a>
+  </nav></div>
+  <main class="shell" id="main">
+    <div class="breadcrumb"><a href="/user-dashboard">Trang chủ</a><span aria-hidden="true">/</span><span>Kho biểu mẫu</span></div>
+    <section class="page-heading"><p class="section-label">Thư viện biểu mẫu</p>
+      <h1>Tìm mẫu đơn bạn cần</h1><p>Tra cứu và xem nội dung biểu mẫu theo từng lĩnh vực, thủ tục.</p>
+    </section>
+    <section class="filter-panel" aria-label="Bộ lọc mẫu đơn">
+      <div class="select-grid">
+        <label for="catalog-domain"><span><span class="step">1</span> Lĩnh vực thủ tục</span>
+          <select id="catalog-domain"><option value="">Tất cả lĩnh vực</option></select>
+        </label>
+        <label for="catalog-procedure"><span><span class="step">2</span> Thủ tục chi tiết</span>
+          <select id="catalog-procedure"><option value="">Tất cả thủ tục</option></select>
+        </label>
+      </div>
+      <label class="search-label" for="catalog-search">Tìm kiếm mẫu đơn</label>
+      <div class="search-box"><span class="search-icon" aria-hidden="true"></span>
+        <input type="search" id="catalog-search" placeholder="Nhập tên mẫu đơn cần tìm (gõ không dấu cũng được)…" autocomplete="off" disabled>
+        <kbd aria-hidden="true">Tìm kiếm</kbd>
+      </div>
+    </section>
+    <section class="catalog-section" aria-labelledby="results-title">
+      <div class="results-heading"><div><h2 id="results-title">Danh sách biểu mẫu</h2><p id="catalog-count" aria-live="polite">Đang tải danh sách…</p></div>
+        <button id="catalog-reset" class="text-button" type="button" hidden>Xóa bộ lọc</button>
+      </div>
+      <p id="catalog-status" role="status" hidden></p><button id="catalog-retry" class="outline-button" type="button" hidden>Thử tải lại</button>
+      <div id="catalog-loading" class="skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div id="catalog-results" class="catalog-grid"></div>
+      <nav id="catalog-pagination" class="catalog-pagination" aria-label="Phân trang mẫu đơn" hidden>
+        <button type="button" id="catalog-prev" class="outline-button">← Trước</button><span id="catalog-page"></span><button type="button" id="catalog-next" class="outline-button">Sau →</button>
+      </nav>
+      <div id="catalog-empty" class="empty-state" hidden><div class="empty-symbol" aria-hidden="true">⌕</div><h3>Chưa tìm thấy mẫu phù hợp</h3><p>Thử từ khóa khác hoặc chọn tất cả lĩnh vực để xem các mẫu hiện có.</p></div>
+    </section>
+    <aside class="reference-note"><span class="info-mark" aria-hidden="true">i</span><p><strong>Lưu ý khi sử dụng</strong><br>Nội dung mẫu được cung cấp để xem và đối chiếu. Kiểm tra yêu cầu của cơ quan tiếp nhận trước khi sử dụng.</p></aside>
+  </main>
+  <footer class="site-footer"><div class="shell footer-inner"><div><strong>Kho biểu mẫu</strong><p>Tra cứu biểu mẫu theo thủ tục.</p></div><span>Hệ thống hỗ trợ thủ tục hành chính</span></div></footer>
+  <script type="module" src="/contract-catalog.js"></script>
+</body>
+</html>
