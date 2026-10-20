@@ -105,6 +105,10 @@ export const readIdentityCardOcr = async (front, back) => {
 export const fetchAdministrativeUnits = async (path) =>
   readData(await request(`/api/locations/administrative/${path}`));
 
+// Location search dùng cùng cookie/refresh flow; không đưa Goong key ra frontend.
+export const searchNearbyOffices = async (payload) =>
+  readData(await authRequest('/api/locations/offices/search', { method: 'POST', body: payload }));
+
 // Lưu 6 trường CCCD người dùng đã kiểm tra vào Document (nguồn: phiên OCR) để hợp đồng dùng lại.
 export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
   const current = await authRequest('/api/documents/identity-profile/me');

@@ -16,3 +16,8 @@ build/
 .idea/
 .vscode/
 *.log
+
+# Superseded previews; the active catalogue uses content-hashed page images.
+/AI_Legal/public/reference-templates/*-page-[0-9].png
+/AI_Legal/public/reference-templates/*-page-[0-9][0-9].png
+/AI_Legal/public/reference-templates/hop-dong-thue-mat-bang.pdf
