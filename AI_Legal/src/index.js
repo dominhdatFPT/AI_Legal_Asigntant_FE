@@ -47,6 +47,11 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'signup.html'));
 });
 
+// Điều khoản sử dụng & Chính sách bảo vệ dữ liệu cá nhân (link từ trang Đăng ký).
+app.get('/dieu-khoan', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'dieu-khoan.html'));
+});
+
 app.get('/forgot-password', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
 });
@@ -98,12 +103,25 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
 });
 
+app.get('/landforms', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'LandForms-admin.html'));
+});
+
 app.get('/detail-information', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
 });
 
 app.get('/user-management', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-management.html'));
+});
+
+// Keep the existing Procedure library available on its own route.
+app.get('/form-library', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'form-library.html'));
+});
+
+app.get('/business-form-templates', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'business-form-templates.html'));
 });
 
 app.get('/user-dashboard', (req, res) => {
@@ -129,6 +147,10 @@ app.get('/dien-mau-don', (req, res) => {
 
 app.get('/xem-mau-don', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'contract-viewer.html'));
+});
+
+app.get('/lawyer-registration', (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'lawyer-registration.html'));
 });
 
 app.get('/api/application-submission-view', (req, res) => {

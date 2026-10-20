@@ -95,6 +95,14 @@ test('HTTP serves the public catalogue and all document pages with no backend, a
     assert.equal(page.status, 200);
     const html = await page.text();
     assert.match(html, /contract-catalog\.js/);
+    for (const [route, filename] of [
+      ['/lawyer-registration', 'lawyer-registration.html'],
+      ['/form-library', 'form-library.html']
+    ]) {
+      const response = await fetch(base + route);
+      assert.equal(response.status, 200);
+      assert.equal(await response.text(), fs.readFileSync(path.join(root, 'src/pages', filename), 'utf8'));
+    }
     const viewer = await (await fetch(`${base}/xem-mau-don`)).text();
     assert.doesNotMatch(viewer, /<form|<input|<textarea|contenteditable|data-action=/i);
     const index = await (await fetch(`${base}/reference-templates/catalog.json`)).json();
