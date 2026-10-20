@@ -2525,11 +2525,11 @@
 
     // =========================================================================
     // DUYỆT HỒ SƠ LUẬT SƯ (tab "Chờ xác thực")
-    // API theo services/lawyer-service/openapi.yaml (BE chưa làm, x-status: planned):
+    // API theo services/lawyer-service/openapi.yaml:
     //   GET  /api/lawyers/applications?approval_status=pending  → { items: [LawyerProfile], pagination }
     //   POST /api/lawyers/{lawyer_id}/approve                    → duyệt, BE đổi vai trò người dùng sang lawyer
     //   POST /api/lawyers/{lawyer_id}/reject  { reason }         → từ chối, người gửi thấy lý do
-    // Mở giấy tờ: GET /api/documents/{document_id}/file (đề xuất, Document Service chưa có API này).
+    // Mở giấy tờ: GET /api/lawyers/{lawyer_id}/credentials/{document_id} (Lawyer Service đọc file từ Document Service).
     // =========================================================================
     const CREDENTIAL_LABEL = {
       the_luat_su: 'Thẻ luật sư',
@@ -2801,7 +2801,7 @@
       const doc = t.closest('[data-doc-id]');
       if (doc) {
         e.preventDefault();
-        window.open(`${await apiBaseUrl()}/api/documents/${encodeURIComponent(doc.dataset.docId)}/file`, '_blank', 'noopener');
+        window.open(`${await apiBaseUrl()}/api/lawyers/${encodeURIComponent(review.selectedId)}/credentials/${encodeURIComponent(doc.dataset.docId)}`, '_blank', 'noopener');
       }
     });
     reviewSearch.addEventListener('input', () => { review.query = reviewSearch.value; renderReview(); });
