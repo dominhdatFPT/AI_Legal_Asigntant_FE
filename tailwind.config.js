@@ -1,7 +1,9 @@
 module.exports = {
   content: [
     "./AI_Legal/src/pages/**/*.html",
-    "./AI_Legal/src/**/*.js"
+    "./AI_Legal/src/**/*.js",
+    // HTML dựng bằng JS ở public (user-dashboard-data.js, auth-api.js...) cũng dùng class Tailwind.
+    "./AI_Legal/public/**/*.js"
   ],
   darkMode: "class",
   theme: {
