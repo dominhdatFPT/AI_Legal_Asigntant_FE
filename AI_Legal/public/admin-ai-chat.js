@@ -1,5 +1,9 @@
-(() => {
-  const createIcon = (path, viewBox = '0 0 24 24') => {
+import { createAgentConversation, sendAgentMessage, uploadAgentDocument } from '/auth-api.js';
+
+const ACCEPTED_FILE_TYPES = '.pdf,.jpg,.jpeg,.png,.docx';
+const MAX_FILE_SIZE = 9 * 1024 * 1024;
+
+const createIcon = (path, viewBox = '0 0 24 24') => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', viewBox);
     svg.setAttribute('fill', 'none');
@@ -14,7 +18,7 @@
     return svg;
   };
 
-  const makeButton = (className, label, iconPath) => {
+const makeButton = (className, label, iconPath) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = className;
@@ -23,7 +27,7 @@
     return button;
   };
 
-  const appendBubble = (container, text, role) => {
+const appendBubble = (container, text, role) => {
     const turn = document.createElement('div');
     turn.className = `admin-ai-turn admin-ai-turn-${role}`;
     const bubble = document.createElement('div');
@@ -34,7 +38,7 @@
     return turn;
   };
 
-  const renderAnswer = (bubble, text) => {
+const renderAnswer = (bubble, text) => {
     bubble.textContent = '';
     const lines = String(text).split('\n');
     lines.forEach((line, index) => {
@@ -53,7 +57,7 @@
     });
   };
 
-  function mountAdminAssistant() {
+function mountAdminAssistant() {
     if (document.querySelector('.admin-ai-chat')) return;
 
     const root = document.createElement('section');
@@ -157,11 +161,32 @@
     input.setAttribute('aria-label', 'Từ khóa hoặc tên thủ tục cần tra cứu');
     const send = makeButton('admin-ai-send', 'Gửi câu hỏi', 'M5 12h14M13 6l6 6-6 6');
     send.type = 'submit';
-    form.append(input, send);
+    const attach = makeButton('admin-ai-attach', 'Đính kèm tệp', 'M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.9-8.9a3.3 3.3 0 0 1 4.7 4.7l-8.9 8.9a1.7 1.7 0 0 1-2.4-2.4l8.2-8.2');
+    attach.title = 'Đính kèm tệp (PDF, JPG, PNG, DOCX — tối đa 9MB)';
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = ACCEPTED_FILE_TYPES;
+    fileInput.hidden = true;
+    fileInput.tabIndex = -1;
+    fileInput.setAttribute('aria-hidden', 'true');
+    form.append(attach, fileInput, input, send);
+
+    const fileError = document.createElement('p');
+    fileError.className = 'admin-ai-file-error';
+    fileError.setAttribute('role', 'alert');
+    fileError.hidden = true;
+    const fileChip = document.createElement('div');
+    fileChip.className = 'admin-ai-file';
+    fileChip.hidden = true;
+    const fileName = document.createElement('span');
+    fileName.className = 'admin-ai-file-name';
+    const fileRemove = makeButton('admin-ai-file-remove', 'Bỏ tệp đính kèm', 'M6 6l12 12M18 6 6 18');
+    fileChip.append(createIcon('M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z M14 3v5h5'), fileName, fileRemove);
+
     const footnote = document.createElement('p');
     footnote.className = 'admin-ai-footnote';
     footnote.textContent = 'Câu trả lời do AI tổng hợp để tham khảo. Vui lòng đối chiếu yêu cầu của cơ quan tiếp nhận hồ sơ.';
-    composerWrap.append(form, footnote);
+    composerWrap.append(fileError, fileChip, form, footnote);
 
     panel.append(header, messages, composerWrap);
     root.append(panel, launcher);
@@ -171,6 +196,7 @@
     let launcherDragState;
     let suppressLauncherClick = false;
     let panelMoved = false;
+    let pendingUpload = null; // AbortController của lượt đang tải/chờ đọc tệp
     const clampPanelPosition = (left, top) => ({
       left: Math.min(Math.max(8, left), Math.max(8, window.innerWidth - panel.offsetWidth - 8)),
       top: Math.min(Math.max(8, top), Math.max(8, window.innerHeight - panel.offsetHeight - 8))
@@ -197,6 +223,7 @@
         if (!panelMoved) positionPanelAboveLauncher();
         input.focus();
       } else {
+        pendingUpload?.abort();
         launcher.focus();
       }
     };
@@ -294,64 +321,107 @@
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !panel.hidden) setOpen(false);
     });
+    window.addEventListener('pagehide', () => pendingUpload?.abort());
 
     const scrollMessages = () => { messages.scrollTop = messages.scrollHeight; };
+    let conversationId = null;
+    let attachment = null; // { file, key }: key dùng lại khi retry cùng tệp
+    const setAttachedFile = (file) => {
+      attachment = file ? { file, key: crypto.randomUUID() } : null;
+      fileName.textContent = file ? file.name : '';
+      fileChip.hidden = !file;
+    };
+    const showFileError = (message) => {
+      fileError.textContent = message || '';
+      fileError.hidden = !message;
+    };
+    attach.addEventListener('click', () => fileInput.click());
+    fileRemove.addEventListener('click', () => {
+      pendingUpload?.abort();
+      setAttachedFile(null);
+      input.focus();
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      fileInput.value = '';
+      if (!file) return;
+      const extension = `.${file.name.split('.').pop().toLowerCase()}`;
+      if (!ACCEPTED_FILE_TYPES.split(',').includes(extension)) {
+        showFileError('Chỉ hỗ trợ tệp PDF, JPG, PNG hoặc DOCX.');
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        showFileError('Tệp quá lớn, vui lòng chọn tệp tối đa 9MB.');
+        return;
+      }
+      showFileError('');
+      setAttachedFile(file);
+      input.focus();
+    });
+
     const sendQuestion = async (rawQuestion) => {
-      const question = rawQuestion.trim();
+      const current = attachment;
+      const file = current?.file;
+      const question = rawQuestion.trim() || (file ? 'Vui lòng xem tệp đính kèm.' : '');
       if (!question || send.disabled) return;
 
       suggestions.remove();
-      appendBubble(messages, question, 'user');
-      const replyTurn = appendBubble(messages, 'Đang tra cứu, vui lòng chờ trong giây lát…', 'assistant');
+      appendBubble(messages, file ? `${question}\n📎 ${file.name}` : question, 'user');
+      showFileError('');
+      const searchingText = 'Đang tra cứu, vui lòng chờ trong giây lát…';
+      const replyTurn = appendBubble(messages, file ? 'Đang tải tệp lên…' : searchingText, 'assistant');
       const replyBubble = replyTurn.querySelector('.admin-ai-bubble');
       replyBubble.classList.add('admin-ai-status');
       input.value = '';
       send.disabled = true;
+      attach.disabled = true;
+      pendingUpload = file ? new AbortController() : null;
       scrollMessages();
 
       try {
-        const configResponse = await fetch('/api/app-config');
-        if (!configResponse.ok) throw new Error('Không thể tải cấu hình kết nối.');
-        const { apiBaseUrl = 'http://localhost:8080' } = await configResponse.json();
-        const response = await fetch(`${apiBaseUrl.replace(/\/+$/, '')}/api/agent/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: question }),
-          signal: AbortSignal.timeout(60000)
-        });
-        const result = await response.json().catch(() => null);
-        if (!response.ok || result?.error || !result?.data) {
-          const serverError = new Error(result?.error?.message || 'Trợ lý chưa thể xử lý yêu cầu này.');
-          serverError.fromServer = true;
-          throw serverError;
+        let documentIds;
+        if (file) {
+          const documentId = await uploadAgentDocument(file, {
+            signal: pendingUpload.signal,
+            idempotencyKey: current.key,
+            onStatus: (stage) => {
+              replyBubble.textContent = stage === 'uploading' ? 'Đang tải tệp lên…' : 'Đang đọc nội dung tài liệu…';
+            }
+          });
+          documentIds = [documentId];
+          pendingUpload = null;
+          fileRemove.disabled = true; // đã tải xong, chỉ còn chờ câu trả lời
+          replyBubble.textContent = searchingText;
         }
-
-        const procedure = result.data.procedure;
+        if (!conversationId) {
+          const convo = await createAgentConversation();
+          conversationId = convo.id;
+        }
+        const result = await sendAgentMessage(conversationId, question, documentIds);
         replyBubble.classList.remove('admin-ai-status');
-        renderAnswer(replyBubble, procedure
-          ? (result.data.answer || 'Đã tìm thấy thủ tục phù hợp.')
-          : (result.data.answer || 'Chưa tìm thấy thủ tục phù hợp.'));
-
-        if (procedure) {
-          const resultCard = document.createElement('div');
-          resultCard.className = 'admin-ai-result';
-          const label = document.createElement('strong');
-          label.textContent = procedure.name || 'Thủ tục phù hợp';
-          resultCard.append(label);
-          if (procedure.code) {
-            const code = document.createElement('code');
-            code.textContent = `Mã thủ tục: ${procedure.code}`;
-            resultCard.append(code);
-          }
-          replyTurn.append(resultCard);
-        }
+        renderAnswer(replyBubble, result.assistant_message.content);
+        if (file) setAttachedFile(null); // tài liệu chỉ dùng cho lượt này
       } catch (error) {
         replyBubble.classList.remove('admin-ai-status');
-        replyBubble.textContent = error?.name === 'TimeoutError'
-          ? 'Yêu cầu mất nhiều thời gian hơn dự kiến. Vui lòng thử lại.'
-          : (error?.fromServer ? error.message : 'Hiện chưa kết nối được dịch vụ tra cứu. Vui lòng thử lại sau.');
+        if (error?.name === 'AbortError') {
+          replyBubble.textContent = 'Đã hủy gửi tài liệu.';
+        } else {
+          const message = error?.backendMessage || 'Hiện chưa kết nối được dịch vụ tra cứu. Vui lòng thử lại sau.';
+          const documentIssue = error?.code?.startsWith('document/');
+          replyBubble.textContent = file && !documentIssue
+            ? `${message}\nBạn có thể gửi lại hoặc bỏ tệp đính kèm.`
+            : message;
+          if (file) {
+            if (error?.code === 'document/failed') setAttachedFile(null);
+            else if (error?.code === 'DOCUMENT_NOT_FOUND') current.key = crypto.randomUUID();
+            if (!input.value && rawQuestion.trim()) input.value = rawQuestion;
+          }
+        }
       } finally {
+        pendingUpload = null;
+        fileRemove.disabled = false;
         send.disabled = false;
+        attach.disabled = false;
         input.focus();
         scrollMessages();
       }
@@ -367,9 +437,8 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountAdminAssistant, { once: true });
-  } else {
-    mountAdminAssistant();
-  }
-})();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mountAdminAssistant, { once: true });
+} else {
+  mountAdminAssistant();
+}

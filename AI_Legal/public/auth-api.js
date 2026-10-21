@@ -13,7 +13,7 @@ export const getApiBaseUrl = () => {
 };
 
 // body: object → gửi JSON; FormData → gửi multipart (trình duyệt tự đặt Content-Type).
-const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
+const request = async (path, { method = 'GET', body, headers = {}, signal } = {}) => {
   const baseUrl = await getApiBaseUrl();
   const isJson = body !== undefined && !(body instanceof FormData);
   try {
@@ -21,9 +21,11 @@ const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
       method,
       credentials: 'include',
       headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
-      body: isJson ? JSON.stringify(body) : body
+      body: isJson ? JSON.stringify(body) : body,
+      signal
     });
-  } catch {
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error; // người dùng chủ động huỷ, không phải lỗi mạng
     throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
   }
 };
@@ -382,6 +384,68 @@ export const submitApplication = async ({ procedureCode, status = 'submitted', f
 
 // File người dùng đã upload → { items, pagination }
 export const fetchMyDocuments = () => getData('/api/documents/');
+
+// Agent chat
+export const createAgentConversation = async () =>
+  readData(await authRequest('/api/agent/conversations', { method: 'POST' }));
+
+// documentIds: tối đa 3 id tài liệu đã xử lý xong (uploadAgentDocument). Backend không nhớ tài liệu giữa các lượt.
+export const sendAgentMessage = async (conversationId, content, documentIds) =>
+  readData(await authRequest(`/api/agent/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    body: documentIds?.length ? { content, document_ids: documentIds } : { content },
+  }));
+
+const DOCUMENT_POLL_INTERVAL_MS = 2500;
+const DOCUMENT_POLL_TIMEOUT_MS = 3 * 60 * 1000;
+
+const documentError = (code, message) => Object.assign(new Error(message), { code, backendMessage: message });
+
+const abortError = () => Object.assign(new Error('aborted'), { name: 'AbortError' });
+
+const waitFor = (ms, signal) => new Promise((resolve, reject) => {
+  if (signal?.aborted) return reject(abortError());
+  const timer = setTimeout(() => {
+    signal?.removeEventListener('abort', onAbort);
+    resolve();
+  }, ms);
+  const onAbort = () => {
+    clearTimeout(timer);
+    reject(abortError());
+  };
+  signal?.addEventListener('abort', onAbort, { once: true });
+});
+
+// Tải tệp cho Agent: upload (202) rồi poll /processing tới khi trích chữ xong → trả document_id.
+// idempotencyKey: dùng lại cùng key khi retry cùng một tệp. onStatus('uploading' | 'processing').
+// Huỷ bằng signal → ném AbortError. Quá 3 phút chưa xong → ném lỗi code 'document/timeout'.
+export const uploadAgentDocument = async (file, { signal, idempotencyKey = crypto.randomUUID(), onStatus } = {}) => {
+  onStatus?.('uploading');
+  const form = new FormData();
+  form.append('file', file);
+  form.append('purpose', 'supporting_document');
+  form.append('document_type', 'other');
+  const { document_id: documentId } = await readData(await authRequest('/api/documents/', {
+    method: 'POST',
+    body: form,
+    headers: { 'Idempotency-Key': idempotencyKey },
+    signal
+  }));
+
+  onStatus?.('processing');
+  const deadline = Date.now() + DOCUMENT_POLL_TIMEOUT_MS;
+  while (true) {
+    const { status } = await readData(await authRequest(`/api/documents/${documentId}/processing`, { signal }));
+    if (status === 'completed') return documentId;
+    if (status === 'failed') {
+      throw documentError('document/failed', 'Không đọc được tài liệu, vui lòng thử tệp khác.');
+    }
+    if (Date.now() + DOCUMENT_POLL_INTERVAL_MS > deadline) {
+      throw documentError('document/timeout', 'Tài liệu đang xử lý quá lâu, thử lại sau.');
+    }
+    await waitFor(DOCUMENT_POLL_INTERVAL_MS, signal);
+  }
+};
 
 export const STATUS_LABELS = {
   draft: 'Bản nháp',
