@@ -12,6 +12,9 @@ export const getApiBaseUrl = () => {
   return configPromise;
 };
 
+// Gọi ngầm trước API base URL để sẵn sàng ngay khi người dùng thao tác
+getApiBaseUrl().catch(() => {});
+
 // body: object → gửi JSON; FormData → gửi multipart (trình duyệt tự đặt Content-Type).
 const request = async (path, { method = 'GET', body, headers = {}, signal } = {}) => {
   const baseUrl = await getApiBaseUrl();
@@ -153,24 +156,34 @@ export const requireLogin = async (allowedRoles) => {
   return user;
 };
 
-// Đăng xuất: thu hồi refresh token + xoá cookie ở Backend, đăng xuất Firebase, về /login?loggedOut=1.
+// Đăng xuất: Xoá session ngay lập tức, gửi lệnh thu hồi token lên Backend (keepalive), về /login?loggedOut=1.
 export const logout = async () => {
-  try {
-    await authRequest('/api/users/auth/logout', { method: 'POST' });
-  } catch {
-    // Backend lỗi vẫn cho người dùng thoát ra
-  }
-  try {
-    const [{ getApps, initializeApp }, { getAuth, signOut }] = await Promise.all([
-      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),
-      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js')
-    ]);
-    const config = await fetch('/api/firebase-config').then((r) => (r.ok ? r.json() : null));
-    if (config) await signOut(getAuth(getApps()[0] || initializeApp(config)));
-  } catch {
-    // Không tải được Firebase thì bỏ qua, phiên của hệ thống đã bị thu hồi ở trên
-  }
+  // 1. Dọn dẹp session phía Client ngay lập tức
   clearSession();
+
+  // 2. Bắn request hủy phiên lên Backend (sử dụng keepalive để trình duyệt đảm bảo hoàn tất kể cả khi chuyển trang)
+  getApiBaseUrl()
+    .then((baseUrl) => {
+      fetch(`${baseUrl}/api/users/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        keepalive: true
+      }).catch(() => {});
+    })
+    .catch(() => {});
+
+  // 3. Đăng xuất Firebase nếu trang có khởi tạo phiên Firebase
+  try {
+    if (window.firebase?.apps?.length) {
+      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js')
+        .then(({ getAuth, signOut }) => signOut(getAuth(window.firebase.apps[0])))
+        .catch(() => {});
+    }
+  } catch {
+    // Không làm gián đoạn điều hướng người dùng
+  }
+
+  // 4. Chuyển hướng ngay lập tức về trang đăng nhập bên ngoài (không để người dùng chờ)
   window.location.replace('/login?loggedOut=1');
 };
 
@@ -349,8 +362,30 @@ const withQuery = (path, params = {}) => {
 const getData = async (path) => readData(await authRequest(path));
 
 // Hồ sơ của người đang đăng nhập → { items, pagination }
-export const fetchMyApplications = ({ domain, status, page = 1, pageSize = 10 } = {}) =>
-  getData(withQuery('/api/procedures/applications/me', { domain, status, page, page_size: pageSize }));
+export const fetchMyApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
+  getData(withQuery('/api/procedures/applications/me', { domain, status, q, page, page_size: pageSize }));
+
+// Tra cứu chi tiết tờ đơn hồ sơ bằng mã (DD-001-XXXXXXXX), tiền tố ID, hoặc UUID
+export const lookupApplication = async (code) =>
+  readData(await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}`));
+
+// Tải file PDF tờ đơn chính thức từ Backend (A4 chuẩn, không chứa URL hay thành phần giao diện web)
+export const exportApplicationPdf = async (code) => {
+  const response = await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}/export-pdf`);
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    throw apiError(response, payload);
+  }
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `To-don-${code}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+};
 
 // Admin: hồ sơ của mọi người; q tìm theo tên, CCCD hoặc mã thủ tục → { items, pagination }
 export const fetchAllApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
