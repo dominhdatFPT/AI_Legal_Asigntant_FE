@@ -1,0 +1,44 @@
+<!-- Navbar chung cho mọi trang người dùng: index.js chèn vào chỗ đánh dấu user-header của từng trang và đánh dấu mục đang chọn. -->
+<header class="unav">
+  <div class="unav-top">
+    <div class="unav-inner">
+      <a class="unav-brand" href="/user-dashboard">
+        <img src="/images/national-service-logo.png" width="40" height="40" alt="Logo Cổng Dịch vụ công Quốc gia">
+        <span class="unav-title"><strong>Cổng Dịch vụ công Quốc gia</strong><small>Hệ thống thông tin giải quyết thủ tục hành chính</small></span>
+      </a>
+      <div class="unav-actions">
+        <a class="unav-account" href="/account" title="Xem thông tin tài khoản" data-account-link>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.6-4.6 1.4 1.4-6 6Z"/></svg>
+          <span class="unav-account-text"><span data-user-field="name">Người dùng</span><small data-user-field="role"></small></span>
+        </a>
+        <button class="unav-logout" type="button" data-logout title="Đăng xuất">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M10 17v-2h6V9h-6V7h8v10h-8Zm-2-1.5L3.5 12 8 8.5V11h6v2H8v2.5Z" transform="matrix(-1 0 0 1 24 0)"/></svg>
+          <span>Đăng xuất</span>
+        </button>
+        <a class="unav-login" href="/login" hidden>Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+  <div class="unav-bar">
+    <nav class="unav-inner unav-links" aria-label="Điều hướng chính" data-active-classes="is-active">
+      <a class="unav-link" data-path="tong-quan-ho-so" href="/user-dashboard">Tổng quan hồ sơ</a>
+      <a class="unav-link" data-path="nop-ho-so-truc-tuyen" href="/application-submission">Tạo hồ sơ</a>
+      <a class="unav-link" data-path="document-storages" href="/document-storages">Kho mẫu đơn tham khảo</a>
+      <a class="unav-link" data-path="location-search" href="/location-search">Tìm nơi nộp</a>
+      <a class="unav-link" data-path="dang-ky-luat-su" href="/lawyer-registration">Đăng ký luật sư</a>
+      <a class="unav-link" data-path="account" href="/account">Tài khoản</a>
+    </nav>
+  </div>
+  <div class="unav-progress" aria-hidden="true"></div>
+</header>
+<!-- Hiện khi trang chưa sẵn sàng (còn auth-pending) quá 0,2 giây, thay cho màn hình trắng. CSS trong user-header.css. -->
+<div class="unav-loader" role="status" aria-live="polite">
+  <span class="unav-spin" aria-hidden="true"></span>
+  <span class="unav-loader-text">Đang tải…</span>
+  <span class="unav-loader-slow">Trang tải lâu hơn bình thường. <a href="">Tải lại trang</a></span>
+</div>
+<script type="module" src="/user-header.js"></script>
+<!-- Tải sẵn trang khi rê chuột/chạm vào mục menu (Chrome/Edge). Chỉ link điều hướng, không có nút đăng xuất. -->
+<script type="speculationrules">
+{"prerender":[{"where":{"and":[{"selector_matches":".unav-link, .unav-brand, .unav-account"},{"not":{"selector_matches":".is-active"}}]},"eagerness":"moderate"}]}
+</script>

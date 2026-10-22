@@ -7,6 +7,10 @@
 <title>Đăng nhập | AI Legal Assistant</title>
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<!-- Ket noi truoc toi Firebase & Google Auth giup mo popup dang nhap tuc thi -->
+<link href="https://ai-legal-assistant-7875a.firebaseapp.com" rel="preconnect">
+<link href="https://accounts.google.com" rel="preconnect">
+<link href="https://apis.google.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
 <!-- Material Symbols: chỉ tải các icon trang này dùng. Thêm icon mới thì thêm tên vào icon_names (giữ thứ tự a→z), nếu không icon sẽ hiện thành chữ. -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=close,error,home,login,pause,person_add,play_arrow,verified_user,visibility,visibility_off&amp;display=block" rel="stylesheet">
@@ -154,8 +158,8 @@
 
       <form class="space-y-5 short:!space-y-4" id="login-form" novalidate>
         <div class="relative">
-              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition" id="gov-identifier" type="text" autocapitalize="none" autocomplete="username" placeholder="ten@gmail.com hoặc admin2026" required spellcheck="false">
-              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="gov-identifier">Email hoặc tên đăng nhập <span class="text-[#F2B544]">*</span></label>
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition" id="gov-identifier" type="text" autocapitalize="none" autocomplete="username" placeholder="ten@gmail.com" required spellcheck="false">
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="gov-identifier">Email<span class="text-[#F2B544]">*</span></label>
             </div>
         <div class="relative">
               <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition pr-12" id="gov-password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required>
@@ -231,6 +235,13 @@
   if (params.get('loggedOut') === '1') document.getElementById('banner-logged-out').classList.remove('hidden');
   if (params.get('verified') === '1') document.getElementById('email-verified-notice').classList.remove('hidden');
   if (['passwordReset', 'loggedOut', 'verified'].some((key) => params.has(key))) window.history.replaceState({}, '', window.location.pathname);
+
+  // Khởi tạo sớm Firebase Auth & cache Base API URL ngay khi trang tải xong
+  // Giúp người dùng khi click nút không phải chờ tải cấu hình và bắt tay mạng
+  setTimeout(() => {
+    getFirebaseAuth().catch(() => {});
+    getApiBaseUrl().catch(() => {});
+  }, 100);
 
   let authPromise;
   const getFirebaseAuth = () => {
@@ -316,7 +327,9 @@
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
       const credential = await signInWithPopup(auth, provider);
-      finishLogin(await loginWithFirebaseToken(await credential.user.getIdToken()));
+      googleLabel.textContent = 'Đang xác thực hệ thống...';
+      const idToken = await credential.user.getIdToken();
+      finishLogin(await loginWithFirebaseToken(idToken));
     } catch (error) {
       googleMessage.textContent = describeLoginError(error);
       googleButton.disabled = false;

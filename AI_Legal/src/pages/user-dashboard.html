@@ -32,17 +32,12 @@
 body.bg-background{background:transparent;isolation:isolate}
 body.bg-background>#user-dashboard-main{position:relative;z-index:1;background:transparent}
 body.bg-background>#user-dashboard-main>div>section:first-child{background:transparent}
-body.bg-background>header>div{background:rgba(65,0,2,.18);backdrop-filter:blur(12px)}
-body.bg-background>header>div>div:first-child{background:linear-gradient(90deg,rgba(138,21,56,.28),rgba(185,28,28,.24),rgba(147,0,11,.28))}
-body.bg-background>header>div>div:nth-child(2){background:rgba(250,242,238,.2);backdrop-filter:blur(12px)}
 body.bg-background>footer{position:relative;z-index:1;background:rgba(250,242,238,.22);backdrop-filter:blur(12px)}
-body.bg-background>header nav a:not([aria-current="page"]){color:#fff}
-body.bg-background>header nav a:not([aria-current="page"]):hover{background:rgba(255,255,255,.18);color:#fff}
 body.bg-background>footer,body.bg-background>footer .text-on-surface,body.bg-background>footer .text-on-surface-variant{color:#fff}
 body.bg-background>footer .bg-surface-container{background:rgba(35,15,15,.38)}
 body.bg-background>footer a:hover{color:#ffd9dd}
 body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
-</style><link rel="preconnect" href="https://cdn.tailwindcss.com"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-fixed": "#ffd9dd", "surface-bright": "#fff8f5", "tertiary-fixed-dim": "#ffb2bd", "secondary-fixed": "#ffdcc3", "surface-container-lowest": "#ffffff", "surface-variant": "#e9e1dd", "on-background": "#1e1b19", "secondary-fixed-dim": "#ffb77d", "on-tertiary-container": "#ffcbd2", "background": "#fff8f5", "primary-fixed": "#ffdad6", "on-primary-fixed": "#410002", "primary-container": "#b91c1c", "surface-dim": "#e0d8d5", "on-secondary-container": "#663500", "on-primary-fixed-variant": "#93000b", "surface-tint": "#b91c1c", "inverse-surface": "#33302d", "primary": "#93000b", "on-primary-container": "#ffcdc7", "surface-container-low": "#faf2ee", "secondary-container": "#fe932c", "on-secondary": "#ffffff", "primary-fixed-dim": "#ffb4ab", "on-tertiary-fixed": "#400014", "secondary": "#904d00", "on-secondary-fixed": "#2f1500", "error": "#ba1a1a", "outline": "#8f6f6c", "on-primary": "#ffffff", "on-secondary-fixed-variant": "#6e3900", "surface-container-high": "#eee7e3", "on-error": "#ffffff", "inverse-on-surface": "#f7efeb", "on-surface-variant": "#5b403d", "on-error-container": "#93000a", "inverse-primary": "#ffb4ab", "error-container": "#ffdad6", "on-surface": "#1e1b19", "tertiary": "#8a1538", "on-tertiary-fixed-variant": "#8a1538", "on-tertiary": "#ffffff", "outline-variant": "#e4beb9", "surface": "#fff8f5", "surface-container": "#f4ece8", "surface-container-highest": "#e9e1dd", "tertiary-container": "#aa304f" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-sm": "0.5rem", "gutter-mobile": "1rem", "space-lg": "1.5rem", "margin": "2rem", "gutter": "1.5rem", "space-xs": "0.25rem", "space-md": "1rem", "space-xl": "2.5rem", "margin-mobile": "1rem" }, "fontFamily": { "body-sm": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "title-md": ["Be Vietnam Pro"], "title-lg": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-lg-mobile": ["Be Vietnam Pro"], "title-sm": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"] }, "fontSize": { "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "display-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }], "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.005em", "fontWeight": "600" }] } } } };</script><style id="auth-pending">body{visibility:hidden!important}</style>
+</style><link rel="stylesheet" href="/tailwind-user.css"><style id="auth-pending">body{visibility:hidden!important}</style>
 <!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
 <script type="speculationrules">
   {
@@ -55,7 +50,7 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
   }
 </script>
   <link rel="stylesheet" href="/admin-ai-chat.css">
-</head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50"><div class="h-28 bg-primary shadow-[0_2px_12px_rgba(65,0,2,0.25)]"><div class="h-16 bg-gradient-to-r from-tertiary via-primary-container to-primary"><div class="max-w-7xl mx-auto h-full px-margin flex items-center justify-between text-on-primary"><div class="flex items-center gap-space-md"><img alt="Logo Cổng Dịch vụ công Quốc gia" class="w-10 h-10 rounded-full object-contain ring-2 ring-on-primary/30 bg-surface-container-lowest p-0.5" src="/images/national-service-logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md tracking-wide uppercase leading-tight">Cổng Dịch vụ công Quốc gia</span><span class="font-label-sm text-label-sm text-on-primary-container opacity-90 uppercase tracking-wider">Hệ thống thông tin giải quyết thủ tục hành chính</span></div></div><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm bg-tertiary-container/40 hover:bg-tertiary-container/70 px-space-md py-space-xs rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-on-primary" href="/account" title="Xem thông tin tài khoản"><span class="material-symbols-outlined text-secondary-container" aria-hidden="true">verified_user</span><div class="flex flex-col text-left"><span class="font-title-sm text-title-sm text-on-primary leading-tight" data-user-field="name">Người dùng</span><span class="font-label-sm text-label-sm text-on-primary-container leading-none" data-user-field="role"></span></div></a><div class="flex items-center gap-space-md"><button class="flex items-center justify-center p-space-xs rounded text-on-primary hover:bg-surface-container-highest/20 hover:text-on-primary transition-colors" title="Thông báo" type="button"><span class="material-symbols-outlined">notifications</span></button><button class="flex items-center justify-center p-space-xs rounded text-on-primary hover:bg-surface-container-highest/20 hover:text-on-primary transition-colors" title="Trợ giúp &amp; Hướng dẫn" type="button"><span class="material-symbols-outlined">help</span></button><button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-lowest/10 text-on-primary hover:bg-surface-container-lowest/20 transition-colors font-label-md text-label-md" type="button" data-logout><span class="material-symbols-outlined text-title-sm">logout</span><span>Đăng xuất</span></button></div></div></div></div><div class="h-12 bg-surface-container-low shadow-[0_2px_6px_rgba(28,25,23,0.06)]"><div class="max-w-7xl mx-auto h-full px-margin flex items-center justify-between"><nav class="flex items-center gap-space-xs h-full overflow-x-auto whitespace-nowrap" data-active-classes="bg-primary-container text-on-primary text-white font-title-sm rounded-lg shadow-[0_2px_8px_rgba(185,28,28,0.35)]"><a class="h-9 px-space-md flex items-center bg-primary-container text-on-primary font-title-sm rounded-lg shadow-[0_2px_8px_rgba(185,28,28,0.35)] transition-colors" data-path="tong-quan-ho-so" href="/user-dashboard" aria-current="page">Tổng quan hồ sơ</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="nop-ho-so-truc-tuyen" href="/applicationSubmission">Tạo hồ sơ</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="kho-mau-don-tham-khao" href="/kho-mau-don-tham-khao">Kho mẫu đơn tham khảo</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="dang-ky-luat-su" href="/lawyer-registration">Đăng ký luật sư</a><a class="h-9 px-space-md flex items-center text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded font-label-lg text-label-lg transition-colors" data-path="account" href="/account">Tài khoản</a></nav></div></div></div></header><main id="user-dashboard-main" class="w-full pt-28 bg-surface min-h-[calc(100vh-16rem)]"><div class="flex flex-col w-full">
+</head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><!-- user-header --><main id="user-dashboard-main" class="w-full bg-surface min-h-[calc(100vh-16rem)]"><div class="flex flex-col w-full">
 <!-- BANNER CHÀO MỪNG & TRA CỨU HÀNH CHÍNH -->
 <section class="w-full bg-gradient-to-r from-tertiary via-primary-container to-primary text-on-primary py-space-xl px-margin relative overflow-hidden shadow-md">
 <div class="hero-carousel" id="dashboard-hero-carousel" role="group" aria-label="Ảnh minh họa lĩnh vực đất đai và kinh doanh">
@@ -97,14 +92,14 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 <div class="bg-surface-container-lowest text-on-surface rounded-xl p-space-md shadow-xl flex flex-col md:flex-row gap-space-md items-center justify-between">
 <div class="flex-1 w-full flex items-center bg-surface-container-low rounded-lg px-space-md py-space-xs focus-within:bg-surface-container-lowest transition-colors">
 <span class="material-symbols-outlined text-outline text-headline-sm mr-space-sm">search</span>
-<input class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-space-xs" placeholder="Nhập mã số hồ sơ (ví dụ: H07.24.0819-0129) hoặc tên thủ tục hành chính cần nộp..." type="text"/>
-<button class="bg-primary-container hover:bg-primary text-on-primary font-title-sm text-title-sm px-space-lg py-space-sm rounded-lg transition-all shadow-[0_4px_14px_rgba(185,28,28,0.35)] flex items-center gap-space-xs shrink-0" type="button">
+<input id="dashboard-search-input" class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-space-xs" placeholder="Nhập mã số hồ sơ (ví dụ: DD-001-811F7E21) hoặc tên thủ tục..." type="text"/>
+<button id="dashboard-search-btn" class="bg-primary-container hover:bg-primary text-on-primary font-title-sm text-title-sm px-space-lg py-space-sm rounded-lg transition-all shadow-[0_4px_14px_rgba(185,28,28,0.35)] flex items-center gap-space-xs shrink-0" type="button">
 <span>Tra cứu</span>
 <span class="material-symbols-outlined text-title-sm">arrow_forward</span>
 </button>
 </div>
 <div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-<a class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all flex items-center justify-center gap-space-xs font-title-sm text-title-sm shadow-[0_4px_14px_rgba(185,28,28,0.35)] whitespace-nowrap" href="/applicationSubmission">
+<a class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all flex items-center justify-center gap-space-xs font-title-sm text-title-sm shadow-[0_4px_14px_rgba(185,28,28,0.35)] whitespace-nowrap" href="/application-submission">
 <span class="material-symbols-outlined text-title-md">add_circle</span>
 <span>Nộp hồ sơ mới</span>
 </a>
@@ -311,11 +306,11 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
   // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
   // Trang tạo hồ sơ: chưa cập nhật thông tin cá nhân → chuyển sang /detail-information.
   import { protectPage } from '/auth-api.js';
-  await protectPage(['citizen', 'lawyer'], { requireProfile: location.pathname === '/applicationSubmission' });
+  await protectPage(['citizen', 'lawyer'], { requireProfile: location.pathname === '/application-submission' });
   // Dữ liệu hồ sơ, tài liệu, thủ tục chỉ tải sau khi đã xác thực.
   await import('/user-dashboard-data.js');
 </script>
-<script src="/user-dashboard-navigation.js" defer></script><script src="/admin-ai-chat.js" defer></script>
+<script src="/user-dashboard-navigation.js" defer></script><script type="module" src="/admin-ai-chat.js"></script>
 <script>
   (() => {
     const carousel = document.getElementById('dashboard-hero-carousel');
@@ -388,4 +383,112 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 
     targets.forEach(target => observer.observe(target));
   })();
-</script></body></html>
+</script>
+
+<!-- MODAL XEM CHI TIẾT TỜ ĐƠN HỒ SƠ CHÍNH THỨC -->
+<div id="application-dossier-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
+  <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-slate-200">
+    
+    <!-- Modal Header (no-print) -->
+    <div class="no-print bg-slate-900 text-white px-5 sm:px-6 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+      <div class="flex items-center gap-2.5">
+        <span class="material-symbols-outlined text-red-500">description</span>
+        <span class="font-bold text-xs sm:text-sm tracking-wide uppercase">Cổng Dịch Vụ Công Quốc Gia • Xem Chi Tiết Tờ Đơn</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-print-dossier" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition shadow-sm" title="Tải file PDF tờ đơn chính thức về máy tính">
+          <span class="material-symbols-outlined text-sm">download</span>
+          <span>Tải file PDF</span>
+        </button>
+        <button id="btn-close-dossier-modal" type="button" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-red-600 text-white flex items-center justify-center transition" title="Đóng cửa sổ">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Content: Printable Sheet Body -->
+    <div id="dossier-modal-content" class="p-5 sm:p-10 overflow-y-auto bg-white text-slate-800 font-serif leading-relaxed text-sm">
+      <!-- Loading indicator -->
+      <div id="dossier-loading" class="py-16 text-center text-slate-500 font-sans">
+        <div class="inline-block animate-spin w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full mb-3"></div>
+        <p class="font-medium text-sm">Đang nạp dữ liệu tờ đơn từ hệ thống...</p>
+      </div>
+
+      <!-- Error box -->
+      <div id="dossier-error" class="hidden py-12 text-center text-red-600 font-sans">
+        <span class="material-symbols-outlined text-4xl mb-2">error</span>
+        <p id="dossier-error-text" class="font-semibold text-base">Không tìm thấy thông tin hồ sơ.</p>
+      </div>
+
+      <!-- Printable Sheet Body -->
+      <div id="dossier-sheet" class="hidden"></div>
+    </div>
+
+    <!-- Modal Footer (no-print) -->
+    <div class="no-print bg-slate-50 px-6 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-sans shrink-0">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
+        <span>Hồ sơ đã được mã hóa và xác thực chữ ký điện tử công dân.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-close-dossier-modal-bottom" type="button" class="px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition">Đóng</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+    background: #ffffff !important;
+  }
+  body > *:not(#application-dossier-modal) {
+    display: none !important;
+  }
+  #application-dossier-modal {
+    position: static !important;
+    display: block !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    inset: auto !important;
+  }
+  #application-dossier-modal > div {
+    display: block !important;
+    position: static !important;
+    max-height: none !important;
+    height: auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+  #application-dossier-modal .no-print {
+    display: none !important;
+  }
+  #dossier-modal-content {
+    overflow: visible !important;
+    max-height: none !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  #dossier-sheet > div,
+  #dossier-sheet .mb-5 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+</style>
+</body></html>

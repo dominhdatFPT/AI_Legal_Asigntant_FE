@@ -149,6 +149,6 @@ document.addEventListener('click', (event) => {
   }
 });
 
-if (window.location.pathname === '/applicationSubmission') {
+if (window.location.pathname === '/application-submission') {
   showApplicationView();
 }

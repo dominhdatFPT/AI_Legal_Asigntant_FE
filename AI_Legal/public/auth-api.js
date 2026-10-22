@@ -2,18 +2,8 @@
 const LEGACY_SESSION_KEY = 'ai_legal_session'; // bản cũ lưu token trong localStorage
 let configPromise;
 
-// Backend trên Render gói free ngủ sau 15 phút, và request đi qua Gateway KHÔNG đánh thức được nó.
-// Gọi thẳng URL của Backend (no-cors, không đọc kết quả) để Render khởi động lại service.
-const BACKEND_WAKE_URLS = ['https://ai-legal-asigntant-be.onrender.com/api/v1/users/health'];
-const wakeBackend = () => {
-  BACKEND_WAKE_URLS.forEach((url) => {
-    fetch(url, { mode: 'no-cors', cache: 'no-store' }).catch(() => {});
-  });
-};
-
 export const getApiBaseUrl = () => {
   if (!configPromise) {
-    wakeBackend();
     configPromise = fetch('/api/app-config')
       .then((response) => (response.ok ? response.json() : {}))
       .then((config) => (config.apiBaseUrl || 'http://localhost:8080').replace(/\/+$/, ''))
@@ -22,29 +12,24 @@ export const getApiBaseUrl = () => {
   return configPromise;
 };
 
+// Gọi ngầm trước API base URL để sẵn sàng ngay khi người dùng thao tác
+getApiBaseUrl().catch(() => {});
+
 // body: object → gửi JSON; FormData → gửi multipart (trình duyệt tự đặt Content-Type).
-const request = async (path, { method = 'GET', body, headers = {} } = {}) => {
+const request = async (path, { method = 'GET', body, headers = {}, signal } = {}) => {
   const baseUrl = await getApiBaseUrl();
   const isJson = body !== undefined && !(body instanceof FormData);
-  // Render gói free ngủ sau 15 phút: lúc đang thức dậy, Render trả 502/503/504 dạng HTML (không phải JSON của Backend).
-  // Gặp trường hợp đó thì chờ rồi gửi lại, tối đa khoảng 90 giây.
-  for (let attempt = 0; ; attempt += 1) {
-    let response;
-    try {
-      response = await fetch(`${baseUrl}${path}`, {
-        method,
-        credentials: 'include',
-        headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
-        body: isJson ? JSON.stringify(body) : body
-      });
-    } catch {
-      throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
-    }
-    const waking = [502, 503, 504].includes(response.status)
-      && !(response.headers.get('content-type') || '').includes('application/json');
-    if (!waking || attempt >= 9) return response;
-    wakeBackend();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+  try {
+    return await fetch(`${baseUrl}${path}`, {
+      method,
+      credentials: 'include',
+      headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
+      body: isJson ? JSON.stringify(body) : body,
+      signal
+    });
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error; // người dùng chủ động huỷ, không phải lỗi mạng
+    throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
   }
 };
 
@@ -79,20 +64,43 @@ const authRequest = async (path, options) => {
 export const loginWithPassword = (username, password) =>
   postJson('/api/users/auth/login', { username, password });
 
-// Tự đăng ký tài khoản local ở Backend: { email, phone, password, confirm_password }.
-export const registerAccount = (body) => postJson('/api/users/auth/register', body);
-
 export const loginWithFirebaseToken = (idToken) =>
   postJson('/api/users/auth/firebase', { id_token: idToken });
 
 // Backend đã set cookie khi đăng nhập; ở FE chỉ cần giữ thông tin user để chuyển trang.
 // Xoá phiên kiểu cũ (token trong localStorage) nếu còn sót lại.
 export const saveSession = (data) => {
-  localStorage.removeItem(LEGACY_SESSION_KEY);
+  clearSession(); // đăng nhập mới: bỏ thông tin hiển thị của phiên trước
   return { user: data.user };
 };
 
-export const clearSession = () => localStorage.removeItem(LEGACY_SESSION_KEY);
+// Nhớ tạm thông tin hiển thị của user trong tab (không có token) để chuyển trang không phải chờ /api/users/me.
+// Tên khoá trùng với script chèn trong <head> ở index.js (USER_HEADER_HEAD).
+const USER_CACHE_KEY = 'ai_legal_user';
+const readCachedUser = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(USER_CACHE_KEY));
+  } catch {
+    return null;
+  }
+};
+const cacheUser = (user) => {
+  try {
+    const { id, role, full_name, username, email } = user;
+    sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify({ id, role, full_name, username, email }));
+  } catch {
+    // Trình duyệt chặn sessionStorage: vẫn chạy, chỉ là không nhanh hơn
+  }
+};
+
+export const clearSession = () => {
+  localStorage.removeItem(LEGACY_SESSION_KEY);
+  try {
+    sessionStorage.removeItem(USER_CACHE_KEY);
+  } catch {
+    // như trên
+  }
+};
 
 // Lấy user đang đăng nhập từ Backend. Chưa đăng nhập / phiên hết hạn → null.
 export const fetchCurrentUser = async () => {
@@ -164,9 +172,11 @@ export const requireLogin = async (allowedRoles) => {
     user = null; // Backend không chạy cũng coi như chưa đăng nhập
   }
   if (!user) {
+    clearSession();
     window.location.replace('/login');
     return new Promise(() => {}); // dừng code phía sau trong lúc chuyển trang
   }
+  cacheUser(user);
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     window.location.replace(homePathFor(user.role));
     return new Promise(() => {});
@@ -174,24 +184,34 @@ export const requireLogin = async (allowedRoles) => {
   return user;
 };
 
-// Đăng xuất: thu hồi refresh token + xoá cookie ở Backend, đăng xuất Firebase, về /login?loggedOut=1.
+// Đăng xuất: Xoá session ngay lập tức, gửi lệnh thu hồi token lên Backend (keepalive), về /login?loggedOut=1.
 export const logout = async () => {
-  try {
-    await authRequest('/api/users/auth/logout', { method: 'POST' });
-  } catch {
-    // Backend lỗi vẫn cho người dùng thoát ra
-  }
-  try {
-    const [{ getApps, initializeApp }, { getAuth, signOut }] = await Promise.all([
-      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),
-      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js')
-    ]);
-    const config = await fetch('/api/firebase-config').then((r) => (r.ok ? r.json() : null));
-    if (config) await signOut(getAuth(getApps()[0] || initializeApp(config)));
-  } catch {
-    // Không tải được Firebase thì bỏ qua, phiên của hệ thống đã bị thu hồi ở trên
-  }
+  // 1. Dọn dẹp session phía Client ngay lập tức
   clearSession();
+
+  // 2. Bắn request hủy phiên lên Backend (sử dụng keepalive để trình duyệt đảm bảo hoàn tất kể cả khi chuyển trang)
+  getApiBaseUrl()
+    .then((baseUrl) => {
+      fetch(`${baseUrl}/api/users/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        keepalive: true
+      }).catch(() => {});
+    })
+    .catch(() => {});
+
+  // 3. Đăng xuất Firebase nếu trang có khởi tạo phiên Firebase
+  try {
+    if (window.firebase?.apps?.length) {
+      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js')
+        .then(({ getAuth, signOut }) => signOut(getAuth(window.firebase.apps[0])))
+        .catch(() => {});
+    }
+  } catch {
+    // Không làm gián đoạn điều hướng người dùng
+  }
+
+  // 4. Chuyển hướng ngay lập tức về trang đăng nhập bên ngoài (không để người dùng chờ)
   window.location.replace('/login?loggedOut=1');
 };
 
@@ -318,19 +338,32 @@ export const displayName = (user) => user?.full_name || user?.username || user?.
 //   <element data-user-field="name|email|role">   → thay bằng dữ liệu thật
 //   <element data-logout>                         → bấm để mở hộp thoại xác nhận đăng xuất
 // requireProfile: trang tạo hồ sơ → bắt buộc đã cập nhật thông tin cá nhân.
+// Đã có user nhớ tạm (cùng tab) → hiện trang ngay, kiểm tra lại với Backend ở nền: hết phiên thì vẫn về /login.
 export const protectPage = async (allowedRoles, { requireProfile = false } = {}) => {
-  const user = await requireLogin(allowedRoles);
+  const cached = readCachedUser();
+  const verified = requireLogin(allowedRoles);
+  const useCache = cached && !requireProfile && (!allowedRoles || allowedRoles.includes(cached.role));
+  const user = useCache ? cached : await verified;
   if (requireProfile) await requireCitizenProfile();
-  const values = { name: displayName(user), email: user.email || '', role: roleLabel(user.role) };
-  document.querySelectorAll('[data-user-field]').forEach((element) => {
-    const value = values[element.dataset.userField];
-    if (value !== undefined) element.textContent = value;
-  });
+  const fillUserFields = (current) => {
+    const values = { name: displayName(current), email: current.email || '', role: roleLabel(current.role) };
+    document.querySelectorAll('[data-user-field]').forEach((element) => {
+      const value = values[element.dataset.userField];
+      if (value !== undefined) element.textContent = value;
+    });
+  };
+  fillUserFields(user);
+  let currentUser = user;
+  if (useCache) verified.then((fresh) => { currentUser = fresh; fillUserFields(fresh); });
   document.querySelectorAll('[data-logout]').forEach((element) => {
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      confirmLogout(user);
+      confirmLogout(currentUser);
     });
+  });
+  // Đăng xuất rồi bấm Back: trang cũ trong bộ nhớ trình duyệt không được hiện lại dữ liệu.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted && !readCachedUser()) window.location.replace('/login');
   });
   document.getElementById('auth-pending')?.remove();
   return user;
@@ -370,8 +403,30 @@ const withQuery = (path, params = {}) => {
 const getData = async (path) => readData(await authRequest(path));
 
 // Hồ sơ của người đang đăng nhập → { items, pagination }
-export const fetchMyApplications = ({ domain, status, page = 1, pageSize = 10 } = {}) =>
-  getData(withQuery('/api/procedures/applications/me', { domain, status, page, page_size: pageSize }));
+export const fetchMyApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
+  getData(withQuery('/api/procedures/applications/me', { domain, status, q, page, page_size: pageSize }));
+
+// Tra cứu chi tiết tờ đơn hồ sơ bằng mã (DD-001-XXXXXXXX), tiền tố ID, hoặc UUID
+export const lookupApplication = async (code) =>
+  readData(await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}`));
+
+// Tải file PDF tờ đơn chính thức từ Backend (A4 chuẩn, không chứa URL hay thành phần giao diện web)
+export const exportApplicationPdf = async (code) => {
+  const response = await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}/export-pdf`);
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    throw apiError(response, payload);
+  }
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `To-don-${code}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+};
 
 // Admin: hồ sơ của mọi người; q tìm theo tên, CCCD hoặc mã thủ tục → { items, pagination }
 export const fetchAllApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
@@ -405,6 +460,68 @@ export const submitApplication = async ({ procedureCode, status = 'submitted', f
 
 // File người dùng đã upload → { items, pagination }
 export const fetchMyDocuments = () => getData('/api/documents/');
+
+// Agent chat
+export const createAgentConversation = async () =>
+  readData(await authRequest('/api/agent/conversations', { method: 'POST' }));
+
+// documentIds: tối đa 3 id tài liệu đã xử lý xong (uploadAgentDocument). Backend không nhớ tài liệu giữa các lượt.
+export const sendAgentMessage = async (conversationId, content, documentIds) =>
+  readData(await authRequest(`/api/agent/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    body: documentIds?.length ? { content, document_ids: documentIds } : { content },
+  }));
+
+const DOCUMENT_POLL_INTERVAL_MS = 2500;
+const DOCUMENT_POLL_TIMEOUT_MS = 3 * 60 * 1000;
+
+const documentError = (code, message) => Object.assign(new Error(message), { code, backendMessage: message });
+
+const abortError = () => Object.assign(new Error('aborted'), { name: 'AbortError' });
+
+const waitFor = (ms, signal) => new Promise((resolve, reject) => {
+  if (signal?.aborted) return reject(abortError());
+  const timer = setTimeout(() => {
+    signal?.removeEventListener('abort', onAbort);
+    resolve();
+  }, ms);
+  const onAbort = () => {
+    clearTimeout(timer);
+    reject(abortError());
+  };
+  signal?.addEventListener('abort', onAbort, { once: true });
+});
+
+// Tải tệp cho Agent: upload (202) rồi poll /processing tới khi trích chữ xong → trả document_id.
+// idempotencyKey: dùng lại cùng key khi retry cùng một tệp. onStatus('uploading' | 'processing').
+// Huỷ bằng signal → ném AbortError. Quá 3 phút chưa xong → ném lỗi code 'document/timeout'.
+export const uploadAgentDocument = async (file, { signal, idempotencyKey = crypto.randomUUID(), onStatus } = {}) => {
+  onStatus?.('uploading');
+  const form = new FormData();
+  form.append('file', file);
+  form.append('purpose', 'supporting_document');
+  form.append('document_type', 'other');
+  const { document_id: documentId } = await readData(await authRequest('/api/documents/', {
+    method: 'POST',
+    body: form,
+    headers: { 'Idempotency-Key': idempotencyKey },
+    signal
+  }));
+
+  onStatus?.('processing');
+  const deadline = Date.now() + DOCUMENT_POLL_TIMEOUT_MS;
+  while (true) {
+    const { status } = await readData(await authRequest(`/api/documents/${documentId}/processing`, { signal }));
+    if (status === 'completed') return documentId;
+    if (status === 'failed') {
+      throw documentError('document/failed', 'Không đọc được tài liệu, vui lòng thử tệp khác.');
+    }
+    if (Date.now() + DOCUMENT_POLL_INTERVAL_MS > deadline) {
+      throw documentError('document/timeout', 'Tài liệu đang xử lý quá lâu, thử lại sau.');
+    }
+    await waitFor(DOCUMENT_POLL_INTERVAL_MS, signal);
+  }
+};
 
 export const STATUS_LABELS = {
   draft: 'Bản nháp',

@@ -53,6 +53,7 @@
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased min-h-screen">
+<!-- user-header -->
     <main class="w-full min-h-screen bg-surface flex items-center justify-center">
         <div class="flex flex-col w-full">
             <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
@@ -1101,7 +1102,7 @@
                 if (identityWarning) showToast('Đã lưu thông tin cá nhân', identityWarning, true);
                 // Đủ thông tin rồi → quay lại trang Tạo hồ sơ, hoặc sang trang Tài khoản để xem thông tin đã lưu
                 // (chờ chút nếu có cảnh báo để kịp đọc)
-                const nextPage = cameForApplication ? '/applicationSubmission' : '/account?saved=1';
+                const nextPage = cameForApplication ? '/application-submission' : '/account?saved=1';
                 setTimeout(() => location.assign(nextPage), identityWarning ? 3000 : 0);
             });
 

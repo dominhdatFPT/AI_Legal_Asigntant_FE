@@ -8,15 +8,13 @@
   <style>
     body { margin: 0; background: #f8f5f3; color: #292524; font-family: system-ui, sans-serif; }
     .shell { max-width: 880px; margin: 0 auto; padding: 28px 20px 64px; }
-    header { background: #8f1020; color: white; padding: 16px 20px; }
-    header a { color: white; text-decoration: none; }
     .card { background: white; border: 1px solid #e7dedb; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px #0000000b; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     label { display: block; font-weight: 600; margin-bottom: 6px; }
     input, select { box-sizing: border-box; width: 100%; padding: 10px 12px; border: 1px solid #bcb1ad; border-radius: 6px; font: inherit; background: white; }
     .wide { grid-column: 1 / -1; }
-    button { background: #a41423; border: 0; color: white; border-radius: 6px; padding: 11px 18px; font: inherit; font-weight: 600; cursor: pointer; }
-    button:disabled { opacity: .55; cursor: wait; }
+    main button { background: #a41423; border: 0; color: white; border-radius: 6px; padding: 11px 18px; font: inherit; font-weight: 600; cursor: pointer; }
+    main button:disabled { opacity: .55; cursor: wait; }
     .muted { color: #625b57; }
     .result { border-top: 1px solid #e7dedb; padding: 16px 0; }
     .result a { color: #8f1020; font-weight: 600; }
@@ -26,7 +24,7 @@
   <style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
 <body>
-  <header><div class="shell" style="padding:0"><a href="/user-dashboard">← Tổng quan hồ sơ</a></div></header>
+  <!-- user-header -->
   <main class="shell">
     <h1>Tìm nơi nộp hồ sơ gần địa chỉ của bạn</h1>
     <p class="muted">Nhập địa chỉ và chọn đơn vị hành chính. Kết quả là gợi ý địa điểm, không xác nhận thẩm quyền tiếp nhận.</p>

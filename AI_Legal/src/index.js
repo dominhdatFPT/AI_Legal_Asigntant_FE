@@ -5,6 +5,42 @@ const app = express();
 const port = process.env.PORT || 3000;
 const pagesDirectory = path.join(__dirname, 'pages');
 
+// Navbar chung cho các trang người dùng: một nguồn (partials/user-header.html), chèn vào chỗ <!-- user-header -->
+// của trang và đánh dấu sẵn mục đang chọn theo URL, nên khi chuyển trang navbar không nháy hay nhảy.
+const userHeaderFile = path.join(__dirname, 'partials', 'user-header.html');
+const USER_NAV_ACTIVE = {
+  '/user-dashboard': 'tong-quan-ho-so',
+  '/application-submission': 'nop-ho-so-truc-tuyen',
+  '/document-storages': 'document-storages',
+  '/form-library': 'document-storages',
+  '/xem-mau-don': 'document-storages',
+  '/location-search': 'location-search',
+  '/lawyer-registration': 'dang-ky-luat-su',
+  '/account': 'account',
+  '/detail-information': 'account'
+};
+// Trang xem được khi chưa đăng nhập: user-header.js tự điền người dùng hoặc hiện nút Đăng nhập.
+const PUBLIC_USER_PAGES = new Set(['/document-storages', '/xem-mau-don']);
+// Đã có user nhớ tạm trong tab (auth-api.js) thì hiện trang ngay từ lần vẽ đầu, không nháy trắng chờ kiểm tra đăng nhập.
+const USER_HEADER_HEAD = '<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="/user-header.css">'
+  + '<style>html.has-user body{visibility:visible!important}</style>'
+  + '<script>try{if(sessionStorage.getItem("ai_legal_user"))document.documentElement.classList.add("has-user")}catch(e){}</script>';
+
+const sendUserPage = (fileName) => (req, res, next) => {
+  try {
+    const active = USER_NAV_ACTIVE[req.path];
+    let header = fs.readFileSync(userHeaderFile, 'utf8')
+      .replace(`class="unav-link" data-path="${active}"`, `class="unav-link is-active" aria-current="page" data-path="${active}"`);
+    if (PUBLIC_USER_PAGES.has(req.path)) header = header.replace('<header class="unav"', '<header class="unav" data-public');
+    const page = fs.readFileSync(path.join(pagesDirectory, fileName), 'utf8')
+      .replace('</head>', `${USER_HEADER_HEAD}</head>`)
+      .replace('<!-- user-header -->', header);
+    res.type('html').send(page);
+  } catch (error) {
+    next(error);
+  }
+};
+
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Read-only source library: prefer Contract API; use its identical exported
@@ -56,39 +92,33 @@ app.get('/forgot-password', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
 });
 
+// Bộ nhớ đệm (in-memory cache) cấu hình Firebase để tránh đọc đĩa và parse regex mỗi request
+let cachedFirebaseConfig = null;
+
 // Địa chỉ Backend (Gateway) mà trình duyệt sẽ gọi. Đổi bằng biến môi trường BACKEND_URL.
 app.get('/api/app-config', (req, res) => {
   const apiBaseUrl = process.env.BACKEND_URL || `${req.protocol}://${req.hostname}:8080`;
+  res.set('Cache-Control', 'public, max-age=3600');
   res.json({ apiBaseUrl });
 });
 
-// Cấu hình Firebase (web config, công khai, không phải bí mật). Thứ tự ưu tiên:
-//   1. Biến môi trường FIREBASE_CONFIG (JSON)
-//   2. `const firebaseConfig = {...};` trong file .env (chạy local)
-//   3. firebase-config.json đi kèm code (bản deploy Vercel không có .env)
-const loadFirebaseConfig = () => {
-  if (process.env.FIREBASE_CONFIG) {
-    return JSON.parse(process.env.FIREBASE_CONFIG);
+app.get('/api/firebase-config', (req, res) => {
+  if (cachedFirebaseConfig) {
+    res.set('Cache-Control', 'public, max-age=3600');
+    return res.json(cachedFirebaseConfig);
   }
+
   try {
     const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
     const configMatch = configSource.match(/const\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;/);
-    if (configMatch) {
-      return JSON.parse(configMatch[1].replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":'));
-    }
-  } catch {
-    // Không có .env (vd. trên Vercel) → dùng file cấu hình đi kèm
-  }
-  return require('./firebase-config.json');
-};
 
-app.get('/api/firebase-config', (req, res) => {
-  try {
-    const configObject = loadFirebaseConfig();
-
-    if (!configObject) {
+    if (!configMatch) {
       return res.status(503).json({ error: 'Firebase configuration is unavailable.' });
     }
+
+    const configObject = JSON.parse(
+      configMatch[1].replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+    );
     const publicKeys = [
       'apiKey',
       'authDomain',
@@ -108,7 +138,9 @@ app.get('/api/firebase-config', (req, res) => {
       return res.status(503).json({ error: 'Firebase configuration is incomplete.' });
     }
 
-    return res.json(publicConfig);
+    cachedFirebaseConfig = publicConfig;
+    res.set('Cache-Control', 'public, max-age=3600');
+    return res.json(cachedFirebaseConfig);
   } catch {
     return res.status(503).json({ error: 'Firebase configuration could not be loaded.' });
   }
@@ -122,58 +154,52 @@ app.get('/landforms', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'LandForms-admin.html'));
 });
 
-app.get('/detail-information', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
-});
+app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-management.html'));
 });
 
 // Keep the existing Procedure library available on its own route.
-app.get('/form-library', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'form-library.html'));
-});
+app.get('/form-library', sendUserPage('form-library.html'));
 
 app.get('/business-form-templates', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'business-form-templates.html'));
 });
 
-app.get('/user-dashboard', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
-});
+app.get('/user-dashboard', sendUserPage('user-dashboard.html'));
 
-app.get('/location-search', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'location-search.html'));
-});
+app.get('/location-search', sendUserPage('location-search.html'));
 
-app.get('/account', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'account.html'));
-});
+app.get('/account', sendUserPage('account.html'));
 
-app.get('/kho-mau-don-tham-khao', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'contract-catalog.html'));
-});
+app.get('/document-storages', sendUserPage('contract-catalog.html'));
 
 app.get('/dien-mau-don', (req, res) => {
   const template = typeof req.query.template === 'string' ? `?template=${encodeURIComponent(req.query.template)}` : '';
   res.redirect(302, `/xem-mau-don${template}`);
 });
 
-app.get('/xem-mau-don', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'contract-viewer.html'));
-});
+app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
-app.get('/lawyer-registration', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'lawyer-registration.html'));
-});
+app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 
 app.get('/api/application-submission-view', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+  res.sendFile(path.join(pagesDirectory, 'application-submission.html'));
 });
 
-app.get('/applicationSubmission', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
+app.get('/application-submission', sendUserPage('user-dashboard.html'));
+
+// Đường dẫn cũ (bookmark, link đã gửi) chuyển sang tên mới, giữ nguyên tham số ?procedure=...
+const renamedPaths = {
+  '/applicationSubmission': '/application-submission',
+  '/kho-mau-don-tham-khao': '/document-storages',
+  '/document-templates': '/document-storages'
+};
+Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
+  app.get(oldPath, (req, res) => {
+    res.redirect(301, req.originalUrl.replace(oldPath, newPath));
+  });
 });
 
 // Bắt đầu lắng nghe các kết nối

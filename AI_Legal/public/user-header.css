@@ -1,0 +1,71 @@
+/* Navbar chung các trang người dùng (theo mẫu header trang Tổng quan hồ sơ). Không phụ thuộc Tailwind của từng trang. */
+.unav{position:sticky;top:0;z-index:50;font-family:"Be Vietnam Pro",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 12px rgba(65,0,2,.25);-webkit-font-smoothing:antialiased}
+.unav *,.unav *::before,.unav *::after{box-sizing:border-box}
+.unav a{text-decoration:none}
+.unav-inner{max-width:80rem;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center}
+.unav-top{height:64px;background:linear-gradient(90deg,#8a1538,#b91c1c,#93000b);color:#fff}
+.unav-top .unav-inner{justify-content:space-between;gap:1rem}
+.unav-brand{display:flex;align-items:center;gap:1rem;color:#fff;min-width:0}
+.unav-brand img{width:40px;height:40px;flex-shrink:0;border-radius:999px;background:#fff;padding:2px;object-fit:contain;box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+.unav-title{display:flex;flex-direction:column;min-width:0}
+.unav-title strong{font-size:16px;line-height:1.3;font-weight:600;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.unav-title small{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#ffcdc7;white-space:nowrap}
+.unav-actions{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+.unav-account,.unav-logout,.unav-login{display:flex;align-items:center;gap:.5rem;min-height:40px;padding:0 1rem;border-radius:4px;color:#fff;font-size:14px;transition:background-color .2s ease}
+.unav-account{background:rgba(170,48,79,.4)}
+.unav-account svg{color:#fe932c;flex-shrink:0}
+.unav-account:hover{background:rgba(170,48,79,.7)}
+.unav-account-text{display:flex;flex-direction:column;line-height:1.2}
+.unav-account-text>span{font-weight:600}
+.unav-account-text small{font-size:11px;color:#ffcdc7}
+.unav-account-text small:empty{display:none}
+.unav-logout{border:0;background:rgba(255,255,255,.1);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.unav-logout:hover,.unav-login:hover{background:rgba(255,255,255,.2)}
+.unav-login{border:1px solid rgba(255,255,255,.4);font-weight:600}
+.unav-login[hidden],.unav [hidden]{display:none}
+.unav-bar{height:48px;background:#faf2ee;box-shadow:0 2px 6px rgba(28,25,23,.06)}
+.unav-links{gap:.25rem;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.unav-links::-webkit-scrollbar{display:none}
+.unav-link{display:flex;align-items:center;flex-shrink:0;min-height:40px;padding:0 1rem;border-radius:8px;color:#5b403d;font-size:14px;font-weight:500;letter-spacing:.01em;transition:background-color .2s ease,color .2s ease}
+.unav-link:hover{background:#eee7e3;color:#1e1b19}
+.unav-link.is-active{background:#b91c1c;color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(185,28,28,.35)}
+.unav a:focus-visible,.unav button:focus-visible{outline:2px solid #fe932c;outline-offset:2px}
+.unav-bar a:focus-visible{outline-color:#93000b}
+@media (max-width:639px){
+  .unav-inner{padding:0 1rem}
+  .unav-title,.unav-logout span,.unav-account-text small{display:none}
+  .unav-account{padding:0 .75rem;max-width:180px}
+  .unav-account-text>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .unav-logout{padding:0 .75rem}
+}
+/* ---------- Đang tải: không để màn hình trắng khi trang mới chưa kịp hiện ---------- */
+/* Thanh tiến trình dưới navbar: trang cũ bật khi bấm link (user-header.js), trang mới bật khi còn auth-pending */
+.unav-progress{position:absolute;left:0;bottom:0;height:3px;width:0;background:linear-gradient(90deg,#fe932c,#b91c1c);opacity:0;pointer-events:none}
+.unav.is-loading .unav-progress,html:has(#auth-pending) .unav-progress{opacity:1;animation:unav-progress 3s cubic-bezier(.1,.7,.3,1) .15s both}
+@keyframes unav-progress{from{width:0}to{width:85%}}
+html.unav-navigating,html.unav-navigating *{cursor:progress}
+/* Trang chưa xác thực xong: vẫn hiện navbar và vòng xoay thay vì ẩn cả trang; nội dung trang vẫn ẩn như cũ */
+html:has(#auth-pending){background:#fff8f5}
+html:has(#auth-pending) body{visibility:visible!important}
+html:has(#auth-pending) body>*:not(.unav):not(.unav-loader){visibility:hidden!important}
+.unav-loader{display:none}
+html:has(#auth-pending) .unav-loader{position:fixed;inset:112px 0 0;z-index:45;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:"Be Vietnam Pro",ui-sans-serif,system-ui,sans-serif;font-size:14px;color:#5b403d;opacity:0;animation:unav-show .2s ease .2s forwards}
+.unav-spin{width:36px;height:36px;border-radius:50%;border:3px solid #f1d9d5;border-top-color:#b91c1c;animation:unav-spin .8s linear infinite}
+.unav-loader-slow{display:none;max-width:320px;text-align:center}
+.unav-loader-slow a{color:#93000b;font-weight:600;text-decoration:underline}
+/* Quá 8 giây vẫn chưa xong (mạng chậm, lỗi JS): đổi sang lời nhắn kèm link tải lại, không đứng mãi */
+html:has(#auth-pending) .unav-loader-slow{display:block;opacity:0;animation:unav-show .2s ease 8s forwards}
+@keyframes unav-show{to{opacity:1}}
+@keyframes unav-spin{to{transform:rotate(360deg)}}
+
+/* Chuyển trang mượt (Chrome/Edge): navbar đứng yên, chỉ nội dung mờ chéo sang trang mới. Trình duyệt khác chuyển như thường. */
+@view-transition{navigation:auto}
+.unav{view-transition-name:user-nav}
+::view-transition-group(user-nav){animation:none}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.18s}
+@media (prefers-reduced-motion:reduce){
+  .unav *{transition:none!important}
+  @view-transition{navigation:none}
+  .unav.is-loading .unav-progress,html:has(#auth-pending) .unav-progress{animation:none;width:60%}
+  .unav-spin{animation:none;border-top-color:#f1d9d5}
+}
