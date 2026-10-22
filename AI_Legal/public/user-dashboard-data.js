@@ -379,7 +379,7 @@ function renderDossierSheet({ application_code, record, procedure, schema }) {
       itemsHtml += `
         <div class="py-2.5 border-b border-slate-200/70 grid grid-cols-1 sm:grid-cols-3 gap-2">
           <dt class="text-xs font-bold text-slate-500 uppercase tracking-wide">${escapeHtml(f.label)}:</dt>
-          <dd class="sm:col-span-2 text-sm font-semibold text-slate-900">${escapeHtml(String(val))}</dd>
+          <dd class="sm:col-span-2 text-sm font-semibold text-slate-900 whitespace-pre-line">${escapeHtml(String(val))}</dd>
         </div>
       `;
     });
@@ -403,7 +403,7 @@ function renderDossierSheet({ application_code, record, procedure, schema }) {
       rowsHtml += `
         <div class="py-2 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-2">
           <dt class="text-xs font-bold text-slate-500 uppercase">${escapeHtml(k)}:</dt>
-          <dd class="sm:col-span-2 text-sm font-semibold text-slate-900">${escapeHtml(String(v))}</dd>
+          <dd class="sm:col-span-2 text-sm font-semibold text-slate-900 whitespace-pre-line">${escapeHtml(String(v))}</dd>
         </div>
       `;
     }
