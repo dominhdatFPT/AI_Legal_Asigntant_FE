@@ -125,7 +125,7 @@ async function renderTable() {
           </td>
         </tr>`).join('')
       : `<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="7">${
-          state.status || state.domain || state.q ? 'Không có hồ sơ phù hợp bộ lọc.' : 'Bạn chưa có hồ sơ nào. <a class="text-primary font-semibold hover:underline" href="/applicationSubmission">Tạo hồ sơ</a>'
+          state.status || state.domain ? 'Không có hồ sơ phù hợp bộ lọc.' : 'Bạn chưa có hồ sơ nào. <a class="text-primary font-semibold hover:underline" href="/application-submission">Tạo hồ sơ</a>'
         }</td></tr>`;
 
     body.querySelectorAll('.btn-view-dossier').forEach((btn) => {
@@ -186,7 +186,7 @@ async function renderFeatured() {
     const picks = [...land.slice(0, 2), ...business.slice(0, 2)];
     box.innerHTML = picks.length
       ? picks.map((procedure) => `
-        <a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="/applicationSubmission?procedure=${encodeURIComponent(procedure.code)}">
+        <a class="p-space-sm rounded-lg hover:bg-surface-container-low transition-colors flex items-center justify-between group" href="/application-submission?procedure=${encodeURIComponent(procedure.code)}">
           <div class="flex items-center gap-space-sm">
             <span class="material-symbols-outlined text-primary">${procedure.domain === 'land' ? 'landscape' : 'storefront'}</span>
             <div class="flex flex-col">

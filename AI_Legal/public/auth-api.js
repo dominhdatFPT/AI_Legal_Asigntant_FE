@@ -70,11 +70,37 @@ export const loginWithFirebaseToken = (idToken) =>
 // Backend đã set cookie khi đăng nhập; ở FE chỉ cần giữ thông tin user để chuyển trang.
 // Xoá phiên kiểu cũ (token trong localStorage) nếu còn sót lại.
 export const saveSession = (data) => {
-  localStorage.removeItem(LEGACY_SESSION_KEY);
+  clearSession(); // đăng nhập mới: bỏ thông tin hiển thị của phiên trước
   return { user: data.user };
 };
 
-export const clearSession = () => localStorage.removeItem(LEGACY_SESSION_KEY);
+// Nhớ tạm thông tin hiển thị của user trong tab (không có token) để chuyển trang không phải chờ /api/users/me.
+// Tên khoá trùng với script chèn trong <head> ở index.js (USER_HEADER_HEAD).
+const USER_CACHE_KEY = 'ai_legal_user';
+const readCachedUser = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(USER_CACHE_KEY));
+  } catch {
+    return null;
+  }
+};
+const cacheUser = (user) => {
+  try {
+    const { id, role, full_name, username, email } = user;
+    sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify({ id, role, full_name, username, email }));
+  } catch {
+    // Trình duyệt chặn sessionStorage: vẫn chạy, chỉ là không nhanh hơn
+  }
+};
+
+export const clearSession = () => {
+  localStorage.removeItem(LEGACY_SESSION_KEY);
+  try {
+    sessionStorage.removeItem(USER_CACHE_KEY);
+  } catch {
+    // như trên
+  }
+};
 
 // Lấy user đang đăng nhập từ Backend. Chưa đăng nhập / phiên hết hạn → null.
 export const fetchCurrentUser = async () => {
@@ -146,9 +172,11 @@ export const requireLogin = async (allowedRoles) => {
     user = null; // Backend không chạy cũng coi như chưa đăng nhập
   }
   if (!user) {
+    clearSession();
     window.location.replace('/login');
     return new Promise(() => {}); // dừng code phía sau trong lúc chuyển trang
   }
+  cacheUser(user);
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     window.location.replace(homePathFor(user.role));
     return new Promise(() => {});
@@ -310,19 +338,32 @@ export const displayName = (user) => user?.full_name || user?.username || user?.
 //   <element data-user-field="name|email|role">   → thay bằng dữ liệu thật
 //   <element data-logout>                         → bấm để mở hộp thoại xác nhận đăng xuất
 // requireProfile: trang tạo hồ sơ → bắt buộc đã cập nhật thông tin cá nhân.
+// Đã có user nhớ tạm (cùng tab) → hiện trang ngay, kiểm tra lại với Backend ở nền: hết phiên thì vẫn về /login.
 export const protectPage = async (allowedRoles, { requireProfile = false } = {}) => {
-  const user = await requireLogin(allowedRoles);
+  const cached = readCachedUser();
+  const verified = requireLogin(allowedRoles);
+  const useCache = cached && !requireProfile && (!allowedRoles || allowedRoles.includes(cached.role));
+  const user = useCache ? cached : await verified;
   if (requireProfile) await requireCitizenProfile();
-  const values = { name: displayName(user), email: user.email || '', role: roleLabel(user.role) };
-  document.querySelectorAll('[data-user-field]').forEach((element) => {
-    const value = values[element.dataset.userField];
-    if (value !== undefined) element.textContent = value;
-  });
+  const fillUserFields = (current) => {
+    const values = { name: displayName(current), email: current.email || '', role: roleLabel(current.role) };
+    document.querySelectorAll('[data-user-field]').forEach((element) => {
+      const value = values[element.dataset.userField];
+      if (value !== undefined) element.textContent = value;
+    });
+  };
+  fillUserFields(user);
+  let currentUser = user;
+  if (useCache) verified.then((fresh) => { currentUser = fresh; fillUserFields(fresh); });
   document.querySelectorAll('[data-logout]').forEach((element) => {
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      confirmLogout(user);
+      confirmLogout(currentUser);
     });
+  });
+  // Đăng xuất rồi bấm Back: trang cũ trong bộ nhớ trình duyệt không được hiện lại dữ liệu.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted && !readCachedUser()) window.location.replace('/login');
   });
   document.getElementById('auth-pending')?.remove();
   return user;

@@ -91,7 +91,7 @@ test('HTTP serves the public catalogue and all document pages with no backend, a
   const previousBackend = process.env.BACKEND_URL;
   process.env.BACKEND_URL = 'http://127.0.0.1:1';
   try {
-    const page = await fetch(`${base}/kho-mau-don-tham-khao`);
+    const page = await fetch(`${base}/document-storages`);
     assert.equal(page.status, 200);
     const html = await page.text();
     assert.match(html, /contract-catalog\.js/);
@@ -101,7 +101,11 @@ test('HTTP serves the public catalogue and all document pages with no backend, a
     ]) {
       const response = await fetch(base + route);
       assert.equal(response.status, 200);
-      assert.equal(await response.text(), fs.readFileSync(path.join(root, 'src/pages', filename), 'utf8'));
+      // Server chèn navbar chung vào chỗ đánh dấu; phần còn lại của trang giữ nguyên.
+      const served = await response.text();
+      const [, body] = fs.readFileSync(path.join(root, 'src/pages', filename), 'utf8').split('<!-- user-header -->');
+      assert.match(served, /<header class="unav"/);
+      assert.ok(served.includes(body));
     }
     const viewer = await (await fetch(`${base}/xem-mau-don`)).text();
     assert.doesNotMatch(viewer, /<form|<input|<textarea|contenteditable|data-action=/i);

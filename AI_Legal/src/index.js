@@ -5,6 +5,42 @@ const app = express();
 const port = process.env.PORT || 3000;
 const pagesDirectory = path.join(__dirname, 'pages');
 
+// Navbar chung cho các trang người dùng: một nguồn (partials/user-header.html), chèn vào chỗ <!-- user-header -->
+// của trang và đánh dấu sẵn mục đang chọn theo URL, nên khi chuyển trang navbar không nháy hay nhảy.
+const userHeaderFile = path.join(__dirname, 'partials', 'user-header.html');
+const USER_NAV_ACTIVE = {
+  '/user-dashboard': 'tong-quan-ho-so',
+  '/application-submission': 'nop-ho-so-truc-tuyen',
+  '/document-storages': 'document-storages',
+  '/form-library': 'document-storages',
+  '/xem-mau-don': 'document-storages',
+  '/location-search': 'location-search',
+  '/lawyer-registration': 'dang-ky-luat-su',
+  '/account': 'account',
+  '/detail-information': 'account'
+};
+// Trang xem được khi chưa đăng nhập: user-header.js tự điền người dùng hoặc hiện nút Đăng nhập.
+const PUBLIC_USER_PAGES = new Set(['/document-storages', '/xem-mau-don']);
+// Đã có user nhớ tạm trong tab (auth-api.js) thì hiện trang ngay từ lần vẽ đầu, không nháy trắng chờ kiểm tra đăng nhập.
+const USER_HEADER_HEAD = '<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="/user-header.css">'
+  + '<style>html.has-user body{visibility:visible!important}</style>'
+  + '<script>try{if(sessionStorage.getItem("ai_legal_user"))document.documentElement.classList.add("has-user")}catch(e){}</script>';
+
+const sendUserPage = (fileName) => (req, res, next) => {
+  try {
+    const active = USER_NAV_ACTIVE[req.path];
+    let header = fs.readFileSync(userHeaderFile, 'utf8')
+      .replace(`class="unav-link" data-path="${active}"`, `class="unav-link is-active" aria-current="page" data-path="${active}"`);
+    if (PUBLIC_USER_PAGES.has(req.path)) header = header.replace('<header class="unav"', '<header class="unav" data-public');
+    const page = fs.readFileSync(path.join(pagesDirectory, fileName), 'utf8')
+      .replace('</head>', `${USER_HEADER_HEAD}</head>`)
+      .replace('<!-- user-header -->', header);
+    res.type('html').send(page);
+  } catch (error) {
+    next(error);
+  }
+};
+
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Read-only source library: prefer Contract API; use its identical exported
@@ -118,58 +154,52 @@ app.get('/landforms', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'LandForms-admin.html'));
 });
 
-app.get('/detail-information', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'detail-information.html'));
-});
+app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'user-management.html'));
 });
 
 // Keep the existing Procedure library available on its own route.
-app.get('/form-library', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'form-library.html'));
-});
+app.get('/form-library', sendUserPage('form-library.html'));
 
 app.get('/business-form-templates', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'business-form-templates.html'));
 });
 
-app.get('/user-dashboard', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
-});
+app.get('/user-dashboard', sendUserPage('user-dashboard.html'));
 
-app.get('/location-search', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'location-search.html'));
-});
+app.get('/location-search', sendUserPage('location-search.html'));
 
-app.get('/account', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'account.html'));
-});
+app.get('/account', sendUserPage('account.html'));
 
-app.get('/kho-mau-don-tham-khao', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'contract-catalog.html'));
-});
+app.get('/document-storages', sendUserPage('contract-catalog.html'));
 
 app.get('/dien-mau-don', (req, res) => {
   const template = typeof req.query.template === 'string' ? `?template=${encodeURIComponent(req.query.template)}` : '';
   res.redirect(302, `/xem-mau-don${template}`);
 });
 
-app.get('/xem-mau-don', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'contract-viewer.html'));
-});
+app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
-app.get('/lawyer-registration', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'lawyer-registration.html'));
-});
+app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 
 app.get('/api/application-submission-view', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'applicationSubmission.html'));
+  res.sendFile(path.join(pagesDirectory, 'application-submission.html'));
 });
 
-app.get('/applicationSubmission', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'user-dashboard.html'));
+app.get('/application-submission', sendUserPage('user-dashboard.html'));
+
+// Đường dẫn cũ (bookmark, link đã gửi) chuyển sang tên mới, giữ nguyên tham số ?procedure=...
+const renamedPaths = {
+  '/applicationSubmission': '/application-submission',
+  '/kho-mau-don-tham-khao': '/document-storages',
+  '/document-templates': '/document-storages'
+};
+Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
+  app.get(oldPath, (req, res) => {
+    res.redirect(301, req.originalUrl.replace(oldPath, newPath));
+  });
 });
 
 // Bắt đầu lắng nghe các kết nối
