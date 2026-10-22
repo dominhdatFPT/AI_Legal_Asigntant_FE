@@ -12,15 +12,16 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tailwind-admin.css">
   <link rel="stylesheet" href="/admin-ai-chat.css">
+  <link rel="stylesheet" href="/admin-dashboard.css">
   
   <style>
-    @layer base {
-      html, body { margin: 0; padding: 0; }
-      body { overscroll-behavior: none; }
-      main> :first-child { margin-top: 0 !important; }
-      main> :last-child { margin-bottom: 0 !important; }
-    }
+    /* Không bọc @layer base: CSS build tĩnh không phát sinh cascade layer nên rule ở đây phải thắng preflight. */
+    html, body { margin: 0; padding: 0; }
+    body { overscroll-behavior: none; }
+    main> :first-child { margin-top: 0 !important; }
+    main> :last-child { margin-bottom: 0 !important; }
     ::-webkit-scrollbar { display: none; }
     /* Lớp "flex" của Tailwind đè thuộc tính hidden, nên ép ẩn ở đây */
     [hidden] { display: none !important; }
@@ -30,120 +31,6 @@
     .red-glow { box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35); }
   </style>
 
-  <!-- Script Tailwind của LandForms -->
-  <link rel="preconnect" href="https://cdn.tailwindcss.com">
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  
-  <!-- ĐỒNG BỘ TAILWIND CONFIG TỪ DASHBOARD ĐỂ KHỚP BẢNG MÀU -->
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#b91c1c",
-            "primary-container": "#c5161d",
-            "primary-dark": "#881337",
-            "on-primary": "#ffffff",
-            "on-primary-container": "#fff1f2",
-            "primary-fixed": "#fee2e2",
-            "primary-fixed-dim": "#fecaca",
-            "on-primary-fixed-variant": "#991b1b",
-            "on-primary-fixed": "#450a0a",
-            "inverse-primary": "#fca5a5",
-
-            "tertiary": "#b45309",
-            "tertiary-container": "#d97706",
-            "tertiary-fixed": "#fef3c7",
-            "tertiary-fixed-dim": "#fde68a",
-            "on-tertiary": "#ffffff",
-            "on-tertiary-fixed": "#78350f",
-            "on-tertiary-fixed-variant": "#92400e",
-            "on-tertiary-container": "#fffbeb",
-
-            "surface": "#EAE5DC",
-            "surface-panel": "#FFFFFF",
-            "surface-subtle": "#F4F0E8",
-            "surface-brand-tint": "#FFF5F5",
-            "surface-container-lowest": "#FFFFFF",
-            "surface-container-low": "#E5DFD4",
-            "surface-container": "#DCD5C8",
-            "surface-container-high": "#D2CABE",
-            "surface-container-highest": "#C7BEB0",
-            "surface-dim": "#DDD6C9",
-            "surface-bright": "#FFFFFF",
-            "surface-variant": "#E8E2D6",
-            "surface-tint": "#b91c1c",
-
-            "on-surface": "#1C1917",
-            "on-surface-variant": "#44403C",
-            "secondary": "#78716C",
-            "secondary-container": "#E5DFD4",
-            "secondary-fixed": "#E5DFD4",
-            "secondary-fixed-dim": "#D2CABE",
-            "on-secondary": "#ffffff",
-            "on-secondary-container": "#44403C",
-            "on-secondary-fixed": "#1C1917",
-            "on-secondary-fixed-variant": "#44403C",
-
-            "border-subtle": "#D5CEBF",
-            "border-focus": "#b91c1c",
-            "outline": "#C8C0B0",
-            "outline-variant": "#DCD5C8",
-
-            "state-success": "#15803d",
-            "state-error": "#b91c1c",
-            "error": "#b91c1c",
-            "error-container": "#fee2e2",
-            "on-error": "#ffffff",
-            "on-error-container": "#991b1b"
-          },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "2xl": "1rem",
-            "full": "9999px"
-          },
-          spacing: {
-            "gutter": "1.5rem",
-            "margin": "2rem",
-            "space-xl": "2.5rem",
-            "space-lg": "1.5rem",
-            "space-sm": "0.5rem",
-            "space-xs": "0.25rem",
-            "space-md": "1rem"
-          },
-          fontFamily: {
-            "body-md": ["Be Vietnam Pro", "sans-serif"],
-            "display-hero": ["Be Vietnam Pro", "sans-serif"],
-            "label-sm": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg-mobile": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg": ["Be Vietnam Pro", "sans-serif"],
-            "body-sm": ["Be Vietnam Pro", "sans-serif"],
-            "body-lg": ["Be Vietnam Pro", "sans-serif"],
-            "label-lg": ["Be Vietnam Pro", "sans-serif"],
-            "headline-sm": ["Be Vietnam Pro", "sans-serif"],
-            "label-md": ["Be Vietnam Pro", "sans-serif"],
-            "headline-md": ["Be Vietnam Pro", "sans-serif"]
-          },
-          fontSize: {
-            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
-            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
-            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
-            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
-            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
-            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
-            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
-            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
-          }
-        }
-      }
-    };
-  </script>
 <!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
 <script type="speculationrules">
   {
@@ -158,139 +45,17 @@
 </head>
 
 <!-- THÊM CLASS ĐỒNG BỘ BODY TỪ DASHBOARD -->
-<body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950">
+<body class="admin-dashboard">
+  <!-- admin-sidebar -->
 
-  <!-- ĐỒNG BỘ SIDEBAR TỪ DASHBOARD VỚI W-72 VÀ CHỈNH SỬA TRẠNG THÁI ACTIVE -->
-  <aside
-    class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-[#6e0d16] via-[#7d141e] to-[#4c070e] text-white z-50 flex flex-col justify-between border-r border-red-900/60 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
-    <div class="flex flex-col">
-      <!-- Brand / Logo Area -->
-      <div
-        class="h-16 px-space-md flex items-center gap-space-sm bg-black/20 border-b border-white/10 backdrop-blur-sm">
-        <div
-          class="relative p-0.5 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-500 shrink-0 shadow-md">
-          <img
-            src="/images/national-service-logo.png"
-            alt="Logo Cổng Dịch vụ công Quốc gia" class="w-9 h-9 object-contain rounded-full bg-white">
-        </div>
-        <div class="flex flex-col min-w-0">
-          <span
-            class="font-headline-sm text-[17px] text-white uppercase truncate leading-tight tracking-tight font-extrabold drop-shadow-sm">Hồ
-            Sơ Đất &amp; HKD</span>
-          <span
-            class="font-label-sm text-[10px] text-amber-300 truncate uppercase tracking-widest font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Cổng dịch vụ hành chính
-          </span>
-        </div>
-      </div>
+  <div class="admin-layout">
+    <!-- admin-topbar -->
 
-      <div class="px-space-md py-space-sm">
-        <div class="h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent w-full"></div>
-      </div>
-
-      <!-- Navigation Links -->
-      <nav class="flex flex-col gap-1.5 px-space-md" id="sidebar-nav">
-        <!-- Tổng quan được bỏ trạng thái active và trỏ về dashboard.html -->
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="tong-quan" href="/dashboard">
-          <span class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors"
-            style="font-variation-settings: 'FILL' 1;">grid_view</span>
-          <span class="font-label-md text-label-md tracking-wide">Tổng quan</span>
-        </a>
-        
-        <!-- Hồ sơ đất đai được nhận trạng thái active, kèm mục con "Mẫu đơn" -->
-        <div class="flex flex-col gap-1">
-          <a aria-current="page" 
-            class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
-            data-path="ho-so-dat-dai" href="/landforms">
-            <span
-              class="material-symbols-outlined text-[20px] text-stone-950 group-hover:scale-110 transition-transform">landscape</span>
-            <span class="font-label-md text-label-md">Hồ sơ đất đai</span>
-          </a>
-          <a class="ml-9 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 text-white font-label-md font-semibold"
-            href="/landforms" aria-current="page">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-300"></span> Mẫu đơn
-          </a>
-        </div>
-        
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="ho-so-ho-kinh-doanh" href="/business-form-templates">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">storefront</span>
-          <span class="font-label-md text-label-md">Hồ sơ hộ kinh doanh</span>
-        </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="quan-ly-nguoi-dung" href="/user-management">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">group</span>
-          <span class="font-label-md text-label-md">Quản lí người dùng</span>
-        </a>
-      </nav>
-    </div>
-
-    <!-- User Profile in Sidebar -->
-    <div class="p-space-md bg-black/25 border-t border-white/10">
-      <div
-        class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
-          <div
-            class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
-            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
-          </div>
-          <div class="flex flex-col min-w-0">
-            <span class="font-label-md text-label-md text-white font-bold truncate" data-user-field="name">Quản trị viên hệ thống</span>
-            <span class="font-label-sm text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
-              <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
-            </span>
-          </div>
-        </div>
-        <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
-          href="/login" title="Đăng xuất" data-logout>
-          <span class="material-symbols-outlined text-[19px]">logout</span>
-        </a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ĐỔI margin CỦA MAIN CONTAINER SANG THÀNH pl-72 ĐỂ KHỚP VỚI KÍCH THƯỚC SIDEBAR MỚI -->
-  <div class="pl-72 flex flex-col min-h-screen">
-    
-    <!-- TOP NAVBAR đồng bộ với dashboard và user-management -->
-    <header class="fixed top-0 left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between">
-      <div class="flex items-center gap-space-md">
-        <div class="flex items-center gap-space-xs text-stone-500">
-          <a href="/dashboard" class="font-body-sm text-body-sm text-stone-600 font-medium hover:text-red-700 transition-colors">Cổng hành chính</a>
-          <span class="material-symbols-outlined text-[16px] text-amber-600">chevron_right</span>
-          <span class="font-label-md text-label-md text-red-800 font-bold">Hồ sơ đất đai</span>
-        </div>
-        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-900 shadow-2xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-state-success animate-pulse"></span>
-          <span class="font-label-sm text-label-sm font-bold">Hệ thống trực tuyến</span>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-space-md flex-1 max-w-xl mx-space-md">
-        <div class="hidden lg:flex w-full"></div>
-      </div>
-
-      <div class="flex items-center gap-space-md flex-shrink-0">
-        <div class="flex items-center gap-space-xs bg-surface-container px-space-md py-1.5 rounded-lg">
-          <span class="material-symbols-outlined text-red-600 text-[18px]">domain</span>
-          <span class="font-label-md text-label-md font-bold text-stone-800">Văn phòng Đăng ký Đất đai</span>
-          <span class="material-symbols-outlined text-amber-700 text-[16px]">expand_more</span>
-        </div>
-        <div class="h-5 w-px bg-stone-300"></div>
-        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center" aria-hidden="true">
-          <span class="material-symbols-outlined text-white text-[18px]">person</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- KÉO DÀI MAIN CÙNG VỚI MIN-H-SCREEN VÀ FLEX-1 ĐỂ LẤP ĐẦY KHOẢNG TRẮNG Ở ĐÁY -->
-    <main class="w-full pt-16 bg-surface px-space-lg py-space-lg flex-1 min-h-screen">
+    <main class="admin-main">
+      <div class="admin-content">
       <div class="flex flex-col w-full">
         <!-- Header & Page Actions - RE-STYLED TO MATCH REFERENCE IMAGE -->
-        <div class="relative overflow-hidden bg-gradient-to-r from-[#881337] to-[#b91c1c] rounded-2xl p-8 mb-space-lg shadow-lg border border-white/5">
+        <div class="relative overflow-hidden bg-gradient-to-r from-[#9e3b2d] to-[#b74f3b] rounded-2xl p-8 mb-space-lg shadow-lg border border-white/5">
           <!-- Decorative Background Elements -->
           <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
           <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full -ml-10 -mb-10 blur-2xl"></div>
@@ -340,7 +105,7 @@
             
             <!-- Right: Ctrl+K & Search Button -->
             <div class="flex items-center gap-4 w-full md:w-auto px-2">
-              <div class="hidden l<link crossorigin="" href="httpg:flex items-center gap-1 px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-[11px] border border-amber-200 shadow-sm">
+              <div class="hidden lg:flex items-center gap-1 px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-[11px] border border-amber-200 shadow-sm">
                 <span>Ctrl</span>
                 <span>+</span>
                 <span>K</span>
@@ -370,9 +135,9 @@
         <!-- Main Data Section: Template Repository Table -->
         <div class="rounded-2xl bg-white shadow-md overflow-hidden flex flex-col mb-space-lg border border-stone-200">
           <!-- Header bar - THEMATICALLY STYLED "CLOSED BOX" -->
-          <div class="px-space-md py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-gradient-to-r from-[#6e0d16] to-[#881337] border-b border-red-900/30">
+          <div class="px-space-md py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-gradient-to-r from-[#9e3b2d] to-[#b74f3b] border-b border-red-900/30">
             <div class="flex items-center gap-space-sm">
-              <div class="w-1.5 h-7 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]"></div>
+              <div class="w-1.5 h-7 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(209,160,141,0.55)]"></div>
               <div class="flex items-center gap-space-xs">
                 <h2 class="font-headline-sm text-headline-sm text-white font-extrabold tracking-tight">Danh sách Mẫu Đơn Đất đai Trong Kho Lưu Trữ</h2>
                 <span class="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 font-label-sm text-xs font-bold flex items-center gap-1.5 border border-white/10 shadow-sm">
@@ -428,6 +193,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </main>
 
@@ -970,6 +736,11 @@
       applyFilters();
       loadDatabaseForms();
     });
+  </script>
+  <!-- Trang quản trị: bắt buộc đăng nhập bằng tài khoản admin trước khi hiện nội dung -->
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['admin']);
   </script>
 <script src="/admin-ai-chat.js" defer></script>
 </body>

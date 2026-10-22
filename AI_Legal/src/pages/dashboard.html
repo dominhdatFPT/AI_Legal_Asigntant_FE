@@ -9,61 +9,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300..600,0..1,0&icon_names=add_business,add_location_alt,assignment_late,badge,calendar_month,chat,chevron_left,chevron_right,domain,document_scanner,expand_more,folder_open,grid_view,group,landscape,logout,map,person,print,schedule,search,star,storefront,travel_explore,verified&display=block" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: { fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] } } }
-    };
-  </script>
+  <link rel="stylesheet" href="/tailwind-admin.css">
   <link rel="stylesheet" href="/admin-ai-chat.css">
   <link rel="stylesheet" href="/admin-dashboard.css">
 </head>
 <body class="admin-dashboard">
-  <aside class="admin-sidebar" aria-label="Điều hướng quản trị">
-    <div class="admin-sidebar__top">
-      <a class="admin-brand" href="/dashboard" aria-label="Hồ sơ đất và hộ kinh doanh - Tổng quan">
-        <span class="admin-brand__logo"><img src="/images/national-service-logo.png" alt="Logo Cổng Dịch vụ công Quốc gia"></span>
-        <span class="admin-brand__copy"><strong>Hồ sơ đất &amp; HKD</strong><small><span class="admin-brand__dot"></span>Cổng dịch vụ hành chính</small></span>
-      </a>
-      <nav class="admin-nav" id="sidebar-nav" aria-label="Điều hướng chính">
-        <a class="admin-nav__link nav-item" aria-current="page" data-path="tong-quan" href="/dashboard" title="Tổng quan">
-          <span class="material-symbols-outlined" aria-hidden="true">grid_view</span><span class="admin-nav__label">Tổng quan</span>
-        </a>
-        <a class="admin-nav__link nav-item" data-path="ho-so-dat-dai" href="/landforms" title="Hồ sơ đất đai">
-          <span class="material-symbols-outlined" aria-hidden="true">landscape</span><span class="admin-nav__label">Hồ sơ đất đai</span>
-        </a>
-        <a class="admin-nav__link nav-item" data-path="ho-so-ho-kinh-doanh" href="/business-form-templates" title="Hồ sơ hộ kinh doanh">
-          <span class="material-symbols-outlined" aria-hidden="true">storefront</span><span class="admin-nav__label">Hồ sơ hộ kinh doanh</span>
-        </a>
-        <a class="admin-nav__link nav-item" data-path="quan-ly-nguoi-dung" href="/user-management" title="Quản lí người dùng">
-          <span class="material-symbols-outlined" aria-hidden="true">group</span><span class="admin-nav__label">Quản lí người dùng</span>
-        </a>
-      </nav>
-    </div>
-    <div class="admin-sidebar__footer">
-      <div class="admin-user-card">
-        <span class="admin-user-card__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
-        <span class="admin-user-card__copy"><strong data-user-field="name">Người dùng</strong><small><span class="material-symbols-outlined" aria-hidden="true">badge</span><span data-user-field="role">Quản trị viên</span></small></span>
-        <a class="admin-user-card__logout" href="/login" title="Đăng xuất" aria-label="Đăng xuất" data-logout><span class="material-symbols-outlined" aria-hidden="true">logout</span></a>
-      </div>
-    </div>
-  </aside>
+  <!-- admin-sidebar -->
 
   <div class="admin-layout">
-    <header class="admin-topbar">
-      <div class="admin-topbar__context">
-        <span class="admin-topbar__section">Cổng hành chính</span>
-        <span class="admin-system-status"><span class="admin-system-status__dot"></span>Hệ thống trực tuyến</span>
-      </div>
-      <button class="admin-agency" type="button" aria-label="Văn phòng Đăng ký Đất đai">
-        <span class="material-symbols-outlined" aria-hidden="true">domain</span>
-        <span class="admin-agency__name">Văn phòng Đăng ký Đất đai</span>
-        <span class="material-symbols-outlined admin-agency__chevron" aria-hidden="true">expand_more</span>
-        <span class="admin-agency__separator"></span>
-        <span class="admin-agency__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
-      </button>
-    </header>
+    <!-- admin-topbar -->
 
     <main class="admin-main">
       <div class="admin-content">

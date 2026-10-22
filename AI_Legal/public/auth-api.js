@@ -52,7 +52,8 @@ const readData = async (response) => {
 const postJson = async (path, body) => readData(await request(path, { method: 'POST', body }));
 
 // Gọi API cần đăng nhập. Access token hết hạn (401) → refresh bằng cookie rồi gọi lại 1 lần.
-const authRequest = async (path, options) => {
+// Export để các module API khác (admin-api.js) dùng lại thay vì tự viết lại tầng này.
+export const authRequest = async (path, options) => {
   let response = await request(path, options);
   if (response.status === 401) {
     const refreshed = await request('/api/users/auth/refresh', { method: 'POST' });

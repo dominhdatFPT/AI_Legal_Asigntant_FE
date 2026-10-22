@@ -296,6 +296,39 @@ body.admin-dashboard {
   color: #51332d;
 }
 .admin-nav__link[aria-current="page"] > .material-symbols-outlined { color: #a64031; }
+/* Mục con "Mẫu đơn" của Hồ sơ đất đai / Hồ sơ hộ kinh doanh: chỉ hiện khi nhóm đang mở,
+   thụt lề 34px kèm dấu chấm đầu dòng; ẩn trên màn hình hẹp (≤760px) vì sidebar chỉ còn icon. */
+.admin-nav__group { display: flex; flex-direction: column; gap: 4px; }
+.admin-nav__sublink {
+  display: none;
+  position: relative;
+  padding: 8px 12px 8px 34px;
+  border-radius: 10px;
+  color: #8e6b63;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.admin-nav__sublink::before {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: #c1705e;
+  content: '';
+}
+.admin-nav__sublink:hover { background: rgba(166,64,49,.08); color: #51332d; }
+@media (min-width: 761px) {
+  .admin-nav__group:has(> .admin-nav__link[aria-current="page"]) > .admin-nav__sublink {
+    display: flex;
+    align-items: center;
+    background: rgba(166,64,49,.1);
+    color: #a64031;
+  }
+}
 .admin-sidebar__footer {
   border-top-color: rgba(103, 67, 58, .14);
   background: rgba(255,255,255,.28);

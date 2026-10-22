@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="vi" style="">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="web_dashboard" name="shell-type">
+  <title>Kho mẫu đơn hộ kinh doanh | AI Legal</title>
+  
+  <!-- Cập nhật bộ icon để đồng bộ -->
+  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,arrow_forward_ios,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,first_page,flag,folder,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,hourglass_top,id_card,info,landscape,last_page,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,sort,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning&amp;display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tailwind-admin.css">
+  <link rel="stylesheet" href="/admin-ai-chat.css">
+  <link rel="stylesheet" href="/admin-dashboard.css">
+  
+  <style>
+    /* Không bọc @layer base: CSS build tĩnh không phát sinh cascade layer nên rule ở đây phải thắng preflight. */
+    html, body { margin: 0; padding: 0; }
+    body { overscroll-behavior: none; }
+    main> :first-child { margin-top: 0 !important; }
+    main> :last-child { margin-bottom: 0 !important; }
+    ::-webkit-scrollbar { display: none; }
+    /* Lớp "flex" của Tailwind đè thuộc tính hidden, nên ép ẩn ở đây */
+    [hidden] { display: none !important; }
+    .drawer-panel { transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+    .drawer-backdrop { transition: opacity 180ms ease-out; }
+    .gold-glow { box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.35); }
+    .red-glow { box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35); }
+  </style>
+
+<!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
+<script type="speculationrules">
+  {
+    "prerender": [
+      {
+        "where": { "href_matches": ["/landforms", "/business-form-templates", "/user-dashboard", "/dashboard"] },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+</script>
+</head>
+
+<!-- THÊM CLASS ĐỒNG BỘ BODY TỪ DASHBOARD -->
+<body class="admin-dashboard">
+  <!-- admin-sidebar -->
+
+  <div class="admin-layout">
+    <!-- admin-topbar -->
+
+    <main class="admin-main">
+      <div class="admin-content">
+      <div class="flex flex-col w-full">
+        <!-- Header & Page Actions - RE-STYLED TO MATCH REFERENCE IMAGE -->
+        <div class="relative overflow-hidden bg-gradient-to-r from-[#9e3b2d] to-[#b74f3b] rounded-2xl p-8 mb-space-lg shadow-lg border border-white/5">
+          <!-- Decorative Background Elements -->
+          <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full -ml-10 -mb-10 blur-2xl"></div>
+
+          <div class="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+            <div class="flex flex-col gap-2">
+              <h1 class="font-headline-lg text-4xl text-white tracking-tight font-bold">Kho lưu trữ hồ sơ hộ kinh doanh</h1>
+              <div class="flex flex-wrap items-center gap-3 mt-1">
+                <p class="text-red-100/90 font-medium text-lg">Quản lý hệ thống biểu mẫu, quy trình và hồ sơ hộ kinh doanh chuẩn hóa số.</p>
+                <span class="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 font-label-sm text-xs font-bold flex items-center gap-1.5 border border-white/10">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                  Căn cứ Nghị định 01/2021/NĐ-CP về đăng ký hộ kinh doanh
+                </span>
+              </div>
+            </div>
+
+            <!-- Main Command Buttons -->
+            <div class="flex flex-wrap items-center gap-3">
+              <button id="reload-btn" type="button" class="flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-stone-50 text-stone-900 font-bold shadow-lg transition-all active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[22px]">sync</span>
+                <span>Tải lại danh sách</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search & Quick Stats Section -->
+        <div class="flex flex-col xl:flex-row items-stretch gap-4 mb-8">
+          <!-- Refined Search Bar matching the reference image -->
+          <div class="flex-1 bg-[#FDFCF9] border border-amber-400 rounded-2xl p-2 shadow-lg flex flex-col md:flex-row items-center gap-2">
+            <!-- Left: Category Selector -->
+            <div class="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-xl w-full md:w-auto shrink-0">
+              <span class="material-symbols-outlined text-amber-600 text-[22px]">folder</span>
+              <select class="bg-transparent outline-none font-bold text-stone-800 text-sm cursor-pointer pr-2 border-none ring-0">
+                <option>Tất cả hồ sơ</option>
+                <option>Mẫu đơn hộ kinh doanh</option>
+                <option>Thủ tục hành chính</option>
+              </select>
+            </div>
+            
+            <!-- Middle: Input Field -->
+            <div class="flex-1 flex items-center px-4 w-full">
+              <span class="material-symbols-outlined text-red-600 text-[24px] mr-3">search</span>
+              <input id="main-search-input" class="w-full bg-transparent border-none outline-none focus:ring-0 font-medium text-stone-600 placeholder:text-stone-400 text-[15px]" 
+                     placeholder="Nhập mã hồ sơ, số CCCD/CMND, tên hộ kinh doanh hoặc địa điểm kinh doanh (ví dụ: HS-2024-8891, Nguyễn Thị Mai)..." type="text">
+            </div>
+            
+            <!-- Right: Ctrl+K & Search Button -->
+            <div class="flex items-center gap-4 w-full md:w-auto px-2">
+              <div class="hidden lg:flex items-center gap-1 px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-[11px] border border-amber-200 shadow-sm">
+                <span>Ctrl</span>
+                <span>+</span>
+                <span>K</span>
+              </div>
+              <button id="search-button-main" class="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-bold shadow-md transition-all active:scale-[0.95] shrink-0">
+                <span>Tìm kiếm</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Thẻ hành động: Thêm mẫu đơn mới -->
+          <button id="add-template-card" type="button" class="group cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-amber-50 border border-amber-300 hover:bg-amber-100 transition-all shadow-md min-w-[220px] text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                <span class="material-symbols-outlined text-[22px]">add_circle</span>
+              </div>
+              <div>
+                <p class="text-[11px] font-bold text-amber-900/60 uppercase tracking-wider">Kho biểu mẫu</p>
+                <p class="text-lg font-extrabold text-amber-800 leading-none mt-1">Thêm mẫu đơn</p>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-amber-500 group-hover:text-amber-700 transition-colors ml-4">arrow_forward_ios</span>
+          </button>
+        </div>
+
+
+        <!-- Main Data Section: Template Repository Table -->
+        <div class="rounded-2xl bg-white shadow-md overflow-hidden flex flex-col mb-space-lg border border-stone-200">
+          <!-- Header bar - THEMATICALLY STYLED "CLOSED BOX" -->
+          <div class="px-space-md py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-gradient-to-r from-[#9e3b2d] to-[#b74f3b] border-b border-red-900/30">
+            <div class="flex items-center gap-space-sm">
+              <div class="w-1.5 h-7 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(209,160,141,0.55)]"></div>
+              <div class="flex items-center gap-space-xs">
+                <h2 class="font-headline-sm text-headline-sm text-white font-extrabold tracking-tight">Danh sách Mẫu Đơn Hộ Kinh Doanh Trong Kho Lưu Trữ</h2>
+                <span class="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 font-label-sm text-xs font-bold flex items-center gap-1.5 border border-white/10 shadow-sm">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                  24 Biểu mẫu Chuẩn hóa
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Interactive Data Table of Form Templates -->
+          <div class="w-full overflow-x-auto">
+            <table class="w-full text-left font-body-sm text-body-sm">
+              <thead>
+                <tr class="bg-stone-100 text-stone-600 font-label-sm text-[11px] uppercase tracking-widest border-b border-stone-200">
+                  <th class="py-3 px-space-md w-10 text-center">
+                    <input class="rounded accent-primary w-4 h-4 cursor-pointer" type="checkbox">
+                  </th>
+                  <th class="py-3 px-space-md font-semibold">Mã hiệu mẫu đơn</th>
+                  <th class="py-3 px-space-md font-semibold min-w-[240px]">Tên biểu mẫu &amp; Phạm vi áp dụng</th>
+                  <th class="py-3 px-space-md font-semibold">Căn cứ pháp lý</th>
+                  <th class="py-3 px-space-md font-semibold">Phiên bản / Ngày cập nhật</th>
+                  <th class="py-3 px-space-md text-right font-semibold min-w-[190px]">Quản trị cấu trúc &amp; Thao tác</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-surface-container-high/40">
+
+          <!-- Pagination & Template Count -->
+          <div class="p-space-md bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-stone-600">
+            <div class="flex items-center gap-space-sm">
+              <span class="">Hiển thị</span>
+              <select class="bg-surface-container-lowest text-on-surface py-1 px-2 rounded font-semibold outline-none cursor-pointer">
+                <option>10</option>
+                <option selected="">25</option>
+                <option>50</option>
+              </select>
+              <span class="">trong tổng số <strong class="text-on-surface font-bold">24</strong> mẫu đơn hộ kinh doanh chuẩn hóa</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button class="p-1.5 rounded hover:bg-surface-container text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+                <span class="material-symbols-outlined text-[18px]">first_page</span>
+              </button>
+              <button class="p-1.5 rounded hover:bg-surface-container text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+              </button>
+              <button class="w-8 h-8 rounded bg-primary text-on-primary font-bold flex items-center justify-center text-label-md shadow-xs">1</button>
+              <button class="w-8 h-8 rounded hover:bg-surface-container text-on-surface font-medium flex items-center justify-center text-label-md">2</button>
+              <button class="p-1.5 rounded hover:bg-surface-container text-outline hover:text-on-surface">
+                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+              </button>
+              <button class="p-1.5 rounded hover:bg-surface-container text-outline hover:text-on-surface">
+                <span class="material-symbols-outlined text-[18px]">last_page</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full bg-surface-container-low py-space-md px-margin text-on-surface-variant font-label-md text-label-md">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+        <div class="flex items-center gap-space-xs">
+          <span class="">© 2025 Cổng dịch vụ hành chính công. Bảo lưu mọi quyền.</span>
+          <span class="text-outline-variant">|</span>
+          <span class="">Kho Lưu Trữ &amp; Quản Trị Biểu Mẫu Chuẩn Hóa Cấp Quốc Gia.</span>
+        </div>
+        <div class="flex items-center gap-space-md">
+          <a class="hover:text-primary transition-colors text-on-surface-variant" data-path="thu-vien-bieu-mau-va-thu-tuc" href="#">Quy chế lưu trữ biểu mẫu</a>
+          <a class="hover:text-primary transition-colors text-on-surface-variant" data-path="bao-cao-thong-ke" href="#">Hỗ trợ kỹ thuật: 1900 8198</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- DRAWER: THÊM MẪU ĐƠN ĐẤT ĐAI (đồng bộ với business-form-templates.html) -->
+  <div id="template-drawer" hidden class="fixed inset-0 z-[60]">
+    <div class="drawer-backdrop absolute inset-0 bg-stone-950/45 opacity-0" data-close-drawer></div>
+    <section role="dialog" aria-modal="true" aria-labelledby="template-drawer-title"
+      class="drawer-panel absolute right-0 top-0 bottom-0 w-full max-w-xl bg-surface-panel shadow-2xl flex flex-col translate-x-full">
+      <header class="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-subtle bg-gradient-to-r from-red-800 to-red-900 text-white">
+        <div>
+          <p class="text-label-sm tracking-wider text-amber-300">Mã mẫu do máy chủ tự cấp</p>
+          <h2 id="template-drawer-title" class="text-headline-sm font-bold">Thêm mẫu đơn</h2>
+        </div>
+        <button type="button" class="w-10 h-10 rounded-lg flex items-center justify-center text-red-100 hover:bg-white/15" aria-label="Đóng" data-close-drawer>
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </header>
+
+      <form id="template-form" novalidate class="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-5">
+        <div class="flex flex-col gap-1.5">
+          <span class="text-label-md font-bold text-stone-800" id="template-file-label">Tệp mẫu đơn <span class="text-red-700">*</span></span>
+          <label for="f-file" id="dropzone" class="flex items-center gap-3 rounded-xl border-2 border-dashed border-stone-300 bg-surface-subtle px-4 py-5 cursor-pointer hover:border-red-600 hover:bg-red-50/50 transition-colors">
+            <span class="w-11 h-11 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-red-700 shrink-0">
+              <span class="material-symbols-outlined">upload_file</span>
+            </span>
+            <span class="flex flex-col min-w-0">
+              <span class="font-semibold text-stone-900 truncate" id="file-name">Chọn hoặc kéo thả tệp vào đây</span>
+              <span class="text-[12px] text-stone-600">PDF, DOC hoặc DOCX, tối đa 10 MB</span>
+            </span>
+          </label>
+          <input id="f-file" name="file" type="file" accept=".pdf,.doc,.docx" class="sr-only" aria-labelledby="template-file-label" aria-describedby="e-file">
+          <p id="e-file" class="text-[12px] text-red-700"></p>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label for="f-name" class="text-label-md font-bold text-stone-800">Tên mẫu đơn <span class="text-red-700">*</span></label>
+          <input id="f-name" name="name" aria-describedby="h-name e-name" class="h-11 rounded-xl border border-stone-300 px-3 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none">
+          <p id="h-name" class="text-[12px] text-stone-500">Tự điền từ tên tệp, bạn có thể sửa lại cho gọn.</p>
+          <p id="e-name" class="text-[12px] text-red-700"></p>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label for="f-procedure" class="text-label-md font-bold text-stone-800">Thuộc thủ tục <span class="text-red-700">*</span></label>
+          <select id="f-procedure" name="procedure" class="h-11 rounded-xl border border-stone-300 px-3 bg-white focus:border-red-700 outline-none" aria-describedby="e-procedure"></select>
+          <p id="e-procedure" class="text-[12px] text-red-700"></p>
+        </div>
+
+        <p id="form-error" role="alert" class="hidden rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-body-md text-red-900"></p>
+      </form>
+
+      <footer class="flex items-center justify-end gap-2 px-6 py-4 border-t border-border-subtle bg-surface-subtle">
+        <button type="button" class="h-11 px-4 rounded-xl text-stone-700 font-semibold hover:bg-white" data-close-drawer>Hủy</button>
+        <button type="submit" form="template-form" id="save-btn" class="h-11 inline-flex items-center gap-2 px-5 rounded-xl bg-red-700 text-white font-bold hover:bg-red-800 disabled:opacity-60 disabled:cursor-wait">
+          <span class="material-symbols-outlined text-[20px]">upload_file</span>
+          <span id="save-label">Tải lên mẫu đơn</span>
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- TOASTS -->
+  <div id="toasts" aria-live="polite" class="fixed z-[80] bottom-4 right-4 left-4 sm:left-auto flex flex-col gap-2 items-end pointer-events-none"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const table = document.querySelector('table');
+      const tbody = table?.querySelector('tbody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-space-md py-10 text-center text-on-surface-variant">Đang tải mẫu đơn từ cơ sở dữ liệu...</td></tr>';
+      const rows = () => Array.from(tbody?.querySelectorAll('tr') || []);
+      const searchInput = document.getElementById('main-search-input');
+      const searchButton = document.getElementById('search-button-main');
+      const filterSelects = Array.from(document.querySelectorAll('main select')).slice(0, 3);
+      const resetButton = document.querySelector('button[title="Thiết lập lại bộ lọc"]');
+      const selectedCount = document.querySelector('tbody')?.closest('.rounded-xl')?.querySelector('strong');
+      const emptyMessage = document.createElement('tr');
+      const formFields = new WeakMap();
+      const formSchemas = new WeakMap();
+      let fetchFormSchemaFromApi;
+      let authModule = null;
+      let businessProcedureNames = [];
+
+      const escapeHtml = (value) => String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+
+      function getFormFields(row) {
+        return formFields.get(row) || [];
+      }
+
+      async function getDatabaseFormFields(row) {
+        if (!fetchFormSchemaFromApi || !row.dataset.procedureCode) return null;
+        if (formSchemas.has(row)) return formSchemas.get(row);
+        try {
+          const schema = await fetchFormSchemaFromApi(row.dataset.procedureCode);
+          const sections = schema.sections || [];
+          const fields = (schema.fields || []).map((field) => {
+            const section = sections.find((item) => item.key === field.section);
+            const type = field.field_type === 'select' ? 'select' : field.field_type === 'long_text' ? 'textarea' : (field.field_type || 'text');
+            return {
+              section: section?.title || field.section || 'THÔNG TIN BỔ SUNG',
+              label: field.label || field.title || field.name,
+              type,
+              options: field.options || field.choices || [],
+              required: Boolean(field.required),
+              fullWidth: type === 'textarea' || type === 'file'
+            };
+          }).filter((field) => field.label);
+          if (fields.length) {
+            formSchemas.set(row, fields);
+            return fields;
+          }
+        } catch {
+          return null;
+        }
+        return null;
+      }
+
+      const getRowText = (row) => row.textContent.toLocaleLowerCase('vi');
+
+      function applyFilters() {
+        const keyword = (searchInput?.value || '').trim().toLocaleLowerCase('vi');
+        const selectedFilters = filterSelects
+          .map((select) => select.value.trim().toLocaleLowerCase('vi'))
+          .filter((value) => value && !value.startsWith('tất cả'));
+        let visible = 0;
+
+        rows().forEach((row) => {
+          const text = getRowText(row);
+          const matchesKeyword = !keyword || text.includes(keyword);
+          const matchesFilters = selectedFilters.every((filter) => text.includes(filter));
+          const isVisible = matchesKeyword && matchesFilters;
+          row.classList.toggle('hidden', !isVisible);
+          if (isVisible) visible += 1;
+        });
+
+        if (emptyMessage.parentNode) emptyMessage.remove();
+        if (!visible && tbody) {
+          emptyMessage.innerHTML = '<td colspan="6" class="px-space-md py-10 text-center text-on-surface-variant">Không tìm thấy hồ sơ phù hợp với bộ lọc hiện tại.</td>';
+          tbody.appendChild(emptyMessage);
+        }
+        if (selectedCount) selectedCount.textContent = visible;
+      }
+
+      function addEyeButton(row) {
+        const actions = row.querySelector('td:last-child > div');
+        if (!actions || actions.querySelector('[data-action="view"]')) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.action = 'view';
+        button.className = 'p-1.5 rounded-lg hover:bg-surface-container text-secondary transition-colors';
+        button.title = 'Xem thông tin hồ sơ';
+        button.innerHTML = '<span class="material-symbols-outlined text-[18px]">visibility</span>';
+        const deleteButton = actions.querySelector('[data-action="delete"]') || actions.querySelector('button:last-child');
+        actions.insertBefore(button, deleteButton || null);
+      }
+
+      function prepareRows() {
+        rows().forEach((row) => {
+          row.querySelectorAll('button').forEach((button) => {
+            const icon = button.querySelector('.material-symbols-outlined')?.textContent.trim();
+            if (icon === 'download') button.remove();
+          });
+          const actions = row.querySelector('td:last-child > div');
+          actions?.querySelectorAll('button').forEach((button) => {
+            const icon = button.querySelector('.material-symbols-outlined')?.textContent.trim();
+            if (icon === 'visibility') button.dataset.action = 'view';
+            if (icon === 'delete') button.dataset.action = 'delete';
+            if (icon === 'settings' || icon === 'edit') button.remove();
+          });
+          addEyeButton(row);
+        });
+      }
+
+      function createModal(id, title, content) {
+        document.getElementById(id)?.remove();
+        document.body.insertAdjacentHTML('beforeend', `
+          <div id="${id}" class="fixed inset-0 z-[100] hidden items-center justify-center bg-stone-950/50 p-4 backdrop-blur-sm">
+            <div class="w-full max-w-xl rounded-2xl bg-surface-container-lowest shadow-2xl border border-stone-200">
+              <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
+                <h2 class="font-headline-sm text-headline-sm font-bold text-primary">${title}</h2>
+                <button type="button" data-modal-close class="rounded-lg p-1 text-stone-500 hover:bg-stone-100 hover:text-stone-900"><span class="material-symbols-outlined">close</span></button>
+              </div>
+              <div class="px-6 py-5">${content}</div>
+            </div>
+          </div>`);
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        modal.querySelector('[data-modal-close]')?.addEventListener('click', () => closeModal(modal));
+        modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(modal); });
+        return modal;
+      }
+
+      function closeModal(modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modal.remove();
+      }
+
+      async function showView(row) {
+        const cells = row.querySelectorAll('td');
+        const fields = await getDatabaseFormFields(row);
+        if (!fields?.length) {
+          createModal('bizform-schema-error-modal', 'Không tải được cấu trúc mẫu đơn', '<p class="text-stone-700">Không thể lấy cấu trúc biểu mẫu từ cơ sở dữ liệu. Vui lòng thử lại sau.</p>');
+          return;
+        }
+        const sections = fields.reduce((groups, field, index) => {
+          const section = field.section || 'THÔNG TIN BỔ SUNG';
+          (groups[section] ||= []).push({ ...field, index });
+          return groups;
+        }, {});
+        const renderControl = (field) => {
+          const required = field.required ? 'required' : '';
+          if (field.type === 'textarea') return `<textarea name="field-${field.index}" ${required} disabled rows="2" placeholder="${escapeHtml(field.label)}" class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none"></textarea>`;
+          if (field.type === 'select') return `<select name="field-${field.index}" ${required} disabled class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none"><option value="">${escapeHtml(field.options?.[0] || 'Chọn thông tin')}</option>${(field.options || []).slice(1).map((option) => `<option>${escapeHtml(option)}</option>`).join('')}</select>`;
+          return `<input name="field-${field.index}" type="${field.type}" ${required} disabled placeholder="${escapeHtml(field.label)}" class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none">`;
+        };
+        const formMarkup = Object.entries(sections).map(([section, sectionFields]) => `
+          <section class="sm:col-span-2">
+            <h3 class="mb-4 border-b border-secondary/70 pb-2 text-lg font-medium tracking-wide text-secondary">${escapeHtml(section)}</h3>
+            <div class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              ${sectionFields.map((field) => `<label class="${field.fullWidth ? 'sm:col-span-2' : ''} grid grid-cols-[minmax(120px,1fr)_minmax(180px,2fr)] items-center gap-3"><span class="text-sm font-medium text-stone-700">${escapeHtml(field.label)}${field.required ? ' <span class="text-error">*</span>' : ''}</span>${renderControl(field)}</label>`).join('')}
+            </div>
+          </section>`).join('');
+        const modal = createModal('bizform-view-modal', 'Xem trước mẫu đơn', `
+          <div class="mb-4 rounded-lg bg-surface-container-low px-4 py-3 text-sm">
+            <p class="font-bold text-primary">${escapeHtml(cells[2]?.querySelector('span')?.textContent || '')}</p>
+            <p class="mt-1 text-on-surface-variant">Mã hiệu: ${escapeHtml(cells[1]?.querySelector('span')?.textContent || '')}</p>
+          </div>
+          <div id="bizform-application-form" class="grid max-h-[70vh] gap-7 overflow-y-auto bg-white px-1 pr-3">
+            ${formMarkup}
+            <div class="flex justify-end gap-2 pt-2 sm:col-span-2"><button type="button" data-modal-close class="rounded-lg border border-stone-300 px-4 py-2 font-semibold text-stone-700 hover:bg-stone-100">Đóng</button></div>
+          </div>`);
+        modal.querySelector('.w-full.max-w-xl')?.classList.replace('max-w-xl', 'max-w-6xl');
+        modal.querySelector('[data-modal-close]')?.addEventListener('click', () => closeModal(modal));
+      }
+
+      function showEdit(row) {
+        const cells = row.querySelectorAll('td');
+        let fields = getFormFields(row);
+        const renderFields = () => fields.map((field, index) => `
+          <div class="rounded-lg border border-stone-200 bg-surface-container-low p-3" data-field-index="${index}">
+            <div class="flex items-start gap-2">
+              <div class="grid flex-1 gap-2 sm:grid-cols-[1fr_1fr_150px]">
+                <input name="label" value="${escapeHtml(field.label)}" required class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary" placeholder="Tên ô mẫu">
+                <input name="section" value="${escapeHtml(field.section || 'THÔNG TIN BỔ SUNG')}" required class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary" placeholder="Nhóm biểu mẫu">
+                <select name="type" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm outline-none focus:border-primary">
+                  ${['text', 'textarea', 'number', 'date', 'file'].map((type) => `<option value="${type}" ${field.type === type ? 'selected' : ''}>${type === 'textarea' ? 'Ô nhập dài' : type === 'file' ? 'Tệp đính kèm' : type === 'number' ? 'Số' : type === 'date' ? 'Ngày' : 'Ô nhập'}</option>`).join('')}
+                </select>
+              </div>
+              <button type="button" data-remove-field class="rounded-lg p-2 text-error hover:bg-error-container/20" title="Xóa ô mẫu"><span class="material-symbols-outlined">delete</span></button>
+            </div>
+            <label class="mt-2 flex items-center gap-2 text-xs font-semibold text-stone-600"><input name="required" type="checkbox" ${field.required ? 'checked' : ''} class="accent-primary"> Bắt buộc người dùng điền</label>
+          </div>`).join('');
+        const modal = createModal('bizform-edit-modal', 'Chỉnh sửa các ô trong mẫu đơn', `
+          <form id="bizform-edit-form" class="space-y-4">
+            <div class="rounded-lg bg-amber-50 px-4 py-3 text-sm text-stone-700">Thêm, đổi tên hoặc xóa các ô mà người dùng cần điền trước khi nộp đơn.</div>
+            <div id="bizform-fields-list" class="grid max-h-[55vh] gap-3 overflow-y-auto pr-1">${renderFields()}</div>
+            <button type="button" id="add-bizform-field" class="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-primary px-4 py-2 font-semibold text-primary hover:bg-primary/5"><span class="material-symbols-outlined">add</span>Thêm ô mẫu</button>
+            <div class="flex justify-end gap-2 pt-2"><button type="button" data-modal-close class="rounded-lg border border-stone-300 px-4 py-2 font-semibold text-stone-700 hover:bg-stone-100">Hủy</button><button class="rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:bg-primary-container" type="submit">Lưu cấu trúc mẫu đơn</button></div>
+          </form>`);
+        const list = modal.querySelector('#bizform-fields-list');
+        const readFields = () => Array.from(list.querySelectorAll('[data-field-index]')).map((item) => ({
+          label: item.querySelector('[name="label"]').value.trim(),
+          section: item.querySelector('[name="section"]').value.trim() || 'THÔNG TIN BỔ SUNG',
+          type: item.querySelector('[name="type"]').value,
+          required: item.querySelector('[name="required"]').checked
+        })).filter((field) => field.label);
+        modal.querySelector('#add-bizform-field').addEventListener('click', () => {
+          fields = [...readFields(), { section: 'THÔNG TIN BỔ SUNG', label: 'Ô thông tin mới', type: 'text', required: false }];
+          list.innerHTML = renderFields();
+        });
+        list.addEventListener('click', (event) => {
+          const removeButton = event.target.closest('[data-remove-field]');
+          if (!removeButton) return;
+          removeButton.closest('[data-field-index]')?.remove();
+        });
+        modal.querySelector('#bizform-edit-form').addEventListener('submit', (event) => {
+          event.preventDefault();
+          const updatedFields = readFields();
+          if (!updatedFields.length) return;
+          formFields.set(row, updatedFields);
+          closeModal(modal);
+        });
+        modal.querySelector('[data-modal-close]')?.addEventListener('click', () => closeModal(modal));
+      }
+
+      function confirmDelete(row) {
+        const name = row.querySelectorAll('td')[2]?.querySelector('span')?.textContent.trim() || 'hồ sơ này';
+        const modal = createModal('bizform-delete-modal', 'Xác nhận xóa hồ sơ', `
+          <p class="text-stone-700">Bạn có chắc chắn muốn xóa <strong>${name}</strong> không? Thao tác này chỉ xóa hồ sơ khỏi danh sách hiện tại.</p>
+          <div class="mt-6 flex justify-end gap-2"><button type="button" data-modal-close class="rounded-lg border border-stone-300 px-4 py-2 font-semibold text-stone-700 hover:bg-stone-100">Hủy</button><button type="button" data-confirm-delete class="rounded-lg bg-error px-4 py-2 font-semibold text-white hover:opacity-90">Xóa hồ sơ</button></div>`);
+        modal.querySelector('[data-confirm-delete]').addEventListener('click', () => {
+          row.remove();
+          closeModal(modal);
+          applyFilters();
+        });
+      }
+
+      function databaseRow(procedure) {
+        const code = procedure.code || procedure.procedure_code || '—';
+        const name = procedure.name || procedure.title || code;
+        const description = procedure.description || procedure.summary || 'Biểu mẫu được lấy từ cơ sở dữ liệu thủ tục hành chính.';
+        const legalBasis = procedure.legal_basis || procedure.legalBasis || procedure.reference || 'Theo cơ sở dữ liệu';
+        const updatedAt = procedure.updated_at || procedure.updatedAt || 'Đang cập nhật';
+        const version = procedure.version || 'Theo dữ liệu hệ thống';
+        return `<tr data-procedure-code="${escapeHtml(code)}" class="hover:bg-surface-container-low/60 transition-colors group">
+          <td class="py-3.5 px-space-md text-center"><input class="rounded accent-primary w-4 h-4 cursor-pointer" type="checkbox"></td>
+          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-lg text-label-lg font-bold text-primary font-mono tracking-tight">${escapeHtml(code)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">Từ cơ sở dữ liệu</span></div></td>
+          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-lg text-label-lg font-bold text-on-surface">${escapeHtml(name)}</span><span class="font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(description)}</span></div></td>
+          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-md text-label-md font-semibold text-secondary">${escapeHtml(legalBasis)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">Cập nhật từ hệ thống</span></div></td>
+          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-md text-label-md font-semibold text-on-surface">${escapeHtml(version)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">${escapeHtml(updatedAt)}</span></div></td>
+          <td class="py-3.5 px-space-md text-right"><div class="flex items-center justify-end gap-1"><button type="button" data-action="view" class="p-1.5 rounded-lg hover:bg-surface-container text-secondary transition-colors" title="Xem trước mẫu đơn"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button type="button" data-action="delete" class="p-1.5 rounded-lg hover:bg-error-container/20 text-error transition-colors" title="Xóa mẫu đơn"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></td>
+        </tr>`;
+      }
+
+      async function loadDatabaseForms() {
+        try {
+          const api = await import('/auth-api.js');
+          authModule = api;
+          fetchFormSchemaFromApi = api.fetchFormSchema;
+          const procedures = await api.fetchProcedures('business');
+          businessProcedureNames = (Array.isArray(procedures) ? procedures : [])
+            .map((procedure) => procedure.name || procedure.title || procedure.code)
+            .filter(Boolean);
+          renderProcedureOptions();
+          if (!Array.isArray(procedures) || !procedures.length || !tbody) {
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-space-md py-10 text-center text-on-surface-variant">Cơ sở dữ liệu chưa có mẫu đơn hộ kinh doanh.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = procedures.map(databaseRow).join('');
+          prepareRows();
+          applyFilters();
+        } catch (error) {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="px-space-md py-10 text-center text-error" role="alert">Không thể tải mẫu đơn từ cơ sở dữ liệu. ${escapeHtml(error?.message || 'Vui lòng kiểm tra kết nối backend.')}</td></tr>`;
+        }
+      }
+
+      // ===== Drawer thêm mẫu đơn (đồng bộ với LandForms-admin.html) =====
+      const FORM_TEMPLATES_PATH = '/api/procedures/form-templates';
+      const MAX_FILE_BYTES = 10 * 1024 * 1024;
+      const templateForm = document.getElementById('template-form');
+      let lastFocus = null;
+
+      function formatFileSize(bytes) {
+        return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+      }
+
+      // Gợi ý tên từ tên tệp: "giay-de-nghi_dang-ky.docx" → "Giay de nghi dang ky"
+      function nameFromFile(fileName) {
+        const base = fileName.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+        return base ? base.charAt(0).toUpperCase() + base.slice(1) : '';
+      }
+
+      function toast(message, kind = 'success') {
+        const colors = { success: 'bg-stone-900 text-white', error: 'bg-red-800 text-white' };
+        const icons = { success: 'check_circle', error: 'error' };
+        const el = document.createElement('div');
+        el.className = `pointer-events-auto flex items-center gap-2 rounded-xl px-4 py-3 shadow-xl text-body-md font-semibold max-w-sm ${colors[kind]}`;
+        el.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icons[kind]}</span><span>${escapeHtml(message)}</span>`;
+        document.getElementById('toasts')?.append(el);
+        setTimeout(() => el.remove(), 3800);
+      }
+
+      // Thủ tục lấy từ danh mục thủ tục hộ kinh doanh của hệ thống
+      function renderProcedureOptions() {
+        const select = document.getElementById('f-procedure');
+        if (!select) return;
+        select.innerHTML = '<option value="">Chọn thủ tục</option>'
+          + businessProcedureNames.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      }
+
+      function openTemplateDrawer() {
+        lastFocus = document.activeElement;
+        templateForm.reset();
+        templateForm.querySelectorAll('[aria-invalid]').forEach((el) => {
+          el.removeAttribute('aria-invalid');
+          el.classList.remove('border-red-600');
+        });
+        ['e-file', 'e-name', 'e-procedure'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = ''; });
+        document.getElementById('form-error').classList.add('hidden');
+        document.getElementById('file-name').textContent = 'Chọn hoặc kéo thả tệp vào đây';
+        document.getElementById('f-name').dataset.auto = '1';
+        renderProcedureOptions();
+        const drawer = document.getElementById('template-drawer');
+        drawer.hidden = false;
+        requestAnimationFrame(() => {
+          drawer.querySelector('.drawer-backdrop').classList.replace('opacity-0', 'opacity-100');
+          drawer.querySelector('.drawer-panel').classList.remove('translate-x-full');
+        });
+        setTimeout(() => document.getElementById('dropzone').focus(), 60);
+      }
+
+      function closeTemplateDrawer() {
+        const drawer = document.getElementById('template-drawer');
+        drawer.querySelector('.drawer-backdrop').classList.replace('opacity-100', 'opacity-0');
+        drawer.querySelector('.drawer-panel').classList.add('translate-x-full');
+        setTimeout(() => { drawer.hidden = true; }, 200);
+        lastFocus?.focus?.();
+      }
+
+      function setTemplateFieldError(id, message) {
+        const input = id === 'file' ? document.getElementById('dropzone') : document.getElementById(`f-${id}`);
+        document.getElementById(`e-${id}`).textContent = message || '';
+        if (message) input?.setAttribute('aria-invalid', 'true'); else input?.removeAttribute('aria-invalid');
+        input?.classList.toggle('border-red-600', Boolean(message));
+      }
+
+      function validateTemplateForm() {
+        const values = {
+          file: document.getElementById('f-file').files[0] || null,
+          name: document.getElementById('f-name').value.trim(),
+          procedure: document.getElementById('f-procedure').value
+        };
+        const errors = {};
+        if (!values.file) errors.file = 'Chọn tệp mẫu đơn để tải lên.';
+        else if (!/\.(pdf|docx?)$/i.test(values.file.name)) errors.file = 'Chỉ nhận tệp PDF, DOC hoặc DOCX.';
+        else if (values.file.size > MAX_FILE_BYTES) errors.file = 'Tệp lớn hơn 10 MB, hãy nén hoặc chọn tệp khác.';
+        if (values.name.length < 5) errors.name = 'Nhập tên mẫu đơn (ít nhất 5 ký tự).';
+        if (!values.procedure) errors.procedure = 'Chọn thủ tục của mẫu đơn.';
+
+        ['file', 'name', 'procedure'].forEach((key) => setTemplateFieldError(key, errors[key]));
+        const first = Object.keys(errors)[0];
+        if (first) (first === 'file' ? document.getElementById('dropzone') : document.getElementById(`f-${first}`)).focus();
+        return first ? null : values;
+      }
+
+      async function uploadFormTemplate(values) {
+        if (!authModule) throw new Error('Chưa kết nối được Backend nên chưa thể tải mẫu đơn lên.');
+        const base = await authModule.getApiBaseUrl();
+        const body = new FormData();
+        body.append('file', values.file);
+        body.append('name', values.name);
+        body.append('procedure', values.procedure);
+        const res = await fetch(`${base}${FORM_TEMPLATES_PATH}`, { method: 'POST', credentials: 'include', body });
+        const payload = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(payload?.error?.message || `Máy chủ trả lỗi ${res.status}.`);
+        return payload?.data;
+      }
+
+      templateForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const values = validateTemplateForm();
+        if (!values) return;
+        const button = document.getElementById('save-btn');
+        button.disabled = true;
+        document.getElementById('save-label').textContent = 'Đang tải lên…';
+        try {
+          const saved = await uploadFormTemplate(values);
+          closeTemplateDrawer();
+          toast(`Đã thêm mẫu ${saved?.code || values.name} vào kho.`);
+          loadDatabaseForms();
+        } catch (error) {
+          const formError = document.getElementById('form-error');
+          formError.textContent = error.message;
+          formError.classList.remove('hidden');
+        } finally {
+          button.disabled = false;
+          document.getElementById('save-label').textContent = 'Tải lên mẫu đơn';
+        }
+      });
+
+      document.getElementById('f-file')?.addEventListener('change', () => {
+        const file = document.getElementById('f-file').files[0];
+        if (file) {
+          document.getElementById('file-name').textContent = `${file.name} · ${formatFileSize(file.size)}`;
+          const nameInput = document.getElementById('f-name');
+          if (!nameInput.value.trim() || nameInput.dataset.auto === '1') {
+            nameInput.value = nameFromFile(file.name);
+            nameInput.dataset.auto = '1';
+            setTemplateFieldError('name', '');
+          }
+        }
+        setTemplateFieldError('file', '');
+      });
+      const templateDropzone = document.getElementById('dropzone');
+      templateDropzone.tabIndex = 0;
+      templateDropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.getElementById('f-file').click(); } });
+      ['dragover', 'dragenter'].forEach((type) => templateDropzone.addEventListener(type, (e) => { e.preventDefault(); templateDropzone.classList.add('border-red-600', 'bg-red-50'); }));
+      ['dragleave', 'drop'].forEach((type) => templateDropzone.addEventListener(type, () => templateDropzone.classList.remove('border-red-600', 'bg-red-50')));
+      templateDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.files.length) {
+          document.getElementById('f-file').files = e.dataTransfer.files;
+          document.getElementById('f-file').dispatchEvent(new Event('change'));
+        }
+      });
+      document.getElementById('f-name')?.addEventListener('input', (e) => { e.target.dataset.auto = '0'; });
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('[data-close-drawer]')) closeTemplateDrawer();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !document.getElementById('template-drawer').hidden) closeTemplateDrawer();
+      });
+
+      prepareRows();
+      searchInput?.addEventListener('input', applyFilters);
+      searchButton?.addEventListener('click', applyFilters);
+      searchInput?.addEventListener('keydown', (event) => { if (event.key === 'Enter') applyFilters(); });
+      filterSelects.forEach((select) => select.addEventListener('change', applyFilters));
+      resetButton?.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        filterSelects.forEach((select) => { select.selectedIndex = 0; });
+        applyFilters();
+      });
+      document.getElementById('add-template-card')?.addEventListener('click', openTemplateDrawer);
+      document.getElementById('reload-btn')?.addEventListener('click', loadDatabaseForms);
+      document.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          searchInput?.focus();
+        }
+      });
+      tbody?.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        const row = button?.closest('tr');
+        if (!button || !row) return;
+        if (button.dataset.action === 'view') showView(row);
+        if (button.dataset.action === 'delete') confirmDelete(row);
+      });
+      applyFilters();
+      loadDatabaseForms();
+    });
+  </script>
+  <!-- Trang quản trị: bắt buộc đăng nhập bằng tài khoản admin trước khi hiện nội dung -->
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['admin']);
+  </script>
+<script src="/admin-ai-chat.js" defer></script>
+</body>
+</html>
