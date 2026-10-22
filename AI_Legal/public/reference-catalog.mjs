@@ -3,13 +3,36 @@ export const domainLabels = {
   cooperative: 'Hợp tác xã', social_insurance: 'Bảo hiểm xã hội'
 };
 export const statusLabels = { source: 'Bản nguồn · Chỉ xem', needs_review: 'Cần rà soát nội dung', specific_case: 'Mẫu cho tình huống riêng' };
-export const groupLabel = (group) => group.code ? `${group.code} · ${group.name}` : group.name;
-export const proceduresOf = (item) => item.procedures || [{ key: item.procedure, code: item.procedure_code ?? item.procedure, name: item.procedure_name }];
+
+const FALLBACK_CODES = {
+  'coop-branch-registration': 'HTX-001',
+  'vat-declaration': 'DN-012',
+  'household-certificate-reissue': 'HKD-003',
+  'social-insurance-authorization': 'BHXH-001',
+  'land-allocation-rental': 'DD-013',
+  'land-dispute-mediation': 'DD-014',
+  'land-survey': 'DD-015',
+  'agricultural-land-term-confirmation': 'DD-016',
+  'land-allocation-method-change': 'DD-017',
+};
+
+export const groupLabel = (group) => {
+  const code = group.code || group.procedure_code || FALLBACK_CODES[group.key] || FALLBACK_CODES[group.procedure] || '';
+  return code ? `${code} · ${group.name}` : group.name;
+};
+
+export const proceduresOf = (item) => item.procedures || [{ key: item.procedure, code: item.procedure_code ?? FALLBACK_CODES[item.procedure] ?? item.procedure, name: item.procedure_name }];
 export const procedureLabel = (item) => groupLabel(proceduresOf(item)[0]);
+
 export function procedureChoices(items) {
   const choices = new Map();
-  for (const item of items) for (const group of proceduresOf(item)) choices.set(group.key, groupLabel(group));
-  return choices;
+  for (const item of items) {
+    for (const group of proceduresOf(item)) {
+      choices.set(group.key, groupLabel(group));
+    }
+  }
+  const sortedEntries = Array.from(choices.entries()).sort((a, b) => a[1].localeCompare(b[1], 'vi'));
+  return new Map(sortedEntries);
 }
 
 export function normalizeSearch(value) {
