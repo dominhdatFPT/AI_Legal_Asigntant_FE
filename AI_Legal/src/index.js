@@ -92,13 +92,22 @@ app.get('/forgot-password', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'forgot-password.html'));
 });
 
+// Bộ nhớ đệm (in-memory cache) cấu hình Firebase để tránh đọc đĩa và parse regex mỗi request
+let cachedFirebaseConfig = null;
+
 // Địa chỉ Backend (Gateway) mà trình duyệt sẽ gọi. Đổi bằng biến môi trường BACKEND_URL.
 app.get('/api/app-config', (req, res) => {
   const apiBaseUrl = process.env.BACKEND_URL || `${req.protocol}://${req.hostname}:8080`;
+  res.set('Cache-Control', 'public, max-age=3600');
   res.json({ apiBaseUrl });
 });
 
 app.get('/api/firebase-config', (req, res) => {
+  if (cachedFirebaseConfig) {
+    res.set('Cache-Control', 'public, max-age=3600');
+    return res.json(cachedFirebaseConfig);
+  }
+
   try {
     const configSource = fs.readFileSync(path.join(__dirname, '..', '..', '.env'), 'utf8');
     const configMatch = configSource.match(/const\s+firebaseConfig\s*=\s*(\{[\s\S]*?\})\s*;/);
@@ -129,7 +138,9 @@ app.get('/api/firebase-config', (req, res) => {
       return res.status(503).json({ error: 'Firebase configuration is incomplete.' });
     }
 
-    return res.json(publicConfig);
+    cachedFirebaseConfig = publicConfig;
+    res.set('Cache-Control', 'public, max-age=3600');
+    return res.json(cachedFirebaseConfig);
   } catch {
     return res.status(503).json({ error: 'Firebase configuration could not be loaded.' });
   }
