@@ -1,11 +1,18 @@
 module.exports = {
   content: [
     "./AI_Legal/src/pages/**/*.html",
-    "./AI_Legal/src/**/*.js"
+    "./AI_Legal/src/**/*.js",
+    // HTML dựng bằng JS ở public (user-dashboard-data.js, auth-api.js...) cũng dùng class Tailwind.
+    "./AI_Legal/public/**/*.js"
   ],
   darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        // Màn hình desktop thấp (laptop 768px): trang Đăng nhập/Đăng ký thu gọn để không phải cuộn
+        short: { raw: '(min-width: 1024px) and (max-height: 820px)' },
+        tiny: { raw: '(min-width: 1024px) and (max-height: 680px)' }
+      },
       keyframes: {
         "fade-up": {
           from: { opacity: "0", transform: "translateY(12px)" },

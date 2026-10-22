@@ -1,719 +1,204 @@
 <!DOCTYPE html>
-<html lang="vi" style="">
-
+<html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="web_dashboard" name="shell-type">
-  <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning,hourglass_top&amp;display=block" rel="stylesheet">
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap"
-    rel="stylesheet">
-  
-  <style>
-    @layer base {
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        overscroll-behavior: none;
-      }
-
-      main> :first-child {
-        margin-top: 0 !important;
-      }
-
-      main> :last-child {
-        margin-bottom: 0 !important;
-      }
-    }
-
-    ::-webkit-scrollbar {
-      display: none;
-    }
-
-    .gold-glow {
-      box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.35);
-    }
-
-    .red-glow {
-      box-shadow: 0 4px 20px -2px rgba(185, 28, 28, 0.35);
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="shell-type" content="web_dashboard">
+  <title>Tổng quan quản trị | Hồ sơ đất &amp; HKD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300..600,0..1,0&icon_names=add_business,add_location_alt,assignment_late,badge,calendar_month,chat,chevron_left,chevron_right,domain,document_scanner,expand_more,folder_open,grid_view,group,landscape,logout,map,person,print,schedule,search,star,storefront,travel_explore,verified&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script id="tailwind-config">
+  <script>
     tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#b91c1c",
-            "primary-container": "#c5161d",
-            "primary-dark": "#881337",
-            "on-primary": "#ffffff",
-            "on-primary-container": "#fff1f2",
-            "primary-fixed": "#fee2e2",
-            "primary-fixed-dim": "#fecaca",
-            "on-primary-fixed-variant": "#991b1b",
-            "on-primary-fixed": "#450a0a",
-            "inverse-primary": "#fca5a5",
-
-            "tertiary": "#b45309",
-            "tertiary-container": "#d97706",
-            "tertiary-fixed": "#fef3c7",
-            "tertiary-fixed-dim": "#fde68a",
-            "on-tertiary": "#ffffff",
-            "on-tertiary-fixed": "#78350f",
-            "on-tertiary-fixed-variant": "#92400e",
-            "on-tertiary-container": "#fffbeb",
-
-            "surface": "#EAE5DC",
-            "surface-panel": "#FFFFFF",
-            "surface-subtle": "#F4F0E8",
-            "surface-brand-tint": "#FFF5F5",
-            "surface-container-lowest": "#FFFFFF",
-            "surface-container-low": "#E5DFD4",
-            "surface-container": "#DCD5C8",
-            "surface-container-high": "#D2CABE",
-            "surface-container-highest": "#C7BEB0",
-            "surface-dim": "#DDD6C9",
-            "surface-bright": "#FFFFFF",
-            "surface-variant": "#E8E2D6",
-            "surface-tint": "#b91c1c",
-
-            "on-surface": "#1C1917",
-            "on-surface-variant": "#44403C",
-            "secondary": "#78716C",
-            "secondary-container": "#E5DFD4",
-            "secondary-fixed": "#E5DFD4",
-            "secondary-fixed-dim": "#D2CABE",
-            "on-secondary": "#ffffff",
-            "on-secondary-container": "#44403C",
-            "on-secondary-fixed": "#1C1917",
-            "on-secondary-fixed-variant": "#44403C",
-
-            "border-subtle": "#D5CEBF",
-            "border-focus": "#b91c1c",
-            "outline": "#C8C0B0",
-            "outline-variant": "#DCD5C8",
-
-            "state-success": "#15803d",
-            "state-error": "#b91c1c",
-            "error": "#b91c1c",
-            "error-container": "#fee2e2",
-            "on-error": "#ffffff",
-            "on-error-container": "#991b1b"
-          },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "2xl": "1rem",
-            "full": "9999px"
-          },
-          spacing: {
-            "gutter": "1.5rem",
-            "margin": "2rem",
-            "space-xl": "2.5rem",
-            "space-lg": "1.5rem",
-            "space-sm": "0.5rem",
-            "space-xs": "0.25rem",
-            "space-md": "1rem"
-          },
-          fontFamily: {
-            "body-md": ["Be Vietnam Pro", "sans-serif"],
-            "display-hero": ["Be Vietnam Pro", "sans-serif"],
-            "label-sm": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg-mobile": ["Be Vietnam Pro", "sans-serif"],
-            "headline-lg": ["Be Vietnam Pro", "sans-serif"],
-            "body-sm": ["Be Vietnam Pro", "sans-serif"],
-            "body-lg": ["Be Vietnam Pro", "sans-serif"],
-            "label-lg": ["Be Vietnam Pro", "sans-serif"],
-            "headline-sm": ["Be Vietnam Pro", "sans-serif"],
-            "label-md": ["Be Vietnam Pro", "sans-serif"],
-            "headline-md": ["Be Vietnam Pro", "sans-serif"]
-          },
-          fontSize: {
-            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
-            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
-            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
-            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
-            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
-            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
-            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
-            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
-          }
-        }
-      }
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] } } }
     };
   </script>
-<link rel="stylesheet" href="/admin-ai-chat.css">
-<style id="auth-pending">body{visibility:hidden!important}</style>
+  <link rel="stylesheet" href="/admin-ai-chat.css">
+  <link rel="stylesheet" href="/admin-dashboard.css">
 </head>
-
-<body class="bg-surface font-body-md text-on-surface antialiased selection:bg-amber-200 selection:text-red-950">
-
-  <!-- SIDEBAR -->
-  <aside
-    class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-[#6e0d16] via-[#7d141e] to-[#4c070e] text-white z-50 flex flex-col justify-between border-r border-red-900/60 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
-    <div class="flex flex-col">
-      <!-- Brand / Logo Area -->
-      <div
-        class="h-16 px-space-md flex items-center gap-space-sm bg-black/20 border-b border-white/10 backdrop-blur-sm">
-        <div
-          class="relative p-0.5 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-500 shrink-0 shadow-md">
-          <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKMs-RKhOfSqrKLcmsX9wkVzHjnXtjnibm5wH5SsQdHWxuMFswwZGfrkNMaeyljQ1DtjYTBCIaRqePhCzO_om-lJ7SX1IOElJ2uf5pXbZozTDQfUuYVGRMbGr9fWHDFuedNDu-XoMAi4Py8KRIjA28VeIeiefjnDBjhYrrkxncsMYDzalHRpG6vFL5XXI4SBUPLeDyE7PGQU4AvH-BXaVbVCXqediLNtyp2Oj6EFePYu37YYrtyaBGxizg_xjpwrDxQVw"
-            alt="Logo" class="w-9 h-9 object-contain rounded-[10px] bg-white">
-        </div>
-        <div class="flex flex-col min-w-0">
-          <span
-            class="font-headline-sm text-[17px] text-white truncate leading-tight tracking-tight font-extrabold drop-shadow-sm">Hồ sơ đất &amp; HKD</span>
-          <span
-            class="font-label-sm text-[10px] text-amber-300 truncate tracking-widest font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Cổng dịch vụ hành chính
-          </span>
-        </div>
-      </div>
-
-      <div class="px-space-md py-space-sm">
-        <div class="h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent w-full"></div>
-      </div>
-
-      <!-- Navigation Links -->
-      <nav class="flex flex-col gap-1.5 px-space-md" id="sidebar-nav"
-        data-active-classes="bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-label-md shadow-lg shadow-amber-950/40 border-l-4 border-white">
-        <a aria-current="page"
-          class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-label-md shadow-lg shadow-black/25 border-l-4 border-white font-bold"
-          data-path="tong-quan" href="/dashboard">
-          <span class="material-symbols-outlined text-[20px] text-stone-950 group-hover:scale-110 transition-transform"
-            style="font-variation-settings: 'FILL' 1;">grid_view</span>
-          <span class="font-label-md text-label-md tracking-wide">Tổng quan</span>
+<body class="admin-dashboard">
+  <aside class="admin-sidebar" aria-label="Điều hướng quản trị">
+    <div class="admin-sidebar__top">
+      <a class="admin-brand" href="/dashboard" aria-label="Hồ sơ đất và hộ kinh doanh - Tổng quan">
+        <span class="admin-brand__logo"><img src="/images/national-service-logo.png" alt="Logo Cổng Dịch vụ công Quốc gia"></span>
+        <span class="admin-brand__copy"><strong>Hồ sơ đất &amp; HKD</strong><small><span class="admin-brand__dot"></span>Cổng dịch vụ hành chính</small></span>
+      </a>
+      <nav class="admin-nav" id="sidebar-nav" aria-label="Điều hướng chính">
+        <a class="admin-nav__link nav-item" aria-current="page" data-path="tong-quan" href="/dashboard" title="Tổng quan">
+          <span class="material-symbols-outlined" aria-hidden="true">grid_view</span><span class="admin-nav__label">Tổng quan</span>
         </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="ho-so-dat-dai" href="#">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">landscape</span>
-          <span class="font-label-md text-label-md">Hồ sơ đất đai</span>
+        <a class="admin-nav__link nav-item" data-path="ho-so-dat-dai" href="/landforms" title="Hồ sơ đất đai">
+          <span class="material-symbols-outlined" aria-hidden="true">landscape</span><span class="admin-nav__label">Hồ sơ đất đai</span>
         </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="ho-so-ho-kinh-doanh" href="/business-form-templates">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">storefront</span>
-          <span class="font-label-md text-label-md">Hồ sơ hộ kinh doanh</span>
+        <a class="admin-nav__link nav-item" data-path="ho-so-ho-kinh-doanh" href="/business-form-templates" title="Hồ sơ hộ kinh doanh">
+          <span class="material-symbols-outlined" aria-hidden="true">storefront</span><span class="admin-nav__label">Hồ sơ hộ kinh doanh</span>
         </a>
-        <a class="nav-item group flex items-center gap-space-sm px-space-md py-2.5 rounded-xl text-red-100/80 hover:bg-white/10 hover:text-white hover:border-l-4 hover:border-amber-400 transition-all font-medium"
-          data-path="quan-ly-nguoi-dung" href="/user-management">
-          <span
-            class="material-symbols-outlined text-[20px] text-amber-300/80 group-hover:text-amber-300 transition-colors">group</span>
-          <span class="font-label-md text-label-md">Quản lí người dùng</span>
+        <a class="admin-nav__link nav-item" data-path="quan-ly-nguoi-dung" href="/user-management" title="Quản lí người dùng">
+          <span class="material-symbols-outlined" aria-hidden="true">group</span><span class="admin-nav__label">Quản lí người dùng</span>
         </a>
       </nav>
     </div>
-
-    <!-- User Profile in Sidebar -->
-    <div class="p-space-md bg-black/25 border-t border-white/10">
-      <div
-        class="p-2.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-space-xs shadow-inner backdrop-blur-sm">
-        <div class="flex items-center gap-space-sm min-w-0 flex-1 rounded-lg px-1.5 py-1 -m-1">
-          <div
-            class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 text-stone-900 flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-300">
-            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person</span>
-          </div>
-          <div class="flex flex-col min-w-0">
-            <span class="font-label-md text-label-md text-white font-bold truncate" data-user-field="name">Người dùng</span>
-            <span class="font-label-sm text-[11px] text-amber-200 font-medium truncate flex items-center gap-1">
-              <span class="material-symbols-outlined text-[12px] text-amber-300">badge</span> <span data-user-field="role">Quản trị viên</span>
-            </span>
-          </div>
-        </div>
-        <a class="w-8 h-8 flex items-center justify-center rounded-lg text-red-200 hover:text-white hover:bg-white/15 transition-colors shrink-0"
-          href="/login" title="Đăng xuất" data-logout>
-          <span class="material-symbols-outlined text-[19px]">logout</span>
-        </a>
+    <div class="admin-sidebar__footer">
+      <div class="admin-user-card">
+        <span class="admin-user-card__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
+        <span class="admin-user-card__copy"><strong data-user-field="name">Người dùng</strong><small><span class="material-symbols-outlined" aria-hidden="true">badge</span><span data-user-field="role">Quản trị viên</span></small></span>
+        <a class="admin-user-card__logout" href="/login" title="Đăng xuất" aria-label="Đăng xuất" data-logout><span class="material-symbols-outlined" aria-hidden="true">logout</span></a>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN CONTAINER -->
-  <div class="pl-72">
-    <!-- TOP HEADER -->
-    <header
-      class="fixed top-0 left-72 right-0 h-16 bg-[#F8F5EE]/95 backdrop-blur-xl border-b border-stone-300/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between">
-      <div class="flex items-center gap-space-md">
-        <div class="flex items-center gap-space-xs text-stone-500">
-          <span class="font-label-md text-label-md text-red-800 font-bold"">Cổng hành chính</span>
-
-        </div>
-        <div
-          class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-900 shadow-2xs">
-          <span class="w-2 h-2 rounded-full bg-state-success animate-pulse"></span>
-          <span class="font-label-sm text-label-sm font-bold">Hệ thống trực tuyến</span>
-        </div>
+  <div class="admin-layout">
+    <header class="admin-topbar">
+      <div class="admin-topbar__context">
+        <span class="admin-topbar__section">Cổng hành chính</span>
+        <span class="admin-system-status"><span class="admin-system-status__dot"></span>Hệ thống trực tuyến</span>
       </div>
-      <div class="flex items-center gap-space-md">
-        <button
-          class="flex items-center gap-space-xs px-3.5 py-1.5 rounded-lg bg-white border border-stone-300 hover:bg-amber-50 hover:border-amber-400 transition-colors text-stone-800 font-medium shadow-xs"
-          type="button">
-          <span class="material-symbols-outlined text-red-600 text-[18px]">domain</span>
-          <span class="font-label-md text-label-md font-bold text-stone-800">Văn phòng Đăng ký Đất đai</span>
-          <span class="material-symbols-outlined text-amber-700 text-[16px]">expand_more</span>
-
-          <div class="h-5 w-px bg-stone-300"></div>
-          <div
-            class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-amber-600 ring-2 ring-amber-300 flex items-center justify-center shadow-xs">
-            <span class="material-symbols-outlined text-white text-[18px]">person</span>
-          </div>
-      </div>
+      <button class="admin-agency" type="button" aria-label="Văn phòng Đăng ký Đất đai">
+        <span class="material-symbols-outlined" aria-hidden="true">domain</span>
+        <span class="admin-agency__name">Văn phòng Đăng ký Đất đai</span>
+        <span class="material-symbols-outlined admin-agency__chevron" aria-hidden="true">expand_more</span>
+        <span class="admin-agency__separator"></span>
+        <span class="admin-agency__avatar"><span class="material-symbols-outlined" aria-hidden="true">person</span></span>
+      </button>
     </header>
 
-    <!-- MAIN VIEWPORT -->
-    <main class="w-full pt-16 px-space-lg py-space-lg bg-surface min-h-screen">
-      <div class="flex flex-col w-full gap-space-lg">
-
-        <!-- 1. WELCOME & SEARCH BANNER -->
-        <section
-          class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-800 via-red-700 to-red-900 p-space-lg shadow-xl shadow-red-950/20 border border-red-600/40 text-white">
-          <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-amber-400/25 blur-3xl pointer-events-none">
-          </div>
-          <div
-            class="absolute right-40 -bottom-20 w-72 h-72 rounded-full bg-yellow-500/20 blur-2xl pointer-events-none">
-          </div>
-          <div class="absolute left-1/3 -top-24 w-60 h-60 rounded-full bg-red-500/20 blur-3xl pointer-events-none">
-          </div>
-
-          <div class="relative z-10 flex flex-col gap-space-md">
-            <!-- Greeting and Quick Meta -->
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-sm">
+    <main class="admin-main">
+      <div class="admin-content">
+        <div class="admin-bento-grid admin-bento-grid--redesign">
+          <section class="admin-overview" aria-labelledby="admin-welcome-title">
+            <div class="admin-overview__top">
+              <div class="admin-overview__intro">
+                <span class="admin-overview__eyebrow">People Operations · Dashboard</span>
+                <h1 id="admin-welcome-title">Xin chào, <span data-user-field="name">Người dùng</span></h1>
+                <p>Toàn cảnh tiếp nhận hồ sơ và vận hành xử lý trong ngày.</p>
+              </div>
+              <div class="admin-overview__stats" aria-label="Số liệu tổng quan">
+                <div class="admin-overview__stat"><span>Tổng hồ sơ</span><strong data-admin-stat="total">—</strong></div>
+                <div class="admin-overview__stat"><span>Đất đai</span><strong data-admin-stat="land">—</strong></div>
+                <div class="admin-overview__stat"><span>Hộ kinh doanh</span><strong data-admin-stat="business">—</strong></div>
+                <div class="admin-overview__stat"><span>Đang xử lý</span><strong data-admin-stat="in_progress">—</strong></div>
+              </div>
+            </div>
+            <div class="admin-search admin-search--canvas" role="search">
+              <label class="sr-only" for="searchTypeFilter">Lĩnh vực hồ sơ</label>
+              <div class="admin-search__select-wrap">
+                <select id="searchTypeFilter" aria-label="Lọc theo lĩnh vực hồ sơ"><option value="all">Tất cả hồ sơ</option><option value="land">Hồ sơ đất đai</option><option value="business">Hộ kinh doanh</option><option value="owner">Chủ sở hữu / CCCD</option></select>
+                <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+              </div>
+              <label class="admin-search__input-wrap" for="globalSearchInput">
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                <input id="globalSearchInput" type="search" autocomplete="off" aria-label="Tìm hồ sơ theo mã, CCCD, tên hoặc thửa đất" placeholder="Tìm mã hồ sơ, CCCD, tên người nộp hoặc địa chỉ...">
+                <kbd><span>Ctrl</span><span>+</span><span>K</span></kbd>
+              </label>
+              <button id="admin-search-btn" type="button" class="admin-search__submit"><span class="material-symbols-outlined" aria-hidden="true">travel_explore</span>Tra cứu</button>
+            </div>
+          </section>
+          <section class="admin-card admin-orchard" aria-labelledby="admin-orchard-title">
+            <div class="admin-orchard__head">
               <div>
-                <div
-                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/40 text-amber-200 font-label-sm tracking-wider backdrop-blur-sm shadow-xs">
-                  <span class="material-symbols-outlined text-[16px] text-amber-300"
-                    style="font-variation-settings: 'FILL' 1;">verified</span>
-                  <span class="font-semibold text-[11px]">Cổng tiếp nhận &amp; thẩm định hành chính số</span>
-                </div>
-                <h1
-                  class="font-headline-lg text-headline-lg text-white font-extrabold mt-2 tracking-tight drop-shadow-sm">
-                  Xin chào, <span data-user-field="name">Người dùng</span>
-                </h1>
-                <p class="font-body-md text-body-md text-red-100/90 mt-1 max-w-2xl leading-relaxed">
-                  Số liệu bên dưới lấy trực tiếp từ cơ sở dữ liệu hồ sơ.
+                <span class="admin-eyebrow">Biểu đồ hồ sơ</span>
+                <h2 id="admin-orchard-title">Tiến độ xử lý tổng quan</h2>
+              </div>
+              <p>Các ô vuông tóm tắt nhanh từng nhóm nghiệp vụ chính.</p>
+            </div>
+            <div class="admin-orchard__chart">
+              <article class="admin-orchard__tile admin-orchard__tile--intake">
+                <span class="admin-orchard__badge"></span>
+                <strong>Tiếp nhận hồ sơ</strong>
+                <span>Khối lượng đầu vào trong ngày</span>
+                <b data-orchard-stat="intake">—</b>
+              </article>
+              <article class="admin-orchard__tile admin-orchard__tile--business">
+                <span class="admin-orchard__badge"></span>
+                <strong>Hộ kinh doanh</strong>
+                <span>Cập nhật giấy phép và thông tin</span>
+                <b data-orchard-stat="business">—</b>
+              </article>
+              <article class="admin-orchard__tile admin-orchard__tile--planning">
+                <span class="admin-orchard__badge"></span>
+                <strong>Thẩm định đất đai</strong>
+                <span>Kiểm tra và đối soát hồ sơ</span>
+                <b data-orchard-stat="land">—</b>
+              </article>
+              <article class="admin-orchard__tile admin-orchard__tile--receipt">
+                <span class="admin-orchard__badge"></span>
+                <strong>Trả kết quả</strong>
+                <span>Hoàn tất và bàn giao hồ sơ</span>
+                <b data-orchard-stat="completed">—</b>
+              </article>
+            </div>
+          </section>
+        </div>
 
-                </p>
-              </div>
-              <div
-                class="flex items-center gap-space-sm bg-black/30 backdrop-blur-md border border-white/20 px-space-md py-2 rounded-xl shadow-inner self-start lg:self-auto">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
-                  <span class="font-label-sm text-label-sm text-white font-medium">Cơ sở dữ liệu: <span id="db-status">đang kiểm tra...</span></span>
-                </div>
-                <span class="text-amber-300/40">|</span>
-                <span class="font-label-sm text-label-sm text-amber-200 font-semibold flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[14px] text-amber-300">calendar_month</span> Kỳ giao dịch:
-                  <span data-coming-soon></span>
-                </span>
-              </div>
-            </div>
-            <!-- Prominent Big Search Bar -->
-            <div
-              class="mt-2 w-full bg-white rounded-xl shadow-2xl p-2.5 flex flex-col md:flex-row items-stretch md:items-center gap-2.5 border-2 border-amber-400/80 focus-within:border-red-600 focus-within:ring-4 focus-within:ring-red-600/15 transition-all text-stone-900">
-              <!-- Category Filter -->
-              <div class="relative shrink-0 min-w-[185px]">
-                <select
-                  class="w-full appearance-none bg-amber-50/90 hover:bg-amber-100 border border-amber-300 text-stone-800 font-label-md text-label-md py-3 pl-3.5 pr-8 rounded-lg focus:outline-none cursor-pointer transition-colors font-semibold"
-                  id="searchTypeFilter">
-                  <option value="all">📁 Tất cả hồ sơ</option>
-                  <option value="land">🏞️ Hồ sơ đất đai</option>
-                  <option value="business">🏪 Hộ kinh doanh</option>
-                  <option value="owner">👤 Chủ sở hữu / CCCD</option>
-                </select>
-                <span
-                  class="material-symbols-outlined pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-amber-800 text-[18px]">expand_more</span>
-              </div>
-              <!-- Search Input -->
-              <div class="relative flex-1 flex items-center min-w-0">
-                <span class="material-symbols-outlined absolute left-3.5 text-red-600 text-[22px]">search</span>
-                <input
-                  class="w-full h-12 bg-transparent pl-11 pr-20 text-stone-800 font-body-md text-body-md placeholder:text-stone-400 focus:outline-none font-medium"
-                  id="globalSearchInput"
-                  placeholder="Nhập mã hồ sơ, số CCCD/CMND, tên hộ kinh doanh hoặc thửa đất (ví dụ: HS-2024-8891, Nguyễn Thị Mai)..."
-                  type="text">
-                <div
-                  class="hidden sm:flex items-center gap-1 absolute right-3 px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900 font-label-sm text-label-sm font-semibold">
-                  <span class="">Ctrl</span>
-                  <span class="">+</span>
-                  <span class="">K</span>
-                </div>
-              </div>
-              <!-- Submit Button -->
-              <button id="admin-search-btn"
-                class="shrink-0 h-12 px-space-lg bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-space-xs transition-all shadow-md shadow-red-700/30 active:scale-[0.99] font-bold"
-                type="button">
-                <span class="material-symbols-outlined text-[20px] text-amber-200">travel_explore</span>
-                <span class="">Tìm kiếm</span>
-              </button>
-            </div>
+        <section class="admin-insights" aria-labelledby="admin-insights-title">
+          <div class="admin-section-heading">
+            <div><span class="admin-eyebrow">Điểm nhấn vận hành</span><h2 id="admin-insights-title">Insight tổng quan</h2></div>
+            <p>Bố cục lấy cảm hứng từ dashboard mẫu nhưng vẫn dùng dữ liệu hồ sơ hiện có.</p>
+          </div>
+          <div class="admin-insight-grid">
+            <article class="admin-card admin-insight admin-insight--risk"><div class="admin-insight__head"><div><span class="admin-eyebrow">Rủi ro xử lý</span><h3>Hồ sơ chờ giải quyết</h3></div><strong data-admin-stat="in_progress">—</strong></div><div class="admin-insight__bars"><div><span>Tiếp nhận</span><b style="width:82%"></b></div><div><span>Thẩm định</span><b style="width:68%"></b></div><div><span>Phản hồi</span><b style="width:44%"></b></div></div></article>
+            <article class="admin-card admin-insight admin-insight--pipeline"><div class="admin-insight__head"><div><span class="admin-eyebrow">Pipeline</span><h3>Khối lượng hồ sơ</h3></div><span class="admin-coming-soon">Live</span></div><div class="admin-insight__metrics"><div><span>Tổng</span><strong data-admin-stat="total">—</strong></div><div><span>Đất đai</span><strong data-admin-stat="land">—</strong></div><div><span>HKD</span><strong data-admin-stat="business">—</strong></div></div></article>
+            <article class="admin-card admin-insight admin-insight--pulse"><div class="admin-insight__head"><div><span class="admin-eyebrow">Tiến độ</span><h3>Nhịp vận hành</h3></div><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__columns" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><p>Theo dõi tình trạng hệ thống, lượt tiếp nhận và nhịp xử lý trong ngày.</p></article>
           </div>
         </section>
 
-        <!-- 3. QUICK STATS (Grid 4 thẻ) -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
-          <!-- Stat 1 -->
-          <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-red-800 text-white p-space-md shadow-lg shadow-red-950/20 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between border border-red-500/50 group">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl pointer-events-none">
+        <section class="admin-card admin-records" aria-labelledby="admin-records-title">
+          <div class="admin-records__head">
+            <div class="admin-section-heading admin-section-heading--records">
+              <div><span class="admin-eyebrow">Danh sách hồ sơ</span><h2 id="admin-records-title">Cập nhật gần đây</h2></div>
+              <span class="admin-live-badge"><span></span>Dữ liệu thật</span>
             </div>
-            <div class="flex items-start justify-between">
-              <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-red-100 font-medium">Tổng hồ sơ tiếp nhận</span>
-                <span
-                  class="font-headline-lg text-headline-lg text-white font-extrabold mt-1 tracking-tight" data-admin-stat="total">—</span>
-              </div>
-              <div
-                class="w-12 h-12 rounded-xl bg-white/20 text-white border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                <span class="material-symbols-outlined text-[26px]">folder_open</span>
-              </div>
-            </div>
-            <div class="mt-space-md pt-2.5 flex items-center justify-between border-t border-white/15">
-              <span data-coming-soon></span>
-
-
-
-
-              <span class="font-body-sm text-body-sm text-red-100/90 font-medium">So với tháng trước</span>
+            <div class="admin-filter-tabs" role="group" aria-label="Lọc hồ sơ theo lĩnh vực">
+              <button class="admin-filter-tab is-active" type="button" data-domain="" aria-pressed="true">Tất cả (<span data-domain-count="all">—</span>)</button>
+              <button class="admin-filter-tab" type="button" data-domain="land" aria-pressed="false">Đất đai (<span data-domain-count="land">—</span>)</button>
+              <button class="admin-filter-tab" type="button" data-domain="business" aria-pressed="false">Hộ kinh doanh (<span data-domain-count="business">—</span>)</button>
             </div>
           </div>
-          <!-- Stat 2 -->
-          <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 text-white p-space-md shadow-lg shadow-amber-950/20 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between border border-amber-400/50 group">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl pointer-events-none">
-            </div>
-            <div class="flex items-start justify-between">
-              <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-amber-100 font-medium">Hồ sơ đất đai</span>
-                <span class="font-headline-lg text-headline-lg text-white font-extrabold mt-1 tracking-tight" data-admin-stat="land">—</span>
-              </div>
-              <div
-                class="w-12 h-12 rounded-xl bg-white/20 text-white border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                <span class="material-symbols-outlined text-[26px]">landscape</span>
-              </div>
-            </div>
-            <div class="mt-space-md pt-2.5 flex items-center justify-between border-t border-white/15">
-              <span data-coming-soon></span>
-
-
-
-
-              <span class="font-body-sm text-body-sm text-amber-100/90 font-medium">Cảnh báo sắp quá hạn</span>
-            </div>
-          </div>
-          <!-- Stat 3 -->
-          <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-600 text-white p-space-md shadow-lg shadow-orange-950/20 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between border border-orange-400/50 group">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl pointer-events-none">
-            </div>
-            <div class="flex items-start justify-between">
-              <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-orange-100 font-medium">Hồ sơ hộ kinh doanh</span>
-                <span class="font-headline-lg text-headline-lg text-white font-extrabold mt-1 tracking-tight" data-admin-stat="business">—</span>
-              </div>
-              <div
-                class="w-12 h-12 rounded-xl bg-white/20 text-white border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                <span class="material-symbols-outlined text-[26px]">storefront</span>
-              </div>
-            </div>
-            <div class="mt-space-md pt-2.5 flex items-center justify-between border-t border-white/15">
-              <span data-coming-soon></span>
-
-
-
-
-              <span class="font-body-sm text-body-sm text-orange-100/90 font-medium">Tỷ lệ đúng hạn</span>
-            </div>
-          </div>
-          <!-- Stat 4 -->
-          <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-700 via-red-800 to-red-950 text-white p-space-md shadow-lg shadow-red-950/25 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between border border-rose-500/50 group">
-            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl pointer-events-none">
-            </div>
-            <div class="flex items-start justify-between">
-              <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-rose-200 font-medium">Đang chờ xử lý</span>
-                <span
-                  class="font-headline-lg text-headline-lg text-amber-300 font-extrabold mt-1 tracking-tight" data-admin-stat="in_progress">—</span>
-              </div>
-              <div
-                class="w-12 h-12 rounded-xl bg-white/20 text-white border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                <span class="material-symbols-outlined text-[26px]">assignment_late</span>
-              </div>
-            </div>
-            <div class="mt-space-md pt-2.5 flex items-center justify-between border-t border-white/15">
-              <span class="font-body-sm text-body-sm text-rose-200 font-medium">Đã nộp + đang xử lý</span>
-
-
-
-
-
-
-
-
-
-
-            </div>
-          </div>
-        </section>
-
-        <!-- 4. QUICK ACTIONS & WORKFLOW SHORTCUTS -->
-        <section class="flex flex-col gap-space-sm">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <span class="w-1.5 h-6 rounded-full bg-gradient-to-b from-red-600 to-amber-500 shadow-xs"></span>
-              <h3 class="font-headline-sm text-headline-sm text-stone-900 font-bold">Thao tác nhanh nghiệp vụ</h3>
-            </div>
-            <span class="font-body-sm text-body-sm text-stone-600 font-medium">Các tác vụ khởi tạo phổ biến theo thẩm
-              quyền</span>
-          </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-space-sm">
-            <!-- Action 1: Đất đai mới -->
-            <button
-              class="group flex flex-col p-space-md rounded-2xl bg-gradient-to-br from-red-600 via-red-700 to-red-800 hover:from-red-700 hover:to-red-900 text-white border border-red-500/50 shadow-md shadow-red-950/20 hover:shadow-xl hover:-translate-y-1 transition-all text-left relative overflow-hidden"
-              type="button" disabled aria-disabled="true" title="Sắp ra mắt">
-              <div
-                class="w-11 h-11 rounded-xl bg-white/20 border border-white/30 backdrop-blur-sm text-white flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-white group-hover:text-red-700 transition-all shadow-xs">
-                <span class="material-symbols-outlined text-[22px]">add_location_alt</span>
-              </div>
-              <span class="font-label-lg text-label-lg text-white font-extrabold tracking-tight">+ Hồ sơ đất đai mới</span>
-              <span class="font-body-sm text-body-sm text-red-100/90 mt-1">Đăng ký biến động, cấp đổi sổ</span>
-              <span class="mt-2" data-coming-soon></span>
-            </button>
-            <!-- Action 2: Hộ kinh doanh mới -->
-            <button
-              class="group flex flex-col p-space-md rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white border border-amber-400/50 shadow-md shadow-amber-950/20 hover:shadow-xl hover:-translate-y-1 transition-all text-left relative overflow-hidden"
-              type="button" disabled aria-disabled="true" title="Sắp ra mắt">
-              <div
-                class="w-11 h-11 rounded-xl bg-white/20 border border-white/30 backdrop-blur-sm text-white flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-white group-hover:text-amber-700 transition-all shadow-xs">
-                <span class="material-symbols-outlined text-[22px]">add_business</span>
-              </div>
-              <span class="font-label-lg text-label-lg text-white font-extrabold tracking-tight">+ Hộ kinh doanh mới</span>
-              <span class="font-body-sm text-body-sm text-amber-100/90 mt-1">Cấp phép, đổi ngành nghề, MST</span>
-              <span class="mt-2" data-coming-soon></span>
-            </button>
-            <!-- Action 3: Tra cứu quy hoạch -->
-            <button
-              class="group flex flex-col p-space-md rounded-2xl bg-gradient-to-br from-amber-600 via-yellow-600 to-amber-700 hover:from-amber-700 hover:to-yellow-700 text-white border border-amber-400/50 shadow-md shadow-amber-950/20 hover:shadow-xl hover:-translate-y-1 transition-all text-left relative overflow-hidden"
-              type="button" disabled aria-disabled="true" title="Sắp ra mắt">
-              <div
-                class="w-11 h-11 rounded-xl bg-white/20 border border-white/30 backdrop-blur-sm text-white flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-white group-hover:text-amber-800 transition-all shadow-xs">
-                <span class="material-symbols-outlined text-[22px]">map</span>
-              </div>
-              <span class="font-label-lg text-label-lg text-white font-extrabold tracking-tight">Tra cứu quy
-                hoạch</span>
-              <span class="font-body-sm text-body-sm text-amber-100/90 mt-1">Bản đồ số địa chính phân khu</span>
-              <span class="mt-2" data-coming-soon></span>
-            </button>
-            <!-- Action 4: In biên nhận &amp; giấy hẹn -->
-            <button
-              class="group flex flex-col p-space-md rounded-2xl bg-gradient-to-br from-red-800 via-rose-900 to-stone-900 hover:from-red-900 hover:to-stone-950 text-white border border-red-700/50 shadow-md shadow-stone-950/25 hover:shadow-xl hover:-translate-y-1 transition-all text-left relative overflow-hidden"
-              type="button" disabled aria-disabled="true" title="Sắp ra mắt">
-              <div
-                class="w-11 h-11 rounded-xl bg-white/20 border border-white/30 backdrop-blur-sm text-white flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-white group-hover:text-red-900 transition-all shadow-xs">
-                <span class="material-symbols-outlined text-[22px]">print</span>
-              </div>
-              <span class="font-label-lg text-label-lg text-white font-extrabold tracking-tight">In biên nhận &amp; giấy hẹn</span>
-              <span class="font-body-sm text-body-sm text-red-200/90 mt-1">Tạo phiếu trả kết quả mã QR</span>
-              <span class="mt-2" data-coming-soon></span>
-            </button>
-            <!-- Action 5: VIP Quét OCR bằng AI -->
-            <button
-              class="group flex flex-col p-space-md rounded-2xl bg-gradient-to-br from-red-700 via-amber-600 to-yellow-500 hover:from-red-800 hover:to-amber-700 text-white border-2 border-amber-300 shadow-xl shadow-amber-950/30 hover:shadow-2xl hover:-translate-y-1 transition-all text-left col-span-2 md:col-span-1 relative overflow-hidden ring-2 ring-amber-400/30"
-              type="button" disabled aria-disabled="true" title="Sắp ra mắt">
-              <div class="absolute -right-4 -bottom-4 w-20 h-20 rounded-full bg-white/15 blur-xl pointer-events-none">
-              </div>
-              <div
-                class="w-11 h-11 rounded-xl bg-white text-red-700 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-md">
-                <span class="material-symbols-outlined text-[22px]">document_scanner</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-label-lg text-label-lg text-white font-extrabold tracking-tight">Quét OCR bằng
-                  AI</span>
-                <span class="material-symbols-outlined text-[17px] text-yellow-300"
-                  style="font-variation-settings: 'FILL' 1;">star</span>
-              </div>
-              <span class="font-body-sm text-body-sm text-yellow-100/90 mt-1">Tự trích xuất số thửa, tờ bản đồ</span>
-              <span class="mt-2" data-coming-soon></span>
-            </button>
-          </div>
-        </section>
-
-        <!-- 5. HỒ SƠ GẦN ĐÂY (TABLE WITH RICH METADATA) -->
-        <section
-          class="rounded-2xl bg-white shadow-md border border-stone-300/80 p-space-lg flex flex-col gap-space-md">
-          <!-- Header & Filter Tabs -->
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm">
-            <div class="flex items-center gap-space-sm">
-              <div class="flex items-center gap-2.5">
-                <span class="w-1.5 h-6 rounded-full bg-gradient-to-b from-red-600 to-amber-500"></span>
-                <h3 class="font-headline-sm text-headline-sm text-stone-900 font-bold">Hồ sơ cập nhật gần đây</h3>
-              </div>
-              <span
-                class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-label-sm text-label-sm font-bold flex items-center gap-1 shadow-2xs">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>
-                Dữ liệu thật
-              </span>
-            </div>
-            <!-- Segmented filter control -->
-            <div class="flex items-center bg-stone-100 p-1 rounded-xl self-start lg:self-auto border border-stone-300">
-              <button
-                class="table-filter-btn px-4 py-1.5 rounded-lg bg-gradient-to-r from-red-700 to-red-600 text-white font-label-md text-label-md shadow-sm font-bold transition-all"
-                type="button" data-domain="">
-                Tất cả (<span data-domain-count="all">—</span>)
-              </button>
-              <button
-                class="table-filter-btn px-4 py-1.5 rounded-lg text-stone-600 hover:text-red-700 font-label-md text-label-md transition-all font-semibold"
-                type="button" data-domain="land">
-                Đất đai (<span data-domain-count="land">—</span>)
-              </button>
-              <button
-                class="table-filter-btn px-4 py-1.5 rounded-lg text-stone-600 hover:text-red-700 font-label-md text-label-md transition-all font-semibold"
-                type="button" data-domain="business">
-                Hộ kinh doanh (<span data-domain-count="business">—</span>)
-              </button>
-            </div>
-          </div>
-          <!-- Table Container -->
-          <div class="overflow-x-auto -mx-space-lg px-space-lg">
-            <table class="w-full text-left border-collapse min-w-[980px]">
-              <thead>
-                <tr
-                  class="bg-gradient-to-r from-amber-50 to-amber-100/50 text-stone-800 font-label-sm text-label-sm tracking-wider border-b border-amber-200">
-                  <th class="py-3.5 px-4 rounded-l-xl font-extrabold">Mã hồ sơ &amp; ngày nộp</th>
-                  <th class="py-3.5 px-4 font-extrabold">Chủ sở hữu / người đại diện</th>
-                  <th class="py-3.5 px-4 font-extrabold">Loại hồ sơ &amp; địa chỉ</th>
-                  <th class="py-3.5 px-4 font-extrabold">Đánh giá sơ bộ AI</th>
-                  <th class="py-3.5 px-4 font-extrabold">Trạng thái</th>
-                  <th class="py-3.5 px-4 rounded-r-xl text-right font-extrabold">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-stone-100 font-body-md text-body-md text-stone-800" id="admin-applications-body" aria-live="polite">
-                <tr><td class="py-6 px-4 text-center text-stone-500" colspan="6">Đang tải hồ sơ...</td></tr>
-              </tbody>
+          <div class="admin-records__table-scroll">
+            <table class="admin-table">
+              <thead><tr><th>Mã hồ sơ &amp; ngày nộp</th><th>Chủ sở hữu / người đại diện</th><th>Loại hồ sơ &amp; địa chỉ</th><th>Đánh giá sơ bộ AI</th><th>Trạng thái</th><th class="admin-table__actions-heading">Thao tác</th></tr></thead>
+              <tbody id="admin-applications-body" aria-live="polite"><tr><td class="admin-table__message" colspan="6">Đang tải hồ sơ...</td></tr></tbody>
             </table>
           </div>
-          <!-- Table Footer / Pagination -->
-          <div
-            class="pt-space-sm flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-t border-stone-200">
-            <span class="font-body-sm text-body-sm text-stone-600 font-semibold">
-              <span id="admin-applications-range"></span>
-            </span>
-            <div class="flex items-center gap-space-sm">
-              <button class="w-8 h-8 rounded-lg border border-stone-300 flex items-center justify-center hover:bg-stone-100 disabled:opacity-40" type="button" id="admin-applications-prev" aria-label="Trang trước"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
-              <span class="font-label-md text-label-md text-stone-700" id="admin-applications-page"></span>
-              <button class="w-8 h-8 rounded-lg border border-stone-300 flex items-center justify-center hover:bg-stone-100 disabled:opacity-40" type="button" id="admin-applications-next" aria-label="Trang sau"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+          <div class="admin-records__footer">
+            <span class="admin-records__range"><span id="admin-applications-range"></span></span>
+            <div class="admin-pagination">
+              <button type="button" id="admin-applications-prev" aria-label="Trang trước" disabled><span class="material-symbols-outlined" aria-hidden="true">chevron_left</span></button>
+              <span id="admin-applications-page" aria-live="polite"></span>
+              <button type="button" id="admin-applications-next" aria-label="Trang sau" disabled><span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
             </div>
           </div>
         </section>
-
-        <!-- Interactive Sandbox Script -->
-        <script>
-          // Keyboard shortcut Ctrl + K focus search bar
-          document.addEventListener('keydown', function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-              e.preventDefault();
-              const searchInput = document.getElementById('globalSearchInput');
-              if (searchInput) searchInput.focus();
-            }
-          });
-
-          // Suggested prompt click helper
-          document.querySelectorAll('.ai-prompt-pill').forEach(pill => {
-            pill.addEventListener('click', function () {
-              const text = this.innerText.replace(/^[^\\w\\s\\u00C0-\\u1EF9]+/u, '').trim();
-              const aiInput = document.getElementById('aiQueryInput');
-              if (aiInput) {
-                aiInput.value = text;
-                aiInput.focus();
-              }
-              const globalSearch = document.getElementById('globalSearchInput');
-              if (globalSearch && !aiInput) {
-                globalSearch.value = text;
-                globalSearch.focus();
-              }
-            });
-          });
-
-
-          // AI Chat widget toggle logic
-          document.addEventListener('DOMContentLoaded', () => {
-            const chatWindow = document.getElementById('ai-chat-window');
-            const chatToggleBtn = document.getElementById('ai-chat-toggle-btn');
-            const chatCloseBtn = document.getElementById('ai-chat-close-btn');
-
-            if (!chatWindow || !chatToggleBtn) return;
-
-            chatToggleBtn.addEventListener('click', () => {
-              const isVisible = chatWindow.classList.contains('hidden');
-              chatWindow.classList.toggle('hidden', !isVisible);
-              chatToggleBtn.setAttribute('aria-expanded', String(isVisible));
-            });
-            chatCloseBtn?.addEventListener('click', () => {
-              chatWindow.classList.add('hidden');
-              chatToggleBtn.setAttribute('aria-expanded', 'false');
-            });
-          });
-        </script>
       </div>
     </main>
   </div>
 
+  <script>
+    document.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        document.getElementById('globalSearchInput')?.focus();
+      }
+    });
 
-
-<script type="module">
-  // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
-  import { protectPage } from '/auth-api.js';
-  await protectPage(['admin']);
-  await import('/admin-dashboard-data.js');
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const navItems = document.querySelectorAll('#sidebar-nav .nav-item');
-    navItems.forEach(item => {
-      item.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
+    document.querySelectorAll('#sidebar-nav .nav-item').forEach((item) => {
+      item.addEventListener('click', (event) => {
+        const href = item.getAttribute('href');
         if (href && href !== '#' && href.startsWith('/')) {
-          e.preventDefault();
+          event.preventDefault();
           window.location.href = href;
         }
       });
     });
-
-    const logoutBtn = document.querySelector('[data-logout]');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-          if (typeof auth !== 'undefined' && auth.signOut) {
-            auth.signOut().then(() => {
-              window.location.href = '/login';
-            }).catch(() => {
-              window.location.href = '/login';
-            });
-          } else {
-            window.location.href = '/login';
-          }
-        }
-      });
-    }
-  });
-</script>
-<script src="/admin-ai-chat.js" defer></script>
+  </script>
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['admin']);
+    await import('/admin-dashboard-data.js');
+  </script>
+  <script src="/admin-ai-chat.js" defer></script>
 </body>
-
 </html>

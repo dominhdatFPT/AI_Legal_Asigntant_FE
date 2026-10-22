@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tìm nơi nộp hồ sơ</title>
+  <link rel="stylesheet" href="/tailwind.css">
+  <style>
+    body { margin: 0; background: #f8f5f3; color: #292524; font-family: system-ui, sans-serif; }
+    .shell { max-width: 880px; margin: 0 auto; padding: 28px 20px 64px; }
+    header { background: #8f1020; color: white; padding: 16px 20px; }
+    header a { color: white; text-decoration: none; }
+    .card { background: white; border: 1px solid #e7dedb; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px #0000000b; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input, select { box-sizing: border-box; width: 100%; padding: 10px 12px; border: 1px solid #bcb1ad; border-radius: 6px; font: inherit; background: white; }
+    .wide { grid-column: 1 / -1; }
+    button { background: #a41423; border: 0; color: white; border-radius: 6px; padding: 11px 18px; font: inherit; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; }
+    .muted { color: #625b57; }
+    .result { border-top: 1px solid #e7dedb; padding: 16px 0; }
+    .result a { color: #8f1020; font-weight: 600; }
+    #status[role="alert"] { color: #a41423; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: 1; } }
+  </style>
+  <style id="auth-pending">body{visibility:hidden!important}</style>
+</head>
+<body>
+  <header><div class="shell" style="padding:0"><a href="/user-dashboard">← Tổng quan hồ sơ</a></div></header>
+  <main class="shell">
+    <h1>Tìm nơi nộp hồ sơ gần địa chỉ của bạn</h1>
+    <p class="muted">Nhập địa chỉ và chọn đơn vị hành chính. Kết quả là gợi ý địa điểm, không xác nhận thẩm quyền tiếp nhận.</p>
+    <form id="location-form" class="card">
+      <div class="grid">
+        <div><label for="version">Phiên bản địa chỉ</label><select id="version"><option value="current">Địa chỉ hiện tại (2 cấp)</option><option value="legacy">Địa chỉ cũ (3 cấp)</option></select></div>
+        <div><label for="province">Tỉnh / Thành phố</label><select id="province" required></select></div>
+        <div id="district-wrap" hidden><label for="district">Quận / Huyện</label><select id="district"></select></div>
+        <div><label for="ward">Xã / Phường</label><select id="ward" required></select></div>
+        <div class="wide"><label for="detail">Số nhà, đường, khu hoặc thôn</label><input id="detail" maxlength="300" required autocomplete="street-address" placeholder="Ví dụ: 12 Lê Duẩn"></div>
+        <div class="wide"><label for="query">Loại cơ quan cần tìm</label><input id="query" maxlength="150" required list="office-suggestions" value="Trung tâm phục vụ hành chính công"><datalist id="office-suggestions"><option value="Ủy ban nhân dân"><option value="Văn phòng đăng ký đất đai"><option value="Trung tâm phục vụ hành chính công"></datalist></div>
+        <div><label for="radius">Bán kính</label><select id="radius"><option value="5000">5 km</option><option value="10000" selected>10 km</option><option value="20000">20 km</option><option value="50000">50 km</option></select></div>
+        <div><label for="limit">Số kết quả tối đa</label><select id="limit"><option value="5" selected>5</option><option value="10">10</option></select></div>
+      </div>
+      <p class="muted" id="ward-note" hidden>Địa chỉ cũ có thể để trống xã/phường nếu giấy tờ không ghi.</p>
+      <button id="submit-search" type="submit" style="margin-top:20px">Tìm nơi nộp</button>
+    </form>
+    <section class="card" style="margin-top:20px" aria-live="polite">
+      <h2>Kết quả</h2>
+      <p id="status" class="muted">Chưa tìm kiếm.</p>
+      <p id="resolved-address" hidden></p>
+      <div id="results"></div>
+      <p class="muted">Liên hệ cơ quan để xác nhận nơi tiếp nhận hồ sơ.</p>
+    </section>
+  </main>
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['citizen', 'lawyer']);
+    await import('/location-search.js');
+  </script>
+</body>
+</html>

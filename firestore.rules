@@ -3,12 +3,21 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /userProfiles/{userId} {
+      // Hồ sơ tạo lúc đăng ký: họ tên, SĐT Việt Nam (10 số), thời điểm đồng ý điều khoản và chính sách dữ liệu.
       allow create: if request.auth != null
         && request.auth.uid == userId
-        && request.resource.data.keys().hasOnly(['username', 'phone', 'email', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['username', 'fullName', 'phone', 'email', 'createdAt', 'termsAcceptedAt', 'privacyConsentAt', 'consentVersion'])
+        && request.resource.data.keys().hasAll(['username', 'fullName', 'phone', 'email', 'termsAcceptedAt', 'privacyConsentAt', 'consentVersion'])
         && request.resource.data.username is string
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 2
+        && request.resource.data.fullName.size() <= 100
         && request.resource.data.phone is string
-        && request.resource.data.email == request.auth.token.email;
+        && request.resource.data.phone.matches('^0[35789][0-9]{8}$')
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.termsAcceptedAt == request.time
+        && request.resource.data.privacyConsentAt == request.time
+        && request.resource.data.consentVersion is string;
       allow read: if request.auth != null && request.auth.uid == userId;
       allow update, delete: if request.auth != null && request.auth.uid == userId;
     }

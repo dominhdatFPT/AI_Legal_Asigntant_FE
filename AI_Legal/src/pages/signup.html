@@ -1,176 +1,202 @@
-<!DOCTYPE html><html lang="vi" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_blank" name="shell-type"><title>Đăng ký - Hệ thống Hỗ trợ Hồ sơ Đất đai &amp; Hộ kinh doanh</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warninghourglass_top&amp;display=block" rel="stylesheet">
-<style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; line-height: 1; }</style><link rel="stylesheet" href="/tailwind.css"><link rel="stylesheet" href="/auth-shell.css"></head><body class="bg-surface text-on-surface font-body-md text-body-md h-screen overflow-hidden antialiased"><main class="w-full h-screen overflow-hidden bg-surface"><div class="flex flex-col w-full h-full">
-<div class="auth-layout w-full h-full flex flex-col lg:flex-row bg-surface">
-<!-- LEFT PANEL: Institutional Authority & Legal AI Brand Stage (60% Desktop) -->
-<div class="auth-scene auth-scene--signup lg:w-3/5 h-full bg-primary-container relative overflow-hidden flex-col justify-between p-10 xl:p-12 [@media(max-height:760px)]:p-8 text-on-primary motion-safe:animate-fade-up">
-<div class="auth-backdrop absolute inset-0 z-0" aria-hidden="true">
-<img class="login-slide absolute inset-0 h-full w-full object-cover opacity-100 transition-opacity duration-1000 motion-reduce:transition-none" data-login-slide src="/images/login/hanoi-court.jpg" alt="" fetchpriority="high">
-<img class="login-slide absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000 motion-reduce:transition-none" data-login-slide src="/images/login/national-assembly.jpg" alt="" loading="lazy">
-<img class="login-slide absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000 motion-reduce:transition-none" data-login-slide src="/images/login/supreme-court.jpg" alt="" loading="lazy">
-<img class="login-slide absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000 motion-reduce:transition-none" data-login-slide src="/images/login/ho-chi-minh-court.jpg" alt="" loading="lazy">
-<div class="auth-shade auth-shade--photo absolute inset-0 bg-black/40"></div>
-<div class="auth-shade auth-shade--brand absolute inset-0 bg-primary-container/55"></div>
-</div>
-<div class="auth-drum absolute -left-[215px] -top-[215px] z-[2] h-[620px] w-[620px] opacity-[0.08] pointer-events-none select-none mix-blend-screen">
-<img class="h-full w-full object-contain invert" src="/images/login/dong-son-drum-face.png" alt="" aria-hidden="true" loading="lazy">
-</div>
-<!-- Top Header / National Seal -->
-<div class="relative z-10 flex items-center justify-between motion-safe:animate-fade-up-late">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-lg bg-surface-panel/15 backdrop-blur-md flex items-center justify-center text-tertiary-fixed shadow-sm">
-<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">assured_workload</span>
-</div>
-<div>
-<div class="font-label-sm text-tertiary-fixed tracking-wider uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-<div class="font-body-sm text-on-primary/80">Độc lập - Tự do - Hạnh phúc</div>
-</div>
-</div>
-<div class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-panel/10 backdrop-blur-md text-xs font-label-md text-on-primary">
-<span class="w-2 h-2 rounded-full bg-state-success motion-safe:animate-pulse"></span>
-          Trợ lý pháp lý trực tuyến
-        </div>
-</div>
-<!-- Main Visual Hero & Value Propositions -->
-<div class="auth-copy relative z-10 my-auto py-4 motion-safe:animate-fade-up-later">
-<!-- Golden Institutional Shield Emblem -->
-<div class="inline-block mb-4 relative [@media(max-height:700px)]:hidden">
-<div class="absolute inset-0 bg-tertiary-fixed rounded-2xl filter blur-xl opacity-30"></div>
-<div class="relative w-20 h-20 rounded-2xl bg-gradient-to-b from-surface-panel/20 to-surface-panel/5 backdrop-blur-md p-1.5 shadow-xl flex items-center justify-center">
-<img alt="Huy hiệu Cổng Trợ Lý Pháp Lý và Dịch Vụ Công Đất Đai Hộ Kinh Doanh" class="w-full h-full object-contain filter drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLWrkBhwiVYIh8hPSz5N-xeqLw5Pmi6WMA5HwWTFODP_TOT76_rlBUVRmnZvhsla6Q8o0hGThWG-pecU0c-wVcSmBVqHD6rNxRE3xZI227np7WcCiLwE-i2Ib4uH567o50qS3TfEKpHfQr7doJBnjlr_WXCezdI7FVgKXOvjTRfhI9q4LcPg-ENS5GOKvVFyCfjC_B8kYsHMPLsLL8nqXi2NeIM-T7D3gLZijss6XOR2nDz_iPywf0xagFHH6cAKWcKmw">
-</div>
-</div>
-<h1 class="font-display-hero text-headline-lg xl:text-display-hero [@media(max-height:760px)]:text-headline-lg text-on-primary mb-3 tracking-tight">
-          CỔNG TRỢ LÝ PHÁP LÝ &amp; DỊCH VỤ CÔNG
-        </h1>
-<p class="font-headline-sm text-headline-sm text-tertiary-fixed font-normal mb-6 max-w-xl">
-          Hệ thống AI Hỗ trợ Hồ sơ Đất đai &amp; Hộ kinh doanh toàn quốc
-        </p>
-<!-- Feature Pillar Badges -->
-<div class="space-y-3 max-w-xl">
-
-<div class="flex items-start gap-4 p-3 rounded-xl bg-surface-panel/10 backdrop-blur-md hover:bg-surface-panel/15 transition duration-200">
-<div class="w-10 h-10 rounded-lg bg-surface-panel/20 flex items-center justify-center shrink-0 text-tertiary-fixed">
-<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-</div>
-<div>
-<h2 class="font-label-lg text-label-lg text-on-primary">AI rà soát, thẩm định hồ sơ theo Luật Đất đai</h2>
-<p class="font-body-md text-body-md text-on-primary/80 mt-0.5 [@media(max-height:760px)]:hidden">Hỗ trợ rà soát giấy tờ, thông tin thửa đất và nội dung quy hoạch trước khi nộp.</p>
-</div>
-</div>
-<div class="flex items-start gap-4 p-3 rounded-xl bg-surface-panel/10 backdrop-blur-md hover:bg-surface-panel/15 transition duration-200">
-<div class="w-10 h-10 rounded-lg bg-surface-panel/20 flex items-center justify-center shrink-0 text-tertiary-fixed">
-<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">storefront</span>
-</div>
-<div>
-<h2 class="font-label-lg text-label-lg text-on-primary">Tự động lập tờ khai Hộ kinh doanh nhanh chóng</h2>
-<p class="font-body-md text-body-md text-on-primary/80 mt-0.5 [@media(max-height:760px)]:hidden">Hỗ trợ chuẩn bị tờ khai và thông tin cần thiết cho hộ kinh doanh.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- RIGHT PANEL: Dedicated Auth Form Canvas (40% Desktop) -->
-<div class="auth-panel auth-panel--signup w-full lg:w-2/5 h-full overflow-y-auto flex flex-col justify-between p-6 sm:p-8 lg:p-10 [@media(max-height:760px)]:py-5 relative">
-<!-- Auth Card Container (440px max width for optimal data entry eye tracking) -->
-<div class="auth-card w-full max-w-[440px] mx-auto my-auto py-4">
-<nav class="auth-tabs" aria-label="Tài khoản">
-<a href="/login">Đăng nhập</a>
-<a href="/signup" aria-current="page">Đăng ký</a>
-</nav>
-<div class="auth-card-header text-center sm:text-left mb-6 [@media(max-height:760px)]:mb-4 motion-safe:animate-fade-up">
-<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">
-            Đăng ký tài khoản
-          </h2>
-<p class="font-body-md text-body-md text-secondary">
-            Tạo tài khoản để sử dụng dịch vụ hồ sơ trực tuyến
-          </p>
-</div>
-<!-- Standard Administrative Registration Form -->
-<form id="signup-form" class="space-y-4 motion-safe:animate-fade-up-late">
-<!-- Gmail / Email -->
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email">Email <span class="text-primary">*</span></label>
-<div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
-<span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">mail</span>
-</div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="email" name="email" type="email" autocomplete="email" placeholder="ten@gmail.com" required>
-</div>
-</div>
-<!-- Phone -->
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="phone">Số điện thoại <span class="text-primary">*</span></label>
-<div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
-<span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">call</span>
-</div>
-<input class="w-full h-12 pl-11 pr-4 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition placeholder:text-secondary/60" id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Nhập số điện thoại" required>
-</div>
-</div>
-<!-- Password Field with View Toggle -->
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="password">Mật khẩu <span class="text-primary">*</span></label>
-<div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
-<span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">lock</span>
-</div>
-<input class="w-full h-12 pl-11 pr-11 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition" id="password" name="password" autocomplete="new-password" minlength="8" placeholder="Nhập mật khẩu" required="" type="password">
-<button aria-label="Hiện hoặc ẩn mật khẩu" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-secondary hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition motion-reduce:transition-none" id="toggle-pwd-1" onclick="togglePasswordVisibility('password', 'pwd-icon-1')" type="button">
-<span class="material-symbols-outlined text-xl" id="pwd-icon-1">visibility</span>
-</button>
-</div>
-</div>
-<!-- Confirm Password Field with View Toggle -->
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="confirm-password">Xác nhận mật khẩu <span class="text-primary">*</span></label>
-<div class="auth-field-wrap group relative rounded-xl border border-transparent transition-[border-color,box-shadow] duration-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 motion-reduce:transition-none">
-<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
-<span class="material-symbols-outlined text-xl transition-colors duration-200 group-focus-within:text-primary motion-reduce:transition-none">lock</span>
-</div>
-<input class="w-full h-12 pl-11 pr-11 bg-surface-panel text-on-surface font-body-md rounded-xl shadow-sm focus:outline-none focus:bg-surface-panel transition" id="confirm-password" name="confirm-password" autocomplete="new-password" minlength="8" placeholder="Nhập lại mật khẩu" required="" type="password">
-<button aria-label="Hiện hoặc ẩn xác nhận mật khẩu" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-secondary hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary transition motion-reduce:transition-none" id="toggle-pwd-2" onclick="togglePasswordVisibility('confirm-password', 'pwd-icon-2')" type="button">
-<span class="material-symbols-outlined text-xl" id="pwd-icon-2">visibility</span>
-</button>
-</div>
-</div>
-<!-- Terms Checkbox -->
-<div class="flex items-center gap-2.5 pt-1">
-<input class="w-4 h-4 rounded text-primary accent-primary cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2" id="terms" name="terms" required="" type="checkbox">
-<label class="font-body-md text-body-md text-secondary cursor-pointer select-none" for="terms">
-              Tôi đồng ý với <a class="text-primary font-medium hover:underline transition" href="#dieu-khoan">Điều khoản sử dụng</a>
-</label>
-</div>
-<!-- Primary Submit Action Button -->
-<div class="pt-2">
-<button id="signup-submit-button" aria-busy="false" class="auth-submit w-full h-12 px-6 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition duration-150 motion-reduce:transition-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-wait" type="submit">
-<span id="signup-submit-label">Đăng ký</span>
-<span id="signup-auth-spinner" aria-hidden="true" class="hidden h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/50 border-t-white motion-reduce:animate-none"></span>
-<span class="material-symbols-outlined text-xl">person_add</span>
-</button>
-</div>
-<p id="signup-auth-message" class="min-h-5 text-sm text-center" role="status" aria-live="polite"></p>
-</form>
-<p class="auth-account-switch text-sm text-secondary"><span>Đã có tài khoản?</span><a class="auth-register-link" href="/login">Đăng nhập</a></p>
-
-</div>
-</div>
-</div>
-<!-- Toggle Password Visibility Script -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="theme-color" content="#140405">
+<title>Đăng ký tài khoản | AI Legal Assistant</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols: chỉ tải các icon trang này dùng. Thêm icon mới thì thêm tên vào icon_names (giữ thứ tự a→z), nếu không icon sẽ hiện thành chữ. -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=close,home,login,pause,person_add,play_arrow,visibility,visibility_off&amp;display=block" rel="stylesheet">
+<link rel="stylesheet" href="/tailwind.css">
 <script>
-    function togglePasswordVisibility(inputId, iconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(iconId);
-      if (!input || !icon) return;
+  // Bật hiệu ứng khi máy không bật "giảm chuyển động"
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-anim');
+</script>
+<style>
+  /* Cùng hệ màu với trang Welcome: nền sơn mài, đỏ son, vàng nghệ */
+  :root { --void: #140405; --surface: #1F0809; --ash: #A8948F; --mist: #CDBCB6; --son: #B4161B; --nghe: #F2B544; }
+  html { background: var(--void); }
+  body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-feature-settings: "ss01" on; background: transparent; color: #fff; }
+  /* Nền sơn mài: quầng đỏ trầm và vảy vàng dát rải rác */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' fill='%23F2B544'%3E%3Cpolygon points='155.9,72.8 155.3,72.7 155.0,72.4 155.3,72.1 155.9,72.0' fill-opacity='0.23'/%3E%3Cpolygon points='280.5,29.8 279.6,29.9 279.7,29.1' fill-opacity='0.12'/%3E%3Cpolygon points='279.9,307.0 279.1,307.9 278.1,307.0 278.5,305.8 280.2,305.5' fill-opacity='0.14'/%3E%3Cpolygon points='275.2,253.2 274.2,251.6 276.0,250.5 276.7,252.5' fill-opacity='0.26'/%3E%3Cpolygon points='273.5,419.3 276.3,418.3 276.4,421.3 274.5,421.9' fill-opacity='0.24'/%3E%3Cpolygon points='475.9,395.3 475.6,394.2 476.7,393.7 477.8,394.2 477.5,395.3' fill-opacity='0.12'/%3E%3Cpolygon points='192.6,134.2 191.5,133.6 192.5,132.7 193.4,132.8 193.7,133.9' fill-opacity='0.14'/%3E%3Cpolygon points='3.4,200.7 2.4,202.5 1.2,201.6 1.5,199.5' fill-opacity='0.27'/%3E%3Cpolygon points='190.1,194.5 186.1,191.0 189.7,188.7' fill-opacity='0.09'/%3E%3Cpolygon points='456.8,296.6 453.5,295.8 453.3,291.4 457.7,292.9' fill-opacity='0.06'/%3E%3Cpolygon points='49.8,167.0 47.6,165.7 46.9,164.0 49.2,161.4 51.8,163.8' fill-opacity='0.14'/%3E%3Cpolygon points='176.2,79.2 177.6,79.9 176.7,81.6 174.9,81.2 175.1,79.6' fill-opacity='0.17'/%3E%3Cpolygon points='13.5,12.6 15.1,13.6 13.2,14.0' fill-opacity='0.13'/%3E%3Cpolygon points='109.6,93.2 110.4,94.6 109.0,96.1 107.4,95.0 108.1,93.7' fill-opacity='0.27'/%3E%3Cpolygon points='158.5,385.1 159.2,383.8 160.2,383.6 160.4,385.0' fill-opacity='0.28'/%3E%3Cpolygon points='471.1,316.8 469.9,316.6 468.8,315.3 470.3,313.9 471.4,315.1' fill-opacity='0.15'/%3E%3Cpolygon points='116.6,282.0 114.5,282.3 115.3,280.2' fill-opacity='0.29'/%3E%3Cpolygon points='63.2,70.2 64.3,73.1 62.4,74.4 61.4,72.5' fill-opacity='0.21'/%3E%3Cpolygon points='231.7,373.0 231.1,372.7 232.0,372.5' fill-opacity='0.16'/%3E%3Cpolygon points='466.1,290.9 467.2,290.1 468.3,291.0 467.2,292.1' fill-opacity='0.13'/%3E%3Cpolygon points='214.4,199.4 215.5,200.0 214.3,201.0' fill-opacity='0.23'/%3E%3Cpolygon points='175.8,120.1 176.4,122.0 175.1,122.1' fill-opacity='0.32'/%3E%3Cpolygon points='193.5,202.6 193.3,202.0 193.9,201.8 194.5,202.1 194.2,202.6' fill-opacity='0.29'/%3E%3Cpolygon points='40.4,129.6 41.1,130.6 40.3,131.2 39.7,130.5' fill-opacity='0.16'/%3E%3Cpolygon points='134.5,383.6 134.1,384.4 133.6,384.1 133.8,383.4' fill-opacity='0.21'/%3E%3Cpolygon points='444.9,129.5 444.1,128.9 444.1,127.8 445.6,127.7 446.0,128.8' fill-opacity='0.16'/%3E%3Cpolygon points='12.2,119.8 10.2,123.8 5.9,123.0 5.5,118.1 9.5,117.3' fill-opacity='0.07'/%3E%3Cpolygon points='111.7,97.2 109.0,96.2 108.4,94.8 110.1,94.3 112.0,94.8' fill-opacity='0.20'/%3E%3Cpolygon points='466.2,287.7 465.6,287.6 465.8,287.0 466.3,287.1' fill-opacity='0.13'/%3E%3Cpolygon points='88.7,162.6 85.9,162.1 85.7,159.9 88.4,158.6 90.1,161.0' fill-opacity='0.09'/%3E%3Cpolygon points='360.4,314.4 361.3,315.7 360.2,317.2 358.8,315.5' fill-opacity='0.18'/%3E%3Cpolygon points='334.0,242.1 336.8,239.9 339.0,242.1 337.7,243.9 335.6,244.5' fill-opacity='0.31'/%3E%3Cpolygon points='179.7,215.3 183.1,214.5 183.0,217.9 180.2,218.3 177.7,216.9' fill-opacity='0.06'/%3E%3Cpolygon points='129.1,349.8 128.2,351.8 126.0,351.4 125.8,349.6 127.7,348.7' fill-opacity='0.26'/%3E%3Cpolygon points='147.9,272.2 146.6,275.6 144.0,273.0 145.6,268.9' fill-opacity='0.09'/%3E%3Cpolygon points='150.4,41.8 149.1,41.9 148.6,40.7 149.9,40.7' fill-opacity='0.26'/%3E%3Cpolygon points='125.5,174.1 124.0,172.9 125.0,171.5 127.4,171.2 127.0,173.5' fill-opacity='0.18'/%3E%3Cpolygon points='180.8,57.1 181.4,58.6 180.2,58.7 179.9,57.4' fill-opacity='0.22'/%3E%3Cpolygon points='173.7,205.7 172.7,205.8 172.8,205.2 173.4,205.1' fill-opacity='0.31'/%3E%3Cpolygon points='424.7,391.4 423.5,390.5 423.7,388.7 424.9,388.1 425.8,389.8' fill-opacity='0.18'/%3E%3Cpolygon points='134.1,123.7 134.2,121.8 136.8,122.1 136.2,124.5' fill-opacity='0.21'/%3E%3Cpolygon points='216.7,159.5 218.2,159.2 217.6,161.0' fill-opacity='0.13'/%3E%3Cpolygon points='10.0,419.9 8.2,418.9 8.5,416.6 10.3,415.9 11.8,418.0' fill-opacity='0.30'/%3E%3Cpolygon points='185.1,310.7 183.6,310.3 184.8,309.4' fill-opacity='0.30'/%3E%3Cpolygon points='445.7,252.7 446.6,253.8 444.3,253.7' fill-opacity='0.28'/%3E%3Cpolygon points='429.6,41.4 429.2,40.7 429.9,40.5' fill-opacity='0.25'/%3E%3C/svg%3E") 0 0 / 480px 480px,
+      radial-gradient(ellipse 55% 45% at 12% 8%, rgba(180, 22, 27, 0.16), transparent 70%),
+      radial-gradient(ellipse 45% 40% at 92% 60%, rgba(122, 24, 14, 0.2), transparent 70%),
+      var(--void);
+  }
+  /* Dải hoa văn trống đồng ở đầu hộp */
+  .drum-band { height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='28' fill='none' stroke='%23F2B544' stroke-width='1'%3E%3Cpath d='M0 4.5 L5 0.5 L10 4.5 L15 0.5 L20 4.5 L25 0.5 L30 4.5 L35 0.5 L40 4.5'/%3E%3Cpath d='M0 23.5 L5 27.5 L10 23.5 L15 27.5 L20 23.5 L25 27.5 L30 23.5 L35 27.5 L40 23.5'/%3E%3Ccircle cx='20' cy='14' r='6'/%3E%3Ccircle cx='20' cy='14' r='2.6'/%3E%3Ccircle cx='20' cy='14' r='0.9' fill='%23F2B544' stroke='none'/%3E%3Cpath d='M0 8 L20 8 M20 20 L40 20 M0 20 L4 20 M36 8 L40 8'/%3E%3C/svg%3E") 0 0 / 40px 28px repeat-x; opacity: 0.32;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  .t-label { font-weight: 600; font-size: 0.8125rem; line-height: 1.2; letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-link { color: var(--ash); transition: color 0.2s ease; }
+  .nav-link:hover, .nav-link[aria-current="page"] { color: #fff; }
+  /* Điện thoại hẹp: chữ menu nhỏ lại để vừa logo và tên; dưới 360px ẩn link Đăng nhập (trong hộp đã có) */
+  @media (max-width: 399px) { .auth-nav { font-size: 11px; letter-spacing: 0.03em; } }
+  @media (max-width: 359px) { .nav-login { display: none; } }
+  :focus-visible { outline: 2px solid var(--nghe); outline-offset: 3px; }
+  /* Ô nhập: giữ nền tối khi trình duyệt tự điền */
+  input:-webkit-autofill { -webkit-text-fill-color: #fff; -webkit-box-shadow: 0 0 0 1000px #1F0809 inset; caret-color: #fff; }
+  .material-symbols-outlined { font-size: 1.15em; line-height: 1; vertical-align: middle; }
+  /* ---------- Hiệu ứng (chỉ khi có lớp js-anim) ---------- */
+  /* 1. Hộp form trượt lên, dải hoa văn mở từ giữa, từng dòng hiện lần lượt */
+  .js-anim .auth-card { animation: card-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; transition: opacity 0.2s ease, transform 0.2s ease; }
+  .js-anim .auth-card .drum-band { animation: band-open 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
+  .js-anim [data-stagger] { animation: rise-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(0.18s + var(--i, 0) * 45ms); }
+  .js-anim .auth-card.is-leaving { opacity: 0; transform: translateY(10px) scale(0.99); }
+  .js-anim .panel-in { animation: rise-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  @keyframes card-in { from { opacity: 0; transform: translateY(24px) scale(0.985); } to { opacity: 1; transform: none; } }
+  @keyframes band-open { from { clip-path: inset(0 50% 0 50%); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  /* 2. Mặt trống nền xoay rất chậm, nghiêng theo con trỏ */
+  .js-anim .auth-bg { transform: translate3d(var(--px, 0), var(--py, 0), 0); }
+  .js-anim .auth-drum { animation: drum-spin 120s linear infinite; }
+  @keyframes drum-spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+  /* 3. Đường vàng chạy dọc viền dưới ô nhập khi bấm vào */
+  .field-line { position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; border-radius: 2px; pointer-events: none;
+    background: linear-gradient(90deg, var(--son), var(--nghe)); transform: scaleX(0); transform-origin: left; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .peer:focus ~ .field-line { transform: scaleX(1); }
+  /* 4. Ô lỗi: viền cam, rung một nhịp */
+  input.peer.is-invalid { border-color: #E4572E !important; }
+  input.peer.is-invalid ~ label { color: #FF8A73 !important; }
+  input.peer.is-invalid ~ .field-line { background: #E4572E; }
+  .js-anim .is-shaking { animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+  @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+  /* 5. Nút gửi: vệt sáng khi rê chuột, co thành vòng quay khi đang gửi, dấu tích khi xong */
+  .auth-btn { position: relative; overflow: hidden; isolation: isolate; }
+  .auth-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, transparent 30%, rgba(242, 181, 68, 0.55) 50%, transparent 70%); transform: translateX(-120%); transition: transform 0.75s ease; }
+  .auth-btn:hover::after { transform: translateX(120%); }
+  .auth-btn > * { transition: opacity 0.15s ease; }
+  .auth-btn.is-busy, .auth-btn.is-done { cursor: wait; }
+  .auth-btn.is-busy > *, .auth-btn.is-done > * { opacity: 0; }
+  .auth-btn::before { content: ""; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 999px; opacity: 0; pointer-events: none; }
+  .auth-btn.is-busy::before { opacity: 1; border: 2px solid rgba(255, 255, 255, 0.35); border-top-color: #fff; animation: spin 0.8s linear infinite; }
+  .auth-btn.is-done { background: var(--nghe) !important; }
+  .auth-btn.is-done::before { opacity: 1; width: 8px; height: 15px; margin: -10px 0 0 -4px; border-radius: 0; border: solid #140405; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+  .js-anim .auth-btn { transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.35s ease, background-color 0.25s ease; }
+  .js-anim .auth-btn.is-busy, .js-anim .auth-btn.is-done { width: 48px; padding-left: 0; padding-right: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* 6. Thanh độ mạnh mật khẩu nằm trong viền dưới ô */
+  .pw-meter { position: absolute; left: 14px; right: 14px; bottom: 5px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, 0.08); opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+  .pw-meter.is-on { opacity: 1; }
+  .pw-meter > span { display: block; height: 100%; width: 0; border-radius: inherit; transition: width 0.35s ease, background-color 0.35s ease; }
+  .pw-hint { font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) {
+    .auth-btn::after { display: none; }
+    .auth-btn.is-busy::before { animation-duration: 1.6s; }
+    .field-line, .pw-meter > span { transition: none; }
+  }
+</style>
+</head>
+<body class="antialiased selection:bg-[#F2B544]/40 selection:text-white">
+<div class="relative min-h-screen lg:h-screen lg:overflow-hidden flex flex-col text-white">
+  <!-- Mặt trống đồng mờ phía sau hộp -->
+  <div aria-hidden="true" class="fixed -inset-8 z-0 overflow-hidden pointer-events-none auth-bg">
+    <img alt="" class="auth-drum absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] max-w-none opacity-[0.05] invert sepia saturate-200 hue-rotate-[-10deg]" src="/images/login/dong-son-drum-face.png">
+  </div>
 
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.textContent = 'visibility_off';
-      } else {
-        input.type = 'password';
-        icon.textContent = 'visibility';
-      }
-    }
-  </script>
+  <!-- Thanh trên: giống trang Welcome -->
+  <header class="relative z-20 shrink-0">
+    <div class="max-w-[1280px] mx-auto h-16 sm:h-[76px] short:!h-16 tiny:!h-14 px-4 sm:px-8 flex items-center justify-between gap-3 sm:gap-6">
+      <a class="flex items-center gap-2 sm:gap-3 shrink-0" href="/" aria-label="AI Legal Assistant, về trang chủ">
+        <img alt="" class="w-8 h-8 sm:w-9 sm:h-9 rounded-[10px] object-cover shrink-0" width="36" height="36" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnlkQoeQ9cz3O0zHezfnJW4i8PbOqNuqCM_y55TX3U1BXwu363H9aKum-CzoC6jH3E8KgRmTnjg6ahp1_0U4Uu7KlgoL-NddAXz2D2XhnbRhUHSynxMXspIRWCp6gO9GfE0mPu7xSV2yXkstnSI-UqyLL9cUZYchWEE_xXHwAcKYC8mOAVROpEiOiEoUh4IIBkqehqRVdGI1SJcTeCy9fwRTkBk3nvQPwTzqMV5ckvIWSpXGRWVNBSEZ2AgnWqrWF4-gE">
+        <span class="text-[13px] sm:text-[15px] font-normal tracking-[-0.01em] text-white whitespace-nowrap" translate="no">AI Legal Assistant</span>
+      </a>
+      <nav aria-label="Tài khoản" class="auth-nav flex items-center gap-3 sm:gap-8 t-label whitespace-nowrap">
+        <a class="nav-link hidden md:inline" href="/">Trang chủ</a>
+        <a class="nav-link nav-login" href="/login">Đăng nhập</a>
+        <a class="inline-flex items-center justify-center min-h-[36px] sm:min-h-[40px] px-3.5 sm:px-5 rounded-[999px] bg-[#F2B544] text-[#140405] transition-colors" href="/signup" aria-current="page">Đăng ký</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hộp đăng ký tài khoản ở giữa màn hình -->
+  <main class="relative z-10 flex-1 min-h-0 flex items-center justify-center px-4 py-8 lg:py-4">
+    <div class="relative w-full max-w-[560px]">
+      <a aria-label="Đóng, về trang chủ" class="absolute -top-12 right-0 sm:-right-12 sm:top-0 w-10 h-10 flex items-center justify-center rounded-[999px] text-[#CDBCB6] hover:text-white hover:bg-white/10 text-2xl transition" href="/" title="Về trang chủ">
+        <span aria-hidden="true" class="material-symbols-outlined">close</span>
+      </a>
+      <div class="auth-card rounded-[24px] bg-[#1F0809] text-white border border-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.6)] overflow-hidden">
+        <div aria-hidden="true" class="drum-band tiny:!h-4"></div>
+        <div class="auth-content px-6 pt-6 pb-8 sm:px-12 sm:pt-7 sm:pb-11 short:!pt-4 short:!pb-7 tiny:!pt-3 tiny:!pb-5">
+          <p class="t-label text-[#F2B544] mb-3 short:!mb-2 tiny:hidden">Tạo tài khoản</p>
+
+      <h1 class="text-[30px] short:!text-[26px] font-normal leading-tight tracking-[-0.03em] text-white">Đăng ký tài khoản</h1>
+      <p class="mt-1 text-[13.5px] text-[#CDBCB6] short:hidden">Tạo tài khoản công dân để nộp và theo dõi hồ sơ trực tuyến.</p>
+
+      <form class="mt-6 short:!mt-5 tiny:!mt-4 space-y-5 short:!space-y-4" id="signup-form" novalidate>
+        <div class="grid sm:grid-cols-2 gap-5 short:!gap-4">
+          <div class="relative">
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition" id="full-name" type="text" autocomplete="name" autocapitalize="words" maxlength="100" name="full-name" placeholder="Nguyễn Văn An" required spellcheck="false">
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="full-name">Họ và tên <span class="text-[#F2B544]">*</span></label>
+            </div>
+          <div class="relative">
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition" id="phone" type="tel" aria-describedby="phone-hint" autocomplete="tel" inputmode="tel" maxlength="15" name="phone" placeholder="0901234567" required>
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="phone">Số điện thoại <span class="text-[#F2B544]">*</span></label>
+            </div>
+        </div>
+        <div class="relative">
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition" id="email" type="email" aria-describedby="email-hint" autocomplete="email" name="email" placeholder="ten@gmail.com" required>
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="email">Email <span class="text-[#F2B544]">*</span></label>
+            </div>
+        <div class="grid sm:grid-cols-2 gap-5 short:!gap-4">
+          <div class="relative">
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition pr-12" id="password" type="password" autocomplete="new-password" minlength="8" name="password" placeholder="Tối thiểu 8 ký tự" required>
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="password">Mật khẩu <span class="text-[#F2B544]">*</span></label>
+              <button aria-label="Hiện mật khẩu" aria-pressed="false" class="absolute inset-y-0 right-0 w-12 flex items-center justify-center text-[#A8948F] hover:text-white rounded-r-[14px] cursor-pointer text-xl" data-toggle-password="password" type="button"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></button>
+            </div>
+          <div class="relative">
+              <input class="peer w-full h-14 short:!h-12 px-4 rounded-[14px] bg-[#1F0809] border border-white/15 text-white text-[15px] font-normal placeholder:text-[#A8948F]/70 focus:outline-none focus:border-[#F2B544] focus:ring-[3px] focus:ring-[#F2B544]/[0.15] transition pr-12" id="confirm-password" type="password" autocomplete="new-password" minlength="8" name="confirm-password" placeholder="Nhập lại" required>
+              <label class="absolute -top-2 left-3 px-1.5 bg-[#1F0809] text-xs font-semibold text-[#CDBCB6] peer-focus:text-[#F2B544] pointer-events-none" for="confirm-password">Xác nhận mật khẩu <span class="text-[#F2B544]">*</span></label>
+              <button aria-label="Hiện mật khẩu" aria-pressed="false" class="absolute inset-y-0 right-0 w-12 flex items-center justify-center text-[#A8948F] hover:text-white rounded-r-[14px] cursor-pointer text-xl" data-toggle-password="confirm-password" type="button"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></button>
+            </div>
+        </div>
+        <p class="-mt-2 text-[12px] leading-snug text-[#A8948F] tiny:hidden"><span id="email-hint">Chúng tôi sẽ gửi email xác minh, hãy dùng email bạn đang dùng.</span> <span id="phone-hint">Số điện thoại gồm 10 số, bắt đầu bằng 0.</span></p>
+
+        <div class="space-y-2.5 short:!space-y-2">
+          <label class="flex items-start gap-2.5 cursor-pointer select-none" for="terms">
+            <input class="w-4 h-4 mt-0.5 rounded-sm accent-[#B4161B] cursor-pointer shrink-0" id="terms" name="terms" required type="checkbox">
+            <span class="text-[13.5px] leading-snug text-[#CDBCB6]">Tôi đồng ý với <a class="font-semibold text-[#F2B544] hover:underline" href="/dieu-khoan#dieu-khoan-su-dung" target="_blank" rel="noopener">Điều khoản sử dụng</a></span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer select-none" for="privacy-consent">
+            <input class="w-4 h-4 mt-0.5 rounded-sm accent-[#B4161B] cursor-pointer shrink-0" id="privacy-consent" name="privacy-consent" required type="checkbox">
+            <span class="text-[13.5px] leading-snug text-[#CDBCB6]">Tôi đồng ý cho hệ thống xử lý dữ liệu cá nhân (họ tên, số điện thoại, CCCD, hồ sơ) theo <a class="font-semibold text-[#F2B544] hover:underline" href="/dieu-khoan#bao-ve-du-lieu" target="_blank" rel="noopener">Chính sách bảo vệ dữ liệu cá nhân</a></span>
+          </label>
+        </div>
+
+        <p aria-live="polite" class="text-center text-[13px] font-medium empty:hidden data-[state=error]:text-[#FF8A73] data-[state=success]:text-emerald-300" id="signup-auth-message" role="status"></p>
+
+        <div class="flex items-center justify-between gap-4 pt-1">
+          <a class="text-[14px] font-medium text-white underline underline-offset-4 decoration-white/30 hover:text-[#F2B544] hover:decoration-[#F2B544]" href="/login">Đã có tài khoản? Đăng nhập</a>
+          <button aria-busy="false" class="w-1/2 h-12 px-6 auth-btn rounded-[999px] bg-[#B4161B] hover:bg-[#C9221F] text-white font-semibold text-sm uppercase tracking-[0.04em] flex items-center justify-center gap-2 cursor-pointer transition disabled:opacity-70 disabled:cursor-wait" id="signup-submit-button" type="submit">
+            <span aria-hidden="true" class="hidden w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" id="signup-auth-spinner"></span>
+            <span id="signup-submit-label">Đăng ký</span>
+          </button>
+        </div>
+      </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Thanh dưới -->
+  <footer class="relative z-20 shrink-0">
+    <div class="max-w-[1280px] mx-auto h-14 tiny:!h-11 px-5 sm:px-8 hidden sm:flex items-center justify-between gap-4 text-xs text-[#A8948F]">
+      <span>© 2026 AI Legal Assistant</span>
+      <span class="flex gap-6 uppercase tracking-[0.06em]">
+        <a class="hover:text-white" href="/dieu-khoan#dieu-khoan-su-dung">Điều khoản sử dụng</a>
+        <a class="hover:text-white" href="/dieu-khoan#bao-ve-du-lieu">Chính sách bảo mật</a>
+      </span>
+    </div>
+  </footer>
+</div>
+
+<script src="/auth-showcase.js" defer></script>
+<script src="/auth-motion.js" defer></script>
 <script type="module" src="/signup-auth.js"></script>
-<script src="/auth-shell.js" defer></script>
-</div></main></body></html>
+</body>
+</html>

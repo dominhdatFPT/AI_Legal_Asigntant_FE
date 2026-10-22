@@ -715,7 +715,8 @@ main {
     }
 }
 
-@media (max-height: 700px) {
+/* Form 2 cột chỉ dùng cho màn hình rất thấp; laptop 1080p scale 125% (~690px) vẫn đủ chỗ cho form 1 cột */
+@media (max-height: 560px) {
     .auth-panel {
         gap: 2px;
         padding: 8px 14px !important;
