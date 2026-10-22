@@ -51,11 +51,23 @@ const readData = async (response) => {
 
 const postJson = async (path, body) => readData(await request(path, { method: 'POST', body }));
 
+// Mutex chống race-condition khi nhiều request song song cùng gặp 401 token hết hạn
+let refreshPromise = null;
+
+const doRefresh = () => {
+  if (!refreshPromise) {
+    refreshPromise = request('/api/users/auth/refresh', { method: 'POST' }).finally(() => {
+      refreshPromise = null;
+    });
+  }
+  return refreshPromise;
+};
+
 // Gọi API cần đăng nhập. Access token hết hạn (401) → refresh bằng cookie rồi gọi lại 1 lần.
 const authRequest = async (path, options) => {
   let response = await request(path, options);
   if (response.status === 401) {
-    const refreshed = await request('/api/users/auth/refresh', { method: 'POST' });
+    const refreshed = await doRefresh();
     if (refreshed.ok) response = await request(path, options);
   }
   return response;

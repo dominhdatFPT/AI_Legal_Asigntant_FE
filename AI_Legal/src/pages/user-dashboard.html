@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Tổng quan hồ sơ - Cổng Dịch vụ công Quốc gia</title><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning,hourglass_top&amp;display=block" rel="stylesheet">
 <style>
@@ -37,7 +37,7 @@ body.bg-background>footer,body.bg-background>footer .text-on-surface,body.bg-bac
 body.bg-background>footer .bg-surface-container{background:rgba(35,15,15,.38)}
 body.bg-background>footer a:hover{color:#ffd9dd}
 body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
-</style><link rel="stylesheet" href="/tailwind-user.css"><style id="auth-pending">body{visibility:hidden!important}</style>
+</style><link rel="stylesheet" href="/tailwind-user.css?v=20261022"><style id="auth-pending">body{visibility:hidden!important}</style>
 <!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
 <script type="speculationrules">
   {
@@ -218,7 +218,6 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 <table class="w-full text-left font-body-sm text-body-sm">
 <thead class="bg-surface-container-high text-on-surface font-label-md text-label-md uppercase tracking-wider">
 <tr>
-<th class="py-space-md px-space-md">Mã hồ sơ</th>
 <th class="py-space-md px-space-md">Tên thủ tục hành chính</th>
 <th class="py-space-md px-space-md">Cơ quan thụ lý</th>
 <th class="py-space-md px-space-md">Ngày nộp</th>
@@ -228,7 +227,7 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 </tr>
 </thead>
 <tbody class="text-on-surface" id="my-applications-body" aria-live="polite">
-<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="7">Đang tải hồ sơ...</td></tr>
+<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="6">Đang tải hồ sơ...</td></tr>
 </tbody>
 </table>
 </div>
@@ -387,13 +386,13 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 
 <!-- MODAL XEM CHI TIẾT TỜ ĐƠN HỒ SƠ CHÍNH THỨC -->
 <div id="application-dossier-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
-  <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-slate-200">
+  <div class="dossier-modal-card relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-slate-200">
     
     <!-- Modal Header (no-print) -->
-    <div class="no-print bg-slate-900 text-white px-5 sm:px-6 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+    <div class="dossier-modal-header no-print bg-slate-900 text-white px-5 sm:px-6 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
       <div class="flex items-center gap-2.5">
         <span class="material-symbols-outlined text-red-500">description</span>
-        <span class="font-bold text-xs sm:text-sm tracking-wide uppercase">Cổng Dịch Vụ Công Quốc Gia • Xem Chi Tiết Tờ Đơn</span>
+        <span id="dossier-title" class="font-bold text-xs sm:text-sm tracking-wide uppercase">Cổng Dịch Vụ Công Quốc Gia • Xem Chi Tiết Tờ Đơn</span>
       </div>
       <div class="flex items-center gap-2">
         <button id="btn-print-dossier" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition shadow-sm" title="Tải file PDF tờ đơn chính thức về máy tính">
@@ -425,7 +424,7 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
     </div>
 
     <!-- Modal Footer (no-print) -->
-    <div class="no-print bg-slate-50 px-6 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-sans shrink-0">
+    <div class="dossier-modal-footer no-print bg-slate-50 px-6 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-sans shrink-0">
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
         <span>Hồ sơ đã được mã hóa và xác thực chữ ký điện tử công dân.</span>
@@ -439,6 +438,53 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 </div>
 
 <style>
+/* Đảm bảo modal Xem đơn luôn hiển thị đè lên toàn bộ giao diện và căn giữa màn hình */
+#application-dossier-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  background-color: rgba(15, 23, 42, 0.72) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+#application-dossier-modal.hidden {
+  display: none !important;
+}
+#application-dossier-modal > .dossier-modal-card {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 56rem !important;
+  max-height: 90vh !important;
+  background-color: #ffffff !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: 1px solid #cbd5e1 !important;
+  box-sizing: border-box !important;
+}
+#application-dossier-modal .dossier-modal-header {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+#dossier-modal-content {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  background-color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+#application-dossier-modal .dossier-modal-footer {
+  background-color: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
 @media print {
   @page {
     size: A4 portrait;
