@@ -17,3 +17,53 @@
 @media(max-width:600px){.catalog-grid .template-card{display:flex;min-height:0}.catalog-grid .document-thumbnail{max-height:180px;padding:19px 0 0}.catalog-grid .card-content{padding:22px}.catalog-grid .card-bottom{flex-direction:row;align-items:center;gap:10px}.catalog-grid .card-bottom .content-status{max-width:170px}.status-filter{max-width:none;font-size:13px}.catalog-pagination{gap:17px}.reader-info .source-filename{font-size:11px!important}}
 
 .filter-panel .status-filter{margin:0;max-width:none;gap:12px}.filter-panel .status-filter select{height:51px;font-weight:400}@media(min-width:760px){.select-grid{grid-template-columns:1fr 1fr;gap:18px}.select-grid label{font-size:13px}}@media(max-width:759px){.select-grid{grid-template-columns:1fr}.filter-panel .status-filter select{height:48px}}
+
+/* ---------- Style giống trang Tổng quan hồ sơ / Tạo hồ sơ (body.app-page): nền ảnh phủ đỏ sẫm, khối hero đỏ son, thẻ trắng bo tròn ---------- */
+.app-page{--red:#b91c1c;--red-dark:#93000b;font-family:"Be Vietnam Pro",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#6f111b;isolation:isolate;min-height:100vh}
+.app-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#6f111b}
+.app-backdrop img{width:100%;height:100%;object-fit:cover;object-position:center 48%;opacity:.66;display:block}
+.app-backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(55,0,10,.84) 0%,rgba(82,5,19,.7) 52%,rgba(35,18,18,.58) 100%),linear-gradient(0deg,rgba(28,17,15,.52),rgba(65,0,2,.2) 55%,rgba(65,0,2,.4))}
+.app-page .shell{width:min(1216px,calc(100% - 64px))}
+.app-page .breadcrumb{color:rgba(255,255,255,.8);margin-top:24px}
+.app-page .breadcrumb a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.app-page :focus-visible{outline:2px solid #fe932c;outline-offset:3px}
+/* Khối hero đỏ son: nhãn viên thuốc trắng, tiêu đề trắng, bộ lọc trong thẻ trắng */
+.app-hero{margin-top:16px;background:#b91c1c;border:1px solid #b91c1c;border-radius:16px;padding:32px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.app-hero .page-heading{padding:0 0 28px;text-align:center;max-width:768px;margin:0 auto}
+.app-hero .section-label{display:inline-flex;align-items:center;gap:8px;background:#fef2f2;color:#93000b;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:.02em;margin:0}
+.app-hero h1{color:#fff;font-size:30px;line-height:1.2;letter-spacing:-.01em;margin:12px 0 8px}
+.app-hero .page-heading>p:last-child{color:rgba(255,255,255,.85);font-size:14px}
+.app-hero .filter-panel{border:0;border-radius:16px;padding:24px;box-shadow:none}
+.app-hero-note{margin:20px 0 0;text-align:center;font-size:12px;color:rgba(255,255,255,.85)}
+.app-page select,.app-page .search-box{border-radius:12px;background:#fffaf8}
+.app-page .step{border-color:#f3c6c6;border-radius:999px;color:#93000b;background:#fef2f2}
+/* Thẻ trắng chứa danh sách, trang xem mẫu */
+.app-card{background:#fffaf2;border-radius:16px;padding:28px;margin-top:24px;margin-bottom:40px;box-shadow:0 14px 30px rgba(28,0,4,.18)}
+.app-page .template-card{border-radius:16px;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.app-page .template-card:hover{border-color:#fca5a5;box-shadow:0 10px 24px rgba(65,0,2,.09);transform:translateY(-2px)}
+.app-page .primary-button{border-radius:12px;min-height:40px}
+.app-page .outline-button{border-radius:12px;min-height:40px;border-color:#e2e8f0;color:#1e1b19;font-weight:600}
+.app-page .outline-button:hover{background:#f8fafc}
+.app-page .text-button{min-height:40px}
+.app-page .empty-state{border-radius:16px}
+.app-page .reference-note{margin:24px 0 0;border-radius:12px;background:#fef2f2;border-color:#fde2e2}
+.app-page .viewer-main{padding-top:24px}
+.app-page .back-link{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#1e1b19;font-weight:600;text-decoration:none}
+.app-page .back-link:hover{background:#f8fafc}
+/* Chân trang giống Tổng quan hồ sơ: nền mờ trong suốt trên ảnh, chữ trắng */
+.app-footer{position:relative;background:rgba(250,242,238,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:40px 0 32px;font-size:13px;line-height:1.6}
+.app-footer a{color:#fff;text-decoration:none}
+.app-footer a:hover{color:#ffd9dd;text-decoration:underline}
+.app-footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;margin-bottom:32px}
+.app-footer-about p{margin:8px 0 0}
+.app-footer-brand{display:flex;align-items:center;gap:8px}
+.app-footer-brand img{object-fit:contain}
+.app-footer-brand strong{font-size:16px;font-weight:600;text-transform:uppercase}
+.app-footer-col{display:flex;flex-direction:column;gap:8px}
+.app-footer-title{font-size:14px;font-weight:600;text-transform:uppercase}
+.app-footer-hotline{font-size:20px;font-weight:600;color:#ffb4ab}
+.app-footer-small{font-size:11px;opacity:.9}
+.app-footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(35,15,15,.38);border-radius:4px;padding:16px;font-size:11px}
+.app-footer-links{display:flex;gap:24px;flex-wrap:wrap}
+@media(max-width:767px){.app-footer-grid{grid-template-columns:1fr}.app-footer-bottom{flex-direction:column;align-items:flex-start}}
+@media(max-width:600px){.app-page .shell{width:calc(100% - 32px)}.app-hero{padding:20px 16px}.app-hero h1{font-size:24px}.app-hero .filter-panel{padding:18px 16px}.app-card{padding:20px 16px}}

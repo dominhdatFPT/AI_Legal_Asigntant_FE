@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="vi">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Xem biểu mẫu thủ tục</title><link rel="stylesheet" href="/contract-catalog.css"></head>
-<body>
+<body class="app-page">
   <a class="skip-link" href="#main">Đến nội dung chính</a>
   <!-- user-header -->
-  <main class="shell viewer-main" id="main">
+  <!-- Nền ảnh mờ phủ đỏ sẫm giống trang Tổng quan hồ sơ / Tạo hồ sơ -->
+  <div class="app-backdrop" aria-hidden="true"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=80" alt="" fetchpriority="low"></div>
+  <main class="shell viewer-main app-card" id="main">
     <a class="back-link" href="/document-storages">← Quay lại kho mẫu</a>
     <p id="viewer-status" role="status">Đang tải tài liệu…</p>
     <section id="viewer" class="reader-layout" hidden>
@@ -15,5 +17,14 @@
       </div>
     </section>
   </main>
+  <footer class="app-footer"><div class="shell">
+    <div class="app-footer-grid">
+      <div class="app-footer-about"><div class="app-footer-brand"><img src="/images/national-service-logo.png" width="32" height="32" alt=""><strong>Cơ quan chủ quản: Văn phòng Chính phủ</strong></div>
+        <p>Hệ thống giải quyết thủ tục hành chính liên thông cấp Bộ, Tỉnh và Cổng Dịch vụ công Quốc gia theo Nghị định số 61/2018/NĐ-CP và Nghị định số 107/2021/NĐ-CP của Chính phủ.</p><p class="app-footer-small">Địa chỉ: Số 1 Hoàng Hoa Thám, Ba Đình, Hà Nội</p></div>
+      <div class="app-footer-col"><strong class="app-footer-title">Đường dây nóng hỗ trợ</strong><span class="app-footer-hotline">1800 1096</span><span class="app-footer-small">Tổng đài miễn cước cuộc gọi phục vụ người dân và doanh nghiệp</span><span class="app-footer-small">Email: dichvucong@chinhphu.vn</span></div>
+      <div class="app-footer-col"><strong class="app-footer-title">Quy định &amp; Hướng dẫn</strong><a href="#">Quy chế hoạt động cổng thông tin</a><a href="#">Chính sách bảo mật dữ liệu công dân</a><a href="#">Hướng dẫn ký số và giao dịch trực tuyến</a><a href="#">Câu hỏi thường gặp (FAQ)</a></div>
+    </div>
+    <div class="app-footer-bottom"><span>© 2026 Cổng Dịch vụ công Quốc gia. Bản quyền thuộc Chính phủ nước CHXHCN Việt Nam.</span><span class="app-footer-links"><a href="#">Điều khoản sử dụng</a><a href="#">An toàn thông tin mạng</a><a href="#">Sơ đồ cổng dịch vụ</a></span></div>
+  </div></footer>
   <script type="module" src="/contract-viewer.js"></script>
 </body></html>

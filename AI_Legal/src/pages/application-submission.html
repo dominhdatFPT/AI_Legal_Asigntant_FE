@@ -347,6 +347,7 @@
     </div>
   </div>
 
+  <div id="personal-step-body" class="space-y-4">
   <!-- Verified Citizen Card Summary -->
   <div id="verified-id-card" class="p-4 rounded-xl bg-gradient-to-br from-slate-50 to-emerald-50/30 border border-slate-200/90 relative overflow-hidden">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3 mb-3">
@@ -394,6 +395,7 @@
 
   <!-- Detailed Form Fields (collapsible/editable when needed) -->
   <div id="citizen-fields-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100"></div>
+  </div>
 </div>
 
           <!-- STEP 2: THÔNG TIN CHI TIẾT THỦ TỤC & ĐẤT ĐAI / HỘ KINH DOANH -->
@@ -797,6 +799,98 @@
       return wrapper;
     }
 
+    // ---------- Mục thu gọn / mở rộng: áp cho mọi mẫu đơn (các khối của schema + thẻ bước 1) ----------
+    // Chỉ ẩn bằng CSS nên dữ liệu đã nhập, tự điền CCCD/AI vẫn giữ nguyên. CSS chèn tại đây vì khi mở trong
+    // trang Tổng quan (user-dashboard-navigation.js) chỉ phần <main> và script này được mang sang.
+    const FORM_COLLAPSE_CSS = `
+.form-collapse-head{display:flex;width:100%;align-items:center;gap:10px;min-height:44px;padding:2px 0;border:0;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.form-collapse-head:focus-visible,.form-collapse-toggle:focus-visible{outline:2px solid #b91c1c;outline-offset:3px;border-radius:8px}
+.form-collapse-title{flex:1;min-width:0}
+.form-collapse-count{flex:none;font-size:11px;font-weight:600;color:#5b403d;background:#fff;border:1px solid #e2e8f0;border-radius:999px;padding:2px 10px}
+.form-collapse-count.is-done{color:#15803d;border-color:#bbf7d0;background:#f0fdf4}
+.form-collapse-icon{flex:none;transition:transform .16s ease;color:#b91c1c}
+.form-collapse:not(.is-collapsed) .form-collapse-head .form-collapse-icon,.form-collapse:not(.is-collapsed)>div .form-collapse-toggle .form-collapse-icon{transform:rotate(180deg)}
+.form-collapse.has-error>.form-collapse-head .form-collapse-title::after{content:" · Còn thiếu thông tin";color:#b91c1c;text-transform:none;letter-spacing:0;font-weight:600}
+.form-collapse-toggle,.form-collapse-all{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#1e1b19;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.form-collapse-toggle:hover,.form-collapse-all:hover{background:#f8fafc}
+.form-collapse-all:focus-visible{outline:2px solid #b91c1c;outline-offset:2px}
+@media screen{.form-collapse.is-collapsed>.form-collapse-body{display:none}}
+.form-collapse:not(.is-collapsed)>.form-collapse-body{animation:form-collapse-in .16s ease}
+@keyframes form-collapse-in{from{opacity:0;transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.form-collapse-icon{transition:none}.form-collapse:not(.is-collapsed)>.form-collapse-body{animation:none}}
+@media (max-width:480px){.form-collapse-count{display:none}}`;
+    if (!document.getElementById('form-collapse-style')) {
+      const style = document.createElement('style');
+      style.id = 'form-collapse-style';
+      style.textContent = FORM_COLLAPSE_CSS;
+      document.head.append(style);
+    }
+
+    function setSectionOpen(section, open) {
+      section.classList.toggle('is-collapsed', !open);
+      section.querySelectorAll(':scope > .form-collapse-head, :scope > div > .form-collapse-toggle').forEach((toggle) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        const label = toggle.querySelector('[data-collapse-label]');
+        if (label) label.textContent = open ? 'Thu gọn' : 'Mở rộng';
+      });
+      syncCollapseAllButton();
+    }
+
+    // Số ô đã điền / tổng số ô trong từng mục
+    function updateSectionCounters() {
+      document.querySelectorAll('.form-collapse [data-collapse-count]').forEach((counter) => {
+        const body = counter.closest('.form-collapse').querySelector(':scope > .form-collapse-body');
+        const controls = [...body.querySelectorAll('input, select, textarea')].filter((control) => control.type !== 'hidden');
+        const done = controls.filter((control) => (control.type === 'checkbox' ? control.checked : String(control.value).trim())).length;
+        counter.textContent = `${done}/${controls.length} đã điền`;
+        counter.classList.toggle('is-done', controls.length > 0 && done === controls.length);
+      });
+    }
+
+    function syncCollapseAllButton() {
+      const button = document.getElementById('form-collapse-all');
+      const sections = [...document.querySelectorAll('#schema-details-fields > .form-collapse')];
+      if (!button) return;
+      button.hidden = sections.length < 2;
+      const anyCollapsed = sections.some((section) => section.classList.contains('is-collapsed'));
+      button.dataset.expand = String(anyCollapsed);
+      button.textContent = anyCollapsed ? 'Mở tất cả' : 'Thu gọn tất cả';
+    }
+
+    // Trường bắt buộc nằm trong mục đang thu gọn: khi kiểm tra/nộp thì tự mở mục đó để trình duyệt focus được và báo lỗi.
+    document.addEventListener('invalid', (event) => {
+      const section = event.target.closest?.('.form-collapse');
+      if (!section) return;
+      section.classList.add('has-error');
+      if (section.classList.contains('is-collapsed')) setSectionOpen(section, true);
+    }, true);
+    document.addEventListener('input', (event) => {
+      const section = event.target.closest?.('.form-collapse');
+      if (!section) return;
+      if (!section.querySelector('.form-collapse-body :invalid')) section.classList.remove('has-error');
+      updateSectionCounters();
+    });
+    document.addEventListener('change', (event) => {
+      if (event.target.closest?.('.form-collapse')) updateSectionCounters();
+    });
+
+    // Thẻ bước 1 (khung tĩnh): thêm nút Thu gọn/Mở rộng ở đầu thẻ.
+    function enhancePersonalStep() {
+      const card = document.getElementById('form-step-personal');
+      const body = document.getElementById('personal-step-body');
+      if (!card || !body || card.classList.contains('form-collapse')) return;
+      card.classList.add('form-collapse');
+      body.classList.add('form-collapse-body');
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'form-collapse-toggle';
+      toggle.setAttribute('aria-controls', body.id);
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.innerHTML = '<span data-collapse-label>Thu gọn</span><span class="material-symbols-outlined form-collapse-icon text-base" aria-hidden="true">expand_more</span>';
+      toggle.addEventListener('click', () => setSectionOpen(card, card.classList.contains('is-collapsed')));
+      card.firstElementChild.append(toggle);
+    }
+
     // Bước 1 = khối đầu tiên của schema (người làm đơn / bên ủy quyền / bên cho thuê), bước 2 = các khối còn lại.
     function renderSchemaForm(schema) {
       currentFormSchema = schema;
@@ -808,18 +902,52 @@
       document.getElementById('verified-id-card')?.classList.toggle('hidden', !isApplicant);
       document.getElementById('btn-autofill-citizen-data')?.classList.toggle('hidden', !isApplicant);
       document.getElementById('autofill-alert')?.classList.add('hidden');
-      document.getElementById('schema-details-fields').replaceChildren(...rest.map((section) => {
+      enhancePersonalStep();
+      setSectionOpen(document.getElementById('form-step-personal'), true);
+      // Mỗi khối là một thẻ thu gọn được: mở khối đầu, các khối sau thu gọn.
+      document.getElementById('schema-details-fields').replaceChildren(...rest.map((section, index) => {
         const box = document.createElement('section');
-        box.className = 'space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
+        box.className = 'form-collapse space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
+        const bodyId = `schema-section-${section.key}`;
+        const head = document.createElement('button');
+        head.type = 'button';
+        head.className = 'form-collapse-head border-b border-slate-200 pb-2';
+        head.setAttribute('aria-controls', bodyId);
         const title = document.createElement('h4');
-        title.className = 'border-b border-slate-200 pb-2 text-xs font-bold uppercase tracking-wider text-red-700';
+        title.className = 'form-collapse-title text-xs font-bold uppercase tracking-wider text-red-700';
         title.textContent = section.title;
+        const count = document.createElement('span');
+        count.className = 'form-collapse-count';
+        count.dataset.collapseCount = '';
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined form-collapse-icon text-xl';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = 'expand_more';
+        head.append(title, count, icon);
+        head.addEventListener('click', () => setSectionOpen(box, box.classList.contains('is-collapsed')));
         const grid = document.createElement('div');
-        grid.className = 'grid grid-cols-1 gap-3 sm:grid-cols-2';
+        grid.id = bodyId;
+        grid.className = 'form-collapse-body grid grid-cols-1 gap-3 sm:grid-cols-2';
         grid.append(...fieldsOf(section).map(createSchemaField));
-        box.append(title, grid);
+        box.append(head, grid);
+        setSectionOpen(box, index === 0);
         return box;
       }));
+      // Nút "Mở tất cả / Thu gọn tất cả" ở đầu thẻ bước 2 (tạo một lần)
+      const detailsHead = document.getElementById('form-step-details')?.firstElementChild;
+      if (detailsHead && !document.getElementById('form-collapse-all')) {
+        const all = document.createElement('button');
+        all.type = 'button';
+        all.id = 'form-collapse-all';
+        all.className = 'form-collapse-all ml-auto';
+        all.addEventListener('click', () => {
+          const open = all.dataset.expand === 'true';
+          document.querySelectorAll('#schema-details-fields > .form-collapse').forEach((box) => setSectionOpen(box, open));
+        });
+        detailsHead.append(all);
+      }
+      syncCollapseAllButton();
+      updateSectionCounters();
     }
 
     function markFieldInvalid(control, message) {
@@ -1088,6 +1216,7 @@
       document.getElementById('step-status-1').textContent = `${personal.done}/${personal.total} mục`;
       document.getElementById('step-status-2').textContent = `${procedure.done}/${procedure.total} mục`;
       document.getElementById('step-status-3').textContent = completedGroups === 2 ? 'Sẵn sàng xem lại' : 'Còn thiếu thông tin';
+      updateSectionCounters(); // tự điền CCCD/AI cũng đi qua đây
       document.getElementById('form-progress-label').textContent = `Hoàn thành thông tin hồ sơ: ${progress}%`;
 
       const progressBar = document.getElementById('form-progress-bar');
@@ -1119,6 +1248,7 @@
       };
       const target = document.getElementById(targets[step]);
       if (!target) return;
+      if (target.classList.contains('form-collapse')) setSectionOpen(target, true);
       activeFormStep = step;
       updateApplicationProgress();
       const stickyHeader = document.querySelector('header');

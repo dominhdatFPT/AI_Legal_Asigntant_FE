@@ -6,11 +6,14 @@
   <meta name="description" content="Tra cứu và xem mẫu đơn, hợp đồng theo lĩnh vực.">
   <link rel="stylesheet" href="/contract-catalog.css">
 </head>
-<body>
+<body class="app-page">
   <a class="skip-link" href="#main">Đến nội dung chính</a>
   <!-- user-header -->
+  <!-- Nền ảnh mờ phủ đỏ sẫm giống trang Tổng quan hồ sơ / Tạo hồ sơ -->
+  <div class="app-backdrop" aria-hidden="true"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=80" alt="" fetchpriority="low"></div>
   <main class="shell" id="main">
-    <div class="breadcrumb"><a href="/user-dashboard">Trang chủ</a><span aria-hidden="true">/</span><span>Kho biểu mẫu</span></div>
+    <div class="breadcrumb"><a href="/user-dashboard">Trang chủ</a><span aria-hidden="true">/</span><span>Kho mẫu đơn tham khảo</span></div>
+    <div class="app-hero">
     <section class="page-heading"><p class="section-label">Thư viện biểu mẫu</p>
       <h1>Tìm mẫu đơn bạn cần</h1><p>Tra cứu và xem nội dung biểu mẫu theo từng lĩnh vực, thủ tục.</p>
     </section>
@@ -29,7 +32,9 @@
         <kbd aria-hidden="true">Tìm kiếm</kbd>
       </div>
     </section>
-    <section class="catalog-section" aria-labelledby="results-title">
+    <p class="app-hero-note">Biểu mẫu chỉ để xem và đối chiếu. Vui lòng kiểm tra yêu cầu của cơ quan tiếp nhận trước khi nộp thực tế.</p>
+    </div>
+    <section class="catalog-section app-card" aria-labelledby="results-title">
       <div class="results-heading"><div><h2 id="results-title">Danh sách biểu mẫu</h2><p id="catalog-count" aria-live="polite">Đang tải danh sách…</p></div>
         <button id="catalog-reset" class="text-button" type="button" hidden>Xóa bộ lọc</button>
       </div>
@@ -40,10 +45,18 @@
         <button type="button" id="catalog-prev" class="outline-button">← Trước</button><span id="catalog-page"></span><button type="button" id="catalog-next" class="outline-button">Sau →</button>
       </nav>
       <div id="catalog-empty" class="empty-state" hidden><div class="empty-symbol" aria-hidden="true">⌕</div><h3>Chưa tìm thấy mẫu phù hợp</h3><p>Thử từ khóa khác hoặc chọn tất cả lĩnh vực để xem các mẫu hiện có.</p></div>
+      <aside class="reference-note"><span class="info-mark" aria-hidden="true">i</span><p><strong>Lưu ý khi sử dụng</strong><br>Nội dung mẫu được cung cấp để xem và đối chiếu. Kiểm tra yêu cầu của cơ quan tiếp nhận trước khi sử dụng.</p></aside>
     </section>
-    <aside class="reference-note"><span class="info-mark" aria-hidden="true">i</span><p><strong>Lưu ý khi sử dụng</strong><br>Nội dung mẫu được cung cấp để xem và đối chiếu. Kiểm tra yêu cầu của cơ quan tiếp nhận trước khi sử dụng.</p></aside>
   </main>
-  <footer class="site-footer"><div class="shell footer-inner"><div><strong>Kho biểu mẫu</strong><p>Tra cứu biểu mẫu theo thủ tục.</p></div><span>Hệ thống hỗ trợ thủ tục hành chính</span></div></footer>
+  <footer class="app-footer"><div class="shell">
+    <div class="app-footer-grid">
+      <div class="app-footer-about"><div class="app-footer-brand"><img src="/images/national-service-logo.png" width="32" height="32" alt=""><strong>Cơ quan chủ quản: Văn phòng Chính phủ</strong></div>
+        <p>Hệ thống giải quyết thủ tục hành chính liên thông cấp Bộ, Tỉnh và Cổng Dịch vụ công Quốc gia theo Nghị định số 61/2018/NĐ-CP và Nghị định số 107/2021/NĐ-CP của Chính phủ.</p><p class="app-footer-small">Địa chỉ: Số 1 Hoàng Hoa Thám, Ba Đình, Hà Nội</p></div>
+      <div class="app-footer-col"><strong class="app-footer-title">Đường dây nóng hỗ trợ</strong><span class="app-footer-hotline">1800 1096</span><span class="app-footer-small">Tổng đài miễn cước cuộc gọi phục vụ người dân và doanh nghiệp</span><span class="app-footer-small">Email: dichvucong@chinhphu.vn</span></div>
+      <div class="app-footer-col"><strong class="app-footer-title">Quy định &amp; Hướng dẫn</strong><a href="#">Quy chế hoạt động cổng thông tin</a><a href="#">Chính sách bảo mật dữ liệu công dân</a><a href="#">Hướng dẫn ký số và giao dịch trực tuyến</a><a href="#">Câu hỏi thường gặp (FAQ)</a></div>
+    </div>
+    <div class="app-footer-bottom"><span>© 2026 Cổng Dịch vụ công Quốc gia. Bản quyền thuộc Chính phủ nước CHXHCN Việt Nam.</span><span class="app-footer-links"><a href="#">Điều khoản sử dụng</a><a href="#">An toàn thông tin mạng</a><a href="#">Sơ đồ cổng dịch vụ</a></span></div>
+  </div></footer>
   <script type="module" src="/contract-catalog.js"></script>
 </body>
 </html>
