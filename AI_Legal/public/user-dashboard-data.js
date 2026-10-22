@@ -45,18 +45,50 @@ const fillComingSoon = () => {
   });
 };
 
+// Dùng 1 request duy nhất tải toàn bộ dữ liệu hồ sơ cá nhân cho Dashboard (Thống kê + Đang xử lý + Bảng lịch sử)
+let dashboardPromise = null;
+
+function loadDashboardData(forceRefresh = false) {
+  if (!dashboardPromise || forceRefresh) {
+    dashboardPromise = fetchMyApplications({ pageSize: 50 })
+      .then((data) => ({
+        items: data.items || [],
+        total: data.pagination?.total || 0,
+      }))
+      .catch((err) => ({
+        items: [],
+        total: 0,
+        error: err,
+      }));
+  }
+  return dashboardPromise;
+}
+
 async function renderStats() {
-  const count = (status) => fetchMyApplications({ status, pageSize: 1 }).then((data) => data.pagination.total);
   try {
-    const [total, submitted, processing, completed, nextDue] = await Promise.all([
-      count(), count('submitted'), count('processing'), count('completed'),
-      fetchMyApplications({ status: 'processing', pageSize: 50 })
-    ]);
+    const data = await loadDashboardData();
+    if (data.error && data.items.length === 0) {
+      document.querySelectorAll('[data-stat]').forEach((element) => { element.textContent = '—'; });
+      return;
+    }
+    const items = data.items;
+    const total = data.total;
+    const submitted = items.filter((i) => i.status === 'submitted').length;
+    const processing = items.filter((i) => i.status === 'processing').length;
+    const completed = items.filter((i) => i.status === 'completed').length;
+
     $('[data-stat="total"]').textContent = total;
     $('[data-stat="in_progress"]').textContent = submitted + processing;
     $('[data-stat="completed"]').textContent = completed;
-    const dues = nextDue.items.map((item) => item.due_date).filter(Boolean).sort();
-    if (dues.length) $('[data-stat-note="next_due"]').textContent = `Hạn trả gần nhất: ${formatDate(dues[0])}`;
+
+    const dues = items
+      .filter((i) => ['submitted', 'processing'].includes(i.status))
+      .map((i) => i.due_date)
+      .filter(Boolean)
+      .sort();
+    if (dues.length) {
+      $('[data-stat-note="next_due"]').textContent = `Hạn trả gần nhất: ${formatDate(dues[0])}`;
+    }
   } catch {
     document.querySelectorAll('[data-stat]').forEach((element) => { element.textContent = '—'; });
   }
@@ -65,23 +97,43 @@ async function renderStats() {
 async function renderProcessing() {
   const list = $('#processing-list');
   try {
-    const { items, pagination } = await fetchMyApplications({ status: 'processing', pageSize: 3 });
-    $('#processing-count').textContent = `${pagination.total} hồ sơ đang xử lý`;
-    list.innerHTML = items.length
-      ? items.map((item) => `
+    const data = await loadDashboardData();
+    if (data.error && data.items.length === 0) {
+      $('#processing-count').textContent = '—';
+      list.innerHTML = errorBox('Không tải được hồ sơ, thử lại sau.', 'processing-retry');
+      $('#processing-retry').addEventListener('click', () => {
+        dashboardPromise = null;
+        renderProcessing();
+      });
+      return;
+    }
+    const inProgress = data.items.filter((i) => ['submitted', 'processing'].includes(i.status));
+    $('#processing-count').textContent = `${inProgress.length} hồ sơ đang xử lý`;
+    list.innerHTML = inProgress.length
+      ? inProgress.slice(0, 3).map((item) => `
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs bg-surface-container-low/50 p-space-md rounded-lg">
           <div class="flex flex-col">
-            <span class="font-mono text-label-md text-primary font-bold">${escapeHtml(applicationCode(item))}</span>
+            <button type="button" class="btn-view-dossier text-left font-mono text-label-md text-primary font-bold hover:underline cursor-pointer" data-app-code="${escapeHtml(applicationCode(item))}">${escapeHtml(applicationCode(item))}</button>
             <span class="font-title-sm text-title-sm text-on-surface font-semibold">${escapeHtml(item.procedure_name || item.procedure_code)}</span>
             <span class="font-label-sm text-label-sm text-on-surface-variant">Nộp ngày ${formatDate(item.created_at)}${dueDate(item) ? ` • Hạn trả ${formatDate(dueDate(item))}` : ''}</span>
           </div>
           ${statusBadge(item.status)}
         </div>`).join('')
       : '<p class="font-body-sm text-body-sm text-on-surface-variant">Không có hồ sơ nào đang xử lý.</p>';
+
+    list.querySelectorAll('.btn-view-dossier').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const code = btn.dataset.appCode;
+        if (code) openDossierModal(code);
+      });
+    });
   } catch {
     $('#processing-count').textContent = '—';
     list.innerHTML = errorBox('Không tải được hồ sơ, thử lại sau.', 'processing-retry');
-    $('#processing-retry').addEventListener('click', renderProcessing);
+    $('#processing-retry').addEventListener('click', () => {
+      dashboardPromise = null;
+      renderProcessing();
+    });
   }
 }
 
@@ -100,17 +152,36 @@ async function renderTable() {
   const body = $('#my-applications-body');
   paintFilters();
   try {
-    const { items, pagination } = await fetchMyApplications({
-      status: state.status, domain: state.domain, q: state.q, page: state.page, pageSize: PAGE_SIZE
-    });
+    let items = [];
+    let total = 0;
+    const page = state.page;
+    const pageSize = PAGE_SIZE;
+
+    // Khi không có từ khóa tìm kiếm q và đang ở trang 1: Sử dụng ngay dữ liệu chung (0ms, không tốn thêm request)
+    if (!state.q && page === 1) {
+      const data = await loadDashboardData();
+      if (data.error && data.items.length === 0) {
+        throw data.error;
+      }
+      let filtered = data.items;
+      if (state.status) filtered = filtered.filter((i) => i.status === state.status);
+      if (state.domain) filtered = filtered.filter((i) => i.domain === state.domain);
+      total = filtered.length;
+      items = filtered.slice(0, pageSize);
+    } else {
+      // Khi có từ khóa tìm kiếm q hoặc sang trang 2+: Gọi API
+      const res = await fetchMyApplications({
+        status: state.status, domain: state.domain, q: state.q, page: state.page, pageSize: PAGE_SIZE
+      });
+      items = res.items || [];
+      total = res.pagination?.total || 0;
+    }
+
     body.innerHTML = items.length
       ? items.map((item) => `
         <tr class="hover:bg-surface-container-low transition-colors">
-          <td class="py-space-md px-space-md whitespace-nowrap">
-            <button type="button" class="btn-view-dossier font-mono text-primary font-bold hover:underline text-left cursor-pointer" data-app-code="${escapeHtml(applicationCode(item))}" title="Bấm để xem chi tiết tờ đơn">${escapeHtml(applicationCode(item))}</button>
-          </td>
           <td class="py-space-md px-space-md">
-            <span class="font-title-sm text-title-sm text-on-surface block font-semibold">${escapeHtml(item.procedure_name || item.procedure_code)}</span>
+            <button type="button" class="btn-view-dossier font-title-sm text-title-sm text-on-surface block font-semibold hover:text-primary transition-colors text-left cursor-pointer" data-app-code="${escapeHtml(applicationCode(item))}" title="Bấm để xem chi tiết tờ đơn">${escapeHtml(item.procedure_name || item.procedure_code)}</button>
             <span class="font-label-sm text-label-sm text-on-surface-variant">Lệ phí: ${escapeHtml(formatFee(item.fee))}</span>
           </td>
           <td class="py-space-md px-space-md text-on-surface-variant">${escapeHtml(AGENCY_LABELS[item.receiving_agency_level] || '—')}</td>
@@ -124,7 +195,7 @@ async function renderTable() {
             </button>
           </td>
         </tr>`).join('')
-      : `<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="7">${
+      : `<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="6">${
           state.status || state.domain ? 'Không có hồ sơ phù hợp bộ lọc.' : 'Bạn chưa có hồ sơ nào. <a class="text-primary font-semibold hover:underline" href="/application-submission">Tạo hồ sơ</a>'
         }</td></tr>`;
 
@@ -135,15 +206,19 @@ async function renderTable() {
       });
     });
 
-    const from = pagination.total ? (pagination.page - 1) * pagination.page_size + 1 : 0;
-    const to = Math.min(pagination.page * pagination.page_size, pagination.total);
-    $('#my-applications-range').textContent = `Hiển thị ${from} - ${to} trong tổng số ${pagination.total} hồ sơ`;
-    $('#my-applications-page').textContent = `${pagination.page} / ${Math.max(pagination.total_pages, 1)}`;
-    $('#my-applications-prev').disabled = pagination.page <= 1;
-    $('#my-applications-next').disabled = pagination.page >= pagination.total_pages;
+    const totalPages = Math.ceil(total / pageSize) || 1;
+    const from = total ? (page - 1) * pageSize + 1 : 0;
+    const to = Math.min(page * pageSize, total);
+    $('#my-applications-range').textContent = `Hiển thị ${from} - ${to} trong tổng số ${total} hồ sơ`;
+    $('#my-applications-page').textContent = `${page} / ${Math.max(totalPages, 1)}`;
+    $('#my-applications-prev').disabled = page <= 1;
+    $('#my-applications-next').disabled = page >= totalPages;
   } catch {
-    body.innerHTML = `<tr><td class="py-space-lg px-space-md" colspan="7">${errorBox('Không tải được hồ sơ, thử lại sau.', 'table-retry')}</td></tr>`;
-    $('#table-retry').addEventListener('click', renderTable);
+    body.innerHTML = `<tr><td class="py-space-lg px-space-md" colspan="6">${errorBox('Không tải được hồ sơ, thử lại sau.', 'table-retry')}</td></tr>`;
+    $('#table-retry').addEventListener('click', () => {
+      dashboardPromise = null;
+      renderTable();
+    });
   }
 }
 
@@ -182,7 +257,10 @@ async function renderDocuments() {
 async function renderFeatured() {
   const box = $('#featured-procedures');
   try {
-    const [land, business] = await Promise.all([fetchProcedures('land'), fetchProcedures('business')]);
+    const [land, business] = await Promise.all([
+      fetchProcedures('land').catch(() => []),
+      fetchProcedures('business').catch(() => [])
+    ]);
     const picks = [...land.slice(0, 2), ...business.slice(0, 2)];
     box.innerHTML = picks.length
       ? picks.map((procedure) => `
@@ -222,6 +300,8 @@ function render() {
   });
   $('#my-applications-prev').addEventListener('click', () => { state.page -= 1; renderTable(); });
   $('#my-applications-next').addEventListener('click', () => { state.page += 1; renderTable(); });
+  
+  // Khởi động đồng thời các hàm render nhưng chúng dùng chung dashboardPromise
   renderStats();
   renderProcessing();
   renderTable();

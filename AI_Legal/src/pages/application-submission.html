@@ -1015,7 +1015,7 @@
           status: 'submitted',
           formData
         });
-        document.getElementById('modal-application-code').textContent = `${record.procedure_code}-${record.id.slice(0, 8).toUpperCase()}`;
+        document.getElementById('modal-application-code').textContent = record.application_code || (record.procedure_code + '-' + record.id.slice(0, 8).toUpperCase());
         activeFormStep = 3;
         updateApplicationProgress();
         document.getElementById('step-status-3').textContent = 'Đã tạo hồ sơ';

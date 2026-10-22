@@ -49,25 +49,16 @@ app.get('/api/reference-catalog', async (req, res) => {
   const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
   try {
     const response = await fetch(`${backendBase}/api/contracts/reference-catalog?page=1&page_size=100`, {
-      signal: AbortSignal.timeout(2500), headers: { Accept: 'application/json' }
+      signal: AbortSignal.timeout(5000), headers: { Accept: 'application/json', Connection: 'close' }
     });
     const payload = response.ok ? await response.json() : null;
     if (!payload?.data?.read_only || !Array.isArray(payload.data.items)) throw new Error('Unavailable');
     res.set('X-Reference-Catalog-Source', 'contract-api');
     res.set('Cache-Control', 'no-store');
     return res.json(payload);
-  } catch {
-    try {
-      const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'public/reference-templates/catalog.json'), 'utf8'));
-      res.set('X-Reference-Catalog-Source', 'bundled-contract-snapshot');
-      res.set('Cache-Control', 'no-store');
-      return res.json({ data: {
-        items: data.items, domains: data.domains, classifications: data.classifications,
-        counts: data.counts, revision: data.revision, read_only: data.read_only
-      }, error: null });
-    } catch {
-      return res.status(503).json({ data: null, error: { code: 'REFERENCE_CATALOG_UNAVAILABLE', message: 'Kho mẫu chưa sẵn sàng.' } });
-    }
+  } catch (err) {
+    console.warn('[Catalog] Cannot fetch from backend API:', err.message);
+    return res.status(503).json({ data: null, error: { code: 'REFERENCE_CATALOG_UNAVAILABLE', message: 'Kho mẫu từ cơ sở dữ liệu chưa sẵn sàng.' } });
   }
 });
 
