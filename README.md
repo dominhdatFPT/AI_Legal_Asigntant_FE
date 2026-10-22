@@ -13,7 +13,7 @@ Frontend được quản lý trong GitLab project riêng, độc lập với Bac
 
 ## Kho biểu mẫu
 
-Mở `/kho-mau-don-tham-khao` để tìm kiếm, lọc và xem đủ 30 tài liệu / 114 trang. Trang chỉ xem, không điền hoặc lưu nháp hợp đồng. Có bốn nhóm: đất đai (18), doanh nghiệp/hộ kinh doanh (10), hợp tác xã (1), BHXH (1).
+Mở `/document-storages` để tìm kiếm, lọc và xem đủ 30 tài liệu / 114 trang. Trang chỉ xem, không điền hoặc lưu nháp hợp đồng. Có bốn nhóm: đất đai (18), doanh nghiệp/hộ kinh doanh (10), hợp tác xã (1), BHXH (1).
 
 Nguồn chính là API Contract qua `/api/reference-catalog` của server FE; khi backend không kết nối được, dùng snapshot tại `AI_Legal/public/reference-templates/catalog.json`. Các ảnh/PDF được xuất từ cùng bộ asset Contract và nằm cùng thư mục. Bộ lọc gồm lĩnh vực, thủ tục và tìm kiếm không dấu; danh sách phân trang 12 mẫu/trang. Ảnh trang được render ở 216 DPI; trang xem không hiện nhãn trạng thái, ghi chú hoặc tên file nguồn.
 
