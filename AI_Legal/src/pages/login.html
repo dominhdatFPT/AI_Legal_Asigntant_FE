@@ -236,11 +236,10 @@
   if (params.get('verified') === '1') document.getElementById('email-verified-notice').classList.remove('hidden');
   if (['passwordReset', 'loggedOut', 'verified'].some((key) => params.has(key))) window.history.replaceState({}, '', window.location.pathname);
 
-  // Khởi tạo sớm Firebase Auth & cache Base API URL ngay khi trang tải xong
+  // Khởi tạo sớm Firebase Auth ngay khi trang tải xong (Base API URL đã được auth-api.js tự cache khi import)
   // Giúp người dùng khi click nút không phải chờ tải cấu hình và bắt tay mạng
   setTimeout(() => {
     getFirebaseAuth().catch(() => {});
-    getApiBaseUrl().catch(() => {});
   }, 100);
 
   let authPromise;
