@@ -326,7 +326,9 @@
 
     try {
       let data;
-      if (identifier.includes('@')) {
+      if (identifier.endsWith('.local')) {
+        data = await loginWithPassword(identifier, password);
+      } else if (identifier.includes('@')) {
         // Có "@" → tài khoản email Firebase (đăng ký ở trang /signup).
         const auth = await getFirebaseAuth();
         const credential = await signInWithEmailAndPassword(auth, identifier, password);

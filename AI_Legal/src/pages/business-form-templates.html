@@ -9,7 +9,7 @@
   
   <!-- Cập nhật bộ icon để đồng bộ -->
   <!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,arrow_forward_ios,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,first_page,flag,folder,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,hourglass_top,id_card,info,landscape,last_page,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,sort,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning&amp;display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,arrow_forward_ios,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,first_page,flag,folder,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,hourglass_top,id_card,info,landscape,last_page,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,open_in_new,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,sort,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning&amp;display=block" rel="stylesheet">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -90,10 +90,11 @@
             <!-- Left: Category Selector -->
             <div class="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-xl w-full md:w-auto shrink-0">
               <span class="material-symbols-outlined text-amber-600 text-[22px]">folder</span>
-              <select class="bg-transparent outline-none font-bold text-stone-800 text-sm cursor-pointer pr-2 border-none ring-0">
-                <option>Tất cả hồ sơ</option>
-                <option>Mẫu đơn hộ kinh doanh</option>
-                <option>Thủ tục hành chính</option>
+              <select id="category-filter" class="bg-transparent outline-none font-bold text-stone-800 text-sm cursor-pointer pr-2 border-none ring-0">
+                <option value="">Tất cả hồ sơ</option>
+                <option value="hộ kinh doanh">Mẫu đơn hộ kinh doanh</option>
+                <option value="doanh nghiệp">Mẫu đơn doanh nghiệp</option>
+                <option value="thủ tục">Thủ tục hành chính</option>
               </select>
             </div>
             
@@ -143,7 +144,7 @@
                 <h2 class="font-headline-sm text-headline-sm text-white font-extrabold tracking-tight">Danh sách Mẫu Đơn Hộ Kinh Doanh Trong Kho Lưu Trữ</h2>
                 <span class="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 font-label-sm text-xs font-bold flex items-center gap-1.5 border border-white/10 shadow-sm">
                   <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                  24 Biểu mẫu Chuẩn hóa
+                  <span id="badge-total-count">24 Biểu mẫu Chuẩn hóa</span>
                 </span>
               </div>
             </div>
@@ -169,12 +170,12 @@
           <div class="p-space-md bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-stone-600">
             <div class="flex items-center gap-space-sm">
               <span class="">Hiển thị</span>
-              <select data-page-size class="bg-surface-container-lowest text-on-surface py-1 px-2 rounded font-semibold outline-none cursor-pointer">
+              <select id="page-size-select" class="bg-surface-container-lowest text-on-surface py-1 px-2 rounded font-semibold outline-none cursor-pointer">
                 <option>10</option>
                 <option selected="">25</option>
                 <option>50</option>
               </select>
-              <span class="">trong tổng số <strong class="text-on-surface font-bold">24</strong> mẫu đơn hộ kinh doanh chuẩn hóa</span>
+              <span class="">trong tổng số <strong id="footer-total-count" class="text-on-surface font-bold">24</strong> mẫu đơn hộ kinh doanh chuẩn hóa</span>
             </div>
             <div class="flex items-center gap-1">
               <button class="p-1.5 rounded hover:bg-surface-container text-outline hover:text-on-surface disabled:opacity-40" disabled="">
@@ -282,10 +283,15 @@
       const rows = () => Array.from(tbody?.querySelectorAll('tr') || []);
       const searchInput = document.getElementById('main-search-input');
       const searchButton = document.getElementById('search-button-main');
-      // Ô "Hiển thị 25" là số dòng mỗi trang, không phải bộ lọc nội dung: tính vào thì mọi dòng bị ẩn.
-      const filterSelects = Array.from(document.querySelectorAll('main select:not([data-page-size])')).slice(0, 3);
+      const categoryFilter = document.getElementById('category-filter');
+      const badgeTotalCount = document.getElementById('badge-total-count');
+      const footerTotalCount = document.getElementById('footer-total-count');
       const resetButton = document.querySelector('button[title="Thiết lập lại bộ lọc"]');
-      const selectedCount = document.querySelector('tbody')?.closest('.rounded-xl')?.querySelector('strong');
+
+      function updateCounts(visible, total) {
+        if (footerTotalCount) footerTotalCount.textContent = total !== undefined ? total : visible;
+        if (badgeTotalCount) badgeTotalCount.textContent = `${total !== undefined ? total : visible} Biểu mẫu Chuẩn hóa`;
+      }
       const emptyMessage = document.createElement('tr');
       const formFields = new WeakMap();
       const formSchemas = new WeakMap();
@@ -336,26 +342,24 @@
 
       function applyFilters() {
         const keyword = (searchInput?.value || '').trim().toLocaleLowerCase('vi');
-        const selectedFilters = filterSelects
-          .map((select) => select.value.trim().toLocaleLowerCase('vi'))
-          .filter((value) => value && !value.startsWith('tất cả'));
+        const selectedCategory = (categoryFilter?.value || '').trim().toLocaleLowerCase('vi');
         let visible = 0;
 
         rows().forEach((row) => {
           const text = getRowText(row);
           const matchesKeyword = !keyword || text.includes(keyword);
-          const matchesFilters = selectedFilters.every((filter) => text.includes(filter));
-          const isVisible = matchesKeyword && matchesFilters;
+          const matchesCategory = !selectedCategory || text.includes(selectedCategory);
+          const isVisible = matchesKeyword && matchesCategory;
           row.classList.toggle('hidden', !isVisible);
           if (isVisible) visible += 1;
         });
 
         if (emptyMessage.parentNode) emptyMessage.remove();
-        if (!visible && tbody) {
+        if (!visible && tbody && rows().length > 0) {
           emptyMessage.innerHTML = '<td colspan="6" class="px-space-md py-10 text-center text-on-surface-variant">Không tìm thấy hồ sơ phù hợp với bộ lọc hiện tại.</td>';
           tbody.appendChild(emptyMessage);
         }
-        if (selectedCount) selectedCount.textContent = visible;
+        updateCounts(visible);
       }
 
       function addEyeButton(row) {
@@ -388,16 +392,21 @@
         });
       }
 
-      function createModal(id, title, content) {
+      function createModal(id, title, content, maxWidth = 'max-w-xl') {
         document.getElementById(id)?.remove();
         document.body.insertAdjacentHTML('beforeend', `
-          <div id="${id}" class="fixed inset-0 z-[100] hidden items-center justify-center bg-stone-950/50 p-4 backdrop-blur-sm">
-            <div class="w-full max-w-xl rounded-2xl bg-surface-container-lowest shadow-2xl border border-stone-200">
-              <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4">
-                <h2 class="font-headline-sm text-headline-sm font-bold text-primary">${title}</h2>
-                <button type="button" data-modal-close class="rounded-lg p-1 text-stone-500 hover:bg-stone-100 hover:text-stone-900"><span class="material-symbols-outlined">close</span></button>
+          <div id="${id}" class="fixed inset-0 z-[100] hidden items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm">
+            <div class="w-full ${maxWidth} rounded-2xl bg-surface-container-lowest shadow-2xl border border-stone-200 flex flex-col max-h-[92vh] overflow-hidden">
+              <div class="flex items-center justify-between border-b border-stone-200 px-6 py-4 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-t-2xl">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="material-symbols-outlined text-amber-300 text-2xl">description</span>
+                  <div class="flex flex-col min-w-0">
+                    <h2 class="font-headline-sm text-base md:text-lg font-bold text-white truncate">${title}</h2>
+                  </div>
+                </div>
+                <button type="button" data-modal-close class="rounded-lg p-1.5 text-red-100 hover:bg-white/10 hover:text-white transition-colors"><span class="material-symbols-outlined text-[20px]">close</span></button>
               </div>
-              <div class="px-6 py-5">${content}</div>
+              <div class="p-4 md:p-6 flex-1 overflow-y-auto bg-stone-50">${content}</div>
             </div>
           </div>`);
         const modal = document.getElementById(id);
@@ -416,40 +425,55 @@
 
       async function showView(row) {
         const cells = row.querySelectorAll('td');
-        const fields = await getDatabaseFormFields(row);
-        if (!fields?.length) {
-          createModal('bizform-schema-error-modal', 'Không tải được cấu trúc mẫu đơn', '<p class="text-stone-700">Không thể lấy cấu trúc biểu mẫu từ cơ sở dữ liệu. Vui lòng thử lại sau.</p>');
-          return;
+        const code = row.dataset.procedureCode || cells[1]?.querySelector('span')?.textContent?.trim() || '';
+        const name = cells[2]?.querySelector('span')?.textContent?.trim() || code;
+        const description = cells[2]?.querySelectorAll('span')?.[1]?.textContent?.trim() || '';
+        
+        let apiBase = '';
+        try {
+          if (authModule && typeof authModule.getApiBaseUrl === 'function') {
+            apiBase = await authModule.getApiBaseUrl();
+          } else {
+            const cfg = await fetch('/api/app-config').then(r => r.json());
+            apiBase = cfg.apiBaseUrl || '';
+          }
+        } catch {
+          apiBase = '';
         }
-        const sections = fields.reduce((groups, field, index) => {
-          const section = field.section || 'THÔNG TIN BỔ SUNG';
-          (groups[section] ||= []).push({ ...field, index });
-          return groups;
-        }, {});
-        const renderControl = (field) => {
-          const required = field.required ? 'required' : '';
-          if (field.type === 'textarea') return `<textarea name="field-${field.index}" ${required} disabled rows="2" placeholder="${escapeHtml(field.label)}" class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none"></textarea>`;
-          if (field.type === 'select') return `<select name="field-${field.index}" ${required} disabled class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none"><option value="">${escapeHtml(field.options?.[0] || 'Chọn thông tin')}</option>${(field.options || []).slice(1).map((option) => `<option>${escapeHtml(option)}</option>`).join('')}</select>`;
-          return `<input name="field-${field.index}" type="${field.type}" ${required} disabled placeholder="${escapeHtml(field.label)}" class="w-full rounded border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 outline-none">`;
-        };
-        const formMarkup = Object.entries(sections).map(([section, sectionFields]) => `
-          <section class="sm:col-span-2">
-            <h3 class="mb-4 border-b border-secondary/70 pb-2 text-lg font-medium tracking-wide text-secondary">${escapeHtml(section)}</h3>
-            <div class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
-              ${sectionFields.map((field) => `<label class="${field.fullWidth ? 'sm:col-span-2' : ''} grid grid-cols-[minmax(120px,1fr)_minmax(180px,2fr)] items-center gap-3"><span class="text-sm font-medium text-stone-700">${escapeHtml(field.label)}${field.required ? ' <span class="text-error">*</span>' : ''}</span>${renderControl(field)}</label>`).join('')}
+
+        const pdfUrl = `${apiBase}/api/procedures/templates/by-procedure/${encodeURIComponent(code)}/pdf`;
+        const wordUrl = `${apiBase}/api/procedures/templates/by-procedure/${encodeURIComponent(code)}/word`;
+
+        const content = `
+          <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-md bg-red-100 text-red-800 font-mono font-bold text-xs uppercase">${escapeHtml(code)}</span>
+                <span class="font-bold text-stone-900 truncate text-sm md:text-base">${escapeHtml(name)}</span>
+              </div>
+              ${description ? `<p class="mt-1 text-xs text-stone-500 truncate">${escapeHtml(description)}</p>` : ''}
             </div>
-          </section>`).join('');
-        const modal = createModal('bizform-view-modal', 'Xem trước mẫu đơn', `
-          <div class="mb-4 rounded-lg bg-surface-container-low px-4 py-3 text-sm">
-            <p class="font-bold text-primary">${escapeHtml(cells[2]?.querySelector('span')?.textContent || '')}</p>
-            <p class="mt-1 text-on-surface-variant">Mã hiệu: ${escapeHtml(cells[1]?.querySelector('span')?.textContent || '')}</p>
+            <div class="flex items-center gap-2 shrink-0">
+              <a href="${pdfUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors border border-stone-300">
+                <span class="material-symbols-outlined text-[16px]">visibility</span>
+                Mở tab mới
+              </a>
+              <a href="${wordUrl}" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[16px]">download</span>
+                Tải file Word (.docx)
+              </a>
+            </div>
           </div>
-          <div id="bizform-application-form" class="grid max-h-[70vh] gap-7 overflow-y-auto bg-white px-1 pr-3">
-            ${formMarkup}
-            <div class="flex justify-end gap-2 pt-2 sm:col-span-2"><button type="button" data-modal-close class="rounded-lg border border-stone-300 px-4 py-2 font-semibold text-stone-700 hover:bg-stone-100">Đóng</button></div>
-          </div>`);
-        modal.querySelector('.w-full.max-w-xl')?.classList.replace('max-w-xl', 'max-w-6xl');
-        modal.querySelector('[data-modal-close]')?.addEventListener('click', () => closeModal(modal));
+          <div class="w-full h-[68vh] rounded-xl overflow-hidden border border-stone-200 bg-white shadow-inner relative flex items-center justify-center">
+            <iframe src="${pdfUrl}#toolbar=0" class="w-full h-full" title="Bản PDF mẫu đơn ${escapeHtml(name)}"></iframe>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-xs text-stone-500 px-1">
+            <span>* Mẫu đơn chuẩn hóa định dạng A4 dùng trong thủ tục đăng ký kinh doanh.</span>
+            <button type="button" data-modal-close class="font-semibold text-stone-600 hover:text-stone-900 px-3 py-1 rounded-lg border border-stone-300 hover:bg-stone-100">Đóng</button>
+          </div>
+        `;
+
+        createModal('landform-view-modal', `Xem trước biểu mẫu: ${name}`, content, 'max-w-5xl md:max-w-6xl');
       }
 
       function showEdit(row) {
@@ -523,7 +547,7 @@
         const version = procedure.version || 'Theo dữ liệu hệ thống';
         return `<tr data-procedure-code="${escapeHtml(code)}" class="hover:bg-surface-container-low/60 transition-colors group">
           <td class="py-3.5 px-space-md text-center"><input class="rounded accent-primary w-4 h-4 cursor-pointer" type="checkbox"></td>
-          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-lg text-label-lg font-bold text-primary font-mono tracking-tight">${escapeHtml(code)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">Từ cơ sở dữ liệu</span></div></td>
+          <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-lg text-label-lg font-bold text-primary font-mono tracking-tight">${escapeHtml(code)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">Mẫu đơn doanh nghiệp & hộ kinh doanh • Thủ tục hành chính</span></div></td>
           <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-lg text-label-lg font-bold text-on-surface">${escapeHtml(name)}</span><span class="font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(description)}</span></div></td>
           <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-md text-label-md font-semibold text-secondary">${escapeHtml(legalBasis)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">Cập nhật từ hệ thống</span></div></td>
           <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-label-md text-label-md font-semibold text-on-surface">${escapeHtml(version)}</span><span class="font-label-sm text-label-sm text-on-surface-variant">${escapeHtml(updatedAt)}</span></div></td>
@@ -546,6 +570,7 @@
             return;
           }
           tbody.innerHTML = procedures.map(databaseRow).join('');
+          updateCounts(procedures.length, procedures.length);
           prepareRows();
           applyFilters();
         } catch (error) {
@@ -714,10 +739,10 @@
       searchInput?.addEventListener('input', applyFilters);
       searchButton?.addEventListener('click', applyFilters);
       searchInput?.addEventListener('keydown', (event) => { if (event.key === 'Enter') applyFilters(); });
-      filterSelects.forEach((select) => select.addEventListener('change', applyFilters));
+      categoryFilter?.addEventListener('change', applyFilters);
       resetButton?.addEventListener('click', () => {
         if (searchInput) searchInput.value = '';
-        filterSelects.forEach((select) => { select.selectedIndex = 0; });
+        if (categoryFilter) categoryFilter.selectedIndex = 0;
         applyFilters();
       });
       document.getElementById('add-template-card')?.addEventListener('click', openTemplateDrawer);
