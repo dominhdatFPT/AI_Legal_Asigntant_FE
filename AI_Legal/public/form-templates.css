@@ -1,0 +1,178 @@
+/* =============================================================================
+   MẪU ĐƠN DÙNG CHUNG: form điền (form-renderer.js), bản in A4, khung dựng mẫu admin (form-templates-admin.js).
+   CSS thường (không qua Tailwind) để trang quản trị và trang công dân hiện form giống hệt nhau.
+   ============================================================================= */
+.ft-form, .ftb, .ftl {
+  --ft-red: #a64031; --ft-red-dark: #812f24; --ft-ink: #1f1a17; --ft-muted: #5f5550;
+  --ft-line: #e3d7d2; --ft-wash: #fbf6f3; --ft-focus: #b45309; --ft-ok: #166534; --ft-warn: #92400e;
+  color: var(--ft-ink); font-size: 15px; line-height: 1.5;
+}
+.ft-form :focus-visible, .ftb :focus-visible, .ftl :focus-visible, .ft-dialog :focus-visible { outline: 3px solid var(--ft-focus); outline-offset: 2px; }
+
+/* ----- Form điền mẫu ----- */
+.ft-form { background: #fff; border: 1px solid var(--ft-line); border-radius: 14px; padding: 24px; }
+.ft-form__head { text-align: center; margin-bottom: 20px; }
+.ft-form__head h2 { margin: 0; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; }
+.ft-form__head p { margin: 4px 0 0; color: var(--ft-muted); font-size: 14px; }
+.ft-section { border: 0; border-top: 1px solid var(--ft-line); margin: 0; padding: 18px 0 6px; min-width: 0; }
+.ft-section legend { font-weight: 700; font-size: 17px; padding: 0 8px 0 0; color: var(--ft-red-dark); }
+.ft-block { margin-top: 12px; }
+.ft-block + .ft-block { border-top: 1px dashed var(--ft-line); padding-top: 12px; }
+.ft-block__title { margin: 0 0 8px; font-size: 13px; font-weight: 700; color: var(--ft-muted); text-transform: uppercase; letter-spacing: .04em; }
+.ft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 4px 16px; }
+.ft-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ft-field--wide { grid-column: 1 / -1; }
+.ft-field label { font-weight: 600; font-size: 14px; }
+.ft-req { color: #b91c1c; }
+.ft-field input, .ft-field select, .ft-field textarea, .ftb input, .ftb select, .ftl select {
+  font: inherit; font-size: 15px; color: var(--ft-ink); background: #fff; border: 1px solid #cdbdb6; border-radius: 10px;
+  min-height: 44px; padding: 9px 12px; width: 100%; box-sizing: border-box;
+}
+.ft-field textarea { resize: vertical; min-height: 80px; }
+.ft-field [aria-invalid] { border-color: #b91c1c; background: #fff7f7; }
+.ft-error { margin: 0; min-height: 20px; font-size: 13px; color: #b91c1c; }
+
+/* ----- Nút dùng chung ----- */
+.ft-btn { font: inherit; font-size: 14px; font-weight: 600; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #cdbdb6;
+  background: #fff; color: var(--ft-ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  text-decoration: none; white-space: nowrap; transition: background-color .15s ease, border-color .15s ease; }
+.ft-btn:hover { background: var(--ft-wash); }
+.ft-btn:disabled { opacity: .55; cursor: not-allowed; }
+.ft-btn--primary { background: var(--ft-red); border-color: var(--ft-red); color: #fff; }
+.ft-btn--primary:hover { background: var(--ft-red-dark); }
+.ft-btn--danger { color: #b91c1c; border-color: #f0b4ab; }
+.ft-btn--sm { min-height: 36px; padding: 0 10px; font-size: 13px; }
+.ft-icon-btn { min-width: 36px; min-height: 36px; padding: 0; }
+.ft-badge { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 10px; background: #eee6e2; color: #4a3f3a; white-space: nowrap; }
+.ft-badge--published { background: #dcfce7; color: var(--ft-ok); }
+.ft-badge--draft { background: #fef3c7; color: var(--ft-warn); }
+.ft-badge--hidden { background: #e5e7eb; color: #374151; }
+.ft-badge--deleted { background: #fee2e2; color: #991b1b; }
+.ft-muted { color: var(--ft-muted); font-size: 13px; }
+.ft-alert { border-left: 4px solid var(--ft-red); background: #fdf0ec; padding: 12px 16px; border-radius: 8px; margin: 0 0 16px; }
+.ft-alert ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* ----- Danh sách mẫu (admin) ----- */
+.ftl { background: #fff; border: 1px solid var(--ft-line); border-radius: 16px; padding: 20px; }
+.ftl__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+.ftl__head h1, .ftl__head h2 { margin: 0; font-size: 20px; }
+.ftl__filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+.ftl__filters label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; min-width: 180px; }
+.ftl__filters .ft-check { flex-direction: row; align-items: center; min-height: 44px; gap: 8px; }
+.ftl__filters .ft-check input { width: 18px; height: 18px; min-height: 0; }
+.ftl table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ftl th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ft-muted); padding: 10px; border-bottom: 1px solid var(--ft-line); }
+.ftl td { padding: 12px 10px; border-bottom: 1px solid #f0e8e4; vertical-align: middle; }
+.ftl tr.is-deleted td { color: #8a7d77; }
+.ftl__actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.ftl__scroll { overflow-x: auto; }
+
+/* ----- Khung dựng mẫu (admin): lớp phủ toàn màn hình trên trang Hồ sơ đất đai / hộ kinh doanh ----- */
+.ftb-overlay { position: fixed; inset: 0; z-index: 95; overflow-y: auto; overscroll-behavior: contain; background: linear-gradient(180deg, #f0e2dc 0%, #faf3ef 100%); padding: 0 24px 32px; }
+.ftb-overlay .ftb { max-width: 1320px; margin: 0 auto; }
+.ftb-overlay .ftb__bar { border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0; }
+@media (max-width: 640px) { .ftb-overlay { padding: 0 12px 24px; } }
+.ftb__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 1px solid var(--ft-line);
+  border-radius: 16px; padding: 14px 18px; margin-bottom: 16px; position: sticky; top: 0; z-index: 5; }
+.ftb__bar h1 { margin: 0; font-size: 20px; }
+.ftb__bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ftb__tabs { display: flex; gap: 4px; background: var(--ft-wash); padding: 4px; border-radius: 12px; }
+.ftb__tabs button { font: inherit; font-weight: 600; font-size: 14px; border: 0; background: transparent; min-height: 38px; padding: 0 14px; border-radius: 9px; cursor: pointer; color: var(--ft-muted); }
+.ftb__tabs button[aria-selected="true"] { background: #fff; color: var(--ft-red-dark); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.ftb__card { background: #fff; border: 1px solid var(--ft-line); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+.ftb__card h2 { margin: 0 0 12px; font-size: 16px; }
+.ftb__info { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px 16px; }
+.ftb__info label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; }
+.ftb__work { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start; }
+.ftb__lib { position: sticky; top: 104px; max-height: calc(100vh - 120px); overflow-y: auto; }
+.ftb__lib-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ftb__lib-item { display: flex; align-items: center; gap: 8px; border: 1px solid var(--ft-line); border-radius: 10px; padding: 8px 10px; background: var(--ft-wash); cursor: grab; }
+.ftb__lib-item strong { display: block; font-size: 14px; }
+.ftb__lib-item small { display: block; color: var(--ft-muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; }
+.ftb__lib-item .ft-btn { margin-left: auto; flex: none; }
+.ftb__free { border-top: 1px solid var(--ft-line); margin-top: 12px; padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.ftb__free label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; }
+.ftb__target { font-size: 13px; color: var(--ft-muted); margin: 0 0 10px; }
+.ftb__sections { display: flex; flex-direction: column; gap: 12px; }
+.ftb-sec { border: 2px solid var(--ft-line); border-radius: 14px; background: #fff; padding: 12px; transition: border-color .15s ease; }
+.ftb-sec.is-selected { border-color: var(--ft-red); }
+.ftb-sec__head { display: flex; align-items: center; gap: 8px; }
+.ftb-sec__head input { font-weight: 700; }
+.ftb-handle { cursor: grab; user-select: none; color: var(--ft-muted); font-size: 18px; line-height: 1; padding: 6px 4px; letter-spacing: -2px; }
+.ftb-sec__blocks { list-style: none; margin: 10px 0 0; padding: 8px; min-height: 52px; border-radius: 10px; background: var(--ft-wash); display: flex; flex-direction: column; gap: 6px; }
+.ftb-sec__empty { color: var(--ft-muted); font-size: 13px; text-align: center; padding: 8px; }
+.ftb-blk { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--ft-line); border-radius: 10px; padding: 8px 10px; }
+.ftb-blk__main { flex: 1 1 200px; min-width: 0; }
+.ftb-blk__main strong { font-size: 14px; }
+.ftb-blk__main code { font-size: 12px; color: var(--ft-muted); margin-left: 6px; }
+.ftb-blk__main small { display: block; color: var(--ft-muted); font-size: 12px; }
+.ftb-blk__free { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ftb-blk__free input { flex: 1 1 180px; min-height: 38px; }
+.ftb-blk__free select { width: auto; min-height: 38px; }
+.ftb-blk__tools { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.ftb-blk__tools select { width: auto; min-height: 36px; font-size: 13px; padding: 4px 8px; }
+.ftb .is-dragging { opacity: .45; }
+.ftb .is-drop-target { outline: 2px dashed var(--ft-red); outline-offset: 2px; }
+.ftb__preview-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 1000px) { .ftb__work { grid-template-columns: 1fr; } .ftb__lib { position: static; max-height: none; } }
+
+/* ----- Hộp thoại xác nhận ----- */
+.ft-dialog { border: 0; border-radius: 16px; padding: 22px; max-width: min(440px, calc(100% - 32px)); box-shadow: 0 20px 50px rgba(0,0,0,.25); color: #1f1a17; }
+.ft-dialog::backdrop { background: rgba(28, 25, 23, .5); }
+.ft-dialog h2 { margin: 0 0 8px; font-size: 18px; }
+.ft-dialog p { margin: 0 0 18px; color: #5f5550; }
+.ft-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ----- Bản in A4 (PDF) ----- */
+.ft-print-root { display: none; }
+.ftp-page { font-family: "Times New Roman", Tinos, "Liberation Serif", serif; font-size: 13pt; line-height: 1.5; color: #000; }
+.ftp-header { text-align: center; margin-bottom: 18pt; }
+.ftp-code { text-align: right; font-style: italic; margin: 0 0 6pt; font-size: 12pt; }
+.ftp-nation { margin: 0; font-weight: 700; text-transform: uppercase; font-size: 13pt; }
+.ftp-motto { margin: 0; font-weight: 700; font-size: 14pt; display: inline-block; }
+.ftp-motto::after { content: ""; display: block; width: 60%; margin: 2pt auto 0; border-bottom: 1px solid #000; }
+.ftp-title { text-align: center; text-transform: uppercase; font-size: 15pt; font-weight: 700; margin: 6pt 0 14pt; }
+.ftp-section { margin-bottom: 8pt; break-inside: auto; }
+.ftp-section h2 { font-size: 13pt; font-weight: 700; margin: 8pt 0 4pt; }
+.ftp-line { display: flex; gap: 4pt; margin: 0 0 4pt; break-inside: avoid; }
+.ftp-label { flex: none; max-width: 55%; }
+.ftp-value { flex: 1; white-space: pre-line; overflow-wrap: anywhere; }
+.ft-dots { flex: 1; border-bottom: 1px dotted #000; margin-bottom: 4pt; min-width: 30%; }
+.ftp-sign { width: 50%; margin: 18pt 0 0 auto; text-align: center; break-inside: avoid; }
+.ftp-sign p { margin: 0; }
+.ftp-date { font-style: italic; }
+.ftp-signer { font-weight: 700; margin-top: 4pt !important; }
+.ftp-hint { font-style: italic; }
+@media print {
+  @page { size: A4; margin: 20mm 20mm 20mm 30mm; }
+  body > *:not(.ft-print-root) { display: none !important; }
+  body { background: #fff !important; }
+  .ft-print-root { display: block !important; }
+}
+
+/* ----- Thông báo nhanh ----- */
+.ft-toast { position: fixed; z-index: 90; right: 16px; bottom: 16px; max-width: min(420px, calc(100% - 32px)); background: #1f2937; color: #fff;
+  padding: 12px 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: 14px; }
+.ft-toast.is-error { background: #991b1b; }
+.ft-sr-only, .ftl .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* ----- Trang công dân "Làm đơn theo mẫu" (form-fill.js) ----- */
+.ff-main h1 { font-size: 28px; margin: 4px 0 8px; }
+.ff-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px 16px; margin: 18px 0; }
+.ff-filters label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+.ff-filters select { height: 48px; }
+.ff-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.ff-card { background: #fff; border: 1px solid #e6ddda; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.ff-card h2 { font-size: 19px; margin: 0; }
+.ff-card p { margin: 0; }
+.ff-card .ft-btn { margin-top: auto; }
+.ff-card__meta { font-size: 12px; font-weight: 700; color: #a64031; text-transform: uppercase; letter-spacing: .04em; }
+.ff-bar, .ff-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.ff-actions { justify-content: flex-end; margin: 16px 0 0; }
+.ff-preview { border: 0; padding: 0; margin: 0; min-width: 0; }
+.ff-autofill { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: #fff; border: 1px solid #e6ddda; border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+.ff-autofill label { font-weight: 600; font-size: 14px; }
+.ff-autofill select { width: auto; max-width: 100%; height: 44px; }
+.ff-autofill .ft-muted { flex-basis: 100%; margin: 0; }
+.ff-ok { color: #166534; background: #ecfdf3; border-radius: 8px; padding: 10px 14px; margin: 0 0 14px; }
+.ff-main .ft-form, .ff-main .ft-alert { --ft-red: #a64031; }

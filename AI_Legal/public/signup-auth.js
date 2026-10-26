@@ -14,6 +14,7 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js';
+import { normalizePhone } from '/field-rules.js';
 
 const form = document.getElementById('signup-form');
 const message = document.getElementById('signup-auth-message');
@@ -30,14 +31,6 @@ const privacyInput = document.getElementById('privacy-consent');
 
 // Phiên bản điều khoản/chính sách người dùng đã đồng ý. Đổi nội dung trang /dieu-khoan thì tăng số này.
 const CONSENT_VERSION = '2026-10-19';
-
-// "0901 234 567", "+84 901.234.567" → "0901234567". Sai định dạng → null.
-const normalizePhone = (value) => {
-  let digits = value.replace(/[\s.\-()]/g, '');
-  if (digits.startsWith('+84')) digits = `0${digits.slice(3)}`;
-  else if (digits.startsWith('84') && digits.length === 11) digits = `0${digits.slice(2)}`;
-  return /^0[35789]\d{8}$/.test(digits) ? digits : null;
-};
 
 // Gộp khoảng trắng thừa; tên phải có chữ cái và không chứa số.
 const normalizeFullName = (value) => {

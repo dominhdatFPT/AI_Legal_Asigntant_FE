@@ -14,6 +14,7 @@ const USER_NAV_ACTIVE = {
   '/document-storages': 'document-storages',
   '/form-library': 'document-storages',
   '/xem-mau-don': 'document-storages',
+  '/lam-don': 'lam-don',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/account': 'account',
@@ -182,7 +183,6 @@ app.get('/landforms', sendAdminPage('LandForms-admin.html'));
 app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', sendAdminPage('user-management.html'));
-
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
@@ -202,6 +202,9 @@ app.get('/dien-mau-don', (req, res) => {
 });
 
 app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
+
+// Công dân chọn mẫu đơn dùng chung đã xuất bản, điền rồi tải PDF (form-fill.js).
+app.get('/lam-don', sendUserPage('form-fill.html'));
 
 app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 

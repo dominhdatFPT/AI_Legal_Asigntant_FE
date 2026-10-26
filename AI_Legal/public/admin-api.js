@@ -12,7 +12,8 @@ const apiError = (response, payload) => {
   });
 };
 
-const api = async (path, options) => {
+// Export để form-template-service.js dùng lại (cùng cách báo lỗi + chuyển /login khi hết phiên).
+export const api = async (path, options) => {
   let response;
   try {
     response = await authRequest(path, options);

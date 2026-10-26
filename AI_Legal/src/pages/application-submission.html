@@ -551,6 +551,7 @@
     // Danh mục thủ tục và thông tin cá nhân lấy từ Backend (auth-api.js); trang không chứa dữ liệu mẫu.
     // Script này cũng được user-dashboard-navigation.js nhúng lại dạng script thường nên dùng import() động.
     const applicationApi = import('/auth-api.js');
+    const fieldRulesApi = import('/field-rules.js'); // CCCD, SĐT, email, ngày sinh/ngày cấp dùng chung mọi bộ thẻ
     let procedureCatalog = []; // [{ id: mã thủ tục, category: 'land' | 'business', name, keywords }]
     let procedureCatalogFailed = false;
 
@@ -760,7 +761,8 @@
         control = document.createElement('input');
         control.type = kind === 'date' || kind === 'checkbox' ? kind : 'text';
         if (kind === 'number') control.inputMode = 'decimal';
-        if (field.validation_regex) control.pattern = field.validation_regex.replace(/^\^|\$$/g, '');
+        // CCCD/SĐT do field-rules.js kiểm tra và chuẩn hóa (+84 → 0...) trước khi gửi; pattern gốc sẽ chặn cách viết hợp lệ đó
+        if (field.validation_regex && !/_(id_number|phone)$/.test(field.name)) control.pattern = field.validation_regex.replace(/^\^|\$$/g, '');
       }
       control.id = id;
       control.name = field.name;
@@ -1071,8 +1073,9 @@ div:has(> [data-form-step]){display:none}
       control.addEventListener('input', () => control.setCustomValidity(''), { once: true });
     }
 
-    // form_data đúng theo name của schema; ô số viết sai → báo tại ô và trả null (không gửi).
-    function collectSchemaData() {
+    // form_data đúng theo name của schema; ô số hoặc CCCD/SĐT/email/ngày viết sai → báo tại ô và trả null (không gửi).
+    function collectSchemaData({ ruleFor, checkField }) {
+      const valueOf = (name) => document.getElementById(`field-${name}`)?.value.trim();
       const data = {};
       for (const field of currentFormSchema?.fields || []) {
         const control = document.getElementById(`field-${field.name}`);
@@ -1092,7 +1095,18 @@ div:has(> [data-form-step]){display:none}
           }
           data[field.name] = number;
         } else {
-          data[field.name] = value;
+          const rule = ruleFor(field.name, field.field_type);
+          // Loại giấy tờ và ngày sinh của cùng một người (cùng tiền tố applicant_/lessor_...)
+          const checked = rule ? checkField(rule, value, {
+            idType: valueOf(field.name.replace(/_id_number$/, '_id_type')),
+            dob: /_id_issue_date$/.test(field.name) ? valueOf(field.name.replace(/_id_issue_date$/, '_dob')) : undefined
+          }) : { value };
+          if (checked.error) {
+            markFieldInvalid(control, checked.error);
+            control.reportValidity();
+            return null;
+          }
+          data[field.name] = checked.value;
         }
       }
       return data;
@@ -1116,7 +1130,7 @@ div:has(> [data-form-step]){display:none}
         procedureInput.reportValidity();
         return;
       }
-      const formData = collectSchemaData();
+      const formData = collectSchemaData(await fieldRulesApi);
       if (!formData) return;
       const button = document.getElementById('btn-submit-form');
       const errorBox = document.getElementById('submit-error');

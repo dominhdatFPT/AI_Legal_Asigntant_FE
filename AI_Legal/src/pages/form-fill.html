@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Làm đơn theo mẫu</title>
+<link rel="stylesheet" href="/contract-catalog.css"><link rel="stylesheet" href="/form-templates.css"><style id="auth-pending">body{visibility:hidden!important}</style></head>
+<body class="app-page">
+  <a class="skip-link" href="#main">Đến nội dung chính</a>
+  <!-- user-header -->
+  <div class="app-backdrop" aria-hidden="true"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=80" alt="" fetchpriority="low"></div>
+  <!-- Danh sách mẫu / xem trước / điền: form-fill.js vẽ vào đây -->
+  <main class="shell app-card ff-main" id="main"><div id="ff-app"></div></main>
+  <!-- Bản in A4 (chỉ hiện khi in/lưu PDF), phải là con trực tiếp của body để CSS in ẩn được phần còn lại -->
+  <div class="ft-print-root" id="ft-print"></div>
+  <script type="module">
+    import { protectPage } from '/auth-api.js';
+    await protectPage(['citizen', 'lawyer']);
+    await import('/form-fill.js');
+  </script>
+</body></html>
