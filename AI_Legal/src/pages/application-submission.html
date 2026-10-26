@@ -413,10 +413,6 @@
                   <p class="mt-0.5 text-xs text-secondary">Bạn có thể hỏi trợ lý để tìm thủ tục. Hãy điền và kiểm tra thông tin ở các bước phía trên.</p>
                 </div>
               </div>
-              <span class="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                <span class="material-symbols-outlined filled text-sm">task_alt</span>
-                Không cần tải giấy tờ lên
-              </span>
             </div>
 
             <div class="rounded-xl border border-red-100 bg-red-50/60 p-4 text-sm leading-relaxed text-slate-700">
@@ -794,31 +790,83 @@
         help.className = 'mt-1 text-[11px] text-slate-600';
         help.textContent = field.description;
         control.setAttribute('aria-describedby', help.id);
+        control.title = field.description; // mô tả phụ ẩn bớt cho gọn, rê chuột vẫn xem được
         wrapper.append(help);
       }
       return wrapper;
     }
 
-    // ---------- Mục thu gọn / mở rộng: áp cho mọi mẫu đơn (các khối của schema + thẻ bước 1) ----------
-    // Chỉ ẩn bằng CSS nên dữ liệu đã nhập, tự điền CCCD/AI vẫn giữ nguyên. CSS chèn tại đây vì khi mở trong
+    // ---------- Thẻ bước thu gọn / mở rộng: 1. Người làm đơn · 2. Thông tin thủ tục · 3. Kiểm tra hồ sơ ----------
+    // Cả phần tiêu đề thẻ (icon + tiêu đề + mô tả) bấm được; mở một bước thì bước khác thu lại.
+    // Bên trong mỗi bước các nhóm trường gộp chung một khối phẳng, tên nhóm chỉ là tiêu đề nhỏ + đường kẻ mỏng.
+    // Nội dung chỉ ẩn bằng CSS nên dữ liệu đã nhập, tự điền CCCD/AI vẫn giữ nguyên. CSS chèn tại đây vì khi mở trong
     // trang Tổng quan (user-dashboard-navigation.js) chỉ phần <main> và script này được mang sang.
+    const STEP_CARD_IDS = ['form-step-personal', 'form-step-details', 'form-step-review'];
     const FORM_COLLAPSE_CSS = `
-.form-collapse-head{display:flex;width:100%;align-items:center;gap:10px;min-height:44px;padding:2px 0;border:0;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit}
-.form-collapse-head:focus-visible,.form-collapse-toggle:focus-visible{outline:2px solid #b91c1c;outline-offset:3px;border-radius:8px}
-.form-collapse-title{flex:1;min-width:0}
-.form-collapse-count{flex:none;font-size:11px;font-weight:600;color:#5b403d;background:#fff;border:1px solid #e2e8f0;border-radius:999px;padding:2px 10px}
-.form-collapse-count.is-done{color:#15803d;border-color:#bbf7d0;background:#f0fdf4}
-.form-collapse-icon{flex:none;transition:transform .16s ease;color:#b91c1c}
-.form-collapse:not(.is-collapsed) .form-collapse-head .form-collapse-icon,.form-collapse:not(.is-collapsed)>div .form-collapse-toggle .form-collapse-icon{transform:rotate(180deg)}
-.form-collapse.has-error>.form-collapse-head .form-collapse-title::after{content:" · Còn thiếu thông tin";color:#b91c1c;text-transform:none;letter-spacing:0;font-weight:600}
-.form-collapse-toggle,.form-collapse-all{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#1e1b19;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
-.form-collapse-toggle:hover,.form-collapse-all:hover{background:#f8fafc}
-.form-collapse-all:focus-visible{outline:2px solid #b91c1c;outline-offset:2px}
+.form-collapse{scroll-margin-top:128px}
+.form-collapse>.form-collapse-head{cursor:pointer;user-select:none}
+.form-collapse>.form-collapse-head:hover [data-collapse-title]{color:#b91c1c}
+.form-collapse.is-collapsed>.form-collapse-head{border-bottom-color:transparent!important;padding-bottom:0!important}
+.form-collapse-side{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+/* Thanh tiến độ mảnh + nhãn ngắn ở đầu thẻ bước (màu theo trạng thái, kèm chữ nên không chỉ dựa vào màu) */
+.step-progress{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#64748b;white-space:nowrap}
+.step-progress-track{width:72px;height:6px;border-radius:999px;background:#f1f5f9;overflow:hidden}
+.step-progress-fill{display:block;height:100%;width:0;border-radius:inherit;background:var(--step-color);transition:width .2s ease}
+.form-collapse[data-step-state=progress] .step-progress-label{color:#92400e}
+.form-collapse[data-step-state=done] .step-progress-label{color:#15803d}
+.form-collapse[data-step-state=error] .step-progress-label{color:#b91c1c}
+#form-step-review .step-progress-track{display:none}
+/* Vạch trạng thái 4px ở mép trái thẻ: xám chưa điền · vàng nghệ đang dở · xanh đủ · đỏ còn lỗi */
+.form-collapse[data-step]{--step-color:#cbd5e1;position:relative;margin-left:48px;border-left:4px solid var(--step-color)!important}
+.form-collapse[data-step-state=progress]{--step-color:#d99206}
+.form-collapse[data-step-state=done]{--step-color:#16a34a}
+.form-collapse[data-step-state=error]{--step-color:#dc2626}
+/* Stepper dọc: vòng số bên trái từng thẻ, nối bằng đường mảnh; đoạn của bước đã đủ tô xanh */
+.form-collapse[data-step]::before{content:attr(data-step);position:absolute;left:-52px;top:20px;z-index:1;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;border:2px solid #cbd5e1;background:#fff;color:#64748b;font-size:14px;font-weight:700;box-sizing:border-box}
+.form-collapse[data-step]:not(.is-collapsed)::before{border-color:#b91c1c;color:#b91c1c;box-shadow:0 0 0 4px rgba(185,28,28,.12)}
+.form-collapse[data-step-state=done]::before{content:'✓';border-color:#16a34a;background:#16a34a;color:#fff;box-shadow:none}
+.form-collapse[data-step-state=error]::before{content:'!';border-color:#dc2626;background:#dc2626;color:#fff;box-shadow:none}
+.form-collapse[data-step]::after{content:'';position:absolute;left:-37px;top:54px;bottom:-26px;width:2px;border-radius:2px;background:#e2e8f0}
+.form-collapse[data-step-state=done]::after{background:#16a34a}
+#form-step-review[data-step]::after{display:none}
+.form-collapse-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#b91c1c;cursor:pointer}
+.form-collapse-toggle:hover{background:#fef2f2}
+.form-collapse-toggle:focus-visible,.form-collapse-all:focus-visible{outline:2px solid #b91c1c;outline-offset:2px}
+.form-collapse-icon{transition:transform .16s ease}
+.form-collapse:not(.is-collapsed) .form-collapse-toggle .form-collapse-icon{transform:rotate(180deg)}
+.form-collapse.has-error [data-collapse-title]::after{content:" · Còn thiếu thông tin";color:#b91c1c;font-size:.8em;font-weight:600}
+.form-collapse-bar{display:flex;justify-content:flex-end;margin-bottom:-8px}
+.form-collapse-all{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 14px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#1e1b19;font-size:12px;font-weight:600;cursor:pointer}
+.form-collapse-all:hover{background:#f8fafc}
 @media screen{.form-collapse.is-collapsed>.form-collapse-body{display:none}}
 .form-collapse:not(.is-collapsed)>.form-collapse-body{animation:form-collapse-in .16s ease}
 @keyframes form-collapse-in{from{opacity:0;transform:translateY(-4px)}}
 @media (prefers-reduced-motion:reduce){.form-collapse-icon{transition:none}.form-collapse:not(.is-collapsed)>.form-collapse-body{animation:none}}
-@media (max-width:480px){.form-collapse-count{display:none}}`;
+/* Điện thoại: stepper thu nhỏ (vòng 24px, thụt lề ít), thanh tiến độ ngắn lại; thanh bước 1/2/3 phía trên trùng chức năng nên ẩn */
+@media (max-width:640px){
+.form-collapse[data-step]{margin-left:32px}
+.form-collapse[data-step]::before{left:-34px;top:18px;width:24px;height:24px;font-size:12px}
+.form-collapse[data-step]::after{left:-24px;top:44px}
+.step-progress-track{display:none}
+.form-collapse[data-step]>.form-collapse-head span:has(> .material-symbols-outlined.filled){display:none}
+.form-collapse[data-step]>.form-collapse-head p{display:none}
+.form-collapse[data-step].has-error [data-collapse-title]::after{display:none}
+#form-step-review>.form-collapse-head{flex-direction:row;align-items:center}
+div:has(> [data-form-step]){display:none}
+}
+@media (prefers-reduced-motion:reduce){.step-progress-fill{transition:none}}
+/* Điện thoại: bỏ nhãn phụ trên đầu thẻ (đã có trong thân thẻ) để tiêu đề gọn một khối */
+@media (max-width:640px){#form-step-personal>.form-collapse-head>div:nth-child(2):not(.form-collapse-side){display:none}}
+/* Nhóm trường trong cùng một thẻ: không khung riêng, chỉ tiêu đề nhỏ và đường kẻ mỏng */
+.schema-group+.schema-group,#citizen-fields-container+.schema-group{border-top:1px solid #f1f5f9;padding-top:16px;margin-top:16px!important}
+#schema-details-fields>*{margin-top:0}
+.schema-group-title{margin:0 0 10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#b91c1c}
+.schema-group-grid,#citizen-fields-container{gap:10px 16px!important}
+/* Ô dài (địa chỉ, ghi chú…) chiếm cả hàng; mô tả phụ của ô chỉ hiện khi đang nhập ô đó (vẫn có tooltip khi rê chuột) */
+.schema-group-grid>div:has(textarea),#citizen-fields-container>div:has(textarea){grid-column:1/-1}
+.form-collapse p[id^="field-"][id$="-help"]{display:none;margin-top:4px}
+.form-collapse div:focus-within>p[id^="field-"][id$="-help"]{display:block}
+.form-collapse textarea{height:64px;min-height:44px;resize:vertical}`;
     if (!document.getElementById('form-collapse-style')) {
       const style = document.createElement('style');
       style.id = 'form-collapse-style';
@@ -826,43 +874,85 @@
       document.head.append(style);
     }
 
+    const stepCards = () => STEP_CARD_IDS.map((id) => document.getElementById(id)).filter((card) => card?.classList.contains('form-collapse'));
+
     function setSectionOpen(section, open) {
       section.classList.toggle('is-collapsed', !open);
-      section.querySelectorAll(':scope > .form-collapse-head, :scope > div > .form-collapse-toggle').forEach((toggle) => {
+      section.querySelectorAll(':scope > .form-collapse-head .form-collapse-toggle').forEach((toggle) => {
         toggle.setAttribute('aria-expanded', String(open));
-        const label = toggle.querySelector('[data-collapse-label]');
-        if (label) label.textContent = open ? 'Thu gọn' : 'Mở rộng';
       });
       syncCollapseAllButton();
     }
 
-    // Số ô đã điền / tổng số ô trong từng mục
+    // Accordion: mở một bước thì các bước khác thu lại; cuộn nhẹ để thấy tiêu đề bước vừa mở.
+    function toggleStep(card) {
+      const open = card.classList.contains('is-collapsed');
+      if (open) stepCards().forEach((other) => { if (other !== card) setSectionOpen(other, false); });
+      setSectionOpen(card, open);
+      if (!open) return;
+      requestAnimationFrame(() => {
+        const top = card.getBoundingClientRect().top;
+        if (top < 120 || top > window.innerHeight * 0.6) {
+          card.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        }
+      });
+    }
+
+    // Số ô đã điền / tổng số ô của từng bước
+    // Trạng thái từng bước cho vạch màu, vòng số và thanh tiến độ:
+    // empty = chưa điền · progress = đang điền dở · done = đủ ô bắt buộc · error = có ô bắt buộc bị báo lỗi.
+    // Bước 3 (kiểm tra) đủ khi bước 1 và 2 đều đủ.
     function updateSectionCounters() {
-      document.querySelectorAll('.form-collapse [data-collapse-count]').forEach((counter) => {
-        const body = counter.closest('.form-collapse').querySelector(':scope > .form-collapse-body');
+      const cards = stepCards();
+      const filled = (control) => (control.type === 'checkbox' ? control.checked : String(control.value).trim() !== '');
+      const states = new Map();
+      cards.filter((card) => card.id !== 'form-step-review').forEach((card) => {
+        const body = card.querySelector(':scope > .form-collapse-body');
         const controls = [...body.querySelectorAll('input, select, textarea')].filter((control) => control.type !== 'hidden');
-        const done = controls.filter((control) => (control.type === 'checkbox' ? control.checked : String(control.value).trim())).length;
-        counter.textContent = `${done}/${controls.length} đã điền`;
-        counter.classList.toggle('is-done', controls.length > 0 && done === controls.length);
+        const required = controls.filter((control) => control.required);
+        const done = controls.filter(filled).length;
+        const missing = required.filter((control) => !filled(control)).length;
+        const complete = required.length ? missing === 0 : done > 0;
+        const state = card.classList.contains('has-error') ? 'error' : complete ? 'done' : done > 0 ? 'progress' : 'empty';
+        states.set(card, { state, done, total: controls.length, missing });
+      });
+      const review = cards.find((card) => card.id === 'form-step-review');
+      if (review) {
+        const others = [...states.values()];
+        const ready = others.length > 0 && others.every((item) => item.state === 'done');
+        const started = others.some((item) => item.done > 0);
+        states.set(review, { state: review.classList.contains('has-error') ? 'error' : ready ? 'done' : started ? 'progress' : 'empty', review: true });
+      }
+      const LABELS = { empty: 'Chưa điền', done: '✓ Đã đủ', error: '! Còn thiếu' };
+      states.forEach((item, card) => {
+        card.dataset.stepState = item.state;
+        const widget = card.querySelector(':scope > .form-collapse-head [data-collapse-count]');
+        if (!widget) return;
+        const label = item.review
+          ? { empty: 'Chưa sẵn sàng', progress: 'Chưa sẵn sàng', done: '✓ Sẵn sàng tạo', error: '! Còn thiếu' }[item.state]
+          : item.state === 'progress' ? `Còn thiếu ${item.missing}`
+            : item.state === 'error' && item.missing ? `! Còn thiếu ${item.missing}` : LABELS[item.state];
+        widget.querySelector('.step-progress-label').textContent = label;
+        widget.querySelector('.step-progress-fill').style.width = item.review || !item.total ? '0%' : `${Math.round((item.done / item.total) * 100)}%`;
+        widget.querySelector('.step-progress-sr').textContent = item.review ? label.replace(/^[✓!] /, '') : `${item.done}/${item.total} trường đã điền, ${label.replace(/^[✓!] /, '')}`;
       });
     }
 
     function syncCollapseAllButton() {
       const button = document.getElementById('form-collapse-all');
-      const sections = [...document.querySelectorAll('#schema-details-fields > .form-collapse')];
       if (!button) return;
-      button.hidden = sections.length < 2;
-      const anyCollapsed = sections.some((section) => section.classList.contains('is-collapsed'));
+      const anyCollapsed = stepCards().some((card) => card.classList.contains('is-collapsed'));
       button.dataset.expand = String(anyCollapsed);
       button.textContent = anyCollapsed ? 'Mở tất cả' : 'Thu gọn tất cả';
     }
 
-    // Trường bắt buộc nằm trong mục đang thu gọn: khi kiểm tra/nộp thì tự mở mục đó để trình duyệt focus được và báo lỗi.
+    // Trường bắt buộc nằm trong bước đang thu gọn: khi kiểm tra/nộp thì tự mở bước đó để trình duyệt focus được và báo lỗi.
     document.addEventListener('invalid', (event) => {
       const section = event.target.closest?.('.form-collapse');
       if (!section) return;
       section.classList.add('has-error');
       if (section.classList.contains('is-collapsed')) setSectionOpen(section, true);
+      updateSectionCounters();
     }, true);
     document.addEventListener('input', (event) => {
       const section = event.target.closest?.('.form-collapse');
@@ -874,21 +964,74 @@
       if (event.target.closest?.('.form-collapse')) updateSectionCounters();
     });
 
-    // Thẻ bước 1 (khung tĩnh): thêm nút Thu gọn/Mở rộng ở đầu thẻ.
-    function enhancePersonalStep() {
-      const card = document.getElementById('form-step-personal');
-      const body = document.getElementById('personal-step-body');
-      if (!card || !body || card.classList.contains('form-collapse')) return;
-      card.classList.add('form-collapse');
+    // Biến thẻ bước tĩnh thành thẻ thu gọn: phần đầu thẻ bấm được + mũi tên, phần còn lại gói vào thân thẻ.
+    function enhanceStepCard(card) {
+      if (!card || card.classList.contains('form-collapse')) return;
+      const head = card.firstElementChild;
+      let body = card.querySelector(':scope > #personal-step-body');
+      if (!body) {
+        body = document.createElement('div');
+        body.className = 'space-y-4';
+        body.append(...[...card.children].slice(1));
+        card.append(body);
+      }
+      body.id ||= `${card.id}-body`;
       body.classList.add('form-collapse-body');
+      card.classList.add('form-collapse');
+      head.classList.add('form-collapse-head');
+      const title = head.querySelector('h3');
+      title?.setAttribute('data-collapse-title', '');
+      const side = document.createElement('div');
+      side.className = 'form-collapse-side';
+      // Trạng thái bước: thanh tiến độ mảnh + nhãn ngắn ("Đã đủ", "Còn thiếu 3"…); trình đọc màn hình đọc aria-label
+      const progress = document.createElement('span');
+      progress.className = 'step-progress';
+      progress.dataset.collapseCount = '';
+      progress.innerHTML = '<span class="step-progress-track" aria-hidden="true"><span class="step-progress-fill"></span></span><span class="step-progress-label" aria-hidden="true"></span><span class="sr-only step-progress-sr"></span>';
+      side.append(progress);
       const toggle = document.createElement('button');
       toggle.type = 'button';
       toggle.className = 'form-collapse-toggle';
       toggle.setAttribute('aria-controls', body.id);
       toggle.setAttribute('aria-expanded', 'true');
-      toggle.innerHTML = '<span data-collapse-label>Thu gọn</span><span class="material-symbols-outlined form-collapse-icon text-base" aria-hidden="true">expand_more</span>';
-      toggle.addEventListener('click', () => setSectionOpen(card, card.classList.contains('is-collapsed')));
-      card.firstElementChild.append(toggle);
+      toggle.setAttribute('aria-label', `Thu gọn hoặc mở rộng: ${title?.textContent.trim() || 'bước'}`);
+      toggle.innerHTML = '<span class="material-symbols-outlined form-collapse-icon" aria-hidden="true">expand_more</span>';
+      side.append(toggle);
+      head.append(side);
+      // Bấm vào bất kỳ chỗ nào trên đầu thẻ (trừ nút/link khác) cũng đóng/mở
+      head.addEventListener('click', (event) => {
+        const control = event.target.closest('a, button, input, select, textarea, label');
+        if (control && control !== toggle) return;
+        toggleStep(card);
+      });
+    }
+
+    function enhanceStepCards() {
+      STEP_CARD_IDS.forEach((id, index) => {
+        const card = document.getElementById(id);
+        enhanceStepCard(card);
+        if (card) card.dataset.step = String(index + 1); // số trong vòng tròn của stepper dọc
+      });
+      const first = document.getElementById(STEP_CARD_IDS[0]);
+      if (first && !document.getElementById('form-collapse-all')) {
+        const bar = document.createElement('div');
+        bar.className = 'form-collapse-bar';
+        const all = document.createElement('button');
+        all.type = 'button';
+        all.id = 'form-collapse-all';
+        all.className = 'form-collapse-all';
+        all.addEventListener('click', () => {
+          const open = all.dataset.expand === 'true';
+          stepCards().forEach((card) => setSectionOpen(card, open));
+        });
+        bar.append(all);
+        first.before(bar);
+      }
+    }
+
+    // Vừa mở biểu mẫu: mọi bước đều mở sẵn (nút trên cùng hiện "Thu gọn tất cả").
+    function openAllSteps() {
+      stepCards().forEach((card) => setSectionOpen(card, true));
     }
 
     // Bước 1 = khối đầu tiên của schema (người làm đơn / bên ủy quyền / bên cho thuê), bước 2 = các khối còn lại.
@@ -902,52 +1045,25 @@
       document.getElementById('verified-id-card')?.classList.toggle('hidden', !isApplicant);
       document.getElementById('btn-autofill-citizen-data')?.classList.toggle('hidden', !isApplicant);
       document.getElementById('autofill-alert')?.classList.add('hidden');
-      enhancePersonalStep();
-      setSectionOpen(document.getElementById('form-step-personal'), true);
-      // Mỗi khối là một thẻ thu gọn được: mở khối đầu, các khối sau thu gọn.
-      document.getElementById('schema-details-fields').replaceChildren(...rest.map((section, index) => {
-        const box = document.createElement('section');
-        box.className = 'form-collapse space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
-        const bodyId = `schema-section-${section.key}`;
-        const head = document.createElement('button');
-        head.type = 'button';
-        head.className = 'form-collapse-head border-b border-slate-200 pb-2';
-        head.setAttribute('aria-controls', bodyId);
+      enhanceStepCards();
+      stepCards().forEach((card) => card.classList.remove('has-error')); // mẫu mới: bỏ dấu báo lỗi của mẫu trước
+      // Các khối còn lại của schema gộp chung vào thân thẻ bước 2: mỗi khối là một nhóm phẳng có tiêu đề nhỏ.
+      document.getElementById('schema-details-fields').replaceChildren(...rest.map((section) => {
+        const group = document.createElement('section');
+        group.className = 'schema-group';
+        group.setAttribute('aria-labelledby', `schema-section-${section.key}-title`);
         const title = document.createElement('h4');
-        title.className = 'form-collapse-title text-xs font-bold uppercase tracking-wider text-red-700';
+        title.id = `schema-section-${section.key}-title`;
+        title.className = 'schema-group-title';
         title.textContent = section.title;
-        const count = document.createElement('span');
-        count.className = 'form-collapse-count';
-        count.dataset.collapseCount = '';
-        const icon = document.createElement('span');
-        icon.className = 'material-symbols-outlined form-collapse-icon text-xl';
-        icon.setAttribute('aria-hidden', 'true');
-        icon.textContent = 'expand_more';
-        head.append(title, count, icon);
-        head.addEventListener('click', () => setSectionOpen(box, box.classList.contains('is-collapsed')));
         const grid = document.createElement('div');
-        grid.id = bodyId;
-        grid.className = 'form-collapse-body grid grid-cols-1 gap-3 sm:grid-cols-2';
+        grid.className = 'schema-group-grid grid grid-cols-1 sm:grid-cols-2';
         grid.append(...fieldsOf(section).map(createSchemaField));
-        box.append(head, grid);
-        setSectionOpen(box, index === 0);
-        return box;
+        group.append(title, grid);
+        return group;
       }));
-      // Nút "Mở tất cả / Thu gọn tất cả" ở đầu thẻ bước 2 (tạo một lần)
-      const detailsHead = document.getElementById('form-step-details')?.firstElementChild;
-      if (detailsHead && !document.getElementById('form-collapse-all')) {
-        const all = document.createElement('button');
-        all.type = 'button';
-        all.id = 'form-collapse-all';
-        all.className = 'form-collapse-all ml-auto';
-        all.addEventListener('click', () => {
-          const open = all.dataset.expand === 'true';
-          document.querySelectorAll('#schema-details-fields > .form-collapse').forEach((box) => setSectionOpen(box, open));
-        });
-        detailsHead.append(all);
-      }
-      syncCollapseAllButton();
       updateSectionCounters();
+      openAllSteps();
     }
 
     function markFieldInvalid(control, message) {
@@ -1075,11 +1191,12 @@
       if (personalSection && locationFields && !document.getElementById('recipient-location-fields')) {
         const locationPanel = document.createElement('section');
         locationPanel.id = 'recipient-location-fields';
-        locationPanel.className = 'space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4';
-        locationPanel.innerHTML = '<div><h3 class="text-sm font-bold text-on-surface">Nơi tiếp nhận hồ sơ</h3><p class="mt-1 text-xs text-secondary">Chọn địa phương dự kiến nộp hồ sơ.</p></div>';
+        // Gộp chung vào thân thẻ bước 1 (nhóm phẳng, ngăn bằng đường kẻ mỏng như các nhóm trường khác)
+        locationPanel.className = 'schema-group';
+        locationPanel.innerHTML = '<h4 class="schema-group-title">Nơi tiếp nhận hồ sơ</h4><p class="mb-2 text-xs text-secondary">Chọn địa phương dự kiến nộp hồ sơ.</p>';
         locationFields.parentElement.insertBefore(locationPanel, locationFields);
         locationPanel.append(locationFields);
-        personalSection.append(locationPanel);
+        (document.getElementById('personal-step-body') || personalSection).append(locationPanel);
       }
 
       function chooseCategory(category) {
@@ -1248,7 +1365,7 @@
       };
       const target = document.getElementById(targets[step]);
       if (!target) return;
-      if (target.classList.contains('form-collapse')) setSectionOpen(target, true);
+      if (target.classList.contains('form-collapse')) stepCards().forEach((card) => setSectionOpen(card, card === target));
       activeFormStep = step;
       updateApplicationProgress();
       const stickyHeader = document.querySelector('header');
