@@ -168,7 +168,7 @@
           <div class="p-space-md bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-stone-600">
             <div class="flex items-center gap-space-sm">
               <span class="">Hiển thị</span>
-              <select class="bg-surface-container-lowest text-on-surface py-1 px-2 rounded font-semibold outline-none cursor-pointer">
+              <select data-page-size class="bg-surface-container-lowest text-on-surface py-1 px-2 rounded font-semibold outline-none cursor-pointer">
                 <option>10</option>
                 <option selected="">25</option>
                 <option>50</option>
@@ -281,7 +281,8 @@
       const rows = () => Array.from(tbody?.querySelectorAll('tr') || []);
       const searchInput = document.getElementById('main-search-input');
       const searchButton = document.getElementById('search-button-main');
-      const filterSelects = Array.from(document.querySelectorAll('main select')).slice(0, 3);
+      // Ô "Hiển thị 25" là số dòng mỗi trang, không phải bộ lọc nội dung: tính vào thì mọi dòng bị ẩn.
+      const filterSelects = Array.from(document.querySelectorAll('main select:not([data-page-size])')).slice(0, 3);
       const resetButton = document.querySelector('button[title="Thiết lập lại bộ lọc"]');
       const selectedCount = document.querySelector('tbody')?.closest('.rounded-xl')?.querySelector('strong');
       const emptyMessage = document.createElement('tr');
