@@ -42,6 +42,33 @@ const sendUserPage = (fileName) => (req, res, next) => {
 };
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// Shell chung cho các trang quản trị: một nguồn (partials/admin-sidebar.html + admin-topbar.html) chèn vào
+// hai vị trí đánh dấu của trang, đánh dấu sẵn mục đang mở theo data-path nên sidebar không lặp ở từng trang.
+const adminSidebarFile = path.join(__dirname, 'partials', 'admin-sidebar.html');
+const adminTopbarFile = path.join(__dirname, 'partials', 'admin-topbar.html');
+const ADMIN_NAV_ACTIVE = {
+  '/dashboard': 'tong-quan',
+  '/landforms': 'ho-so-dat-dai',
+  '/business-form-templates': 'ho-so-ho-kinh-doanh',
+  '/user-management': 'quan-ly-nguoi-dung'
+};
+
+const sendAdminPage = (fileName) => (req, res, next) => {
+  try {
+    const active = ADMIN_NAV_ACTIVE[req.path];
+    const sidebar = fs.readFileSync(adminSidebarFile, 'utf8')
+      .replace(`data-path="${active}"`, `data-path="${active}" aria-current="page"`);
+    const topbar = fs.readFileSync(adminTopbarFile, 'utf8');
+    const page = fs.readFileSync(path.join(pagesDirectory, fileName), 'utf8')
+      .replace('<!-- admin-sidebar -->', sidebar)
+      .replace('<!-- admin-topbar -->', topbar);
+    res.type('html').send(page);
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Read-only source library: prefer Contract API; use its identical exported
 // snapshot when the backend is unavailable. No user cookies or tokens forwarded.
@@ -148,26 +175,18 @@ app.get('/api/firebase-config', (req, res) => {
   }
 });
 
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'dashboard.html'));
-});
+app.get('/dashboard', sendAdminPage('dashboard.html'));
 
-app.get('/landforms', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'LandForms-admin.html'));
-});
+app.get('/landforms', sendAdminPage('LandForms-admin.html'));
 
 app.get('/detail-information', sendUserPage('detail-information.html'));
 
-app.get('/user-management', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'user-management.html'));
-});
+app.get('/user-management', sendAdminPage('user-management.html'));
 
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
-app.get('/business-form-templates', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'business-form-templates.html'));
-});
+app.get('/business-form-templates', sendAdminPage('business-form-templates.html'));
 
 app.get('/user-dashboard', sendUserPage('user-dashboard.html'));
 

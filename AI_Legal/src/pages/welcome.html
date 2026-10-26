@@ -382,6 +382,16 @@
         cursor: default;
       }
 
+      .hover-list li:has(a),
+      .hover-list li a {
+        cursor: pointer;
+      }
+
+      .hover-list li a {
+        color: inherit;
+        text-decoration: none;
+      }
+
       .hover-list li .tri {
         transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1);
       }
@@ -704,8 +714,11 @@
         <span class="text-[15px] font-normal tracking-[-0.01em] text-white" translate="no">AI Legal Assistant</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 t-label" aria-label="Điều hướng chính">
+      <nav class="hidden md:flex items-center gap-7 t-label" aria-label="Điều hướng chính">
         <a class="nav-link" href="#procedures">Thủ tục</a>
+        <a class="nav-link" href="/application-submission">Nộp hồ sơ</a>
+        <a class="nav-link" href="/document-storages">Kho biểu mẫu</a>
+        <a class="nav-link" href="/location-search">Tìm nơi nộp</a>
         <a class="nav-link" href="#audiences">Dành cho ai</a>
         <a class="nav-link" href="#workflow">Cách làm</a>
         <button class="nav-link uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
@@ -728,6 +741,9 @@
     <div class="hidden md:hidden bg-[#140405] px-5 pt-2 pb-6" id="mobile-menu">
       <nav class="flex flex-col t-label text-[15px]" aria-label="Điều hướng trên di động">
         <a class="nav-link py-3.5" href="#procedures">Thủ tục</a>
+        <a class="nav-link py-3.5" href="/application-submission">Nộp hồ sơ</a>
+        <a class="nav-link py-3.5" href="/document-storages">Kho biểu mẫu</a>
+        <a class="nav-link py-3.5" href="/location-search">Tìm nơi nộp</a>
         <a class="nav-link py-3.5" href="#audiences">Dành cho ai</a>
         <a class="nav-link py-3.5" href="#workflow">Cách làm</a>
         <button class="nav-link py-3.5 text-left uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
@@ -754,7 +770,7 @@
             cho các việc về đất đai, hộ kinh doanh và doanh nghiệp.
           </p>
           <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4" data-hero-fade style="--d: 0.55s">
-            <a class="btn-pill" href="/login">Bắt đầu làm hồ sơ</a>
+            <a class="btn-pill" href="/application-submission">Bắt đầu làm hồ sơ</a>
             <button class="btn-ghost" type="button" data-open-chat>
               <span>Hỏi trợ lý AI</span>
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -802,7 +818,7 @@
           <p class="mt-8 text-sm text-[#A8948F]">
             Để tạo hồ sơ, bạn cần đăng nhập và cập nhật thông tin cá nhân trước.
           </p>
-          <a class="btn-ghost mt-2" href="/login">
+          <a class="btn-ghost mt-2" href="/application-submission">
             <span>Đăng nhập để bắt đầu</span>
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6"></path>
@@ -820,12 +836,42 @@
               Từ chuẩn bị giấy tờ, hợp đồng, kê khai thuế đến cơ quan tiếp nhận hồ sơ tại địa phương.
             </p>
             <ul class="hover-list mt-6 space-y-4 t-body text-white">
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Mua bán, chuyển nhượng quyền sử dụng đất</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Sang tên đổi chủ: tặng cho, thừa kế, mua bán</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tách thửa, hợp thửa và đăng ký biến động đất đai</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Giao đất, thuê đất và gia hạn sử dụng đất</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thế chấp và tranh chấp đất đai</li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-001" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-001">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Mua bán, chuyển nhượng quyền sử dụng đất</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-006" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-006">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Sang tên đổi chủ: tặng cho, thừa kế, mua bán</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-004" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-004">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Cấp Giấy chứng nhận quyền sử dụng đất lần đầu</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-003" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-003">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Tách thửa, hợp thửa và đăng ký biến động đất đai</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-009" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-009">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Giao đất, thuê đất và gia hạn sử dụng đất</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DD-010" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-010">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Thế chấp và tranh chấp đất đai</span>
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -835,12 +881,42 @@
               Điền sẵn tờ khai, tra cứu mã ngành nghề phù hợp và hướng dẫn nộp đúng cơ quan có thẩm quyền.
             </p>
             <ul class="hover-list mt-6 space-y-4 t-body text-white">
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập hộ kinh doanh mới</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Đăng ký thành lập doanh nghiệp</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Thay đổi nội dung đăng ký: địa điểm, ngành nghề, vốn</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tạm ngừng kinh doanh theo quy định</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Chấm dứt hoạt động hộ kinh doanh, giải thể doanh nghiệp</li>
-              <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Hợp tác kinh doanh</li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="HKD-001" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DHKD-001">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Đăng ký thành lập hộ kinh doanh mới</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DN-004" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDN-004">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Đăng ký thành lập doanh nghiệp</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="HKD-002" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DHKD-002">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Thay đổi nội dung đăng ký: địa điểm, ngành nghề, vốn</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DN-010" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDN-010">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Tạm ngừng kinh doanh theo quy định</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DN-009" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDN-009">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Chấm dứt hoạt động hộ kinh doanh, giải thể doanh nghiệp</span>
+                </a>
+              </li>
+              <li>
+                <a class="procedure-link flex items-baseline gap-4" data-procedure="DN-001" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDN-001">
+                  <span class="tri" aria-hidden="true"></span>
+                  <span>Hợp tác kinh doanh</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -1060,10 +1136,10 @@
       <div class="lg:col-span-2">
         <h2 class="t-label text-white">Thủ tục</h2>
         <ul class="mt-4 space-y-2.5 font-light">
-          <li><a class="hover:text-white" href="#procedures">Sang tên đất đai</a></li>
-          <li><a class="hover:text-white" href="#procedures">Chuyển nhượng nhà đất</a></li>
-          <li><a class="hover:text-white" href="#procedures">Đăng ký hộ kinh doanh</a></li>
-          <li><a class="hover:text-white" href="#procedures">Thành lập doanh nghiệp</a></li>
+          <li><a class="hover:text-white" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-006">Sang tên đất đai</a></li>
+          <li><a class="hover:text-white" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDD-001">Chuyển nhượng nhà đất</a></li>
+          <li><a class="hover:text-white" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DHKD-001">Đăng ký hộ kinh doanh</a></li>
+          <li><a class="hover:text-white" href="/login?redirect=%2Fapplication-submission%3Fprocedure%3DDN-004">Thành lập doanh nghiệp</a></li>
         </ul>
       </div>
       <div class="lg:col-span-2">
@@ -1998,6 +2074,43 @@
         flockSection.classList.toggle('birds-on', entry.isIntersecting);
       }).observe(flockSection);
     }
+  </script>
+  <script>
+    (() => {
+      let currentUser = null;
+      try {
+        const raw = sessionStorage.getItem("ai_legal_user");
+        if (raw) currentUser = JSON.parse(raw);
+      } catch {}
+
+      if (currentUser) {
+        document.querySelectorAll('a[href="/login"]').forEach((el) => {
+          el.href = currentUser.role === "admin" ? "/dashboard" : "/user-dashboard";
+          if (el.textContent.trim().toLowerCase().includes("đăng nhập")) {
+            el.textContent = "Vào hệ thống";
+          }
+        });
+        document.querySelectorAll(".procedure-link").forEach((link) => {
+          const proc = link.dataset.procedure;
+          if (proc) {
+            link.href = `/application-submission?procedure=${encodeURIComponent(proc)}`;
+          }
+        });
+        document.querySelectorAll('a[href^="/login?redirect="]').forEach((link) => {
+          const target = new URL(link.href, window.location.origin).searchParams.get("redirect");
+          if (target) link.href = target;
+        });
+      } else {
+        document.addEventListener("click", (event) => {
+          const targetLink = event.target.closest('a[href^="/application-submission"], a[href^="/location-search"]');
+          if (targetLink && !currentUser) {
+            event.preventDefault();
+            const destination = targetLink.getAttribute("href");
+            window.location.assign(`/login?redirect=${encodeURIComponent(destination)}`);
+          }
+        });
+      }
+    })();
   </script>
 </body>
 

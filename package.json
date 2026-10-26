@@ -11,7 +11,8 @@
     "smoke": "node -e \"const app=require('./AI_Legal/src/index.js'); console.log(typeof app);\"",
     "css:build": "tailwindcss -i ./AI_Legal/src/tailwind.css -o ./AI_Legal/public/tailwind.css",
     "css:watch": "npm run css:build -- --watch",
-    "css:build:user": "tailwindcss -c tailwind.user.config.js -i ./AI_Legal/src/tailwind.css -o ./AI_Legal/public/tailwind-user.css --minify"
+    "css:build:user": "tailwindcss -c tailwind.user.config.js -i ./AI_Legal/src/tailwind.css -o ./AI_Legal/public/tailwind-user.css --minify",
+    "css:build:admin": "tailwindcss -c tailwind.admin.config.js -i ./AI_Legal/src/tailwind.css -o ./AI_Legal/public/tailwind-admin.css --minify"
   },
   "dependencies": {
     "express": "^5.1.0",

@@ -198,5 +198,15 @@
 <script src="/auth-showcase.js" defer></script>
 <script src="/auth-motion.js" defer></script>
 <script type="module" src="/signup-auth.js"></script>
+<script>
+  (() => {
+    const redirect = new URLSearchParams(window.location.search).get('redirect');
+    if (redirect) {
+      document.querySelectorAll('a[href="/login"]').forEach((link) => {
+        link.href = `/login?redirect=${encodeURIComponent(redirect)}`;
+      });
+    }
+  })();
+</script>
 </body>
 </html>

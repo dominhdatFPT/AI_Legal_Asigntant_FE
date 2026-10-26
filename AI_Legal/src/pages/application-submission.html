@@ -1304,7 +1304,8 @@ div:has(> [data-form-step]){display:none}
       };
 
       window.openApplicationTemplateById = (procedureId) => {
-        const procedure = procedureCatalog.find((item) => item.id === procedureId);
+        const targetId = String(procedureId || '').trim().toUpperCase();
+        const procedure = procedureCatalog.find((item) => String(item.id || '').toUpperCase() === targetId);
         if (!procedure) return false;
         openTemplateForm(procedure);
         return true;
@@ -1515,4 +1516,4 @@ div:has(> [data-form-step]){display:none}
 
 
 
-<script src="/admin-ai-chat.js" defer></script></body></html>
+<script type="module" src="/admin-ai-chat.js"></script></body></html>

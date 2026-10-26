@@ -64,7 +64,8 @@ const doRefresh = () => {
 };
 
 // Gọi API cần đăng nhập. Access token hết hạn (401) → refresh bằng cookie rồi gọi lại 1 lần.
-const authRequest = async (path, options) => {
+// Export để các module API khác (admin-api.js) dùng lại thay vì tự viết lại tầng này.
+export const authRequest = async (path, options) => {
   let response = await request(path, options);
   if (response.status === 401) {
     const refreshed = await doRefresh();
@@ -170,11 +171,15 @@ export const PROFILE_PATH = '/detail-information';
 const requireCitizenProfile = async () => {
   const profile = await fetchMyCitizenProfile().catch(() => null);
   if (profile) return profile;
-  window.location.replace(`${PROFILE_PATH}?required=1`);
+  const currentTarget = window.location.pathname + window.location.search;
+  const targetParam = (currentTarget && currentTarget !== PROFILE_PATH)
+    ? `&redirect=${encodeURIComponent(currentTarget)}`
+    : '';
+  window.location.replace(`${PROFILE_PATH}?required=1${targetParam}`);
   return new Promise(() => {}); // dừng code phía sau trong lúc chuyển trang
 };
 
-// Chặn trang cần đăng nhập. Chưa đăng nhập → /login. Sai vai trò → trang chủ đúng vai trò.
+// Chặn trang cần đăng nhập. Chưa đăng nhập → /login (kèm redirect). Sai vai trò → trang chủ đúng vai trò.
 // Trả về user khi được phép ở lại trang.
 export const requireLogin = async (allowedRoles) => {
   let user = null;
@@ -185,7 +190,11 @@ export const requireLogin = async (allowedRoles) => {
   }
   if (!user) {
     clearSession();
-    window.location.replace('/login');
+    const currentTarget = window.location.pathname + window.location.search;
+    const loginUrl = (currentTarget && currentTarget !== '/' && currentTarget !== '/login')
+      ? `/login?redirect=${encodeURIComponent(currentTarget)}`
+      : '/login';
+    window.location.replace(loginUrl);
     return new Promise(() => {}); // dừng code phía sau trong lúc chuyển trang
   }
   cacheUser(user);

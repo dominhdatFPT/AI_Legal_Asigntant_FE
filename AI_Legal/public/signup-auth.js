@@ -134,7 +134,9 @@ form.addEventListener('submit', async (event) => {
 
     // Gửi email xác minh; lỗi gửi không huỷ tài khoản, người dùng gửi lại được ở trang đăng nhập.
     let verificationSent = true;
-    await sendEmailVerification(user, { url: `${window.location.origin}/login?verified=1` }).catch(() => { verificationSent = false; });
+    const redirectParam = new URLSearchParams(window.location.search).get('redirect');
+    const verifyUrl = `${window.location.origin}/login?verified=1${redirectParam ? '&redirect=' + encodeURIComponent(redirectParam) : ''}`;
+    await sendEmailVerification(user, { url: verifyUrl }).catch(() => { verificationSent = false; });
     await signOut(auth);
 
     form.reset();

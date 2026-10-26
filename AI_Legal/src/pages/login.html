@@ -213,6 +213,8 @@
   } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
   import {
     describeLoginError,
+    fetchCurrentUser,
+    getApiBaseUrl,
     homePathFor,
     loginWithFirebaseToken,
     loginWithPassword,
@@ -229,12 +231,31 @@
   const googleMessage = document.getElementById('google-auth-message');
   const googleSpinner = document.getElementById('google-auth-spinner');
 
-  // Thông báo theo tham số trên URL, hiện một lần rồi xoá tham số.
+  // Thông báo theo tham số trên URL, hiện một lần rồi xoá tham số nhưng giữ lại redirect.
   const params = new URLSearchParams(window.location.search);
-  if (params.get('passwordReset') === 'success') document.getElementById('password-reset-notice').classList.remove('hidden');
-  if (params.get('loggedOut') === '1') document.getElementById('banner-logged-out').classList.remove('hidden');
-  if (params.get('verified') === '1') document.getElementById('email-verified-notice').classList.remove('hidden');
-  if (['passwordReset', 'loggedOut', 'verified'].some((key) => params.has(key))) window.history.replaceState({}, '', window.location.pathname);
+  if (params.get('passwordReset') === 'success') document.getElementById('password-reset-notice')?.classList.remove('hidden');
+  const isExplicitLogout = params.get('loggedOut') === '1';
+  if (isExplicitLogout) document.getElementById('banner-logged-out')?.classList.remove('hidden');
+  if (params.get('verified') === '1') document.getElementById('email-verified-notice')?.classList.remove('hidden');
+
+  let cleanedParams = false;
+  ['passwordReset', 'loggedOut', 'verified'].forEach((key) => {
+    if (params.has(key)) {
+      params.delete(key);
+      cleanedParams = true;
+    }
+  });
+  if (cleanedParams) {
+    const remaining = params.toString();
+    window.history.replaceState({}, '', window.location.pathname + (remaining ? `?${remaining}` : ''));
+  }
+
+  const redirectFromUrl = new URLSearchParams(window.location.search).get('redirect');
+  if (redirectFromUrl) {
+    document.querySelectorAll('a[href="/signup"]').forEach((el) => {
+      el.href = `/signup?redirect=${encodeURIComponent(redirectFromUrl)}`;
+    });
+  }
 
   // Khởi tạo sớm Firebase Auth ngay khi trang tải xong (Base API URL đã được auth-api.js tự cache khi import)
   // Giúp người dùng khi click nút không phải chờ tải cấu hình và bắt tay mạng
@@ -263,11 +284,32 @@
     formError.classList.toggle('hidden', !message);
   };
 
-  // Đăng nhập xong ở Backend → lưu token → chuyển trang theo role.
+  const getSafeRedirectUrl = (role) => {
+    const urlQuery = new URLSearchParams(window.location.search);
+    const target = urlQuery.get('redirect') || urlQuery.get('returnUrl');
+    if (target && target.startsWith('/') && !target.startsWith('//')) {
+      if (role === 'admin' && !target.startsWith('/dashboard') && !target.startsWith('/landforms') && !target.startsWith('/user-management')) {
+        return '/dashboard';
+      }
+      return target;
+    }
+    return homePathFor(role);
+  };
+
+  // Đăng nhập xong ở Backend → lưu token → chuyển trang theo redirect hoặc role.
   const finishLogin = (data) => {
     const session = saveSession(data);
-    window.location.assign(homePathFor(session.user?.role));
+    window.location.assign(getSafeRedirectUrl(session.user?.role));
   };
+
+  // Nếu đã đăng nhập trước đó và không phải vừa bấm Đăng xuất: tự chuyển tiếp tới trang đích
+  if (!isExplicitLogout) {
+    fetchCurrentUser().then((user) => {
+      if (user) {
+        window.location.replace(getSafeRedirectUrl(user.role));
+      }
+    }).catch(() => {});
+  }
 
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();

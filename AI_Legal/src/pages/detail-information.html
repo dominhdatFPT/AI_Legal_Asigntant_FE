@@ -1102,7 +1102,10 @@
                 if (identityWarning) showToast('Đã lưu thông tin cá nhân', identityWarning, true);
                 // Đủ thông tin rồi → quay lại trang Tạo hồ sơ, hoặc sang trang Tài khoản để xem thông tin đã lưu
                 // (chờ chút nếu có cảnh báo để kịp đọc)
-                const nextPage = cameForApplication ? '/application-submission' : '/account?saved=1';
+                const redirectParam = new URLSearchParams(location.search).get('redirect');
+                const nextPage = (redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//'))
+                    ? redirectParam
+                    : (cameForApplication ? '/application-submission' : '/account?saved=1');
                 setTimeout(() => location.assign(nextPage), identityWarning ? 3000 : 0);
             });
 
