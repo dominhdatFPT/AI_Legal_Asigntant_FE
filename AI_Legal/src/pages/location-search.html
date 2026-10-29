@@ -3,57 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tìm nơi nộp hồ sơ</title>
-  <link rel="stylesheet" href="/tailwind.css">
-  <style>
-    body { margin: 0; background: #f8f5f3; color: #292524; font-family: system-ui, sans-serif; }
-    .shell { max-width: 880px; margin: 0 auto; padding: 28px 20px 64px; }
-    .card { background: white; border: 1px solid #e7dedb; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px #0000000b; }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    label { display: block; font-weight: 600; margin-bottom: 6px; }
-    input, select { box-sizing: border-box; width: 100%; padding: 10px 12px; border: 1px solid #bcb1ad; border-radius: 6px; font: inherit; background: white; }
-    .wide { grid-column: 1 / -1; }
-    main button { background: #a41423; border: 0; color: white; border-radius: 6px; padding: 11px 18px; font: inherit; font-weight: 600; cursor: pointer; }
-    main button:disabled { opacity: .55; cursor: wait; }
-    .muted { color: #625b57; }
-    .result { border-top: 1px solid #e7dedb; padding: 16px 0; }
-    .result a { color: #8f1020; font-weight: 600; }
-    #status[role="alert"] { color: #a41423; }
-    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: 1; } }
-  </style>
+  <meta name="shell-type" content="web_standard">
+  <meta name="theme-color" content="#93000b">
+  <title>Tìm nơi nộp hồ sơ - Cổng Dịch vụ công Quốc gia</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_balance,arrow_back,arrow_forward,call,check_circle,chevron_right,description,directions,expand_more,home,info,location_on,logout,map,pause,person,play_arrow,schedule,search,travel_explore&display=block">
+  <link rel="stylesheet" href="/location-search.css">
   <style id="auth-pending">body{visibility:hidden!important}</style>
 </head>
-<body>
+<body class="location-dashboard">
+  <a class="skip-link" href="#location-main">Đến nội dung chính</a>
+  <div class="location-background" aria-hidden="true">
+    <img class="location-slide is-active" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" fetchpriority="high">
+    <img class="location-slide" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" loading="lazy">
+    <img class="location-slide" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" loading="lazy">
+  </div>
+  <div class="location-background-shade" aria-hidden="true"></div>
+  <div class="location-background-controls" aria-label="Điều khiển ảnh nền">
+    <button type="button" data-background-prev aria-label="Ảnh nền trước"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span></button>
+    <button type="button" data-background-pause aria-label="Tạm dừng ảnh nền" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">pause</span></button>
+    <button type="button" data-background-next aria-label="Ảnh nền tiếp theo"><span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>
+  </div>
   <!-- user-header -->
-  <main class="shell">
-    <h1>Tìm nơi nộp hồ sơ gần địa chỉ của bạn</h1>
-    <p class="muted">Nhập địa chỉ và chọn đơn vị hành chính. Kết quả là gợi ý địa điểm, không xác nhận thẩm quyền tiếp nhận.</p>
-    <form id="location-form" class="card">
-      <div class="grid">
-        <div><label for="version">Phiên bản địa chỉ</label><select id="version"><option value="current">Địa chỉ hiện tại (2 cấp)</option><option value="legacy">Địa chỉ cũ (3 cấp)</option></select></div>
-        <div><label for="province">Tỉnh / Thành phố</label><select id="province" required></select></div>
-        <div id="district-wrap" hidden><label for="district">Quận / Huyện</label><select id="district"></select></div>
-        <div><label for="ward">Xã / Phường</label><select id="ward" required></select></div>
-        <div class="wide"><label for="detail">Số nhà, đường, khu hoặc thôn</label><input id="detail" maxlength="300" required autocomplete="street-address" placeholder="Ví dụ: 12 Lê Duẩn"></div>
-        <div class="wide"><label for="query">Loại cơ quan cần tìm</label><input id="query" maxlength="150" required list="office-suggestions" value="Trung tâm phục vụ hành chính công"><datalist id="office-suggestions"><option value="Ủy ban nhân dân"><option value="Văn phòng đăng ký đất đai"><option value="Trung tâm phục vụ hành chính công"></datalist></div>
-        <div><label for="radius">Bán kính</label><select id="radius"><option value="5000">5 km</option><option value="10000" selected>10 km</option><option value="20000">20 km</option><option value="50000">50 km</option></select></div>
-        <div><label for="limit">Số kết quả tối đa</label><select id="limit"><option value="5" selected>5</option><option value="10">10</option></select></div>
-      </div>
-      <p class="muted" id="ward-note" hidden>Địa chỉ cũ có thể để trống xã/phường nếu giấy tờ không ghi.</p>
-      <button id="submit-search" type="submit" style="margin-top:20px">Tìm nơi nộp</button>
-    </form>
-    <section class="card" style="margin-top:20px" aria-live="polite">
-      <h2>Kết quả</h2>
-      <p id="status" class="muted">Chưa tìm kiếm.</p>
-      <p id="resolved-address" hidden></p>
-      <div id="results"></div>
-      <p class="muted">Liên hệ cơ quan để xác nhận nơi tiếp nhận hồ sơ.</p>
-    </section>
+  <main id="location-main" class="page-width location-main">
+    <nav class="breadcrumb" aria-label="Đường dẫn"><a href="/user-dashboard">Tổng quan hồ sơ</a><span class="material-symbols-outlined" aria-hidden="true">chevron_right</span><span aria-current="page">Tìm nơi nộp hồ sơ</span></nav>
+    <section class="page-intro" aria-labelledby="page-title"><div class="page-intro__icon" aria-hidden="true"><span class="material-symbols-outlined">travel_explore</span></div><div><h1 id="page-title">Tìm nơi nộp hồ sơ</h1><p>Chọn địa chỉ, tìm cơ quan phù hợp và lên đường thuận tiện hơn.</p></div></section>
+    <div class="location-layout">
+      <aside class="search-sidebar" aria-label="Thông tin tìm kiếm">
+        <form id="location-form" class="search-panel">
+          <div class="panel-heading"><span class="material-symbols-outlined" aria-hidden="true">home</span><div><h2>Địa chỉ của bạn</h2><p>Tìm cơ quan gần địa chỉ cần nộp hồ sơ.</p></div></div>
+          <div class="form-grid">
+            <div class="form-field"><label for="province">Tỉnh / Thành phố <span aria-hidden="true">*</span></label><select id="province" required></select></div>
+            <div class="form-field"><label for="ward">Xã / Phường <span aria-hidden="true">*</span></label><select id="ward" required></select></div>
+            <div class="form-field form-field--wide"><label for="detail">Số nhà, đường, khu hoặc thôn <span aria-hidden="true">*</span></label><input id="detail" maxlength="300" required autocomplete="street-address" placeholder="Ví dụ: 16 Hòa Mỹ 3"></div>
+            <div class="form-field form-field--wide form-field--office"><label for="query">Loại cơ quan cần tìm <span aria-hidden="true">*</span></label><input id="query" maxlength="150" required list="office-suggestions" value="Trung tâm phục vụ hành chính công"><datalist id="office-suggestions"><option value="Ủy ban nhân dân"><option value="Văn phòng đăng ký đất đai"><option value="Trung tâm phục vụ hành chính công"><option value="Văn phòng công chứng"><option value="Phòng đăng ký kinh doanh"></datalist></div>
+          </div>
+          <button id="submit-search" class="primary-button search-button" type="submit"><span class="material-symbols-outlined" aria-hidden="true">search</span><span id="submit-label">Tìm nơi nộp</span><span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>
+          <p class="search-panel__note"><span class="material-symbols-outlined" aria-hidden="true">info</span>Tối đa 5 gợi ý trong tỉnh/thành đã chọn.</p>
+        </form>
+        <div class="visit-note"><span class="material-symbols-outlined" aria-hidden="true">description</span><div><h3>Chuẩn bị trước khi đến</h3><p>Liên hệ cơ quan để xác nhận nơi tiếp nhận, lịch làm việc và giấy tờ cần mang theo.</p></div></div>
+      </aside>
+      <section id="results-section" class="results-section" aria-labelledby="results-title">
+        <div class="results-heading"><h2 id="results-title">Cơ quan gợi ý <span id="result-count" class="result-count" hidden>0</span></h2><span class="sort-label"><span class="material-symbols-outlined" aria-hidden="true">location_on</span>Gần đến xa</span></div>
+        <p id="status" class="results-status" role="status">Nhập địa chỉ để xem các cơ quan phù hợp trong dữ liệu hiện có.</p>
+        <p id="resolved-address" class="resolved-address" hidden></p>
+        <details id="coverage-note" class="coverage-note" hidden><summary><span class="material-symbols-outlined" aria-hidden="true">info</span><span id="coverage-title">Về dữ liệu tìm kiếm</span><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></summary><p id="coverage-message"></p></details>
+        <div id="loading-state" class="loading-state" aria-label="Đang tìm cơ quan" hidden><div class="skeleton-card"><div></div><div><i></i><i></i><i></i></div></div><div class="skeleton-card"><div></div><div><i></i><i></i><i></i></div></div></div>
+        <div id="empty-state" class="empty-state"><div class="empty-state__icon"><span class="material-symbols-outlined" aria-hidden="true">map</span></div><h3 id="empty-title">Một địa chỉ, những gợi ý phù hợp</h3><p id="empty-description">Các cơ quan sẽ xuất hiện tại đây cùng vị trí, khoảng cách và thông tin cần biết trước khi đến.</p><span id="empty-hint" class="empty-state__hint"><span class="material-symbols-outlined" aria-hidden="true">search</span>Bắt đầu với địa chỉ của bạn</span></div>
+        <div id="results" class="office-list"></div>
+      </section>
+    </div>
   </main>
   <script type="module">
     import { protectPage } from '/auth-api.js';
     await protectPage(['citizen', 'lawyer']);
     await import('/location-search.js');
+    await import('/location-background.js');
   </script>
 </body>
 </html>

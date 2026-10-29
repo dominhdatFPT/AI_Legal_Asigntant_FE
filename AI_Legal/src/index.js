@@ -14,7 +14,7 @@ const USER_NAV_ACTIVE = {
   '/document-storages': 'document-storages',
   '/form-library': 'document-storages',
   '/xem-mau-don': 'document-storages',
-  '/lam-don': 'lam-don',
+  '/form-fill': 'lam-don',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/account': 'account',
@@ -51,9 +51,10 @@ const adminSidebarFile = path.join(__dirname, 'partials', 'admin-sidebar.html');
 const adminTopbarFile = path.join(__dirname, 'partials', 'admin-topbar.html');
 const ADMIN_NAV_ACTIVE = {
   '/dashboard': 'tong-quan',
-  '/landforms': 'ho-so-dat-dai',
+  '/land-forms': 'ho-so-dat-dai',
   '/business-form-templates': 'ho-so-ho-kinh-doanh',
-  '/user-management': 'quan-ly-nguoi-dung'
+  '/user-management': 'quan-ly-nguoi-dung',
+  '/lawyer-management': 'quan-ly-luat-su'
 };
 
 const sendAdminPage = (fileName) => (req, res, next) => {
@@ -71,22 +72,51 @@ const sendAdminPage = (fileName) => (req, res, next) => {
   }
 };
 
-// Read-only source library: prefer Contract API; use its identical exported
-// snapshot when the backend is unavailable. No user cookies or tokens forwarded.
+// Public reference library and page previews. No user cookies or tokens forwarded.
 app.get('/api/reference-catalog', async (req, res) => {
   const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
   try {
-    const response = await fetch(`${backendBase}/api/contracts/reference-catalog?page=1&page_size=100`, {
-      signal: AbortSignal.timeout(5000), headers: { Accept: 'application/json', Connection: 'close' }
-    });
-    const payload = response.ok ? await response.json() : null;
-    if (!payload?.data?.read_only || !Array.isArray(payload.data.items)) throw new Error('Unavailable');
+    let payload;
+    const items = [];
+    for (let page = 1; ; page += 1) {
+      const response = await fetch(`${backendBase}/api/contracts/reference-catalog?page=${page}&page_size=100`, {
+        signal: AbortSignal.timeout(15000), headers: { Accept: 'application/json', Connection: 'close' }
+      });
+      const result = response.ok ? await response.json() : null;
+      if (!result?.data?.read_only || !Array.isArray(result.data.items)) throw new Error('Unavailable');
+      payload ||= result;
+      items.push(...result.data.items);
+      if (page >= (result.data.pagination?.total_pages || 1)) break;
+      if (!result.data.items.length || page >= 1000) throw new Error('Invalid pagination');
+    }
+    payload.data.items = items;
     res.set('X-Reference-Catalog-Source', 'contract-api');
     res.set('Cache-Control', 'no-store');
     return res.json(payload);
   } catch (err) {
     console.warn('[Catalog] Cannot fetch from backend API:', err.message);
     return res.status(503).json({ data: null, error: { code: 'REFERENCE_CATALOG_UNAVAILABLE', message: 'Kho mẫu từ cơ sở dữ liệu chưa sẵn sàng.' } });
+  }
+});
+
+app.get('/api/reference-assets/:assetName', async (req, res) => {
+  const { assetName } = req.params;
+  if (!/^[a-z0-9-]+\.(png|pdf)$/.test(assetName) || assetName.length > 180) return res.sendStatus(404);
+  const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
+  try {
+    const response = await fetch(`${backendBase}/api/contracts/reference-assets/${assetName}`, {
+      signal: AbortSignal.timeout(15000), headers: { Connection: 'close' }
+    });
+    if (!response.ok) return res.sendStatus(response.status === 404 ? 404 : 503);
+    const mediaType = assetName.endsWith('.pdf') ? 'application/pdf' : 'image/png';
+    if (response.headers.get('content-type')?.split(';')[0] !== mediaType) throw new Error('Invalid asset');
+    res.set('Content-Type', mediaType);
+    res.set('Content-Disposition', `inline; filename="${assetName}"`);
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.set('Cache-Control', 'no-store');
+    return res.send(Buffer.from(await response.arrayBuffer()));
+  } catch {
+    return res.sendStatus(503);
   }
 });
 
@@ -178,11 +208,14 @@ app.get('/api/firebase-config', (req, res) => {
 
 app.get('/dashboard', sendAdminPage('dashboard.html'));
 
-app.get('/landforms', sendAdminPage('LandForms-admin.html'));
+app.get('/land-forms', sendAdminPage('LandForms-admin.html'));
 
 app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', sendAdminPage('user-management.html'));
+
+// Quản lý hồ sơ đăng ký luật sư (xem, duyệt, từ chối). ?demo=1 trên localhost dùng dữ liệu mẫu.
+app.get('/lawyer-management', sendAdminPage('lawyer-management.html'));
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
@@ -204,7 +237,7 @@ app.get('/dien-mau-don', (req, res) => {
 app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
 // Công dân chọn mẫu đơn dùng chung đã xuất bản, điền rồi tải PDF (form-fill.js).
-app.get('/lam-don', sendUserPage('form-fill.html'));
+app.get('/form-fill', sendUserPage('form-fill.html'));
 
 app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 
@@ -218,11 +251,14 @@ app.get('/application-submission', sendUserPage('user-dashboard.html'));
 const renamedPaths = {
   '/applicationSubmission': '/application-submission',
   '/kho-mau-don-tham-khao': '/document-storages',
-  '/document-templates': '/document-storages'
+  '/document-templates': '/document-storages',
+  '/landforms': '/land-forms',
+  '/lam-don': '/form-fill'
 };
 Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
   app.get(oldPath, (req, res) => {
-    res.redirect(301, req.originalUrl.replace(oldPath, newPath));
+    // Cắt theo độ dài: Express khớp đường dẫn không phân biệt hoa thường (/LandForms), replace() thì có.
+    res.redirect(301, newPath + req.originalUrl.slice(oldPath.length));
   });
 });
 

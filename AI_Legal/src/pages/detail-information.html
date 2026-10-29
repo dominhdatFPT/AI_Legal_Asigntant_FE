@@ -335,7 +335,7 @@
                             </div>
                             <!-- Quê quán: CCCD có thể in 2 hoặc 3 cấp hành chính -->
                             <div class="flex flex-col gap-2 p-4 rounded-xl bg-surface-subtle border border-border-subtle">
-                                <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Quê quán (Nguyên quán)
+                                <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Quê quán / Nơi đăng ký khai sinh (theo thẻ)
                                     <span class="text-error font-bold">*</span></h4>
                                 <input id="origin-place" name="origin-place" type="hidden">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -360,7 +360,7 @@
                                 <div class="flex items-center gap-2 mb-1">
                                     <span
                                         class="material-symbols-outlined text-primary-container text-lg">home_pin</span>
-                                    <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Nơi thường trú
+                                    <h4 class="font-label-lg text-label-lg font-bold text-on-surface">Nơi thường trú / Nơi cư trú
                                         (Theo thẻ CCCD) <span class="text-error font-bold">*</span></h4>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -860,7 +860,7 @@
                     return false;
                 }
                 field('perm-ward').value = ward.value;
-                field('perm-street').value = stripTrailingAdministrativeParts(detail, [
+                field('perm-street').value = components?.detail || stripTrailingAdministrativeParts(detail, [
                     ward.text, selectedText('perm-district'), selectedText('perm-province')
                 ]);
                 return Boolean(field('perm-street').value);
@@ -885,19 +885,32 @@
                 sex: 'Giới tính',
                 nationality: 'Quốc tịch',
                 expiry_date: 'Hạn thẻ',
-                place_of_origin: 'Quê quán'
+                place_of_origin: 'Quê quán',
+                registered_birth_place: 'Nơi đăng ký khai sinh',
+                residence_address: 'Nơi cư trú trên thẻ'
             };
 
-            const applyOcrFields = async (fields, additional = {}) => {
+            const applyOcrFields = async (fields, additional = {}, diagnostics = {}) => {
+                // Mẫu thẻ mới in Nơi cư trú và Nơi đăng ký khai sinh tại vị trí
+                // các mục địa chỉ tương ứng của thẻ cũ. Giữ nguyên field OCR gốc
+                // trong response; chỉ chọn giá trị để gợi ý vào form người dùng.
                 const address = fields.permanent_address || additional.residence_address;
                 const origin = additional.place_of_origin || additional.registered_birth_place;
+                const registration = additional.registered_birth_place;
+                const registrationParts = splitParts(registration);
+                const matchedSuffix = !fields.permanent_address && address && registration
+                    && registrationParts.length >= 3 && address.endsWith(registration);
+                const residenceComponents = matchedSuffix ? {
+                    detail: address.slice(0, -registration.length).trim().replace(/,$/, '').trim(),
+                    ward: registrationParts.slice(0, -1).join(', '),
+                    province: registrationParts.at(-1)
+                } : (!fields.permanent_address ? additional.residence_address_components : null);
                 if (fields.full_name) field('full-name').value = fields.full_name.normalize('NFC');
                 if (fields.identity_number) field('cccd-number').value = fields.identity_number;
                 if (fields.date_of_birth) field('dob').value = fromIsoDate(fields.date_of_birth);
                 if (fields.issue_date) field('issue-date').value = fromIsoDate(fields.issue_date);
                 if (fields.issue_place) field('issue-place').value = fields.issue_place;
-                const addressComplete = address && await fillPermanentAddress(address,
-                    !fields.permanent_address ? additional.residence_address_components : null);
+                const addressComplete = address && await fillPermanentAddress(address, residenceComponents);
                 const gender = { male: 'Nam', female: 'Nữ' }[additional.sex];
                 if (gender) {
                     form.querySelectorAll('input[name="gender"]').forEach((radio) => {
@@ -912,7 +925,12 @@
                 const available = { ...fields, ...additional, sex: gender,
                     permanent_address: addressComplete ? address : null,
                     place_of_origin: originComplete ? field('origin-place').value : null };
-                return Object.keys(OCR_FIELD_LABELS).filter((key) => !available[key]).map((key) => OCR_FIELD_LABELS[key]);
+                const requiredFormFields = new Set(['full_name', 'identity_number', 'date_of_birth',
+                    'permanent_address', 'place_of_origin']);
+                return Object.keys(OCR_FIELD_LABELS)
+                    .filter((key) => !available[key] &&
+                        (requiredFormFields.has(key) || diagnostics[key]?.reason !== 'not_present_on_card'))
+                    .map((key) => OCR_FIELD_LABELS[key]);
             };
 
             ocrButton.addEventListener('click', async () => {
@@ -929,7 +947,8 @@
                     const result = await readIdentityCardOcr(images.front, images.back);
                     if (generation !== identityImageGeneration) return;
                     ocrSessionId = result.session_id;
-                    const missing = await applyOcrFields(result.fields || {}, result.additional_fields || {});
+                    const missing = await applyOcrFields(result.fields || {}, result.additional_fields || {},
+                        result.field_diagnostics || {});
                     rememberIdentityAutofill();
                     field('ocr-filled-badge').classList.replace('hidden', 'inline-flex');
                     setOcrStatus(missing.length

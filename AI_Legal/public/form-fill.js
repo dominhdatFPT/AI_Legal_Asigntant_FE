@@ -1,5 +1,5 @@
 // =============================================================================
-// TRANG CÔNG DÂN "LÀM ĐƠN THEO MẪU" (/lam-don): chọn mẫu đã xuất bản → xem trước → điền → tải PDF.
+// TRANG CÔNG DÂN "LÀM ĐƠN THEO MẪU" (/form-fill): chọn mẫu đã xuất bản → xem trước → điền → tải PDF.
 // Form vẽ bằng form-renderer.js (giống hệt màn Tổng hợp của admin). Dữ liệu công dân điền KHÔNG gửi xuống BE:
 // chỉ dùng để dựng bản in A4 rồi mở hộp thoại in của trình duyệt (chọn "Lưu dưới dạng PDF").
 // =============================================================================
@@ -26,7 +26,7 @@ const loadProfile = () => {
 };
 const needProfileHtml = () => `<div class="ft-alert" role="alert"><strong>Cần cập nhật hồ sơ cá nhân.</strong>
   Hồ sơ của bạn chưa có thông tin CCCD. Hệ thống yêu cầu có CCCD trước khi làm bất kỳ đơn nào.
-  <p><a class="ft-btn ft-btn--primary" href="${PROFILE_PATH}?required=1&amp;redirect=${encodeURIComponent('/lam-don')}">Cập nhật hồ sơ</a></p></div>`;
+  <p><a class="ft-btn ft-btn--primary" href="${PROFILE_PATH}?required=1&amp;redirect=${encodeURIComponent('/form-fill')}">Cập nhật hồ sơ</a></p></div>`;
 
 function showList() {
   current = null;

@@ -111,7 +111,7 @@
 .admin-user-card__copy strong { overflow: hidden; color: #fff; font-size: 12px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
 .admin-user-card__copy small { display: flex; align-items: center; gap: 4px; margin-top: 2px; color: #dcb9bc; font-size: 10px; font-weight: 500; }
 .admin-user-card__copy small .material-symbols-outlined { font-size: 12px; }
-.admin-user-card__logout { display: grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border-radius: 9px; color: #dcb9bc; text-decoration: none; }
+.admin-user-card__logout { display: grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border-radius: 9px; color: #dcb9bc; text-decoration: none; background: transparent; border: 0; padding: 0; cursor: pointer; }
 .admin-user-card__logout:hover { background: rgba(255,255,255,.1); color: #fff; }
 .admin-user-card__logout .material-symbols-outlined { font-size: 19px; }
 
@@ -358,7 +358,8 @@ body.admin-dashboard {
 .admin-overview { padding: 24px 28px; border-radius: 22px; background: linear-gradient(135deg,#9e3b2d,#b74f3b); color: #fff8f5; box-shadow: 0 18px 38px rgba(120, 52, 39, .2); }
 .admin-overview__top { display: flex; justify-content: space-between; gap: 20px; }
 .admin-overview__eyebrow { display: inline-block; margin-bottom: 8px; color: rgba(255,247,241,.82); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
-.admin-overview h1 { margin: 0; font-size: clamp(30px,3vw,42px); line-height: 1.15; }
+/* Cùng kiểu tiêu đề trang với các trang quản trị khác (text-headline-lg font-extrabold tracking-tight). */
+.admin-overview h1 { margin: 0; font-size: clamp(26px,2.4vw,32px); font-weight: 800; letter-spacing: -.025em; line-height: 1.25; }
 .admin-overview p { margin: 10px 0 0; color: rgba(255,247,241,.84); font-size: 14px; }
 .admin-overview__stats { display: grid; grid-template-columns: repeat(4,minmax(120px,1fr)); gap: 12px; min-width: 48%; }
 .admin-overview__stat { padding-left: 14px; border-left: 1px solid rgba(255,247,241,.22); }
@@ -371,7 +372,7 @@ body.admin-dashboard {
 .admin-search--canvas .admin-search__submit { border-color: transparent; background: #fff5f6; color: #973645; }
 .admin-orchard { padding: 24px 28px; }
 .admin-orchard__head,.admin-insight__head { display: flex; justify-content: space-between; gap: 16px; }
-.admin-orchard__head h2,.admin-insight h3 { margin: 4px 0 0; color: var(--admin-ink); font-size: 28px; line-height: 1.2; }
+.admin-orchard__head h2,.admin-insight h3 { margin: 4px 0 0; color: var(--admin-ink); font-size: 19px; font-weight: 700; line-height: 1.3; }
 .admin-orchard__head p,.admin-insight p { margin: 6px 0 0; color: var(--admin-muted); font-size: 14px; }
 .admin-orchard__chart {
   display: grid;

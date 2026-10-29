@@ -2,7 +2,7 @@
    MẪU ĐƠN DÙNG CHUNG: form điền (form-renderer.js), bản in A4, khung dựng mẫu admin (form-templates-admin.js).
    CSS thường (không qua Tailwind) để trang quản trị và trang công dân hiện form giống hệt nhau.
    ============================================================================= */
-.ft-form, .ftb, .ftl {
+:root, .ft-form, .ftb, .ftl, .ft-dialog {
   --ft-red: #a64031; --ft-red-dark: #812f24; --ft-ink: #1f1a17; --ft-muted: #5f5550;
   --ft-line: #e3d7d2; --ft-wash: #fbf6f3; --ft-focus: #b45309; --ft-ok: #166534; --ft-warn: #92400e;
   color: var(--ft-ink); font-size: 15px; line-height: 1.5;
@@ -117,11 +117,15 @@
 @media (max-width: 1000px) { .ftb__work { grid-template-columns: 1fr; } .ftb__lib { position: static; max-height: none; } }
 
 /* ----- Hộp thoại xác nhận ----- */
-.ft-dialog { border: 0; border-radius: 16px; padding: 22px; max-width: min(440px, calc(100% - 32px)); box-shadow: 0 20px 50px rgba(0,0,0,.25); color: #1f1a17; }
-.ft-dialog::backdrop { background: rgba(28, 25, 23, .5); }
-.ft-dialog h2 { margin: 0 0 8px; font-size: 18px; }
-.ft-dialog p { margin: 0 0 18px; color: #5f5550; }
-.ft-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
+.ft-dialog { border: 0; border-radius: 16px; padding: 24px; max-width: min(460px, calc(100% - 32px)); box-shadow: 0 25px 60px rgba(0,0,0,.35); color: #1f1a17; background: #ffffff; }
+.ft-dialog::backdrop { background: rgba(28, 25, 23, .55); backdrop-filter: blur(3px); }
+.ft-dialog h2 { margin: 0 0 10px; font-size: 19px; font-weight: 700; color: #1c1917; }
+.ft-dialog p { margin: 0 0 24px; color: #57534e; font-size: 14.5px; line-height: 1.55; }
+.ft-dialog__actions { display: flex; justify-content: flex-end; gap: 12px; }
+.ft-btn--danger-action { background: #dc2626 !important; border: 1px solid #b91c1c !important; color: #ffffff !important; font-weight: 600 !important; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25) !important; }
+.ft-btn--danger-action:hover { background: #b91c1c !important; border-color: #991b1b !important; }
+.ft-btn--secondary-action { background: #ffffff !important; border: 1px solid #d6d3d1 !important; color: #292524 !important; font-weight: 600 !important; }
+.ft-btn--secondary-action:hover { background: #f5f5f4 !important; border-color: #a8a29e !important; }
 
 /* ----- Bản in A4 (PDF) ----- */
 .ft-print-root { display: none; }

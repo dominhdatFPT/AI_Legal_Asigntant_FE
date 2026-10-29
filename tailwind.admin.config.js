@@ -8,6 +8,7 @@ module.exports = {
     './AI_Legal/src/pages/LandForms-admin.html',
     './AI_Legal/src/pages/user-management.html',
     './AI_Legal/src/pages/business-form-templates.html',
+    './AI_Legal/src/pages/lawyer-management.html',
     // Shell dùng chung (sidebar/topbar) được server chèn vào từng trang quản trị.
     './AI_Legal/src/partials/admin-sidebar.html',
     './AI_Legal/src/partials/admin-topbar.html',

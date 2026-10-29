@@ -36,6 +36,10 @@ export const api = async (path, options) => {
 export const fetchUsersPage = ({ page = 1, pageSize = 100, deleted = false } = {}) =>
   api(`/api/users?page=${page}&page_size=${pageSize}&deleted=${deleted}`);
 
+// Tài khoản đang có vai trò luật sư, kể cả tài khoản admin tạo hoặc đổi vai trò (không có hồ sơ đăng ký).
+export const fetchLawyerAccounts = ({ page = 1, pageSize = 100 } = {}) =>
+  api(`/api/users?role=lawyer&page=${page}&page_size=${pageSize}`);
+
 export const fetchUserCitizenProfile = (userId) =>
   api(`/api/users/${encodeURIComponent(userId)}/citizen-profile`);
 
@@ -59,8 +63,12 @@ export const createUser = (body) => api('/api/users', { method: 'POST', body });
 
 // ===== Duyệt hồ sơ luật sư =====
 
+// status: 'pending' | 'approved' | 'rejected'; order theo thời gian gửi ('asc' = cũ nhất trước).
+export const fetchLawyerApplications = ({ status = 'pending', order = 'asc', page = 1, pageSize = 100 } = {}) =>
+  api(`/api/lawyers/applications?approval_status=${status}&order=${order}&page=${page}&page_size=${pageSize}`);
+
 export const fetchPendingLawyerApplications = ({ page = 1, pageSize = 100 } = {}) =>
-  api(`/api/lawyers/applications?approval_status=pending&page=${page}&page_size=${pageSize}`);
+  fetchLawyerApplications({ status: 'pending', page, pageSize });
 
 // decision: 'approve' | 'reject'. body: { reason } khi từ chối.
 export const reviewLawyerApplication = (applicationId, decision, body) =>

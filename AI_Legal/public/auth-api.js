@@ -84,6 +84,7 @@ export const loginWithFirebaseToken = (idToken) =>
 // Xoá phiên kiểu cũ (token trong localStorage) nếu còn sót lại.
 export const saveSession = (data) => {
   clearSession(); // đăng nhập mới: bỏ thông tin hiển thị của phiên trước
+  if (data?.user) cacheUser(data.user);
   return { user: data.user };
 };
 
@@ -152,6 +153,11 @@ export const fetchAdministrativeUnits = async (path) =>
 // Location search dùng cùng cookie/refresh flow; không đưa Goong key ra frontend.
 export const searchNearbyOffices = async (payload) =>
   readData(await authRequest('/api/locations/offices/search', { method: 'POST', body: payload }));
+
+export const enrichOfficeContacts = async (lookupId) =>
+  readData(await authRequest('/api/locations/offices/enrich', {
+    method: 'POST', body: { lookup_id: lookupId }, signal: AbortSignal.timeout(45000)
+  }));
 
 // Lưu 6 trường CCCD người dùng đã kiểm tra vào Document (nguồn: phiên OCR) để hợp đồng dùng lại.
 export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
@@ -362,6 +368,13 @@ export const displayName = (user) => user?.full_name || user?.username || user?.
 // Đã có user nhớ tạm (cùng tab) → hiện trang ngay, kiểm tra lại với Backend ở nền: hết phiên thì vẫn về /login.
 export const protectPage = async (allowedRoles, { requireProfile = false } = {}) => {
   const cached = readCachedUser();
+  let currentUser = cached;
+  document.querySelectorAll('[data-logout]').forEach((element) => {
+    element.addEventListener('click', (event) => {
+      event.preventDefault();
+      confirmLogout(currentUser);
+    });
+  });
   const verified = requireLogin(allowedRoles);
   const useCache = cached && !requireProfile && (!allowedRoles || allowedRoles.includes(cached.role));
   const user = useCache ? cached : await verified;
@@ -374,14 +387,8 @@ export const protectPage = async (allowedRoles, { requireProfile = false } = {})
     });
   };
   fillUserFields(user);
-  let currentUser = user;
+  currentUser = user;
   if (useCache) verified.then((fresh) => { currentUser = fresh; fillUserFields(fresh); });
-  document.querySelectorAll('[data-logout]').forEach((element) => {
-    element.addEventListener('click', (event) => {
-      event.preventDefault();
-      confirmLogout(currentUser);
-    });
-  });
   // Đăng xuất rồi bấm Back: trang cũ trong bộ nhớ trình duyệt không được hiện lại dữ liệu.
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && !readCachedUser()) window.location.replace('/login');

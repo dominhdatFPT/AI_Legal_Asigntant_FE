@@ -1,5 +1,5 @@
 // =============================================================================
-// "THÊM MẪU ĐƠN" DÙNG CHUNG CHO TRANG HỒ SƠ ĐẤT ĐAI (/landforms) VÀ HỘ KINH DOANH (/business-form-templates).
+// "THÊM MẪU ĐƠN" DÙNG CHUNG CHO TRANG HỒ SƠ ĐẤT ĐAI (/land-forms) VÀ HỘ KINH DOANH (/business-form-templates).
 // Trang chỉ cần: nút #add-template-card, vùng #ft-app (danh sách mẫu của trang) và
 //   <script type="module" src="/form-templates-admin.js" data-domains="dat_dai|ho_kinh_doanh,doanh_nghiep"></script>
 // Danh sách mẫu (lọc theo lĩnh vực của trang) nằm trong trang; khung dựng mẫu + Tổng hợp mở thành lớp phủ toàn màn hình.
@@ -38,19 +38,23 @@ const toast = (message, isError = false) => {
   toastTimer = setTimeout(() => { toastEl.hidden = true; }, isError ? 7000 : 3500);
 };
 const dialog = document.querySelector('.ft-dialog');
-const confirmDialog = (title, message, okLabel, cancelLabel = 'Hủy') => new Promise((resolve) => {
+const confirmDialog = (title, message, okLabel, cancelLabel = 'Hủy', variant = 'primary') => new Promise((resolve) => {
   dialog.querySelector('h2').textContent = title;
   dialog.querySelector('p').textContent = message;
-  dialog.querySelector('[value="ok"]').textContent = okLabel;
-  dialog.querySelector('[value="cancel"]').textContent = cancelLabel;
+  const okBtn = dialog.querySelector('[value="ok"]');
+  const cancelBtn = dialog.querySelector('[value="cancel"]');
+  okBtn.textContent = okLabel;
+  cancelBtn.textContent = cancelLabel;
+  okBtn.className = `ft-btn ${variant === 'danger' ? 'ft-btn--danger-action' : 'ft-btn--primary'}`;
+  cancelBtn.className = 'ft-btn ft-btn--secondary-action';
   const done = (value) => { dialog.close(); resolve(value); };
-  dialog.querySelector('[value="ok"]').onclick = () => done(true);
-  dialog.querySelector('[value="cancel"]').onclick = () => done(false);
+  okBtn.onclick = () => done(true);
+  cancelBtn.onclick = () => done(false);
   dialog.oncancel = (event) => { event.preventDefault(); done(false); };
   dialog.showModal();
-  dialog.querySelector('[value="cancel"]').focus();
+  cancelBtn.focus();
 });
-const confirmLeave = () => confirmDialog('Rời khỏi trang dựng mẫu?', 'Mẫu đơn có thay đổi chưa lưu nháp. Nếu rời đi, các thay đổi này sẽ mất.', 'Rời đi, bỏ thay đổi', 'Ở lại');
+const confirmLeave = () => confirmDialog('Rời khỏi trang dựng mẫu?', 'Mẫu đơn có thay đổi chưa lưu nháp. Nếu rời đi, các thay đổi này sẽ mất.', 'Rời đi, bỏ thay đổi', 'Ở lại chỉnh sửa', 'danger');
 
 // ===== Chặn rời trang khi chưa lưu =====
 window.addEventListener('beforeunload', (event) => {
@@ -370,7 +374,7 @@ const onClick = async (event) => {
   }
   if (act === 'sec-del') {
     const section = findSection(id);
-    if (section.blocks.length && !(await confirmDialog('Xóa mục?', `Mục "${section.title || 'chưa đặt tên'}" và ${section.blocks.length} thẻ bên trong sẽ bị xóa khỏi mẫu.`, 'Xóa mục'))) return;
+    if (section.blocks.length && !(await confirmDialog('Xóa mục?', `Mục "${section.title || 'chưa đặt tên'}" và ${section.blocks.length} thẻ bên trong sẽ bị xóa khỏi mẫu.`, 'Xóa mục', 'Hủy', 'danger'))) return;
     return change(() => {
       sections.splice(sections.indexOf(section), 1);
       if (editor.selected === id) editor.selected = sections[0]?.id ?? null;

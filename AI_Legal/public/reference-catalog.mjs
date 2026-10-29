@@ -47,7 +47,7 @@ export function filterReferences(items, { query = '', domain = '', procedure = '
     && words.every((word) => normalizeSearch(`${item.name} ${item.description || ''} ${item.source_filename || ''} ${domainLabels[item.domain] || ''} ${proceduresOf(item).map(groupLabel).join(' ')}`).includes(word)));
 }
 
-// Chỉ tài liệu tham khảo chưa điền được đóng gói cùng FE. Không gọi API nháp hoặc generation.
+// Public, unfilled source PDFs, including administrator uploads.
 export async function loadReferenceCatalog(fetcher = fetch) {
   const response = await fetcher('/api/reference-catalog', { cache: 'no-cache' });
   if (!response.ok) throw new Error('REFERENCE_CATALOG_UNAVAILABLE');
@@ -59,7 +59,11 @@ export async function loadReferenceCatalog(fetcher = fetch) {
     || item.view_only !== true || item.can_fill !== false || !statusLabels[item.content_status]
     || !Array.isArray(item.procedures) || !item.procedures.length
     || !Array.isArray(item.pages) || !item.pages.length || item.pages.length !== item.page_count
-    || item.pages.some((page) => !/^\/reference-templates\/[a-z0-9-]+\.png$/.test(page)))) {
+    || !Array.isArray(item.page_dimensions) || item.page_dimensions.length !== item.pages.length
+    || item.page_dimensions.some((size) => !Number.isFinite(size.width) || size.width <= 0 || !Number.isFinite(size.height) || size.height <= 0)
+    || item.pages.some((page, index) => !/^\/reference-templates\/[a-z0-9-]+\.png$/.test(page)
+      && (!/^\/api\/reference-assets\/[0-9a-f-]{36}-page-[1-9][0-9]{0,2}\.png$/.test(page)
+        || page !== `/api/reference-assets/${item.id}-page-${index + 1}.png`)))) {
     throw new Error('REFERENCE_CATALOG_INVALID');
   }
   return payload;

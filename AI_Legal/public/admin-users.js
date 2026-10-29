@@ -15,6 +15,7 @@ import {
 } from '/admin-api.js';
 import { showToast, showToastWithUndo } from '/admin-toast.js';
 import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
+import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
     // Danh sách luôn lấy từ Backend; không khởi tạo bằng dữ liệu mẫu trên trình duyệt.
     let usersData = [];
 
@@ -195,6 +196,12 @@ import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
 
     // DOM Elements
     const userTableBody = document.getElementById('user-table-body');
+    // Phân trang phía client: mặc định 10 người dùng mỗi trang; đổi bộ lọc thì về trang 1.
+    let userPage = 1;
+    let userPageSize = PAGE_SIZE;
+    const userPager = document.getElementById('user-pager');
+    const userPageSizeSelect = document.getElementById('user-page-size');
+    const refilterUsers = () => { userPage = 1; renderUserTable(); };
     const userModal = document.getElementById('user-modal');
     const createUserModal = document.getElementById('create-user-modal');
     const deleteModal = document.getElementById('deleteModal');
@@ -265,6 +272,7 @@ import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
         }
       });
       notifyFilterTabChange();
+      userPage = 1;
       renderUserTable();
     }
 
@@ -304,6 +312,8 @@ import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
       });
 
       if (displayUserCountEl) displayUserCountEl.textContent = filtered.length;
+      userPage = clampPage(userPage, filtered.length, userPageSize);
+      renderPager(userPager, { page: userPage, total: filtered.length, size: userPageSize, onChange: (p) => { userPage = p; renderUserTable(); } });
 
       if (filtered.length === 0) {
         if (isViewingSuspended) {
@@ -336,7 +346,7 @@ import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
         return;
       }
 
-      userTableBody.innerHTML = filtered.map(user => {
+      userTableBody.innerHTML = pageSlice(filtered, userPage, userPageSize).map(user => {
         let statusBadge = '';
         if (user.status === 'active') {
           statusBadge = `
@@ -963,15 +973,16 @@ import { openModal, closeModal, bindModalDismiss } from '/admin-modals.js';
           });
         }
 
-        if (userSearchInput) userSearchInput.addEventListener('input', renderUserTable);
-        if (userTypeSelect) userTypeSelect.addEventListener('change', renderUserTable);
+        if (userSearchInput) userSearchInput.addEventListener('input', refilterUsers);
+        if (userTypeSelect) userTypeSelect.addEventListener('change', refilterUsers);
+        if (userPageSizeSelect) userPageSizeSelect.addEventListener('change', () => { userPageSize = Number(userPageSizeSelect.value) || PAGE_SIZE; refilterUsers(); });
         if (userStatusSelect) userStatusSelect.addEventListener('change', function () {
           if (this.value === 'suspended' && currentFilterTab !== 'suspended') {
             setFilterTab('suspended');
           } else if (this.value !== 'suspended' && currentFilterTab === 'suspended') {
             setFilterTab('all');
           } else {
-            renderUserTable();
+            refilterUsers();
           }
         });
         if (btnResetFilters) btnResetFilters.addEventListener('click', resetAllFilters);
