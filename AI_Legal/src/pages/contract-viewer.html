@@ -12,8 +12,23 @@
     <section id="viewer" class="reader-layout" hidden>
       <aside class="reader-info"><p class="section-label">Biểu mẫu thủ tục</p><h1 id="viewer-title"></h1><p id="viewer-description"></p>
         <dl><div><dt>Lĩnh vực</dt><dd id="viewer-domain"></dd></div><div><dt>Thủ tục</dt><dd id="viewer-procedure"></dd></div><div><dt>Tài liệu</dt><dd id="viewer-page-count"></dd></div></dl>
+        <div class="viewer-actions">
+          <button id="viewer-download-btn" type="button" class="download-button" aria-label="Tải mẫu đơn này dạng PDF">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Tải mẫu đơn (PDF)</span>
+          </button>
+        </div>
       </aside>
-      <div class="reader-document"><div class="reader-toolbar"><strong>Nội dung tài liệu</strong><span id="reader-total"></span></div><div id="viewer-pages" class="paper-stack"></div>
+      <div class="reader-document"><div class="reader-toolbar">
+          <strong>Nội dung tài liệu</strong>
+          <div class="reader-toolbar-actions">
+            <span id="reader-total"></span>
+            <button id="reader-download-btn" type="button" class="toolbar-download-btn" title="Tải tệp PDF về máy">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Tải PDF</span>
+            </button>
+          </div>
+        </div><div id="viewer-pages" class="paper-stack"></div>
       </div>
     </section>
   </main>

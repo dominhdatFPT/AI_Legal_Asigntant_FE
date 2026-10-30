@@ -70,3 +70,58 @@ export async function loadReferenceCatalog(fetcher = fetch) {
 }
 
 export async function loadReferences(fetcher = fetch) { return (await loadReferenceCatalog(fetcher)).items; }
+
+export function getPdfUrl(item) {
+  if (item?.pdf && typeof item.pdf === 'string') return item.pdf;
+  if (item?.pdf_url && typeof item.pdf_url === 'string') return item.pdf_url;
+  if (Array.isArray(item?.pages) && item.pages.length > 0) {
+    const firstPage = item.pages[0];
+    const refMatch = String(firstPage).match(/^(\/reference-templates\/)([a-f0-9]+)-page-/i);
+    if (refMatch) return `${refMatch[1]}${refMatch[2]}.pdf`;
+    const assetMatch = String(firstPage).match(/^(\/api\/reference-assets\/)([a-z0-9-]+?)-page-/i);
+    if (assetMatch) return `${assetMatch[1]}${assetMatch[2]}.pdf`;
+  }
+  if (item?.id) {
+    return `/api/reference-assets/${item.id}.pdf`;
+  }
+  return null;
+}
+
+export function sanitizeFileName(name) {
+  return String(name || 'bieu-mau')
+    .replace(/[/\\?%*:|"<>]/g, '_')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export async function downloadReferencePdf(item) {
+  const url = getPdfUrl(item);
+  if (!url) {
+    throw new Error('Không tìm thấy tệp PDF của biểu mẫu.');
+  }
+  const cleanName = sanitizeFileName(item.name || 'bieu-mau-tham-khao');
+  const filename = cleanName.toLowerCase().endsWith('.pdf') ? cleanName : `${cleanName}.pdf`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Máy chủ trả về mã lỗi ${response.status}`);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 30000);
+  } catch (err) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+}
+

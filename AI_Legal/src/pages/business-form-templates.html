@@ -286,6 +286,7 @@
       const searchInput = document.getElementById('main-search-input');
       const searchButton = document.getElementById('search-button-main');
       const filterSelects = Array.from(document.querySelectorAll('[data-template-filter]'));
+      const categoryFilter = filterSelects[0] || null;
       const resetButton = document.querySelector('button[title="Thiết lập lại bộ lọc"]');
       const selectedCount = document.getElementById('template-count');
       const emptyMessage = document.createElement('tr');
@@ -307,6 +308,7 @@
       let fetchFormSchemaFromApi;
       let authModule = null;
       let businessProcedures = [];
+      let currentTemplates = [];
 
       const escapeHtml = (value) => String(value)
         .replaceAll('&', '&amp;')
@@ -393,11 +395,26 @@
         actions.insertBefore(button, deleteButton || null);
       }
 
+      async function downloadRow(row) {
+        const id = row.dataset.referenceId;
+        const template = currentTemplates.find((t) => String(t.id) === String(id));
+        if (template) {
+          try {
+            const { downloadReferencePdf } = await import('/reference-catalog.mjs');
+            await downloadReferencePdf(template);
+          } catch (err) {
+            toast(err.message || 'Không thể tải mẫu PDF.', 'error');
+          }
+        } else if (id) {
+          window.open(`/api/reference-assets/${id}.pdf`, '_blank');
+        }
+      }
+
       function prepareRows() {
         rows().forEach((row) => {
           row.querySelectorAll('button').forEach((button) => {
             const icon = button.querySelector('.material-symbols-outlined')?.textContent.trim();
-            if (icon === 'download') button.remove();
+            if (icon === 'download' && button.dataset.action !== 'download') button.remove();
           });
           const actions = row.querySelector('td:last-child > div');
           actions?.querySelectorAll('button').forEach((button) => {
@@ -548,7 +565,7 @@
           <td class="py-3.5 px-space-md"><div class="flex flex-col"><span class="font-bold">${escapeHtml(template.name)}</span><span class="text-sm text-on-surface-variant">${escapeHtml(template.procedure_name)}</span></div></td>
           <td class="py-3.5 px-space-md">${template.uploaded ? 'Mẫu PDF tải lên' : 'Tài liệu nguồn'}</td>
           <td class="py-3.5 px-space-md">PDF · ${Number(template.page_count)} trang</td>
-          <td class="py-3.5 px-space-md text-right"><div class="flex items-center justify-end gap-1"><button type="button" data-action="view" class="p-1.5 rounded-lg hover:bg-surface-container text-secondary" title="Xem mẫu PDF"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></td>
+          <td class="py-3.5 px-space-md text-right"><div class="flex items-center justify-end gap-1"><button type="button" data-action="view" class="p-1.5 rounded-lg hover:bg-surface-container text-secondary" title="Xem mẫu PDF"><span class="material-symbols-outlined text-[18px]">visibility</span></button><button type="button" data-action="download" class="p-1.5 rounded-lg hover:bg-surface-container text-primary" title="Tải mẫu PDF về máy"><span class="material-symbols-outlined text-[18px]">download</span></button></div></td>
         </tr>`;
       }
 
@@ -560,6 +577,7 @@
           const { loadReferenceCatalog } = await import('/reference-catalog.mjs');
           const catalog = await loadReferenceCatalog();
           const templates = catalog.items.filter((item) => item.domain === 'business');
+          currentTemplates = templates;
           businessProcedures = (catalog.classifications || []).filter((item) => item.domain === 'business');
           renderProcedureOptions();
           if (!tbody) return;
@@ -740,6 +758,7 @@
       searchButton?.addEventListener('click', refilter);
       searchInput?.addEventListener('keydown', (event) => { if (event.key === 'Enter') refilter(); });
       categoryFilter?.addEventListener('change', refilter);
+      filterSelects.forEach((select) => select.addEventListener('change', refilter));
       pageSizeSelect?.addEventListener('change', refilter);
       resetButton?.addEventListener('click', () => {
         if (searchInput) searchInput.value = '';
@@ -759,6 +778,7 @@
         const row = button?.closest('tr');
         if (!button || !row) return;
         if (button.dataset.action === 'view') showView(row);
+        if (button.dataset.action === 'download') downloadRow(row);
         if (button.dataset.action === 'delete') confirmDelete(row);
       });
       applyFilters();

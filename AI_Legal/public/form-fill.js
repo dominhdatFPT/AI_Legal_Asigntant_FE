@@ -5,7 +5,7 @@
 // =============================================================================
 import { formTemplates, DOMAINS, PROCEDURE_PREFIX } from '/form-template-service.js';
 import { checkValues } from '/form-blocks.js';
-import { renderForm, readValues, showErrors, autofillTargets, applyAutofill, renderPrint } from '/form-renderer.js';
+import { renderForm, readValues, showErrors, autofillTargets, applyAutofill, renderPrint, initTableResizers } from '/form-renderer.js';
 import { escapeHtml, fetchMyCitizenProfile, fetchProcedureNames, PROFILE_PATH } from '/auth-api.js';
 
 const app = document.getElementById('ff-app');
@@ -31,10 +31,10 @@ const needProfileHtml = () => `<div class="ft-alert" role="alert"><strong>Cần 
 function showList() {
   current = null;
   app.innerHTML = `<p class="section-label">Mẫu đơn dùng chung</p><h1>Làm đơn theo mẫu</h1>
-    <p class="ft-muted">Chọn mẫu, xem trước, điền thông tin rồi tải bản PDF để in và mang đi nộp. Thông tin bạn điền không được gửi lên hệ thống.</p>
-    <div class="ff-filters"><label>Lĩnh vực<select data-filter="domain">${domainOptions()}</select></label>
-      <label>Thủ tục<select data-filter="procedureId">${procedureOptions()}</select></label></div>
-    <div id="ff-list" class="ff-list" aria-live="polite"><p class="ft-muted">Đang tải mẫu…</p></div>`;
+  <p class="ft-muted">Chọn mẫu, xem trước, điền thông tin rồi tải bản PDF để in và mang đi nộp. Thông tin bạn điền không được gửi lên hệ thống.</p>
+  <div class="ff-filters"><label>Lĩnh vực<select data-filter="domain">${domainOptions()}</select></label>
+    <label>Thủ tục<select data-filter="procedureId">${procedureOptions()}</select></label></div>
+  <div id="ff-list" class="ff-list" aria-live="polite"><p class="ft-muted">Đang tải mẫu…</p></div>`;
   loadList();
 }
 
@@ -65,6 +65,7 @@ async function open(id, mode) {
       <button type="button" class="ft-btn ft-btn--primary" data-act="fill">Dùng mẫu này</button></div>
       <p class="ft-muted">Xem trước các thông tin cần điền để biết mẫu có phù hợp không.</p>
       <fieldset disabled class="ff-preview">${renderForm(current.content)}</fieldset>`;
+    initTableResizers(app);
     return app.querySelector('[data-act="fill"]').focus();
   }
   app.innerHTML = '<p class="ft-muted" role="status">Đang kiểm tra hồ sơ cá nhân…</p>';
@@ -82,6 +83,7 @@ async function open(id, mode) {
     <div id="ff-errors" tabindex="-1"></div>
     <form id="ff-form" novalidate>${renderForm(current.content)}
       <div class="ff-actions"><button type="submit" class="ft-btn ft-btn--primary">Tải về PDF</button></div></form>`;
+  initTableResizers(app);
   app.querySelector('#ff-target, #ff-form input')?.focus();
 }
 

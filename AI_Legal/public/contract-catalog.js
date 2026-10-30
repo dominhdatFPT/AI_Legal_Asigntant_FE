@@ -1,4 +1,4 @@
-import { loadReferenceCatalog, filterReferences, domainLabels, procedureLabel, procedureChoices } from './reference-catalog.mjs';
+import { loadReferenceCatalog, filterReferences, domainLabels, procedureLabel, procedureChoices, downloadReferencePdf } from './reference-catalog.mjs';
 
 const byId = (id) => document.getElementById(id);
 const search = byId('catalog-search');
@@ -46,10 +46,37 @@ function render() {
     const description = document.createElement('p'); description.className = 'card-description'; description.textContent = item.description;
     const procedureInfo = document.createElement('p'); procedureInfo.className = 'card-procedure'; procedureInfo.textContent = procedureLabel(item);
     const bottom = document.createElement('div'); bottom.className = 'card-bottom';
+    const actions = document.createElement('div'); actions.className = 'card-actions';
+
     const link = document.createElement('a'); link.className = 'primary-button';
     link.href = `/xem-mau-don?template=${encodeURIComponent(item.id)}`;
     link.textContent = 'Xem mẫu'; link.setAttribute('aria-label', `Xem mẫu: ${item.name}`);
-    bottom.append(link); content.append(category, title, description, procedureInfo, bottom); card.append(preview, content); results.append(card);
+
+    const dlBtn = document.createElement('button');
+    dlBtn.type = 'button';
+    dlBtn.className = 'card-download-btn';
+    dlBtn.setAttribute('aria-label', `Tải PDF mẫu: ${item.name}`);
+    dlBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Tải PDF</span>';
+    dlBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      dlBtn.disabled = true;
+      const oldHtml = dlBtn.innerHTML;
+      dlBtn.textContent = 'Đang tải…';
+      try {
+        await downloadReferencePdf(item);
+      } catch (err) {
+        alert(err.message || 'Không thể tải tệp PDF.');
+      } finally {
+        dlBtn.disabled = false;
+        dlBtn.innerHTML = oldHtml;
+      }
+    });
+
+    actions.append(link, dlBtn);
+    bottom.append(actions);
+    content.append(category, title, description, procedureInfo, bottom);
+    card.append(preview, content);
+    results.append(card);
   }
 }
 

@@ -1,4 +1,4 @@
-import { loadReferences, domainLabels, proceduresOf, groupLabel } from './reference-catalog.mjs';
+import { loadReferences, domainLabels, proceduresOf, groupLabel, downloadReferencePdf } from './reference-catalog.mjs';
 const byId = (id) => document.getElementById(id);
 try {
   const items = await loadReferences();
@@ -12,6 +12,25 @@ try {
   byId('viewer-procedure').textContent = proceduresOf(item).map(groupLabel).join('\n');
   byId('viewer-page-count').textContent = `PDF · ${item.page_count} trang`;
   byId('reader-total').textContent = `${item.page_count} trang · Chỉ xem`;
+
+  const onDownload = async (btn) => {
+    if (!btn) return;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    try {
+      await downloadReferencePdf(item);
+    } catch (error) {
+      alert(error.message || 'Không thể tải tệp PDF biểu mẫu.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  };
+
+  const dlBtn = byId('viewer-download-btn');
+  const toolbarDlBtn = byId('reader-download-btn');
+  dlBtn?.addEventListener('click', () => onDownload(dlBtn));
+  toolbarDlBtn?.addEventListener('click', () => onDownload(toolbarDlBtn));
   item.pages.forEach((page, index) => {
     const figure = document.createElement('figure');
     const caption = document.createElement('figcaption'); caption.textContent = `Trang ${index + 1} / ${item.page_count}`;

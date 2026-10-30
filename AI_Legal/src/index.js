@@ -14,7 +14,6 @@ const USER_NAV_ACTIVE = {
   '/document-storages': 'document-storages',
   '/form-library': 'document-storages',
   '/xem-mau-don': 'document-storages',
-  '/form-fill': 'lam-don',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/account': 'account',
@@ -221,6 +220,9 @@ app.get('/form-library', sendUserPage('form-library.html'));
 
 app.get('/business-form-templates', sendAdminPage('business-form-templates.html'));
 
+// Trang Thêm/Sửa mẫu đơn dùng chung cho Hồ sơ đất đai và Hồ sơ hộ kinh doanh.
+app.get('/form-templates/editor', sendAdminPage('form-template-editor.html'));
+
 app.get('/user-dashboard', sendUserPage('user-dashboard.html'));
 
 app.get('/location-search', sendUserPage('location-search.html'));
@@ -237,7 +239,7 @@ app.get('/dien-mau-don', (req, res) => {
 app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
 // Công dân chọn mẫu đơn dùng chung đã xuất bản, điền rồi tải PDF (form-fill.js).
-app.get('/form-fill', sendUserPage('form-fill.html'));
+app.get('/form-fill', (req, res) => res.redirect(302, '/user-dashboard'));
 
 app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 
@@ -253,7 +255,7 @@ const renamedPaths = {
   '/kho-mau-don-tham-khao': '/document-storages',
   '/document-templates': '/document-storages',
   '/landforms': '/land-forms',
-  '/lam-don': '/form-fill'
+  '/lam-don': '/user-dashboard'
 };
 Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
   app.get(oldPath, (req, res) => {

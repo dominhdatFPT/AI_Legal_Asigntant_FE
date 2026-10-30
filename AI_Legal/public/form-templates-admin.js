@@ -2,22 +2,39 @@
 // "THÊM MẪU ĐƠN" DÙNG CHUNG CHO TRANG HỒ SƠ ĐẤT ĐAI (/land-forms) VÀ HỘ KINH DOANH (/business-form-templates).
 // Trang chỉ cần: nút #add-template-card, vùng #ft-app (danh sách mẫu của trang) và
 //   <script type="module" src="/form-templates-admin.js" data-domains="dat_dai|ho_kinh_doanh,doanh_nghiep"></script>
-// Danh sách mẫu (lọc theo lĩnh vực của trang) nằm trong trang; khung dựng mẫu + Tổng hợp mở thành lớp phủ toàn màn hình.
+// Danh sách mẫu (lọc theo lĩnh vực của trang) nằm trong trang; khung dựng mẫu + Tổng hợp là một trang riêng dùng chung
+// /form-templates/editor, có vùng #ftb-page thay cho #ft-app. Mẫu đang sửa nằm trong sessionStorage nên URL luôn gọn và tải lại vẫn đúng mẫu.
 // Không lưu tạm vào localStorage/sessionStorage: rời trang khi chưa lưu nháp là mất, nên có hộp thoại cảnh báo
-// (beforeunload + chặn bấm link + khi đóng khung). Kéo thả bằng HTML5; bàn phím dùng nút Lên/Xuống và ô "Chuyển sang mục".
+// (beforeunload + chặn bấm link + khi đóng khung).
 // =============================================================================
 import { formTemplates, DOMAINS, STATUSES, PROCEDURE_PREFIX, USE_MOCK } from '/form-template-service.js';
-import { BLOCKS, FREE_TYPES, FREE_BLOCK_KEY, snapshotBlock, blockTitle, checkTemplate } from '/form-blocks.js';
-import { renderForm } from '/form-renderer.js';
+import { FREE_BLOCK_KEY, snapshotBlock, blockTitle, checkTemplate } from '/form-blocks.js';
+import { renderForm, initTableResizers, readValues } from '/form-renderer.js';
 import { escapeHtml, fetchProcedureNames, formatDate } from '/auth-api.js';
+import { mountDocEditor, renderDocPreview, sectionsFromDoc } from '/form-doc-editor.js';
 
 const listRoot = document.getElementById('ft-app');
+const app = document.getElementById('ftb-page');
+const legacy = new URLSearchParams(location.search); // link cũ ?id/?domain/?from: đọc một lần rồi trả về URL gọn
+if (app && location.search) history.replaceState(null, '', location.pathname);
 const PAGE_DOMAINS = (document.querySelector('script[src="/form-templates-admin.js"]')?.dataset.domains || 'dat_dai').split(',');
 const pageDomains = Object.fromEntries(Object.entries(DOMAINS).filter(([key]) => PAGE_DOMAINS.includes(key)));
-// Khung dựng mẫu: lớp phủ toàn màn hình trên trang hiện tại (không đổi route).
-document.body.insertAdjacentHTML('beforeend', '<div class="ftb-overlay" role="dialog" aria-modal="true" aria-label="Thêm mẫu đơn" hidden></div>');
-const app = document.querySelector('.ftb-overlay');
-let lastTrigger = null;
+const LIST_PAGES = ['/land-forms', '/business-form-templates'];
+const EDITOR_URL = '/form-templates/editor';
+const TEMPLATE_KEY = 'ftEditorTemplateId';
+const FLASH_KEY = 'ftFlash';
+const stored = (key) => { try { return sessionStorage.getItem(key); } catch { return null; } };
+const store = (key, value) => {
+  try { if (value) sessionStorage.setItem(key, value); else sessionStorage.removeItem(key); } catch { /* trình duyệt chặn: mở mẫu mới */ }
+};
+const openNewTemplate = () => { store(TEMPLATE_KEY, null); location.assign(EDITOR_URL); };
+const openTemplate = (id, flash) => { store(TEMPLATE_KEY, id); store(FLASH_KEY, flash); location.assign(EDITOR_URL); };
+// Về đúng trang danh sách vừa bấm; mở thẳng URL thì về theo lĩnh vực đang chọn.
+const opener = document.referrer ? new URL(document.referrer) : null;
+const listUrl = () => {
+  const from = legacy.get('from') || (opener?.origin === location.origin ? opener.pathname : '');
+  return LIST_PAGES.includes(from) ? from : editor?.content.domain === 'dat_dai' ? '/land-forms' : '/business-form-templates';
+};
 const filters = { domain: '', status: '', includeDeleted: false };
 let editor = null; // { id, version, status, content, selected, dirty, tab }
 let procedures = null; // [{ id, code, name }] hoặc 'unavailable' (khi đó nhập tay mã thủ tục)
@@ -37,6 +54,13 @@ const toast = (message, isError = false) => {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toastEl.hidden = true; }, isError ? 7000 : 3500);
 };
+// Thông báo cho thao tác vừa chuyển trang.
+const FLASH = {
+  published: 'Đã xuất bản mẫu đơn thành công vào hệ thống thủ tục.',
+  new_version: 'Đã tạo bản nháp mới. Bản cũ vẫn giữ nguyên cho tới khi xuất bản bản mới.'
+};
+if (FLASH[stored(FLASH_KEY)]) toast(FLASH[stored(FLASH_KEY)]);
+store(FLASH_KEY, null);
 const dialog = document.querySelector('.ft-dialog');
 const confirmDialog = (title, message, okLabel, cancelLabel = 'Hủy', variant = 'primary') => new Promise((resolve) => {
   dialog.querySelector('h2').textContent = title;
@@ -78,7 +102,12 @@ document.addEventListener('click', async (event) => {
 // ===== Danh sách mẫu =====
 function rowActions(row) {
   const button = (action, label, extra = '') => `<button type="button" class="ft-btn ft-btn--sm ${extra}" data-row-act="${action}" data-id="${row.id}">${label}</button>`;
-  if (row.deleted_at) return button('restore', 'Khôi phục');
+  if (row.deleted_at) {
+    return [
+      button('restore', 'Khôi phục'),
+      button('delete', 'Xóa vĩnh viễn', 'ft-btn--danger')
+    ].join('');
+  }
   return [
     button('edit', row.status === 'draft' ? 'Sửa' : 'Sửa (tạo bản mới)'),
     ['draft', 'hidden'].includes(row.status) ? button('publish', 'Xuất bản', 'ft-btn--primary') : '',
@@ -90,14 +119,14 @@ function rowActions(row) {
 function renderList() {
   listRoot.innerHTML = `<section class="ftl" aria-labelledby="ftl-title">
     <div class="ftl__head"><div><h2 id="ftl-title">Mẫu đơn dựng từ thư viện thẻ · ${Object.values(pageDomains).join(', ')}</h2>
-      <p class="ft-muted">Mẫu đã xuất bản hiện cho công dân ở trang "Làm đơn theo mẫu".${USE_MOCK ? ' <strong>Đang dùng dữ liệu thử (mock)</strong>, tải lại trang là mất.' : ''}</p></div>
+      <p class="ft-muted">Danh sách các mẫu đơn dùng chung đã tạo và xuất bản.${USE_MOCK ? ' <strong>(Chế độ thử nghiệm - dữ liệu lưu trên trình duyệt)</strong>' : ''}</p></div>
       <button type="button" class="ft-btn ft-btn--primary" data-act="new">+ Thêm mẫu đơn</button></div>
     <div class="ftl__filters">
       ${PAGE_DOMAINS.length > 1 ? `<label>Lĩnh vực<select data-filter="domain">${options(pageDomains, filters.domain, 'Tất cả lĩnh vực')}</select></label>` : ''}
       <label>Trạng thái<select data-filter="status">${options(STATUSES, filters.status, 'Tất cả trạng thái')}</select></label>
       <label class="ft-check"><input type="checkbox" data-filter="includeDeleted"${filters.includeDeleted ? ' checked' : ''}> Hiện cả mẫu đã xóa</label>
     </div>
-    <div class="ftl__scroll"><table><thead><tr><th scope="col">Tên mẫu</th><th scope="col">Lĩnh vực</th><th scope="col">Phiên bản</th><th scope="col">Trạng thái</th><th scope="col">Cập nhật</th><th scope="col"><span class="sr-only">Thao tác</span></th></tr></thead>
+    <div class="ftl__scroll"><table><thead><tr><th scope="col">Tên mẫu</th><th scope="col">Thủ tục đại diện</th><th scope="col">Lĩnh vực</th><th scope="col">Phiên bản</th><th scope="col">Trạng thái</th><th scope="col">Cập nhật</th><th scope="col"><span class="sr-only">Thao tác</span></th></tr></thead>
       <tbody id="ftl-rows"><tr><td colspan="6" class="ft-muted">Đang tải…</td></tr></tbody></table></div>
   </section>`;
   loadRows();
@@ -110,6 +139,7 @@ async function loadRows() {
     const items = (await formTemplates.listAdmin({ ...filters, domain })).items.filter((row) => PAGE_DOMAINS.includes(row.domain));
     tbody.innerHTML = items.length ? items.map((row) => `<tr${row.deleted_at ? ' class="is-deleted"' : ''}>
       <td><strong>${escapeHtml(row.name)}</strong>${row.content.code ? `<div class="ft-muted">Mẫu số ${escapeHtml(row.content.code)}</div>` : ''}</td>
+      <td>${row.procedure_id ? `<span class="ft-badge" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;font-weight:600;">${escapeHtml(row.procedure_id)}</span>` : '<span class="ft-muted">—</span>'}</td>
       <td>${escapeHtml(DOMAINS[row.domain] || row.domain)}</td>
       <td>v${row.version}</td>
       <td><span class="ft-badge ft-badge--${row.status}">${STATUSES[row.status] || row.status}</span>${row.deleted_at ? ' <span class="ft-badge ft-badge--deleted">Đã xóa</span>' : ''}</td>
@@ -125,14 +155,27 @@ async function rowAction(action, id) {
   try {
     if (action === 'edit') {
       const row = await formTemplates.getAdmin(id);
-      if (row.status === 'draft') return openEditor(row);
+      if (row.status === 'draft') return openTemplate(id);
       const draft = await formTemplates.newVersion(id);
-      toast(`Đã tạo bản nháp phiên bản ${draft.version}. Bản cũ vẫn giữ nguyên cho tới khi xuất bản bản mới.`);
-      return openEditor(draft);
+      return openTemplate(draft.id, 'new_version');
     }
-    if (action === 'delete' && !(await confirmDialog('Xóa mẫu đơn?', 'Mẫu sẽ bị ẩn khỏi mọi danh sách. Có thể khôi phục lại từ bộ lọc "Hiện cả mẫu đã xóa".', 'Xóa mẫu'))) return;
-    const messages = { publish: 'Đã xuất bản mẫu. Phiên bản cũ (nếu có) chuyển sang lưu trữ.', hide: 'Đã ẩn mẫu khỏi công dân.', delete: 'Đã xóa mẫu.', restore: 'Đã khôi phục mẫu.' };
-    await formTemplates[action === 'delete' ? 'remove' : action](id);
+    if (action === 'delete') {
+      const allItems = (await formTemplates.listAdmin({ includeDeleted: true })).items;
+      const target = allItems.find(it => it.id === id);
+      const isPermanent = target && Boolean(target.deleted_at);
+      const title = isPermanent ? 'Xóa vĩnh viễn khỏi Database?' : 'Xóa mẫu đơn?';
+      const desc = isPermanent
+        ? 'Mẫu đơn này sẽ bị XÓA HOÀN TOÀN KHỎI DATABASE và không thể khôi phục lại. Bạn có chắc chắn muốn xóa?'
+        : 'Mẫu sẽ bị ẩn khỏi mọi danh sách. Có thể khôi phục lại từ bộ lọc "Hiện cả mẫu đã xóa".';
+      const btnText = isPermanent ? 'Xóa vĩnh viễn' : 'Xóa mẫu';
+      if (!(await confirmDialog(title, desc, btnText))) return;
+      await formTemplates.remove(id);
+      toast(isPermanent ? 'Đã xóa vĩnh viễn mẫu đơn khỏi Database.' : 'Đã chuyển mẫu đơn vào danh sách đã xóa.');
+      loadRows();
+      return;
+    }
+    const messages = { publish: 'Đã xuất bản mẫu. Phiên bản cũ (nếu có) chuyển sang lưu trữ.', hide: 'Đã ẩn mẫu khỏi công dân.', restore: 'Đã khôi phục mẫu.' };
+    await formTemplates[action](id);
     toast(messages[action]);
     loadRows();
   } catch (error) {
@@ -141,51 +184,58 @@ async function rowAction(action, id) {
 }
 
 // ===== Khung dựng mẫu =====
-const allBlocks = () => editor.content.sections.flatMap((section) => section.blocks);
-const findSection = (id) => editor.content.sections.find((section) => section.id === id);
-const sectionOf = (instanceId) => editor.content.sections.find((section) => section.blocks.some((block) => block.instance_id === instanceId));
-const nextSectionId = () => {
-  let n = 1;
-  while (findSection(`sec_${n}`)) n += 1;
-  return `sec_${n}`;
-};
-
 function openEditor(row) {
-  if (!row || !editor) lastTrigger = document.activeElement;
+  const initialContent = row ? structuredClone(row.content)
+    : { schema_version: 1, name: '', code: '', domain: DOMAINS[legacy.get('domain')] ? legacy.get('domain') : '', procedure_id: null, sections: [{ id: 'sec_1', title: '', order: 1, blocks: [] }] };
+  if (!row) {
+    initialContent.proc_mode = 'new';
+    initialContent.new_proc_code = getSuggestedProcedureCode(initialContent.domain);
+    initialContent.new_proc_name = '';
+  } else {
+    initialContent.proc_mode = initialContent.procedure_id ? 'existing' : 'none';
+  }
   editor = {
     id: row?.id ?? null, version: row?.version ?? 1, status: row?.status ?? 'draft', dirty: false, tab: 'build',
-    content: row ? structuredClone(row.content)
-      : { schema_version: 1, name: '', code: '', domain: PAGE_DOMAINS[0], procedure_id: null, sections: [{ id: 'sec_1', title: '', order: 1, blocks: [] }] }
+    content: initialContent
   };
-  editor.selected = editor.content.sections[0]?.id ?? null;
-  app.hidden = false;
-  document.documentElement.style.overflow = 'hidden'; // trang phía sau không cuộn theo
   renderEditor();
-  app.scrollTop = 0;
   app.querySelector('[data-info="name"]')?.focus();
 }
 
-function closeEditor() {
-  editor = null;
-  app.hidden = true;
-  app.innerHTML = '';
-  document.documentElement.style.overflow = '';
-  loadRows();
-  lastTrigger?.focus();
+function closeEditor(flash) {
+  editor.dirty = false;
+  store(TEMPLATE_KEY, null);
+  store(FLASH_KEY, flash);
+  location.assign(listUrl());
 }
 
-// Bản JSON gửi BE (mục 4 của hợp đồng): thứ tự theo vị trí hiện tại.
+// Bản JSON gửi BE: thứ tự theo vị trí hiện tại.
 const serialize = () => {
   const content = structuredClone(editor.content);
+  content.sections = deriveSections();
   content.name = content.name.trim();
   content.code = content.code?.trim() || '';
-  content.procedure_id = content.procedure_id || null;
+  const mode = editor.content.proc_mode || (editor.content.procedure_id ? 'existing' : 'new');
+  if (mode === 'new') {
+    const pCode = (editor.content.new_proc_code || getSuggestedProcedureCode(editor.content.domain)).trim().toUpperCase();
+    const pName = (editor.content.new_proc_name || (editor.content.name ? `Thủ tục ${editor.content.name}` : '')).trim();
+    content.procedure_id = pCode;
+    content.new_procedure = { code: pCode, name: pName, domain: content.domain };
+  } else if (mode === 'existing') {
+    content.procedure_id = editor.content.procedure_id || null;
+    content.new_procedure = null;
+  } else {
+    content.procedure_id = null;
+    content.new_procedure = null;
+  }
   content.sections.forEach((section, i) => {
     section.order = i + 1;
     section.title = section.title.trim();
     section.blocks.forEach((block, j) => {
       block.order = j + 1;
-      if (block.block_key === FREE_BLOCK_KEY) block.fields[0].label = block.fields[0].label.trim();
+      if (block.block_key === FREE_BLOCK_KEY) {
+        block.fields[0].label = block.fields[0].label.trim();
+      }
     });
   });
   return content;
@@ -195,302 +245,415 @@ const statusText = () => `Phiên bản ${editor.version} · ${STATUSES[editor.st
 const markDirty = () => {
   editor.dirty = true;
   const status = document.getElementById('ftb-status');
-  if (status) status.textContent = statusText();
+  if (status) { status.textContent = statusText(); status.classList.add('is-dirty'); }
 };
 
+function getSuggestedProcedureCode(domain) {
+  const prefix = PROCEDURE_PREFIX[domain];
+  if (!prefix) return ''; // chưa chọn lĩnh vực
+  const list = Array.isArray(procedures) ? procedures : [];
+  const numbers = list
+    .filter((p) => p.code && p.code.startsWith(prefix))
+    .map((p) => {
+      const m = p.code.replace(prefix, '').match(/^(\d+)/);
+      return m ? parseInt(m[1], 10) : 0;
+    });
+  const max = numbers.length ? Math.max(...numbers) : 17;
+  return `${prefix}${String(max + 1).padStart(3, '0')}`;
+}
+
 function procedureControl() {
-  const value = editor.content.procedure_id || '';
-  if (procedures === 'unavailable') {
-    return `<input data-info="procedure_id" value="${escapeHtml(value)}" placeholder="Nhập ID thủ tục (chưa tải được danh mục)">`;
-  }
-  const list = (procedures || []).filter((item) => item.code?.startsWith(PROCEDURE_PREFIX[editor.content.domain]));
-  return `<select data-info="procedure_id"${procedures ? '' : ' disabled'}><option value="">${procedures ? '— Không liên kết —' : 'Đang tải danh mục thủ tục…'}</option>
-    ${list.map((item) => `<option value="${escapeHtml(item.id)}"${item.id === value ? ' selected' : ''}>${escapeHtml(`${item.code} · ${item.name}`)}</option>`).join('')}</select>`;
-}
+  const mode = editor.content.proc_mode || (editor.content.procedure_id ? 'existing' : 'new');
+  const code = editor.content.new_proc_code || getSuggestedProcedureCode(editor.content.domain);
+  const name = editor.content.new_proc_name || (editor.content.name ? `Thủ tục ${editor.content.name}` : '');
+  const existingValue = editor.content.procedure_id || '';
+  const list = (Array.isArray(procedures) ? procedures : []).filter((item) => item.code?.startsWith(PROCEDURE_PREFIX[editor.content.domain]));
 
-const blockSummary = (block) => block.fields.map((field) => field.label).join(' · ');
+  const dupProc = mode === 'new' && code ? (Array.isArray(procedures) ? procedures : []).find(p => p.code?.toUpperCase() === code.trim().toUpperCase()) : null;
 
-function blockItem(block, section, index) {
-  const label = escapeHtml(blockTitle(block));
-  const free = block.block_key === FREE_BLOCK_KEY ? block.fields[0] : null;
-  return `<li class="ftb-blk" data-blk="${block.instance_id}">
-    <span class="ftb-handle" draggable="true" title="Kéo để đổi chỗ hoặc chuyển sang mục khác" aria-hidden="true">⋮⋮</span>
-    <div class="ftb-blk__main"><strong>${label}</strong><code>${block.instance_id}</code>
-      ${free ? `<div class="ftb-blk__free">
-        <input data-free-title="${block.instance_id}" value="${escapeHtml(free.label)}" placeholder="Tiêu đề ô (bắt buộc), vd: Lý do ủy quyền" aria-label="Tiêu đề ô của ${block.instance_id}" required>
-        <select data-free-type="${block.instance_id}" aria-label="Kiểu ô của ${block.instance_id}">${options(FREE_TYPES, free.type)}</select></div>`
-        : `<small>${escapeHtml(blockSummary(block))}</small>`}</div>
-    <div class="ftb-blk__tools">
-      <button type="button" class="ft-btn ft-btn--sm ft-icon-btn" data-act="blk-up" data-id="${block.instance_id}" aria-label="Đưa thẻ ${label} (${block.instance_id}) lên"${index === 0 ? ' disabled' : ''}>↑</button>
-      <button type="button" class="ft-btn ft-btn--sm ft-icon-btn" data-act="blk-down" data-id="${block.instance_id}" aria-label="Đưa thẻ ${label} (${block.instance_id}) xuống"${index === section.blocks.length - 1 ? ' disabled' : ''}>↓</button>
-      <select data-move-to="${block.instance_id}" aria-label="Chuyển thẻ ${block.instance_id} sang mục khác">
-        <option value="">Chuyển sang…</option>${editor.content.sections.filter((other) => other !== section)
-          .map((other, i) => `<option value="${other.id}">${escapeHtml(other.title || `Mục ${editor.content.sections.indexOf(other) + 1}`)}</option>`).join('')}</select>
-      <button type="button" class="ft-btn ft-btn--sm ft-btn--danger" data-act="blk-del" data-id="${block.instance_id}" aria-label="Xóa thẻ ${block.instance_id}">Xóa</button>
-    </div></li>`;
-}
-
-function sectionItem(section, index) {
-  const count = editor.content.sections.length;
-  const name = escapeHtml(section.title || `Mục ${index + 1}`);
-  return `<li class="ftb-sec${section.id === editor.selected ? ' is-selected' : ''}" data-sec="${section.id}">
-    <div class="ftb-sec__head">
-      <span class="ftb-handle" draggable="true" title="Kéo để đổi thứ tự mục" aria-hidden="true">⋮⋮</span>
-      <input data-sec-title="${section.id}" value="${escapeHtml(section.title)}" placeholder="Tên mục, vd: I. Bên ủy quyền" aria-label="Tên mục ${index + 1}">
-      <button type="button" class="ft-btn ft-btn--sm" data-act="sec-select" data-id="${section.id}" aria-pressed="${section.id === editor.selected}">${section.id === editor.selected ? 'Đang chọn' : 'Chọn'}</button>
-      <button type="button" class="ft-btn ft-btn--sm ft-icon-btn" data-act="sec-up" data-id="${section.id}" aria-label="Đưa mục ${name} lên"${index === 0 ? ' disabled' : ''}>↑</button>
-      <button type="button" class="ft-btn ft-btn--sm ft-icon-btn" data-act="sec-down" data-id="${section.id}" aria-label="Đưa mục ${name} xuống"${index === count - 1 ? ' disabled' : ''}>↓</button>
-      <button type="button" class="ft-btn ft-btn--sm ft-btn--danger" data-act="sec-del" data-id="${section.id}" aria-label="Xóa mục ${name}">Xóa mục</button>
+  return `<div class="ftb-proc-control">
+    <div class="ftb-proc-modes">
+      <label class="ftb-proc-mode-card${mode === 'new' ? ' is-active' : ''}">
+        <input type="radio" name="proc_mode" value="new"${mode === 'new' ? ' checked' : ''}>
+        <span><strong>★ Tạo thủ tục mới</strong> (Tờ đơn này đại diện chính)</span>
+      </label>
+      <label class="ftb-proc-mode-card${mode === 'existing' ? ' is-active' : ''}">
+        <input type="radio" name="proc_mode" value="existing"${mode === 'existing' ? ' checked' : ''}>
+        <span>Chọn thủ tục đã có</span>
+      </label>
+      <label class="ftb-proc-mode-card${mode === 'none' ? ' is-active' : ''}">
+        <input type="radio" name="proc_mode" value="none"${mode === 'none' ? ' checked' : ''}>
+        <span>Không liên kết</span>
+      </label>
     </div>
-    <ul class="ftb-sec__blocks" data-drop-blocks="${section.id}" aria-label="Các thẻ trong mục ${name}">
-      ${section.blocks.length ? section.blocks.map((block, i) => blockItem(block, section, i)).join('') : '<li class="ftb-sec__empty">Kéo thẻ từ thư viện vào đây, hoặc chọn mục này rồi bấm "Thêm".</li>'}
-    </ul></li>`;
+
+    ${mode === 'new' ? `
+      <div class="ftb-proc-new-box">
+        <div class="ftb-proc-new-grid">
+          <label class="ftb-proc-field" style="width: 160px;">
+            <span class="ftb-proc-label">MÃ THỦ TỤC</span>
+            <input data-info="new_proc_code" value="${escapeHtml(code)}" placeholder="vd: DD-018" style="font-weight:700;letter-spacing:.05em;${dupProc ? ';border-color:#b91c1c;background:#fff5f5;color:#991b1b;' : ''}">
+          </label>
+          <label class="ftb-proc-field" style="flex:1;min-width:240px;">
+            <span class="ftb-proc-label">TÊN THỦ TỤC HÀNH CHÍNH CÔNG</span>
+            <input data-info="new_proc_name" value="${escapeHtml(name)}" placeholder="vd: Thủ tục ${escapeHtml(editor.content.name || 'cho thuê mặt bằng...')}">
+          </label>
+        </div>
+        ${dupProc ? `
+          <div class="ft-alert ftb-proc-dup-alert" role="alert" style="margin:4px 0 0;padding:8px 12px;font-size:13px;border-left:3px solid #b91c1c;background:#fef2f2;color:#991b1b;">
+            <strong>⚠️ Trùng mã thủ tục:</strong> Mã <code>${escapeHtml(code)}</code> đã thuộc về <em>"${escapeHtml(dupProc.name)}"</em>. Vui lòng nhập mã khác hoặc chuyển sang "Chọn thủ tục đã có".
+          </div>
+        ` : ''}
+        <p class="ftb-proc-hint">Khi xuất bản, hệ thống sẽ đăng ký thủ tục mới này vào Cổng Dịch vụ công. Tờ đơn này là biểu mẫu chính để công dân nộp hồ sơ.</p>
+      </div>
+    ` : mode === 'existing' ? `
+      <div style="max-width: 500px;">
+        <select data-info="procedure_id"${procedures ? '' : ' disabled'}>
+          <option value="">${procedures ? '— Chọn thủ tục liên kết —' : 'Đang tải danh mục thủ tục…'}</option>
+          ${list.map((item) => `<option value="${escapeHtml(item.id || item.code)}"${(item.id === existingValue || item.code === existingValue) ? ' selected' : ''}>${escapeHtml(`${item.code} · ${item.name}`)}</option>`).join('')}
+        </select>
+      </div>
+    ` : `
+      <p class="ft-muted" style="margin:2px 0 0;font-size:13px;">Mẫu đơn này chỉ lưu nội bộ trên hệ thống quản trị, không liên kết với thủ tục hành chính công nào.</p>
+    `}
+  </div>`;
 }
 
 function buildView() {
   const { content } = editor;
-  const selected = findSection(editor.selected);
-  return `<div class="ftb__card"><h2>a. Thông tin chung</h2><div class="ftb__info">
-      <label><span>Tên mẫu <span class="ft-req" aria-hidden="true">*</span></span><input data-info="name" value="${escapeHtml(content.name)}" required aria-required="true" placeholder="vd: Hợp đồng ủy quyền"></label>
-      <label>Mã mẫu<input data-info="code" value="${escapeHtml(content.code || '')}" placeholder="vd: 09/ĐK (không bắt buộc)"></label>
-      <label>Lĩnh vực<select data-info="domain">${options(pageDomains[content.domain] ? pageDomains : DOMAINS, content.domain)}</select></label>
-      <label>Thủ tục liên kết<span id="ftb-procedure">${procedureControl()}</span></label>
-    </div></div>
-    <div class="ftb__work">
-      <aside class="ftb__card ftb__lib" aria-labelledby="ftb-lib-title"><h2 id="ftb-lib-title">b. Thư viện thẻ</h2>
-        <p class="ftb__target" id="ftb-target">Bấm "Thêm" để đưa vào: <strong>${escapeHtml(selected ? selected.title || `Mục ${content.sections.indexOf(selected) + 1}` : 'chưa chọn mục')}</strong></p>
-        <ul class="ftb__lib-list">${BLOCKS.filter((block) => block.block_key !== FREE_BLOCK_KEY).map((block) => `<li class="ftb__lib-item" draggable="true" data-lib="${block.block_key}">
-          <div><strong>${escapeHtml(block.name)}</strong><small>${escapeHtml(blockSummary(block))}</small></div>
-          <button type="button" class="ft-btn ft-btn--sm" data-act="add-block" data-key="${block.block_key}" aria-label="Thêm thẻ ${escapeHtml(block.name)} vào mục đang chọn"${selected ? '' : ' disabled'}>Thêm</button></li>`).join('')}</ul>
-        <div class="ftb__free"><strong>Trường tự do</strong><span class="ft-muted">Ô để công dân tự viết. Chỉ cần tiêu đề ô.</span>
-          <label>Tiêu đề ô<input id="ftb-free-title" placeholder="vd: Lý do ủy quyền"></label>
-          <label>Kiểu ô<select id="ftb-free-type">${options(FREE_TYPES, 'text')}</select></label>
-          <button type="button" class="ft-btn ft-btn--sm" data-act="add-free"${selected ? '' : ' disabled'}>Thêm trường tự do</button></div>
-      </aside>
-      <section aria-labelledby="ftb-sections-title"><div class="ftb__card">
-        <h2 id="ftb-sections-title">Các mục của mẫu</h2>
-        <ol class="ftb__sections" data-drop-sections aria-label="Các mục, theo thứ tự">${content.sections.map(sectionItem).join('')}</ol>
-        <p><button type="button" class="ft-btn" data-act="sec-add">+ Thêm mục</button></p></div></section>
-    </div>`;
+  return `<div class="ftb__card"><h2>a. Thông tin chung</h2>
+    <div class="ftb__info">
+      <label style="flex:2;"><span>Tên mẫu <span class="ft-req" aria-hidden="true">*</span></span><input data-info="name" value="${escapeHtml(content.name)}" required aria-required="true" placeholder="vd: Hợp đồng ủy quyền"></label>
+      <label style="flex:1;">Mã mẫu<input data-info="code" value="${escapeHtml(content.code || '')}" placeholder="vd: 09/ĐK (không bắt buộc)"></label>
+      <label style="flex:1;"><span>Lĩnh vực <span class="ft-req" aria-hidden="true">*</span></span><select data-info="domain" required aria-required="true" aria-describedby="ftb-domain-error">${options(DOMAINS, content.domain, '— Chọn lĩnh vực —')}</select><small class="ftb__field-error" id="ftb-domain-error" hidden>Chọn lĩnh vực trước khi lưu.</small></label>
+    </div>
+    <div style="margin-top:14px;border-top:1px dashed var(--ft-line);padding-top:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--ft-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;">Thủ tục hành chính liên kết</div>
+      <div id="ftb-procedure">${procedureControl()}</div>
+    </div>
+  </div>`;
 }
 
-const previewView = () => `<div class="ftb__card"><div class="ftb__preview-bar"><div><h2>c. Tổng hợp</h2>
-    <p class="ft-muted">Đây đúng là giao diện công dân sẽ thấy khi điền mẫu.</p></div>
-    <button type="button" class="ft-btn" data-act="back-edit">← Quay lại chỉnh sửa</button></div>
-  <form novalidate onsubmit="return false">${renderForm(serialize())}</form></div>`;
+const previewView = () => `<div class="ftb__card"><div class="ftb__preview-bar"><div><h2>Tổng hợp</h2>
+    <p class="ft-muted">Xem trước hình thức thể hiện của mẫu đơn trên hệ thống.</p></div>
+    <div class="ftb__bar-actions"><button type="button" class="ft-btn" data-act="clear-preview">Xoá dữ liệu thử</button>
+      <button type="button" class="ft-btn" data-act="back-edit">← Quay lại chỉnh sửa</button></div></div>
+  <form novalidate onsubmit="return false">${renderForm(serialize(), previewValues)}</form></div>
+  ${hasDocument() ? `<div class="ftb__card"><h2>Văn bản mẫu đơn (từ b. Soạn văn bản)</h2>
+    <p class="ft-muted">Ô gạch chân là thẻ công dân sẽ điền.</p><div id="ftb-doc-preview"></div></div>` : ''}`;
+// Tổng hợp: giá trị gõ vào form xem trước hiện ngay vào ô tương ứng của văn bản (ô có data-id = name của ô nhập).
+function fillDocPreview(form, docPreview) {
+  if (!form || !docPreview) return;
+  form.querySelectorAll('[name*="."]').forEach((input) => {
+    if (input.type === 'radio' && !input.checked) return;
+    const shown = input.type === 'checkbox' ? (input.checked ? '☒' : '')
+      : input.tagName === 'SELECT' ? (input.value ? input.selectedOptions[0].textContent : '')
+      : /^\d{4}-\d{2}-\d{2}$/.test(input.value) ? input.value.split('-').reverse().join('/') : input.value.trim();
+    docPreview.querySelectorAll(`.ql-field[data-id="${CSS.escape(input.name)}"]`).forEach((chip) => {
+      chip.classList.toggle('has-value', Boolean(shown));
+      (chip.querySelector('[contenteditable]') || chip).textContent = shown || ' ';
+    });
+  });
+}
+let previewValues = {};
+const hasDocument = () => (editor.content.document?.ops || []).some((op) => typeof op.insert !== 'string' || op.insert.trim());
 
 function renderEditor(focusSelector) {
   const title = editor.id ? `Sửa mẫu: ${escapeHtml(editor.content.name || 'chưa đặt tên')}` : 'Tạo mẫu đơn mới';
   app.innerHTML = `<div class="ftb">
     <div class="ftb__bar"><div><button type="button" class="ft-btn ft-btn--sm" data-act="back">← Đóng, về danh sách</button>
-      <h1>${title}</h1><p class="ft-muted" id="ftb-status" aria-live="polite">${statusText()}</p></div>
+      <h1>${title}</h1><p class="ft-muted${editor.dirty ? ' is-dirty' : ''}" id="ftb-status" aria-live="polite">${statusText()}</p></div>
       <div class="ftb__tabs" role="tablist" aria-label="Bước dựng mẫu">
         <button type="button" role="tab" data-tab="build" aria-selected="${editor.tab === 'build'}">1. Dựng mẫu</button>
         <button type="button" role="tab" data-tab="preview" aria-selected="${editor.tab === 'preview'}">2. Tổng hợp</button></div>
       <div class="ftb__bar-actions"><button type="button" class="ft-btn" data-act="save">Lưu nháp</button>
         <button type="button" class="ft-btn ft-btn--primary" data-act="publish">Xác thực &amp; xuất bản</button></div></div>
     <div id="ftb-errors" tabindex="-1"></div>
-    ${editor.tab === 'build' ? buildView() : previewView()}</div>`;
+    ${editor.tab === 'build' ? `${buildView()}<div class="ftb__card" id="ftb-doc"></div>` : previewView()}</div>`;
+  if (editor.tab === 'build') attachDocCard();
+
+  if (editor.tab === 'preview') {
+    initTableResizers(app);
+    const docPreview = app.querySelector('#ftb-doc-preview');
+    const form = app.querySelector('.ftb__card form');
+    if (docPreview) renderDocPreview(docPreview, editor.content.document, templateFields).then(() => fillDocPreview(form, docPreview));
+    // Dữ liệu thử chỉ giữ trong phiên mở khung (qua lại giữa 2 tab), không vào content nên không lưu lên BE.
+    const onFill = () => { previewValues = readValues(form); fillDocPreview(form, docPreview); };
+    form?.addEventListener('input', onFill);
+    form?.addEventListener('change', onFill);
+  }
+
   if (focusSelector) app.querySelector(focusSelector)?.focus();
 }
 
-// Thay đổi cấu trúc: sửa state rồi vẽ lại, giữ con trỏ ở nút vừa bấm.
-function change(mutate, focusSelector) {
-  mutate();
-  markDirty();
-  renderEditor(focusSelector);
-}
-
-const moveIn = (list, item, index) => {
-  list.splice(list.indexOf(item), 1);
-  list.splice(Math.max(0, Math.min(index, list.length)), 0, item);
-};
-const moveBlock = (instanceId, toSectionId, index) => {
-  const from = sectionOf(instanceId);
-  const block = from.blocks.find((item) => item.instance_id === instanceId);
-  from.blocks.splice(from.blocks.indexOf(block), 1);
-  const to = findSection(toSectionId);
-  to.blocks.splice(Math.max(0, Math.min(index ?? to.blocks.length, to.blocks.length)), 0, block);
-};
-const addBlock = (key, sectionId, index, free) => {
-  const block = snapshotBlock(key, new Set(allBlocks().map((item) => item.instance_id)), free);
-  const section = findSection(sectionId);
-  section.blocks.splice(index ?? section.blocks.length, 0, { ...block, order: 0 });
-  editor.selected = sectionId;
-  return block.instance_id;
-};
-
-async function save(publish) {
-  const content = serialize();
-  const errors = publish ? checkTemplate(content) : [!content.name && 'Chưa nhập tên mẫu.', !content.domain && 'Chưa chọn lĩnh vực.'].filter(Boolean);
-  const box = document.getElementById('ftb-errors');
-  box.innerHTML = errors.length ? `<div class="ft-alert" role="alert"><strong>${publish ? 'Chưa xuất bản được' : 'Chưa lưu được'}:</strong><ul>${errors.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul></div>` : '';
-  if (errors.length) return box.focus();
-  app.querySelectorAll('[data-act="save"], [data-act="publish"]').forEach((button) => { button.disabled = true; });
-  try {
-    let row = editor.id ? await formTemplates.update(editor.id, content) : await formTemplates.create(content);
-    Object.assign(editor, { id: row.id, version: row.version, status: row.status, dirty: false });
-    if (publish) {
-      row = await formTemplates.publish(row.id);
-      toast(`Đã xuất bản "${row.name}" phiên bản ${row.version}.`);
-      return closeEditor();
-    }
-    toast('Đã lưu nháp.');
-    renderEditor();
-  } catch (error) {
-    box.innerHTML = `<div class="ft-alert" role="alert">${escapeHtml(error.message)}</div>`;
-    box.focus();
-    app.querySelectorAll('[data-act="save"], [data-act="publish"]').forEach((button) => { button.disabled = false; });
+// ===== b. Soạn văn bản mẫu đơn (form-doc-editor.js): văn bản là nguồn chính của mẫu =====
+// Văn bản lưu trong content.document = { ops, fields }. Các ô của mẫu (content.sections gửi BE, form ở Tổng hợp) sinh từ
+// thẻ trong văn bản theo thứ tự xuất hiện; dòng đậm, không căn giữa, không có thẻ là tiêu đề mục.
+// Khối của mẫu cũ (không phải thẻ văn bản) giữ nguyên: đặt đúng chỗ nếu có trong văn bản, không thì cuối mẫu, hiện ở "Thẻ của mẫu đã lưu".
+let docCard = null;
+let docApi = null;
+const DOC_SECTION_TITLE = 'Nội dung mẫu đơn';
+const DOC_BLOCK = /^doc_\d+$/; // instance_id thẻ văn bản: "doc_<n>", id thẻ = "doc_<n>.value" (trùng name ô ở Tổng hợp)
+// Kiểu thẻ → kiểu ô BE; ô chọn/ô tích chưa có danh sách lựa chọn nên nhập chữ.
+const DOC_FIELD_TYPE = { textarea: 'textarea', number: 'number', date: 'date', cccd: 'cccd', phone: 'phone', email: 'email' };
+const oldBlocks = () => editor.content.sections.flatMap((section) => section.blocks).filter((block) => !DOC_BLOCK.test(block.instance_id));
+const templateFields = () => oldBlocks().flatMap((block) => block.fields
+  .filter((field) => !['static_text', 'table'].includes(field.type))
+  .map((field) => ({ id: `${block.instance_id}.${field.key}`, name: `${block.instance_id}.${field.key}`, label: field.label || blockTitle(block), type: field.type, section: blockTitle(block) })));
+function deriveSections() {
+  const doc = editor.content.document || { ops: [], fields: [] };
+  const docFields = new Map(doc.fields.map((field) => [field.id, field]));
+  const rest = new Map(oldBlocks().map((block) => [block.instance_id, block]));
+  const docBlock = (field) => ({ ...snapshotBlock(FREE_BLOCK_KEY, new Set(), { label: field.label, type: DOC_FIELD_TYPE[field.type] || 'text', required: field.required, width: 'full' }),
+    instance_id: field.id.split('.')[0] });
+  const sections = sectionsFromDoc(doc.ops).map((part) => ({ title: part.title, blocks: part.ids.flatMap((id) => {
+    if (docFields.has(id)) return [docBlock(docFields.get(id))];
+    const block = rest.get(id.split('.')[0]);
+    rest.delete(id.split('.')[0]);
+    return block ? [block] : [];
+  }) })).filter((section) => section.blocks.length);
+  if (rest.size || !sections.length) {
+    if (!sections.length) sections.push({ title: DOC_SECTION_TITLE, blocks: [] });
+    sections.at(-1).blocks.push(...rest.values());
   }
+  return sections.map((section, i) => ({ ...section, id: `sec_${i + 1}`, order: i + 1, title: section.title || DOC_SECTION_TITLE }));
 }
-
-// ===== Sự kiện (ủy quyền trên danh sách #ft-app và lớp phủ khung dựng) =====
-const requestClose = async () => { if (!editor.dirty || await confirmLeave()) closeEditor(); };
-const onClick = async (event) => {
-  const rowButton = event.target.closest('[data-row-act]');
-  if (rowButton) return rowAction(rowButton.dataset.rowAct, rowButton.dataset.id);
-  const tab = event.target.closest('[data-tab]');
-  if (tab && editor) { editor.tab = tab.dataset.tab; return renderEditor(`[data-tab="${editor.tab}"]`); }
-  const button = event.target.closest('[data-act]');
-  if (!button) {
-    const section = event.target.closest('[data-sec]');
-    if (section && editor && editor.selected !== section.dataset.sec && !event.target.closest('input, select')) change(() => { editor.selected = section.dataset.sec; });
+// Xoá thẻ của mẫu cũ khỏi mẫu (từ khung "Thẻ của mẫu đã lưu").
+function removeTemplateField(id) {
+  const [instanceId, key] = id.split('.');
+  editor.content.sections = editor.content.sections.map((section) => ({ ...section, blocks: section.blocks
+    .map((block) => (block.instance_id === instanceId ? { ...block, fields: block.fields.filter((field) => field.key !== key) } : block))
+    .filter((block) => block.fields.length) }));
+  markDirty();
+}
+// Mỗi lần vẽ lại khung thì gắn lại đúng phần tử trình soạn cũ, để không mất con trỏ/lịch sử hoàn tác.
+function attachDocCard() {
+  const slot = app.querySelector('#ftb-doc');
+  if (docCard && docCard.owner === editor) {
+    slot.replaceWith(docCard);
+    docApi?.refresh();
     return;
   }
+  docCard = slot;
+  docCard.owner = editor;
+  docApi = null;
+  editor.content.document ??= { ops: [], fields: [] };
+  mountDocEditor(slot, {
+    doc: editor.content.document,
+    templateFields,
+    removeTemplateField,
+    onChange: markDirty,
+    templateName: () => editor.content.name || '',
+    domain: () => editor.content.domain
+  }).then((api) => { if (docCard === slot) docApi = api; });
+}
+
+async function requestClose() {
+  if (editor?.dirty && !(await confirmLeave())) return;
+  closeEditor();
+}
+
+function showDomainError(show) {
+  const select = app.querySelector('[data-info="domain"]');
+  if (!select) return;
+  select.setAttribute('aria-invalid', String(show));
+  select.nextElementSibling.hidden = !show;
+}
+
+async function save(shouldPublish = false) {
+  const errBox = document.getElementById('ftb-errors');
+  errBox.innerHTML = '';
+  const payload = serialize();
+  const errors = checkTemplate(payload);
+
+  if (payload.new_procedure) {
+    const np = payload.new_procedure;
+    if (!np.code) {
+      if (payload.domain) errors.push('Chưa nhập mã thủ tục mới.'); // chưa chọn lĩnh vực thì chưa có mã gợi ý, báo lĩnh vực là đủ
+    } else {
+      const dup = (Array.isArray(procedures) ? procedures : []).find(p => p.code?.toUpperCase() === np.code.toUpperCase());
+      if (dup) {
+        errors.push(`Mã thủ tục "${np.code}" đã tồn tại trên hệ thống ("${dup.name}"). Vui lòng chọn mã khác hoặc chuyển sang "Chọn thủ tục đã có".`);
+      }
+    }
+    if (!np.name) {
+      errors.push('Chưa nhập tên thủ tục hành chính công.');
+    }
+  }
+
+  showDomainError(!payload.domain);
+  if (errors.length) {
+    errBox.innerHTML = `<div class="ft-alert" role="alert"><strong>Chưa thể lưu mẫu:</strong><ul>${errors.map((msg) => `<li>${escapeHtml(msg)}</li>`).join('')}</ul></div>`;
+    errBox.focus();
+    return;
+  }
+  setSaving(true, shouldPublish);
+  try {
+    const payload = serialize();
+    let saved;
+    if (editor.id) {
+      if (editor.status !== 'draft') {
+        const draft = await formTemplates.newVersion(editor.id);
+        editor.id = draft.id;
+        editor.version = draft.version;
+        editor.status = 'draft';
+      }
+      saved = await (formTemplates.update || formTemplates.updateDraft)(editor.id, payload);
+    } else {
+      saved = await (formTemplates.create || formTemplates.createDraft)(payload);
+      editor.id = saved.id;
+    }
+    store(TEMPLATE_KEY, editor.id); // tải lại trang thì mở đúng mẫu vừa lưu
+    if (shouldPublish) {
+      saved = await formTemplates.publish(saved.id);
+      closeEditor('published');
+      return;
+    } else {
+      toast(editor.version > 1 ? `Đã lưu bản nháp phiên bản v${saved.version}.` : 'Đã lưu bản nháp.');
+    }
+    editor.dirty = false;
+    editor.version = saved.version;
+    const status = document.getElementById('ftb-status');
+    if (status) { status.textContent = statusText(); status.classList.remove('is-dirty'); }
+  } catch (error) {
+    errBox.innerHTML = `<div class="ft-alert" role="alert"><strong>Chưa lưu được mẫu.</strong> ${escapeHtml(error.message)}
+      <p class="ft-alert__hint">Nội dung đang soạn vẫn còn trên trang. Kiểm tra kết nối rồi bấm "${shouldPublish ? 'Xác thực &amp; xuất bản' : 'Lưu nháp'}" lại sau ít phút.</p></div>`;
+    errBox.focus();
+  } finally {
+    setSaving(false);
+  }
+}
+// Trong lúc gửi: khoá 2 nút, nút vừa bấm hiện "Đang lưu…".
+function setSaving(on, shouldPublish) {
+  app.querySelectorAll('[data-act="save"], [data-act="publish"]').forEach((button) => {
+    button.disabled = on;
+    button.setAttribute('aria-busy', String(on));
+    button.dataset.label ??= button.textContent;
+    button.textContent = on && (button.dataset.act === 'publish') === Boolean(shouldPublish) ? 'Đang lưu…' : button.dataset.label;
+  });
+}
+
+// ===== Xử lý sự kiện =====
+listRoot?.addEventListener('click', (event) => {
+  const btn = event.target.closest('[data-row-act]');
+  if (btn) rowAction(btn.dataset.rowAct, btn.dataset.id);
+});
+
+const onClick = async (event) => {
+  const button = event.target.closest('button');
+  if (!button) return;
+  const tab = button.closest('[data-tab]');
+  if (tab && editor) { editor.tab = tab.dataset.tab; return renderEditor(`[data-tab="${editor.tab}"]`); }
   const { act, id } = button.dataset;
-  if (act === 'new') return openEditor(null);
+  if (act === 'new') return openNewTemplate();
   if (act === 'back') return requestClose();
   if (act === 'back-edit') { editor.tab = 'build'; return renderEditor('[data-tab="build"]'); }
+  if (act === 'clear-preview') { previewValues = {}; return renderEditor(); }
   if (act === 'save' || act === 'publish') return save(act === 'publish');
-  const { sections } = editor.content;
-  if (act === 'sec-add') {
-    const newId = nextSectionId();
-    return change(() => { sections.push({ id: newId, title: '', order: 0, blocks: [] }); editor.selected = newId; }, `[data-sec-title="${newId}"]`);
-  }
-  if (act === 'sec-select') return change(() => { editor.selected = id; }, `[data-act="sec-select"][data-id="${id}"]`);
-  if (act === 'sec-up' || act === 'sec-down') {
-    const section = findSection(id);
-    return change(() => moveIn(sections, section, sections.indexOf(section) + (act === 'sec-up' ? -1 : 1)), `[data-act="${act}"][data-id="${id}"]:not(:disabled), [data-sec-title="${id}"]`);
-  }
-  if (act === 'sec-del') {
-    const section = findSection(id);
-    if (section.blocks.length && !(await confirmDialog('Xóa mục?', `Mục "${section.title || 'chưa đặt tên'}" và ${section.blocks.length} thẻ bên trong sẽ bị xóa khỏi mẫu.`, 'Xóa mục', 'Hủy', 'danger'))) return;
-    return change(() => {
-      sections.splice(sections.indexOf(section), 1);
-      if (editor.selected === id) editor.selected = sections[0]?.id ?? null;
-    }, '[data-act="sec-add"]');
-  }
-  if (act === 'blk-up' || act === 'blk-down') {
-    const section = sectionOf(id);
-    const block = section.blocks.find((item) => item.instance_id === id);
-    return change(() => moveIn(section.blocks, block, section.blocks.indexOf(block) + (act === 'blk-up' ? -1 : 1)), `[data-act="${act}"][data-id="${id}"]:not(:disabled), [data-move-to="${id}"]`);
-  }
-  if (act === 'blk-del') {
-    const section = sectionOf(id);
-    return change(() => section.blocks.splice(section.blocks.findIndex((item) => item.instance_id === id), 1), `[data-sec-title="${section.id}"]`);
-  }
-  if (act === 'add-block') {
-    return change(() => addBlock(button.dataset.key, editor.selected), `[data-act="add-block"][data-key="${button.dataset.key}"]`);
-  }
-  if (act === 'add-free') {
-    const label = document.getElementById('ftb-free-title').value.trim();
-    const type = document.getElementById('ftb-free-type').value;
-    if (!label) { toast('Nhập tiêu đề ô trước khi thêm trường tự do.', true); return document.getElementById('ftb-free-title').focus(); }
-    return change(() => addBlock(FREE_BLOCK_KEY, editor.selected, undefined, { label, type }), '#ftb-free-title');
-  }
 };
-[listRoot, app].forEach((root) => root.addEventListener('click', onClick));
-app.addEventListener('keydown', (event) => { if (event.key === 'Escape' && editor && !event.defaultPrevented) requestClose(); });
-document.getElementById('add-template-card')?.addEventListener('click', () => openEditor(null));
+[listRoot, app].forEach((root) => root?.addEventListener('click', onClick));
+document.getElementById('add-template-card')?.addEventListener('click', openNewTemplate);
 
-app.addEventListener('input', (event) => {
+app?.addEventListener('input', (event) => {
   const el = event.target;
   if (!editor) return;
-  if (el.dataset.info && el.dataset.info !== 'domain') editor.content[el.dataset.info] = el.value;
-  else if (el.dataset.secTitle) findSection(el.dataset.secTitle).title = el.value;
-  else if (el.dataset.freeTitle) sectionOf(el.dataset.freeTitle).blocks.find((block) => block.instance_id === el.dataset.freeTitle).fields[0].label = el.value;
-  else return;
+  if (el.dataset.info && el.dataset.info !== 'domain') {
+    editor.content[el.dataset.info] = el.value;
+    if (el.dataset.info === 'name' && (editor.content.proc_mode || 'new') === 'new') {
+      const procNameInput = app.querySelector('[data-info="new_proc_name"]');
+      if (procNameInput && (!procNameInput.value || procNameInput.value.startsWith('Thủ tục '))) {
+        procNameInput.value = el.value ? `Thủ tục ${el.value}` : '';
+        editor.content.new_proc_name = procNameInput.value;
+      }
+    }
+    if (el.dataset.info === 'new_proc_code') {
+      editor.content.new_proc_code = el.value.trim().toUpperCase();
+      const procEl = document.getElementById('ftb-procedure');
+      const dup = el.value.trim() ? (Array.isArray(procedures) ? procedures : []).find(p => p.code?.toUpperCase() === el.value.trim().toUpperCase()) : null;
+      let dupBox = procEl?.querySelector('.ftb-proc-dup-alert');
+      if (dup) {
+        el.style.borderColor = '#b91c1c';
+        el.style.background = '#fff5f5';
+        el.style.color = '#991b1b';
+        if (!dupBox) {
+          el.closest('.ftb-proc-new-grid')?.insertAdjacentHTML('afterend', `
+            <div class="ft-alert ftb-proc-dup-alert" role="alert" style="margin:4px 0 0;padding:8px 12px;font-size:13px;border-left:3px solid #b91c1c;background:#fef2f2;color:#991b1b;">
+              <strong>⚠️ Trùng mã thủ tục:</strong> Mã <code>${escapeHtml(el.value.trim().toUpperCase())}</code> đã thuộc về <em>"${escapeHtml(dup.name)}"</em>. Vui lòng nhập mã khác hoặc chuyển sang "Chọn thủ tục đã có".
+            </div>
+          `);
+        } else {
+          dupBox.innerHTML = `<strong>⚠️ Trùng mã thủ tục:</strong> Mã <code>${escapeHtml(el.value.trim().toUpperCase())}</code> đã thuộc về <em>"${escapeHtml(dup.name)}"</em>. Vui lòng nhập mã khác hoặc chuyển sang "Chọn thủ tục đã có".`;
+        }
+      } else {
+        el.style.borderColor = '';
+        el.style.background = '';
+        el.style.color = '';
+        dupBox?.remove();
+      }
+    }
+  } else {
+    return;
+  }
   markDirty();
 });
 
-listRoot.addEventListener('change', (event) => {
+listRoot?.addEventListener('change', (event) => {
   const el = event.target;
   if (!el.dataset.filter) return;
   filters[el.dataset.filter] = el.type === 'checkbox' ? el.checked : el.value;
   loadRows();
 });
-app.addEventListener('change', (event) => {
+
+app?.addEventListener('change', (event) => {
   const el = event.target;
   if (!editor) return;
+  if (el.name === 'proc_mode') {
+    editor.content.proc_mode = el.value;
+    const procEl = document.getElementById('ftb-procedure');
+    if (procEl) procEl.innerHTML = procedureControl();
+    return markDirty();
+  }
   if (el.dataset.info === 'domain') {
     editor.content.domain = el.value;
-    editor.content.procedure_id = null; // danh mục thủ tục đi theo lĩnh vực
+    editor.content.new_proc_code = getSuggestedProcedureCode(el.value);
+    editor.content.procedure_id = null;
     document.getElementById('ftb-procedure').innerHTML = procedureControl();
+    showDomainError(!el.value);
+    docApi?.refreshLibrary();
     return markDirty();
   }
   if (el.dataset.info === 'procedure_id') { editor.content.procedure_id = el.value; return markDirty(); }
-  if (el.dataset.freeType) {
-    sectionOf(el.dataset.freeType).blocks.find((block) => block.instance_id === el.dataset.freeType).fields[0].type = el.value;
-    return markDirty();
-  }
-  if (el.dataset.moveTo && el.value) {
-    const id = el.dataset.moveTo;
-    change(() => { moveBlock(id, el.value); editor.selected = el.value; }, `[data-move-to="${id}"]`);
-  }
 });
-
-// ===== Kéo thả HTML5 =====
-let drag = null; // { kind: 'section' | 'block' | 'lib', id }
-const clearDropMarks = () => app.querySelectorAll('.is-drop-target, .is-dragging').forEach((el) => el.classList.remove('is-drop-target', 'is-dragging'));
-const dropZone = (target) => (drag?.kind === 'section' ? target.closest('[data-drop-sections]') : target.closest('[data-drop-blocks]'));
-// Vị trí chèn = số phần tử (trừ phần tử đang kéo) có tâm nằm trên con trỏ.
-const dropIndex = (zone, selector, y) => [...zone.children]
-  .filter((el) => el.matches(selector) && !el.classList.contains('is-dragging'))
-  .filter((el) => { const box = el.getBoundingClientRect(); return box.top + box.height / 2 < y; }).length;
-
-app.addEventListener('dragstart', (event) => {
-  const handle = event.target.closest?.('[draggable="true"]');
-  if (!handle || !editor) return;
-  const block = handle.closest('[data-blk]');
-  const section = handle.closest('[data-sec]');
-  drag = handle.dataset.lib ? { kind: 'lib', id: handle.dataset.lib } : block ? { kind: 'block', id: block.dataset.blk } : { kind: 'section', id: section.dataset.sec };
-  const moving = block || (drag.kind === 'section' ? section : handle);
-  moving.classList.add('is-dragging');
-  if (moving !== handle) event.dataTransfer.setDragImage(moving, 16, 16);
-  event.dataTransfer.effectAllowed = drag.kind === 'lib' ? 'copy' : 'move';
-  event.dataTransfer.setData('text/plain', drag.id);
-});
-app.addEventListener('dragover', (event) => {
-  const zone = drag && dropZone(event.target);
-  if (!zone) return;
-  event.preventDefault();
-  event.dataTransfer.dropEffect = drag.kind === 'lib' ? 'copy' : 'move';
-  app.querySelectorAll('.is-drop-target').forEach((el) => el !== zone && el.classList.remove('is-drop-target'));
-  zone.classList.add('is-drop-target');
-});
-app.addEventListener('drop', (event) => {
-  const zone = drag && dropZone(event.target);
-  if (!zone) return;
-  event.preventDefault();
-  const current = drag;
-  if (current.kind === 'section') {
-    const index = dropIndex(zone, '[data-sec]', event.clientY);
-    return change(() => moveIn(editor.content.sections, findSection(current.id), index));
-  }
-  const sectionId = zone.dataset.dropBlocks;
-  const index = dropIndex(zone, '[data-blk]', event.clientY);
-  if (current.kind === 'lib') return change(() => addBlock(current.id, sectionId, index));
-  change(() => { moveBlock(current.id, sectionId, index); editor.selected = sectionId; });
-});
-app.addEventListener('dragend', () => { drag = null; clearDropMarks(); });
 
 // ===== Khởi động =====
-fetchProcedureNames('all')
-  .then((items) => { procedures = items; })
-  .catch(() => { procedures = 'unavailable'; })
-  .finally(() => {
-    const slot = document.getElementById('ftb-procedure');
-    if (slot && editor) slot.innerHTML = procedureControl();
-  });
+async function startEditor() {
+  const id = legacy.get('id') || (legacy.has('domain') ? null : stored(TEMPLATE_KEY));
+  store(TEMPLATE_KEY, id);
+  if (!id) return openEditor(null);
+  try {
+    openEditor(await formTemplates.getAdmin(id));
+  } catch (error) {
+    store(TEMPLATE_KEY, null);
+    app.innerHTML = `<div class="ft-alert" role="alert"><strong>Không mở được mẫu đơn.</strong> ${escapeHtml(error.message)}
+      <p class="ft-alert__hint"><a href="${listUrl()}">Về danh sách mẫu</a></p></div>`;
+  }
+}
+// Chờ danh sách thủ tục trước khi mở khung: mã thủ tục gợi ý cần biết các mã đã dùng.
+if (app) {
+  fetchProcedureNames('all')
+    .then((items) => { procedures = items; })
+    .catch(() => { procedures = 'unavailable'; })
+    .finally(startEditor);
+}
 
-renderList();
+
+window.addEventListener('procedure:created', (e) => {
+  const np = e.detail;
+  if (!np || !np.code) return;
+  if (!Array.isArray(procedures)) procedures = [];
+  if (!procedures.find((p) => p.code === np.code)) {
+    procedures.push({ id: np.code, code: np.code, name: np.name, domain: np.domain });
+  }
+});
+
+if (listRoot) renderList();

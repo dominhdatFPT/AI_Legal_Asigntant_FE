@@ -7,16 +7,35 @@
 // =============================================================================
 import { checkField } from '/field-rules.js';
 
-// type → quy tắc trong field-rules.js. Kiểu không có ở đây (text, textarea, select) chỉ kiểm tra bắt buộc.
+// type → quy tắc trong field-rules.js. Kiểu không có ở đây (text, textarea, select, static_text, table) chỉ kiểm tra bắt buộc.
 export const TYPE_RULES = {
   cccd: 'cccd', phone: 'phone', email: 'email', number: 'number',
   past_date: 'pastDate', dob: 'dob', issue_date: 'issueDate'
 };
 const DATE_TYPES = ['date', 'past_date', 'dob', 'issue_date'];
-export const inputKind = (type) => (DATE_TYPES.includes(type) ? 'date' : type === 'textarea' || type === 'select' ? type : 'text');
+export const inputKind = (type) => (
+  DATE_TYPES.includes(type) ? 'date'
+  : ['textarea', 'select', 'static_text', 'table'].includes(type) ? type
+  : 'text'
+);
 
-// Kiểu admin chọn cho "Trường tự do" (admin chỉ nhập tiêu đề ô).
-export const FREE_TYPES = { text: 'Chữ ngắn', textarea: 'Đoạn dài', date: 'Ngày', number: 'Số' };
+// Kiểu admin chọn cho "Trường tự do" (admin chỉ nhập tiêu đề ô / nội dung điều luật).
+export const FREE_TYPES = {
+  static_text: 'Văn bản / Điều luật / Hợp đồng (Chỉ hiển thị, không nhập)',
+  textarea: 'Đoạn văn dài (Người dân nhập)',
+  table: 'Bảng biểu (Table)',
+  text: 'Chữ ngắn (Người dân nhập)',
+  date: 'Ngày',
+  number: 'Số'
+};
+
+export const WIDTH_OPTIONS = {
+  full: '100% (Toàn dòng)',
+  half: '50% (Nửa dòng)',
+  third: '33% (1/3 dòng)',
+  two_thirds: '66% (2/3 dòng)'
+};
+
 export const FREE_BLOCK_KEY = 'free_field';
 
 const f = (key, label, type, required, autofill, extra) => ({ key, label, type, required, ...(autofill && { autofill }), ...extra });
@@ -80,7 +99,28 @@ export function snapshotBlock(blockKey, usedIds, free = {}) {
   let n = 1;
   while (usedIds.has(`${prefix}_${n}`)) n += 1;
   const fields = block.fields.map((field) => structuredClone(field));
-  if (blockKey === FREE_BLOCK_KEY) Object.assign(fields[0], { label: free.label ?? '', type: free.type || 'text' });
+  if (blockKey === FREE_BLOCK_KEY) {
+    const ftype = free.type || 'static_text';
+    const defWidth = 'full';
+    const isStatic = ftype === 'static_text';
+    Object.assign(fields[0], {
+      label: free.label ?? '',
+      type: ftype,
+      required: isStatic ? false : (free.required ?? false),
+      width: free.width || defWidth,
+      ...(ftype === 'table' ? {
+        table_config: free.table_config || {
+          cols: free.cols || [
+            { id: 'c1', title: 'STT', width: 15 },
+            { id: 'c2', title: 'Nội dung', width: 55 },
+            { id: 'c3', title: 'Ghi chú', width: 30 }
+          ],
+          rows: free.rows || 3,
+          allow_add_row: true
+        }
+      } : {})
+    });
+  }
   return { instance_id: `${prefix}_${n}`, block_key: blockKey, fields };
 }
 
@@ -94,10 +134,12 @@ export function checkTemplate(content) {
   if (!content.sections.length) errors.push('Mẫu cần ít nhất một mục.');
   content.sections.forEach((section, i) => {
     const where = section.title?.trim() || `Mục ${i + 1}`;
-    if (!section.title?.trim()) errors.push(`Mục ${i + 1} chưa có tên.`);
     if (!section.blocks.length) errors.push(`${where}: chưa có thẻ nào.`);
     section.blocks.forEach((block) => {
-      if (block.block_key === FREE_BLOCK_KEY && !block.fields[0].label.trim()) errors.push(`${where}: trường tự do chưa có tiêu đề ô.`);
+      if (block.block_key === FREE_BLOCK_KEY && !block.fields[0].label.trim()) {
+        const typeName = block.fields[0].type === 'static_text' ? 'nội dung văn bản/điều luật' : 'tiêu đề ô';
+        errors.push(`${where}: trường tự do chưa có ${typeName}.`);
+      }
     });
   });
   return errors;
@@ -110,6 +152,20 @@ export function checkValues(content, values) {
   content.sections.forEach((section) => section.blocks.forEach((block) => {
     const dob = (values[`${block.instance_id}.${block.fields.find((field) => field.type === 'dob')?.key}`] || '').trim();
     block.fields.forEach((field) => {
+      // Trường static_text chỉ đọc, không cần người dùng nhập
+      if (field.type === 'static_text') return;
+
+      // Xử lý trường table
+      if (field.type === 'table') {
+        const prefix = `${block.instance_id}.${field.key}`;
+        Object.entries(values).forEach(([k, val]) => {
+          if (k.startsWith(`${prefix}_`)) {
+            clean[k] = String(val ?? '').trim();
+          }
+        });
+        return;
+      }
+
       const path = `${block.instance_id}.${field.key}`;
       const value = String(values[path] ?? '').trim();
       if (!value) {

@@ -67,3 +67,21 @@
 .app-footer-links{display:flex;gap:24px;flex-wrap:wrap}
 @media(max-width:767px){.app-footer-grid{grid-template-columns:1fr}.app-footer-bottom{flex-direction:column;align-items:flex-start}}
 @media(max-width:600px){.app-page .shell{width:calc(100% - 32px)}.app-hero{padding:20px 16px}.app-hero h1{font-size:24px}.app-hero .filter-panel{padding:18px 16px}.app-card{padding:20px 16px}}
+
+/* Download buttons for reference forms */
+.card-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
+.catalog-grid .card-bottom{align-items:flex-start;flex-direction:column;gap:13px;width:100%}
+.card-download-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;font-size:13px;font-weight:600;border:1px solid #d8cac6;border-radius:12px;background:#fff;color:#5b524f;cursor:pointer;transition:all .15s;min-height:40px}
+.card-download-btn:hover{background:#fdf2f2;border-color:var(--red);color:var(--red)}
+.card-download-btn svg{flex-shrink:0}
+
+.viewer-actions{margin-top:24px}
+.download-button{background:var(--red);color:#fff;padding:12px 20px;border:1px solid var(--red);border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:14px;width:100%;box-shadow:0 2px 6px rgba(185,28,28,0.22);transition:all .15s;text-decoration:none;cursor:pointer}
+.download-button:hover{background:var(--red-dark);box-shadow:0 4px 12px rgba(185,28,28,0.32)}
+.download-button:after{content:none!important}
+.download-button svg{flex-shrink:0}
+
+.reader-toolbar-actions{display:flex;align-items:center;gap:16px}
+.toolbar-download-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;font-weight:700;border:1px solid #d8cac6;border-radius:8px;background:#fff;color:var(--red);cursor:pointer;transition:all .15s}
+.toolbar-download-btn:hover{background:#fdf2f2;border-color:var(--red)}
+.toolbar-download-btn svg{flex-shrink:0}

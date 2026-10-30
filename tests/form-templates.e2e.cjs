@@ -4,7 +4,7 @@
 // Biến môi trường: BASE_URL (mặc định http://localhost:3100), PLAYWRIGHT (đường dẫn gói playwright nếu không cài trong dự án),
 //   CHROME (mặc định Chrome trên Windows), SHOTS (thư mục ảnh chụp + PDF, mặc định ../screenshots-mau-don).
 // Phiên đăng nhập là phiên giả trong script (chặn /api/users/me...), không đi qua /login (Firebase đang hỏng).
-// Dữ liệu mẫu đơn dùng mock trong bộ nhớ của form-template-service.js (mở trang với ?api=mock).
+// Dữ liệu mẫu đơn dùng mock trong bộ nhớ của form-template-service.js (USE_MOCK mặc định).
 const path = require('path');
 const fs = require('fs');
 const assert = require('assert/strict');
@@ -45,7 +45,7 @@ async function admin(browser) {
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   watch(page);
   await fakeSession(page, { id: 'u1', role: 'admin', full_name: 'Quản trị thử', email: 'admin@example.vn' });
-  await page.goto(`${BASE}/land-forms?api=mock`);
+  await page.goto(`${BASE}/land-forms`);
   await page.waitForSelector('#ftl-rows strong');
   // Trang Hồ sơ đất đai chỉ hiện mẫu lĩnh vực đất đai
   assert.deepEqual(await page.locator('#ftl-rows strong').allInnerTexts(), ['Đơn đề nghị tách thửa đất', 'Hợp đồng ủy quyền']);
@@ -115,7 +115,7 @@ async function admin(browser) {
   const beforeUnload = new Promise((resolve) => page.once('dialog', async (d) => { resolve(d.type()); await d.dismiss(); }));
   await page.evaluate(() => { document.body.click(); }); // cần có tương tác người dùng để Chrome hiện beforeunload
   await page.click('[data-info="name"]');
-  await page.goto(`${BASE}/dashboard?api=mock`).catch(() => {});
+  await page.goto(`${BASE}/dashboard`).catch(() => {});
   assert.equal(await beforeUnload, 'beforeunload');
   assert.equal(new URL(page.url()).pathname, '/land-forms');
   step('cảnh báo khi rời chưa lưu (đóng khung, link trong trang, beforeunload)');
@@ -184,7 +184,7 @@ async function admin(browser) {
   const biz = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   watch(biz);
   await fakeSession(biz, { id: 'u1', role: 'admin', full_name: 'Quản trị thử', email: 'admin@example.vn' });
-  await biz.goto(`${BASE}/business-form-templates?api=mock`);
+  await biz.goto(`${BASE}/business-form-templates`);
   await biz.waitForSelector('#ftl-rows strong');
   assert.deepEqual(await biz.locator('#ftl-rows strong').allInnerTexts(), ['Giấy đề nghị đăng ký hộ kinh doanh']);
   await biz.click('#add-template-card');
@@ -209,7 +209,7 @@ async function citizen(browser) {
   const page = await context.newPage();
   watch(page);
   await fakeSession(page, { id: 'u2', role: 'citizen', full_name: 'Nguyễn Thị Hương', email: 'huong@example.vn' });
-  await page.goto(`${BASE}/form-fill?api=mock`);
+  await page.goto(`${BASE}/form-fill`);
   await page.waitForSelector('.ff-card');
   assert.deepEqual(await page.locator('.ff-card h2').allInnerTexts(), ['Hợp đồng ủy quyền', 'Giấy đề nghị đăng ký hộ kinh doanh']); // chỉ mẫu đã xuất bản
   await page.selectOption('[data-filter="domain"]', 'ho_kinh_doanh');
@@ -295,7 +295,7 @@ async function citizen(browser) {
   const page2 = await browser.newPage();
   watch(page2);
   await fakeSession(page2, { id: 'u3', role: 'citizen', full_name: 'Chưa khai hồ sơ', email: 'moi@example.vn' }, null);
-  await page2.goto(`${BASE}/form-fill?api=mock`);
+  await page2.goto(`${BASE}/form-fill`);
   await page2.click('[data-act="preview"] >> nth=0');
   await page2.click('[data-act="fill"]');
   await page2.waitForSelector('text=Cần cập nhật hồ sơ cá nhân');
