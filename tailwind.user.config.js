@@ -7,6 +7,7 @@ module.exports = {
     './AI_Legal/src/pages/account.html',
     './AI_Legal/src/pages/form-library.html',
     './AI_Legal/src/pages/lawyer-registration.html',
+    './AI_Legal/src/pages/chatbox.html',
     // Nội dung "Tạo hồ sơ" được chèn vào trang tổng quan (user-dashboard-navigation.js)
     './AI_Legal/src/pages/application-submission.html',
     // HTML dựng bằng JS (user-dashboard-data.js, auth-api.js, admin-ai-chat.js...)

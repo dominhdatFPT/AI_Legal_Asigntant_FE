@@ -16,6 +16,7 @@ const USER_NAV_ACTIVE = {
   '/xem-mau-don': 'document-storages',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
+  '/chatbox': 'chatbox',
   '/account': 'account',
   '/detail-information': 'account'
 };
@@ -224,6 +225,9 @@ app.get('/business-form-templates', sendAdminPage('business-form-templates.html'
 app.get('/form-templates/editor', sendAdminPage('form-template-editor.html'));
 
 app.get('/user-dashboard', sendUserPage('user-dashboard.html'));
+
+app.get('/chatbox', sendUserPage('chatbox.html'));
+app.get('/user-chatbox', (req, res) => res.redirect(301, '/chatbox'));
 
 app.get('/location-search', sendUserPage('location-search.html'));
 
