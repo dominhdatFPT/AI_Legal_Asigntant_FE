@@ -16,7 +16,6 @@ const setTextIfPresent = (selector, text) => {
   const element = $(selector);
   if (element) element.textContent = text;
 };
-const COMING_SOON_BADGE = '<span class="admin-coming-soon"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>Sắp ra mắt</span>';
 
 const STATUS_STYLES = {
   draft: 'admin-status--draft',
@@ -26,10 +25,6 @@ const STATUS_STYLES = {
   cancelled: 'admin-status--cancelled'
 };
 
-document.querySelectorAll('[data-coming-soon]').forEach((element) => {
-  element.innerHTML = COMING_SOON_BADGE;
-});
-
 async function renderSummary() {
   try {
     const summary = await fetchApplicationSummary();
@@ -38,7 +33,10 @@ async function renderSummary() {
       total,
       land: summary.by_domain.land,
       business: summary.by_domain.business,
-      in_progress: summary.by_status.submitted + summary.by_status.processing
+      in_progress: summary.by_status.submitted + summary.by_status.processing,
+      submitted: summary.by_status.submitted,
+      processing: summary.by_status.processing,
+      completed: summary.by_status.completed
     };
     const orchardValues = {
       intake: formatPercent(summary.by_status.draft + summary.by_status.submitted, total),
@@ -83,11 +81,9 @@ async function renderTable() {
           <td><div class="admin-table__code">${escapeHtml(`${item.procedure_code}-${item.id.slice(0, 8).toUpperCase()}`)}</div><span class="admin-table__secondary">${formatDate(item.created_at)}</span></td>
           <td><div class="admin-table__primary">${escapeHtml(item.applicant_name || '—')}</div><span class="admin-table__secondary">${item.applicant_id_number ? `CCCD: ${escapeHtml(item.applicant_id_number)}` : ''}</span></td>
           <td><div class="admin-table__primary">${escapeHtml(item.procedure_name || item.procedure_code)}</div><span class="admin-table__secondary">${escapeHtml(item.address || '')}</span></td>
-          <td>${COMING_SOON_BADGE}</td>
           <td><span class="admin-status ${STATUS_STYLES[item.status] || ''}">${escapeHtml(STATUS_LABELS[item.status] || item.status)}</span></td>
-          <td class="admin-table__action-cell">${COMING_SOON_BADGE}</td>
         </tr>`).join('')
-      : `<tr><td class="admin-table__message" colspan="6">${state.q || state.domain ? 'Không có hồ sơ phù hợp.' : 'Chưa có hồ sơ nào trong hệ thống.'}</td></tr>`;
+      : `<tr><td class="admin-table__message" colspan="4">${state.q || state.domain ? 'Không có hồ sơ phù hợp.' : 'Chưa có hồ sơ nào trong hệ thống.'}</td></tr>`;
 
     const from = pagination.total ? (pagination.page - 1) * pagination.page_size + 1 : 0;
     const to = Math.min(pagination.page * pagination.page_size, pagination.total);
@@ -96,7 +92,7 @@ async function renderTable() {
     $('#admin-applications-prev').disabled = pagination.page <= 1;
     $('#admin-applications-next').disabled = pagination.page >= pagination.total_pages;
   } catch {
-    body.innerHTML = '<tr><td class="admin-table__message" colspan="6" role="alert">Không tải được hồ sơ, thử lại sau. <button type="button" id="admin-table-retry" class="admin-table__retry">Thử lại</button></td></tr>';
+    body.innerHTML = '<tr><td class="admin-table__message" colspan="4" role="alert">Không tải được hồ sơ, thử lại sau. <button type="button" id="admin-table-retry" class="admin-table__retry">Thử lại</button></td></tr>';
     $('#admin-table-retry').addEventListener('click', renderTable);
   }
 }

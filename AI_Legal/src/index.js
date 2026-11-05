@@ -14,6 +14,8 @@ const USER_NAV_ACTIVE = {
   '/document-storages': 'document-storages',
   '/form-library': 'document-storages',
   '/xem-mau-don': 'document-storages',
+  '/lam-don': 'lam-don',
+  '/form-fill': 'lam-don',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/chatbox': 'chatbox',
@@ -51,10 +53,10 @@ const adminSidebarFile = path.join(__dirname, 'partials', 'admin-sidebar.html');
 const adminTopbarFile = path.join(__dirname, 'partials', 'admin-topbar.html');
 const ADMIN_NAV_ACTIVE = {
   '/dashboard': 'tong-quan',
+  '/landforms': 'ho-so-dat-dai',
   '/land-forms': 'ho-so-dat-dai',
   '/business-form-templates': 'ho-so-ho-kinh-doanh',
-  '/user-management': 'quan-ly-nguoi-dung',
-  '/lawyer-management': 'quan-ly-luat-su'
+  '/user-management': 'quan-ly-nguoi-dung'
 };
 
 const sendAdminPage = (fileName) => (req, res, next) => {
@@ -208,14 +210,13 @@ app.get('/api/firebase-config', (req, res) => {
 
 app.get('/dashboard', sendAdminPage('dashboard.html'));
 
+app.get('/landforms', sendAdminPage('LandForms-admin.html'));
+// Giữ đường dẫn mới để các bookmark hiện tại vẫn mở đúng giao diện cũ.
 app.get('/land-forms', sendAdminPage('LandForms-admin.html'));
 
 app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', sendAdminPage('user-management.html'));
-
-// Quản lý hồ sơ đăng ký luật sư (xem, duyệt, từ chối). ?demo=1 trên localhost dùng dữ liệu mẫu.
-app.get('/lawyer-management', sendAdminPage('lawyer-management.html'));
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
@@ -243,7 +244,9 @@ app.get('/dien-mau-don', (req, res) => {
 app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
 // Công dân chọn mẫu đơn dùng chung đã xuất bản, điền rồi tải PDF (form-fill.js).
-app.get('/form-fill', (req, res) => res.redirect(302, '/user-dashboard'));
+app.get('/lam-don', (req, res) => res.redirect(`/application-submission${req.query.template ? `?template=${encodeURIComponent(String(req.query.template))}` : ''}`));
+// Bí danh tương thích cho đường dẫn điền mẫu đơn hiện tại.
+app.get('/form-fill', (req, res) => res.redirect(`/application-submission${req.query.template ? `?template=${encodeURIComponent(String(req.query.template))}` : ''}`));
 
 app.get('/lawyer-registration', sendUserPage('lawyer-registration.html'));
 
@@ -257,14 +260,11 @@ app.get('/application-submission', sendUserPage('user-dashboard.html'));
 const renamedPaths = {
   '/applicationSubmission': '/application-submission',
   '/kho-mau-don-tham-khao': '/document-storages',
-  '/document-templates': '/document-storages',
-  '/landforms': '/land-forms',
-  '/lam-don': '/user-dashboard'
+  '/document-templates': '/document-storages'
 };
 Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
   app.get(oldPath, (req, res) => {
-    // Cắt theo độ dài: Express khớp đường dẫn không phân biệt hoa thường (/LandForms), replace() thì có.
-    res.redirect(301, newPath + req.originalUrl.slice(oldPath.length));
+    res.redirect(301, req.originalUrl.replace(oldPath, newPath));
   });
 });
 

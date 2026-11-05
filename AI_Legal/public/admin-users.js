@@ -136,7 +136,7 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
     function renderTableMessage(icon, message) {
       userTableBody.innerHTML = `
         <tr>
-          <td colspan="7" class="py-12 text-center text-stone-500">
+          <td colspan="6" class="py-12 text-center text-stone-500">
             <span class="material-symbols-outlined text-[36px] text-stone-400 mb-2">${icon}</span>
             <p class="font-medium text-stone-600">${escapeHtml(message)}</p>
           </td>
@@ -319,7 +319,7 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
         if (isViewingSuspended) {
           userTableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="py-12 text-center text-stone-500">
+              <td colspan="6" class="py-12 text-center text-stone-500">
                 <p class="font-medium text-stone-600">Hiện không có tài khoản nào trong danh mục đã xóa.</p>
                 <button type="button" data-empty-action="all" class="mt-3 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold">
                   Xem tất cả người dùng
@@ -330,7 +330,7 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
         } else {
           userTableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="py-12 text-center text-stone-500">
+              <td colspan="6" class="py-12 text-center text-stone-500">
                 <span class="material-symbols-outlined text-[36px] text-stone-400 mb-2">person_search</span>
                 <p class="font-medium text-stone-600">Không tìm thấy người dùng nào phù hợp với điều kiện tìm kiếm.</p>
                 <button type="button" data-empty-action="reset" class="mt-3 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold">
@@ -438,10 +438,6 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
 
         return `
           <tr class="${rowBgClass}" id="user-row-${user.id}">
-            <td class="py-3.5 px-4 text-center">
-              <input class="w-4 h-4 rounded text-red-600 accent-red-600 cursor-pointer user-checkbox" type="checkbox" data-id="${user.id}" />
-            </td>
-            
             <td class="py-3.5 px-4">
               <div class="flex items-center gap-3">
                 <div class="relative shrink-0">
@@ -562,8 +558,6 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
       document.getElementById('card-front-expiry').textContent = user.cardExpiry || '—';
       document.getElementById('card-back-issuedate').textContent = user.cardIssueDate || '—';
       document.getElementById('card-back-issueplace').textContent = user.cardIssuePlace || '—';
-      document.getElementById('card-back-mrz1').textContent = `IDVNM${user.cccd}<<<<<<<<<<<<<<`;
-      document.getElementById('card-back-mrz3').textContent = `${user.name.toUpperCase().replace(/\s+/g, '<')}<<<<<<<<<<<<<<<<`;
 
       document.getElementById('modal-input-name').value = user.name;
       document.getElementById('modal-input-cccd').value = user.cccd;
@@ -965,13 +959,6 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
       const start = () => {
         updateCounts();
         renderUserTable();
-
-        const checkAllBox = document.getElementById('check-all');
-        if (checkAllBox) {
-          checkAllBox.addEventListener('change', function () {
-            document.querySelectorAll('.user-checkbox').forEach(cb => { cb.checked = checkAllBox.checked; });
-          });
-        }
 
         if (userSearchInput) userSearchInput.addEventListener('input', refilterUsers);
         if (userTypeSelect) userTypeSelect.addEventListener('change', refilterUsers);

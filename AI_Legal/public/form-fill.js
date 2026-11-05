@@ -1,11 +1,11 @@
 // =============================================================================
-// TRANG CÔNG DÂN "LÀM ĐƠN THEO MẪU" (/form-fill): chọn mẫu đã xuất bản → xem trước → điền → tải PDF.
+// TRANG CÔNG DÂN "LÀM ĐƠN THEO MẪU" (/lam-don): chọn mẫu đã xuất bản → xem trước → điền → tải Word/xem PDF.
 // Form vẽ bằng form-renderer.js (giống hệt màn Tổng hợp của admin). Dữ liệu công dân điền KHÔNG gửi xuống BE:
 // chỉ dùng để dựng bản in A4 rồi mở hộp thoại in của trình duyệt (chọn "Lưu dưới dạng PDF").
 // =============================================================================
 import { formTemplates, DOMAINS, PROCEDURE_PREFIX } from '/form-template-service.js';
 import { checkValues } from '/form-blocks.js';
-import { renderForm, readValues, showErrors, autofillTargets, applyAutofill, renderPrint, initTableResizers } from '/form-renderer.js';
+import { renderForm, readValues, readGroups, showErrors, autofillTargets, applyAutofill, renderPrint } from '/form-renderer.js';
 import { escapeHtml, fetchMyCitizenProfile, fetchProcedureNames, PROFILE_PATH } from '/auth-api.js';
 
 const app = document.getElementById('ff-app');
@@ -26,15 +26,19 @@ const loadProfile = () => {
 };
 const needProfileHtml = () => `<div class="ft-alert" role="alert"><strong>Cần cập nhật hồ sơ cá nhân.</strong>
   Hồ sơ của bạn chưa có thông tin CCCD. Hệ thống yêu cầu có CCCD trước khi làm bất kỳ đơn nào.
-  <p><a class="ft-btn ft-btn--primary" href="${PROFILE_PATH}?required=1&amp;redirect=${encodeURIComponent('/form-fill')}">Cập nhật hồ sơ</a></p></div>`;
+  <p><a class="ft-btn ft-btn--primary" href="${PROFILE_PATH}?required=1&amp;redirect=${encodeURIComponent('/lam-don')}">Cập nhật hồ sơ</a></p></div>`;
 
 function showList() {
+  if (new URLSearchParams(window.location.search).get('from') === 'application-submission') {
+    window.location.assign('/application-submission');
+    return;
+  }
   current = null;
   app.innerHTML = `<p class="section-label">Mẫu đơn dùng chung</p><h1>Làm đơn theo mẫu</h1>
-  <p class="ft-muted">Chọn mẫu, xem trước, điền thông tin rồi tải bản PDF để in và mang đi nộp. Thông tin bạn điền không được gửi lên hệ thống.</p>
-  <div class="ff-filters"><label>Lĩnh vực<select data-filter="domain">${domainOptions()}</select></label>
-    <label>Thủ tục<select data-filter="procedureId">${procedureOptions()}</select></label></div>
-  <div id="ff-list" class="ff-list" aria-live="polite"><p class="ft-muted">Đang tải mẫu…</p></div>`;
+    <p class="ft-muted">Chọn mẫu, xem trước, điền đủ thông tin rồi xem PDF hoặc tải file Word để in và ký. Thông tin được kiểm tra đủ trước khi xuất file.</p>
+    <div class="ff-filters"><label>Lĩnh vực<select data-filter="domain">${domainOptions()}</select></label>
+      <label>Thủ tục<select data-filter="procedureId">${procedureOptions()}</select></label></div>
+    <div id="ff-list" class="ff-list" aria-live="polite"><p class="ft-muted">Đang tải mẫu…</p></div>`;
   loadList();
 }
 
@@ -65,7 +69,6 @@ async function open(id, mode) {
       <button type="button" class="ft-btn ft-btn--primary" data-act="fill">Dùng mẫu này</button></div>
       <p class="ft-muted">Xem trước các thông tin cần điền để biết mẫu có phù hợp không.</p>
       <fieldset disabled class="ff-preview">${renderForm(current.content)}</fieldset>`;
-    initTableResizers(app);
     return app.querySelector('[data-act="fill"]').focus();
   }
   app.innerHTML = '<p class="ft-muted" role="status">Đang kiểm tra hồ sơ cá nhân…</p>';
@@ -82,8 +85,20 @@ async function open(id, mode) {
       <p class="ft-muted">Thường chọn thẻ của người làm đơn. Các ô đã điền vẫn sửa được.</p></div>` : ''}
     <div id="ff-errors" tabindex="-1"></div>
     <form id="ff-form" novalidate>${renderForm(current.content)}
-      <div class="ff-actions"><button type="submit" class="ft-btn ft-btn--primary">Tải về PDF</button></div></form>`;
-  initTableResizers(app);
+      <div class="ff-actions"><button type="button" class="ft-btn" data-act="preview-pdf">Xem trước PDF</button>
+        <button type="submit" class="ft-btn ft-btn--primary">Tải file Word</button></div></form>`;
+  const { profileValues } = await import('/form-renderer.js');
+  const registered = profileValues(profile);
+  current.content.sections.forEach((section) => section.blocks.forEach((block) => block.fields.forEach((field) => {
+    if (!Object.prototype.hasOwnProperty.call(registered, field.autofill)) return;
+    const input = document.getElementById(`ft-${`${block.instance_id}.${field.key}`.replace(/[^a-z0-9_]/gi, '-')}`);
+    if (!input) return;
+    input.value = registered[field.autofill] || '';
+    input.readOnly = true;
+    if (input.tagName === 'SELECT') input.disabled = true;
+    input.dataset.profileLocked = 'true';
+    input.title = 'Thông tin từ tài khoản đã đăng ký; cập nhật trong Tài khoản.';
+  })));
   app.querySelector('#ff-target, #ff-form input')?.focus();
 }
 
@@ -97,20 +112,51 @@ async function autofill() {
   document.getElementById('ff-errors').innerHTML = `<p class="ff-ok" role="status">Đã tự điền ${filled} ô từ hồ sơ của bạn. Hãy kiểm tra lại trước khi tải về.</p>`;
 }
 
-function download(form) {
+function readFilledValues(form) {
+  if (!form.reportValidity()) return null;
   const { errors, values } = checkValues(current.content, readValues(form));
   const count = showErrors(form, errors);
   const box = document.getElementById('ff-errors');
   if (count) {
     box.innerHTML = `<div class="ft-alert" role="alert">Còn ${count} ô chưa đúng hoặc chưa điền. Hãy sửa các ô được đánh dấu đỏ.</div>`;
-    return;
+    return null;
   }
   box.innerHTML = '';
-  printRoot.innerHTML = renderPrint(current.content, values);
-  const title = document.title;
-  document.title = current.content.code ? `${current.content.code} ${current.content.name}` : current.content.name; // tên file PDF gợi ý
-  window.print();
-  document.title = title;
+  return values;
+}
+
+async function previewPdf(form) {
+  const values = readFilledValues(form);
+  if (!values) return;
+  const tab = window.open('', '_blank');
+  try {
+    const blob = await formTemplates.previewPdf(current.id, { values, groups: readGroups(form) });
+    const url = URL.createObjectURL(blob);
+    if (tab) tab.location.href = url;
+    else window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  } catch (error) {
+    tab?.close();
+    document.getElementById('ff-errors').innerHTML = `<div class="ft-alert" role="alert">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+async function downloadWord(form) {
+  const values = readFilledValues(form);
+  if (!values) return;
+  try {
+    const blob = await formTemplates.downloadWord(current.id, { values, groups: readGroups(form) });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `${current.content.code || 'mau-don'}-${current.content.name || 'da-dien'}.docx`.replace(/[\\/:*?"<>|]+/g, '-');
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  } catch (error) {
+    document.getElementById('ff-errors').innerHTML = `<div class="ft-alert" role="alert">${escapeHtml(error.message)}</div>`;
+  }
 }
 
 app.addEventListener('click', (event) => {
@@ -121,10 +167,11 @@ app.addEventListener('click', (event) => {
   if (act === 'preview') { current = null; return open(id, 'preview'); }
   if (act === 'fill') return open(current.id, 'fill');
   if (act === 'autofill') return autofill();
+  if (act === 'preview-pdf') return previewPdf(document.getElementById('ff-form'));
 });
 app.addEventListener('submit', (event) => {
   event.preventDefault();
-  download(event.target);
+  downloadWord(event.target);
 });
 app.addEventListener('change', (event) => {
   const { filter } = event.target.dataset;

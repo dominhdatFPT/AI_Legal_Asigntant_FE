@@ -463,10 +463,11 @@
         <span class="material-symbols-outlined text-base text-secondary">save</span>
         <span class="">Lưu bản nháp</span>
       </button>
-      <button type="button" onclick="alert('Tính năng xem trước PDF đang được hoàn thiện. Bạn có thể kiểm tra thông tin trong phần tóm tắt hồ sơ.')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl border border-slate-300 text-on-surface hover:bg-slate-100 font-semibold text-xs transition flex items-center justify-center gap-1.5">
+      <button type="button" onclick="exportPublishedForm(true)" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl border border-slate-300 text-on-surface hover:bg-slate-100 font-semibold text-xs transition flex items-center justify-center gap-1.5">
         <span class="material-symbols-outlined text-base text-secondary">visibility</span>
         <span class="">Xem trước PDF</span>
       </button>
+      <button type="button" onclick="exportPublishedForm(false)" class="px-4 py-2.5 rounded-xl border border-slate-300 text-on-surface font-semibold text-xs">Tải file Word</button>
     </div>
 
     <p id="submit-error" role="alert" class="hidden text-sm font-semibold text-red-700"></p>
@@ -556,6 +557,45 @@
     let procedureCatalogFailed = false;
 
     let currentFormSchema = null; // form schema của thủ tục đang mở (GET /api/procedures/form-schema/{code})
+    let activePublishedTemplate = null;
+    const publishedFormApi = import('/form-template-service.js');
+    const publishedRenderer = import('/form-renderer.js');
+
+    async function publishedPayload() {
+      const form = document.getElementById('submission-form');
+      if (!form.reportValidity()) return null;
+      const { checkValues } = await import('/form-blocks.js');
+      const raw = {};
+      activePublishedTemplate.content.sections.forEach((section) => section.blocks.forEach((block) => {
+        if (block.block_key === 'repeat_group') return;
+        block.fields.forEach((field) => {
+          const path = `${block.instance_id}.${field.key}`;
+          const input = document.getElementById(`field-${path}`);
+          raw[path] = input?.type === 'checkbox' ? String(input.checked) : input?.value || '';
+        });
+      }));
+      const result = checkValues(activePublishedTemplate.content, raw);
+      for (const [path, message] of Object.entries(result.errors)) {
+        const input = document.getElementById(`field-${path}`);
+        if (input) { markFieldInvalid(input, message); input.reportValidity(); return null; }
+      }
+      return { values: result.values, groups: (await publishedRenderer).readGroups(form) };
+    }
+
+    async function exportPublishedForm(pdf) {
+      if (!activePublishedTemplate) return alert('Chọn mẫu có file Word để xuất tài liệu.');
+      const payload = await publishedPayload();
+      if (!payload) return;
+      const tab = pdf ? window.open('', '_blank') : null;
+      try {
+        const { formTemplates } = await publishedFormApi;
+        const blob = await formTemplates[pdf ? 'previewPdf' : 'downloadWord'](activePublishedTemplate.id, payload);
+        const url = URL.createObjectURL(blob);
+        if (pdf) { if (tab) tab.location.href = url; else window.open(url, '_blank'); }
+        else { const link = document.createElement('a'); link.href = url; link.download = 'ho-so-da-dien.docx'; link.click(); }
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      } catch (error) { tab?.close(); const box = document.getElementById('submit-error'); box.textContent = error.message; box.classList.remove('hidden'); }
+    }
     const formSchemaCache = new Map();
     let activeProcedureSuggestionIndex = -1;
 
@@ -704,7 +744,13 @@
       };
       Object.entries(values).forEach(([name, value]) => {
         const field = document.getElementById(`field-${name}`);
-        if (field && value) field.value = value; // select chỉ nhận giá trị có trong options
+        if (field) {
+          field.value = value || '';
+          field.readOnly = true;
+          if (field.tagName === 'SELECT') field.disabled = true;
+          field.dataset.profileLocked = 'true';
+          field.title = 'Thông tin từ tài khoản đã đăng ký; cập nhật trong Tài khoản.';
+        }
       });
       updateApplicationSummary();
       updateApplicationProgress();
@@ -714,6 +760,7 @@
     function clearPersonalFields() {
       document.querySelectorAll('#citizen-fields-container input, #citizen-fields-container select, #citizen-fields-container textarea')
         .forEach((field) => {
+          if (field.dataset.profileLocked === 'true') return;
           if (field.type === 'checkbox') field.checked = false;
           else field.value = '';
         });
@@ -1039,6 +1086,9 @@ div:has(> [data-form-step]){display:none}
     // Bước 1 = khối đầu tiên của schema (người làm đơn / bên ủy quyền / bên cho thuê), bước 2 = các khối còn lại.
     function renderSchemaForm(schema) {
       currentFormSchema = schema;
+      document.getElementById('btn-submit-form').disabled = false;
+      document.getElementById('terms-agree').checked = false;
+      document.getElementById('submit-error').classList.add('hidden');
       const [first, ...rest] = schema.sections;
       const fieldsOf = (section) => schema.fields.filter((field) => field.section === section.key);
       document.getElementById('citizen-fields-container').replaceChildren(...fieldsOf(first).map(createSchemaField));
@@ -1123,6 +1173,24 @@ div:has(> [data-form-step]){display:none}
 
     // Nộp hồ sơ thật: POST /api/procedures/applications (chủ hồ sơ lấy từ token).
     async function handleSubmitProcedure() {
+      if (activePublishedTemplate) {
+        const payload = await publishedPayload();
+        if (!payload) return;
+        const button = document.getElementById('btn-submit-form');
+        const errorBox = document.getElementById('submit-error');
+        if (button.disabled) return;
+        button.disabled = true;
+        try {
+          const { authRequest } = await applicationApi;
+          const response = await authRequest(`/api/procedures/form-templates/${encodeURIComponent(activePublishedTemplate.id)}/submissions`, { method: 'POST', body: { ...payload, status: 'submitted' } });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error?.message || result.detail || 'Không tạo được hồ sơ.');
+          document.getElementById('modal-application-code').textContent = result.data.id;
+          document.getElementById('success-modal').classList.remove('hidden');
+          errorBox.classList.add('hidden');
+        } catch (error) { errorBox.textContent = error.message; errorBox.classList.remove('hidden'); button.disabled = false; }
+        return;
+      }
       const procedureSelect = document.getElementById('proc-name');
       const procedureInput = document.getElementById('proc-search-input');
       if (!procedureSelect.value || procedureSelect.selectedOptions[0]?.textContent !== procedureInput.value.trim()) {
@@ -1213,7 +1281,9 @@ div:has(> [data-form-step]){display:none}
         (document.getElementById('personal-step-body') || personalSection).append(locationPanel);
       }
 
-      function chooseCategory(category) {
+      let templateListRequest = 0;
+      async function chooseCategory(category) {
+        const request = ++templateListRequest;
         document.getElementById('proc-category').value = category;
         updateProcedureTypes();
         const procedures = procedureCatalog.filter((procedure) => procedure.category === category);
@@ -1232,7 +1302,9 @@ div:has(> [data-form-step]){display:none}
             : 'Lĩnh vực này chưa có thủ tục nào.';
           list.append(empty);
         }
-        procedures.forEach((procedure) => {
+        function renderCatalog(entries) {
+        list.replaceChildren();
+        entries.sort((a, b) => a.name.localeCompare(b.name, 'vi')).forEach((procedure) => {
           const item = document.createElement('button');
           item.type = 'button';
           item.className = 'group flex w-full items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-red-300 hover:bg-red-50/40 hover:shadow-sm focus:outline-none focus:ring-4 focus:ring-red-100 sm:p-5';
@@ -1252,15 +1324,94 @@ div:has(> [data-form-step]){display:none}
           arrow.className = 'material-symbols-outlined shrink-0 text-primary transition group-hover:translate-x-1';
           arrow.textContent = 'arrow_forward';
           item.append(copy, arrow);
-          item.addEventListener('click', () => openTemplateForm(procedure));
+          item.addEventListener('click', () => {
+            if (procedure.template) {
+              openTemplateForm(procedure);
+            } else openTemplateForm(procedure);
+          });
           list.append(item);
         });
+        title.textContent = `${label} · ${entries.length} biểu mẫu`;
+        }
+        if (procedures.length) renderCatalog([...procedures]);
         categoryCards.classList.add('hidden');
         listPanel.classList.remove('hidden');
         document.getElementById('template-browser-title').textContent = 'Chọn mẫu hồ sơ';
+        // Mẫu do quản trị viên xuất bản dùng schema và luồng điền riêng.
+        // Liệt kê cùng danh mục thủ tục để người dùng có thể tìm từ Tạo hồ sơ.
+        const status = document.createElement('p');
+        status.className = 'text-sm text-secondary';
+        status.setAttribute('role', 'status');
+        status.textContent = 'Đang tải các mẫu đơn đã xuất bản…';
+        list.prepend(status);
+        try {
+          const { formTemplates } = await import('/form-template-service.js');
+          const domains = category === 'land' ? ['dat_dai'] : ['ho_kinh_doanh', 'doanh_nghiep'];
+          const results = await Promise.all(domains.map((domain) => formTemplates.listPublished({ domain })));
+          if (request !== templateListRequest) return;
+          const templates = results.flatMap((result) => result.items || []);
+          // Một danh sách chung, cùng kiểu thẻ và thứ tự tên; mẫu trùng tên
+          // ưu tiên phiên bản quản trị viên đang xuất bản.
+          const normalizeName = (name) => String(name || '').normalize('NFC').trim().replace(/\s+/g, ' ').toLocaleLowerCase('vi');
+          const entries = new Map(procedures.map((procedure) => [normalizeName(procedure.name), procedure]));
+          templates.forEach((template) => entries.set(normalizeName(template.name), {
+            name: template.name, category, template,
+            keywords: template.content?.description || 'Điền thông tin hồ sơ, xem trước PDF và tải file Word.'
+          }));
+          if (entries.size) renderCatalog([...entries.values()]);
+          status.remove();
+        } catch {
+          if (request !== templateListRequest) return;
+          status.setAttribute('role', 'alert');
+          status.textContent = 'Chưa tải được mẫu đơn đã xuất bản. Chọn lại lĩnh vực để thử lại.';
+        }
       }
 
       async function openTemplateForm(procedure) {
+        if (procedure.template) {
+          try {
+            const { formTemplates } = await publishedFormApi;
+            const template = await formTemplates.getPublished(procedure.template.id);
+            const sections = template.content.sections.map((section, index) => ({ key: section.id || `section_${index}`, title: section.title }));
+            const fields = template.content.sections.flatMap((section, index) => section.blocks.filter((block) => block.block_key !== 'repeat_group').flatMap((block) => block.fields.map((field) => ({
+              name: `${block.instance_id}.${field.key}`, label: field.label, required: field.required,
+              field_type: ['dob', 'past_date', 'issue_date'].includes(field.type) ? 'date' : field.type,
+              section: sections[index].key, options: (field.options || []).map((value) => ({ label: value, value }))
+            }))));
+            renderSchemaForm({ sections, fields });
+            activePublishedTemplate = template;
+            const renderer = await publishedRenderer;
+            if (!document.getElementById('published-form-css')) { const css = document.createElement('link'); css.id = 'published-form-css'; css.rel = 'stylesheet'; css.href = '/form-templates.css'; document.head.append(css); }
+            const repeats = document.createElement('div');
+            repeats.innerHTML = renderer.renderForm({ name: '', sections: [], repeat_groups: template.content.repeat_groups || [] });
+            repeats.querySelector('.ft-form__head')?.remove();
+            document.getElementById('schema-details-fields').append(repeats);
+            const { fetchMyCitizenProfile } = await applicationApi;
+            const profile = await fetchMyCitizenProfile().catch(() => null);
+            if (profile) {
+              const values = renderer.profileValues(profile);
+              template.content.sections.forEach((section) => section.blocks.forEach((block) => block.fields.forEach((field) => {
+                const control = document.getElementById(`field-${block.instance_id}.${field.key}`);
+                if (control && field.autofill && Object.prototype.hasOwnProperty.call(values, field.autofill)) {
+                  control.value = values[field.autofill] || '';
+                  control.readOnly = true;
+                  if (control.tagName === 'SELECT') control.disabled = true;
+                  control.dataset.profileLocked = 'true';
+                  control.title = 'Thông tin từ tài khoản đã đăng ký; cập nhật trong Tài khoản.';
+                }
+              })));
+            }
+            browser.classList.add('hidden'); formHelp?.classList.remove('hidden'); workspace?.classList.remove('hidden');
+            document.getElementById('application-template-name').textContent = template.name;
+            document.getElementById('btn-submit-form').disabled = false;
+            const selection = document.getElementById('proc-name'); selection.replaceChildren(new Option(template.name, template.id));
+            document.getElementById('proc-search-input').value = template.name;
+            document.getElementById('back-to-template-list').onclick = () => { browser.classList.remove('hidden'); workspace?.classList.add('hidden'); formHelp?.classList.add('hidden'); activePublishedTemplate = null; };
+            updateApplicationProgress(); window.scrollTo({ top: 0, behavior: 'smooth' });
+          } catch (error) { alert(`Không mở được mẫu: ${error.message}`); }
+          return;
+        }
+        activePublishedTemplate = null;
         let schema = formSchemaCache.get(procedure.id);
         if (!schema) {
           list.setAttribute('aria-busy', 'true');
@@ -1307,6 +1458,7 @@ div:has(> [data-form-step]){display:none}
 
       categoryCards.querySelectorAll('[data-law-category]').forEach((button) => button.addEventListener('click', () => chooseCategory(button.dataset.lawCategory)));
       document.getElementById('back-to-law-categories')?.addEventListener('click', () => {
+        templateListRequest++;
         listPanel.classList.add('hidden');
         categoryCards.classList.remove('hidden');
         document.getElementById('template-browser-title').textContent = 'Bạn cần làm thủ tục nào?';
@@ -1324,6 +1476,11 @@ div:has(> [data-form-step]){display:none}
         openTemplateForm(procedure);
         return true;
       };
+      const linkedTemplate = new URLSearchParams(window.location.search).get('template');
+      if (linkedTemplate) publishedFormApi.then(async ({ formTemplates }) => {
+        const template = await formTemplates.getPublished(linkedTemplate);
+        await openTemplateForm({ template, category: template.domain === 'dat_dai' ? 'land' : 'business' });
+      }).catch((error) => { description.textContent = `Không mở được mẫu: ${error.message}`; });
     }
 
     let activeFormStep = 1;

@@ -25,15 +25,7 @@
           <section class="admin-overview" aria-labelledby="admin-welcome-title">
             <div class="admin-overview__top">
               <div class="admin-overview__intro">
-                <span class="admin-overview__eyebrow">People Operations · Dashboard</span>
                 <h1 id="admin-welcome-title">Xin chào, <span data-user-field="name">Người dùng</span></h1>
-                <p>Toàn cảnh tiếp nhận hồ sơ và vận hành xử lý trong ngày.</p>
-              </div>
-              <div class="admin-overview__stats" aria-label="Số liệu tổng quan">
-                <div class="admin-overview__stat"><span>Tổng hồ sơ</span><strong data-admin-stat="total">—</strong></div>
-                <div class="admin-overview__stat"><span>Đất đai</span><strong data-admin-stat="land">—</strong></div>
-                <div class="admin-overview__stat"><span>Hộ kinh doanh</span><strong data-admin-stat="business">—</strong></div>
-                <div class="admin-overview__stat"><span>Đang xử lý</span><strong data-admin-stat="in_progress">—</strong></div>
               </div>
             </div>
             <div class="admin-search admin-search--canvas" role="search">
@@ -53,35 +45,30 @@
           <section class="admin-card admin-orchard" aria-labelledby="admin-orchard-title">
             <div class="admin-orchard__head">
               <div>
-                <span class="admin-eyebrow">Biểu đồ hồ sơ</span>
-                <h2 id="admin-orchard-title">Tiến độ xử lý tổng quan</h2>
+                <h2 id="admin-orchard-title">Tổng quan hồ sơ</h2>
               </div>
-              <p>Các ô vuông tóm tắt nhanh từng nhóm nghiệp vụ chính.</p>
+              <p>Số liệu hồ sơ đã tiếp nhận và đang xử lý.</p>
             </div>
             <div class="admin-orchard__chart">
+              <article class="admin-orchard__tile admin-orchard__tile--planning">
+                <span class="admin-orchard__badge"></span>
+                <strong>Tổng hồ sơ</strong>
+                <b data-admin-stat="total">—</b>
+              </article>
               <article class="admin-orchard__tile admin-orchard__tile--intake">
                 <span class="admin-orchard__badge"></span>
-                <strong>Tiếp nhận hồ sơ</strong>
-                <span>Khối lượng đầu vào trong ngày</span>
-                <b data-orchard-stat="intake">—</b>
+                <strong>Đất đai</strong>
+                <b data-admin-stat="land">—</b>
               </article>
               <article class="admin-orchard__tile admin-orchard__tile--business">
                 <span class="admin-orchard__badge"></span>
                 <strong>Hộ kinh doanh</strong>
-                <span>Cập nhật giấy phép và thông tin</span>
-                <b data-orchard-stat="business">—</b>
-              </article>
-              <article class="admin-orchard__tile admin-orchard__tile--planning">
-                <span class="admin-orchard__badge"></span>
-                <strong>Thẩm định đất đai</strong>
-                <span>Kiểm tra và đối soát hồ sơ</span>
-                <b data-orchard-stat="land">—</b>
+                <b data-admin-stat="business">—</b>
               </article>
               <article class="admin-orchard__tile admin-orchard__tile--receipt">
                 <span class="admin-orchard__badge"></span>
-                <strong>Trả kết quả</strong>
-                <span>Hoàn tất và bàn giao hồ sơ</span>
-                <b data-orchard-stat="completed">—</b>
+                <strong>Đang xử lý</strong>
+                <b data-admin-stat="in_progress">—</b>
               </article>
             </div>
           </section>
@@ -89,20 +76,19 @@
 
         <section class="admin-insights" aria-labelledby="admin-insights-title">
           <div class="admin-section-heading">
-            <div><span class="admin-eyebrow">Điểm nhấn vận hành</span><h2 id="admin-insights-title">Insight tổng quan</h2></div>
-            <p>Bố cục lấy cảm hứng từ dashboard mẫu nhưng vẫn dùng dữ liệu hồ sơ hiện có.</p>
+            <div><h2 id="admin-insights-title">Insight tổng quan</h2></div>
           </div>
           <div class="admin-insight-grid">
-            <article class="admin-card admin-insight admin-insight--risk"><div class="admin-insight__head"><div><span class="admin-eyebrow">Rủi ro xử lý</span><h3>Hồ sơ chờ giải quyết</h3></div><strong data-admin-stat="in_progress">—</strong></div><div class="admin-insight__bars"><div><span>Tiếp nhận</span><b style="width:82%"></b></div><div><span>Thẩm định</span><b style="width:68%"></b></div><div><span>Phản hồi</span><b style="width:44%"></b></div></div></article>
-            <article class="admin-card admin-insight admin-insight--pipeline"><div class="admin-insight__head"><div><span class="admin-eyebrow">Pipeline</span><h3>Khối lượng hồ sơ</h3></div><span class="admin-coming-soon">Live</span></div><div class="admin-insight__metrics"><div><span>Tổng</span><strong data-admin-stat="total">—</strong></div><div><span>Đất đai</span><strong data-admin-stat="land">—</strong></div><div><span>HKD</span><strong data-admin-stat="business">—</strong></div></div></article>
-            <article class="admin-card admin-insight admin-insight--pulse"><div class="admin-insight__head"><div><span class="admin-eyebrow">Tiến độ</span><h3>Nhịp vận hành</h3></div><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__columns" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><p>Theo dõi tình trạng hệ thống, lượt tiếp nhận và nhịp xử lý trong ngày.</p></article>
+            <article class="admin-card admin-insight admin-insight--risk"><div class="admin-insight__head"><h3>Hồ sơ chờ giải quyết</h3><strong data-admin-stat="in_progress">—</strong></div><div class="admin-insight__metrics"><div><span>Đã nộp</span><strong data-admin-stat="submitted">—</strong></div><div><span>Đang thẩm định</span><strong data-admin-stat="processing">—</strong></div></div></article>
+            <article class="admin-card admin-insight admin-insight--pipeline"><div class="admin-insight__head"><h3>Khối lượng hồ sơ</h3><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__metrics"><div><span>Tổng</span><strong data-admin-stat="total">—</strong></div><div><span>Đất đai</span><strong data-admin-stat="land">—</strong></div><div><span>Hộ kinh doanh</span><strong data-admin-stat="business">—</strong></div></div></article>
+            <article class="admin-card admin-insight admin-insight--pulse"><div class="admin-insight__head"><h3>Nhịp hoàn tất</h3><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__metrics"><div><span>Đã hoàn tất</span><strong data-admin-stat="completed">—</strong></div><div><span>Tỉ lệ hoàn tất</span><strong data-orchard-stat="completed">—</strong></div></div></article>
           </div>
         </section>
 
         <section class="admin-card admin-records" aria-labelledby="admin-records-title">
           <div class="admin-records__head">
             <div class="admin-section-heading admin-section-heading--records">
-              <div><span class="admin-eyebrow">Danh sách hồ sơ</span><h2 id="admin-records-title">Cập nhật gần đây</h2></div>
+              <div><h2 id="admin-records-title">Cập nhật gần đây</h2></div>
               <span class="admin-live-badge"><span></span>Dữ liệu thật</span>
             </div>
             <div class="admin-filter-tabs" role="group" aria-label="Lọc hồ sơ theo lĩnh vực">
@@ -113,8 +99,8 @@
           </div>
           <div class="admin-records__table-scroll">
             <table class="admin-table">
-              <thead><tr><th>Mã hồ sơ &amp; ngày nộp</th><th>Chủ sở hữu / người đại diện</th><th>Loại hồ sơ &amp; địa chỉ</th><th>Đánh giá sơ bộ AI</th><th>Trạng thái</th><th class="admin-table__actions-heading">Thao tác</th></tr></thead>
-              <tbody id="admin-applications-body" aria-live="polite"><tr><td class="admin-table__message" colspan="6">Đang tải hồ sơ...</td></tr></tbody>
+              <thead><tr><th>Mã hồ sơ &amp; ngày nộp</th><th>Chủ sở hữu / người đại diện</th><th>Loại hồ sơ &amp; địa chỉ</th><th>Trạng thái</th></tr></thead>
+              <tbody id="admin-applications-body" aria-live="polite"><tr><td class="admin-table__message" colspan="4">Đang tải hồ sơ...</td></tr></tbody>
             </table>
           </div>
           <div class="admin-records__footer">

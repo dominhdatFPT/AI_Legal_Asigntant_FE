@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Làm đơn đăng ký biến động đất đai</title><link rel="stylesheet" href="/contract-catalog.css">
+<style id="auth-pending">body{visibility:hidden!important}</style>
+<style>
+.m18{max-width:960px;margin:24px auto;padding:28px;background:#fff;border-radius:18px}.m18 fieldset{border:1px solid #e4d7d3;border-radius:12px;padding:20px;margin:20px 0}.m18 legend{font-weight:700;color:#8c1821;padding:0 8px}.m18-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.m18 label{display:flex;flex-direction:column;gap:6px;font-weight:600}.m18 input,.m18 textarea{width:100%;padding:12px;border:1px solid #c9c2bf;border-radius:8px;font:inherit}.m18 textarea{min-height:110px;resize:vertical}.m18 .full{grid-column:1/-1}.m18 button{cursor:pointer}.m18 [role=alert]{color:#a50000}.m18 p{line-height:1.6}.m18 small{font-weight:400;color:#555}@media(max-width:650px){.m18-grid{grid-template-columns:1fr}.m18 .full{grid-column:auto}.m18{padding:18px}}
+</style></head><body class="app-page"><!-- user-header -->
+<main class="m18"><a href="/document-storages">← Kho mẫu đơn</a><h1>Đơn đăng ký biến động đất đai</h1>
+<p>Mẫu 18 · Trường hợp hai người cùng sử dụng hoặc sở hữu. Người thứ nhất là người đại diện được ghi trên đơn; cả hai được ghi trong Bảng 18a.</p>
+<form id="mau18-form">
+<fieldset><legend>Cơ quan tiếp nhận</legend><label>Kính gửi *<input name="receiving_agency" maxlength="200" required placeholder="Văn phòng đăng ký đất đai / Chi nhánh..."></label></fieldset>
+<div id="people"></div>
+<fieldset><legend>Liên hệ</legend><div class="m18-grid"><label>Điện thoại<input name="phone" maxlength="40" autocomplete="tel"></label><label>Email<input name="email" maxlength="150" type="email" autocomplete="email"></label></div></fieldset>
+<fieldset><legend>Nội dung đăng ký</legend><div class="m18-grid">
+<label class="full">Nội dung biến động *<small>Ghi rõ nội dung đề nghị và thông tin liên quan đến thửa đất, giấy chứng nhận.</small><textarea name="change_content" maxlength="1200" required></textarea></label>
+<label class="full">Thông tin miễn, giảm nghĩa vụ tài chính (nếu có)<textarea name="tax_exemption" maxlength="400"></textarea></label>
+<label class="full">Giấy tờ nộp kèm *<textarea name="attached_documents" maxlength="800" required></textarea></label>
+<label>Địa điểm viết đơn<input name="place" maxlength="100"></label><label>Ngày viết đơn<input name="date" type="date"></label>
+</div></fieldset>
+<p>Kiểm tra thông tin sau khi tải; ký và ghi rõ họ tên trên đơn. Không tự điền các thông tin bạn chưa xác nhận.</p>
+<p id="mau18-error" role="alert" hidden></p><button class="primary-button" type="submit">Tải đơn Word</button>
+</form></main><script type="module">import { protectPage } from '/auth-api.js'; await protectPage(['citizen','lawyer']); await import('/mau18.js');</script></body></html>
