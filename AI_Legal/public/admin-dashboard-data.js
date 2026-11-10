@@ -7,8 +7,10 @@ import {
   fetchApplicationSummary,
   formatDate
 } from '/auth-api.js';
+import { fetchPendingLawyerApplications } from '/admin-api.js';
 
 const PAGE_SIZE = 10;
+const LAWYER_APPLICATIONS_PAGE_SIZE = 5;
 const state = { page: 1, domain: '', q: '' };
 const $ = (selector) => document.querySelector(selector);
 const formatPercent = (value, total) => `${Math.round(total > 0 ? (value / total) * 100 : 0)}%`;
@@ -97,6 +99,33 @@ async function renderTable() {
   }
 }
 
+async function renderPendingLawyerApplications() {
+  const body = $('#admin-lawyer-applications-body');
+  const count = $('#admin-lawyer-applications-count');
+  try {
+    const data = await fetchPendingLawyerApplications({ page: 1, pageSize: LAWYER_APPLICATIONS_PAGE_SIZE, order: 'desc' });
+    const items = data?.items || [];
+    count.textContent = Number(data?.pagination?.total ?? items.length).toLocaleString('vi-VN');
+    body.innerHTML = items.length
+      ? items.map((item) => `
+        <tr>
+          <td><div class="admin-table__primary">${escapeHtml(item.full_name || 'Chưa có tên')}</div><span class="admin-table__secondary">Số thẻ: ${escapeHtml(item.bar_card_number || '—')}</span></td>
+          <td><div class="admin-table__primary">${escapeHtml(item.law_firm || 'Hành nghề cá nhân')}</div></td>
+          <td>${(item.specializations || []).map((specialization) => escapeHtml(specialization.name)).join(', ') || '—'}</td>
+          <td>${formatDate(item.created_at)}</td>
+          <td><span class="admin-status admin-status--submitted">Chờ xác thực</span></td>
+        </tr>`).join('')
+      : '<tr><td class="admin-table__message" colspan="5">Hiện không có hồ sơ đăng ký luật sư chờ xác thực.</td></tr>';
+  } catch {
+    count.textContent = '—';
+    body.innerHTML = '<tr><td class="admin-table__message" colspan="5" role="alert">Không tải được hồ sơ luật sư. <button type="button" id="admin-lawyer-applications-retry" class="admin-table__retry">Thử lại</button></td></tr>';
+  }
+}
+
+$('#admin-lawyer-applications-body').addEventListener('click', (event) => {
+  if (event.target.closest('#admin-lawyer-applications-retry')) renderPendingLawyerApplications();
+});
+
 document.querySelectorAll('[data-domain]').forEach((button) => {
   button.addEventListener('click', () => {
     state.domain = button.dataset.domain;
@@ -128,3 +157,4 @@ $('#admin-applications-next').addEventListener('click', () => { state.page += 1;
 
 renderSummary();
 renderTable();
+renderPendingLawyerApplications();

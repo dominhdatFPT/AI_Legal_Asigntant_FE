@@ -15,21 +15,53 @@ export const getApiBaseUrl = () => {
 // Gọi ngầm trước API base URL để sẵn sàng ngay khi người dùng thao tác
 getApiBaseUrl().catch(() => {});
 
+const RETRYABLE_STATUSES = new Set([429, 502, 503, 504]);
+const sleep = (ms, signal) => new Promise((resolve, reject) => {
+  if (signal?.aborted) return reject(Object.assign(new Error('aborted'), { name: 'AbortError' }));
+  const timer = setTimeout(resolve, ms);
+  signal?.addEventListener('abort', () => {
+    clearTimeout(timer);
+    reject(Object.assign(new Error('aborted'), { name: 'AbortError' }));
+  }, { once: true });
+});
+
 // body: object → gửi JSON; FormData → gửi multipart (trình duyệt tự đặt Content-Type).
+// Tự động retry có backoff + jitter cho các request GET khi gặp lỗi tạm thời (429, 502, 503, 504 hoặc lỗi mạng lúc cold-start).
 const request = async (path, { method = 'GET', body, headers = {}, signal } = {}) => {
   const baseUrl = await getApiBaseUrl();
+  const upperMethod = String(method || 'GET').toUpperCase();
+  const isIdempotent = upperMethod === 'GET' || upperMethod === 'HEAD';
+  const maxAttempts = isIdempotent ? 3 : 1;
   const isJson = body !== undefined && !(body instanceof FormData);
-  try {
-    return await fetch(`${baseUrl}${path}`, {
-      method,
-      credentials: 'include',
-      headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
-      body: isJson ? JSON.stringify(body) : body,
-      signal
-    });
-  } catch (error) {
-    if (error?.name === 'AbortError') throw error; // người dùng chủ động huỷ, không phải lỗi mạng
-    throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: upperMethod,
+        credentials: 'include',
+        headers: isJson ? { 'Content-Type': 'application/json', ...headers } : headers,
+        body: isJson ? JSON.stringify(body) : body,
+        signal
+      });
+      if (attempt < maxAttempts && RETRYABLE_STATUSES.has(response.status)) {
+        const retryAfter = Number(response.headers?.get?.('Retry-After'));
+        const baseDelay = Number.isFinite(retryAfter) && retryAfter > 0
+          ? Math.min(retryAfter * 1000, 4000)
+          : 350 * (2 ** (attempt - 1));
+        const jitter = Math.floor(Math.random() * 150);
+        await sleep(baseDelay + jitter, signal);
+        continue;
+      }
+      return response;
+    } catch (error) {
+      if (error?.name === 'AbortError') throw error; // người dùng chủ động huỷ, không phải lỗi mạng
+      if (attempt < maxAttempts) {
+        const delay = 350 * (2 ** (attempt - 1)) + Math.floor(Math.random() * 150);
+        await sleep(delay, signal);
+        continue;
+      }
+      throw Object.assign(new Error('backend-unreachable'), { code: 'backend/unreachable', baseUrl });
+    }
   }
 };
 
@@ -80,17 +112,19 @@ export const loginWithPassword = (username, password) =>
 export const loginWithFirebaseToken = (idToken) =>
   postJson('/api/users/auth/firebase', { id_token: idToken });
 
-// Backend đã set cookie khi đăng nhập; ở FE chỉ cần giữ thông tin user để chuyển trang.
-// Xoá phiên kiểu cũ (token trong localStorage) nếu còn sót lại.
-export const saveSession = (data) => {
-  clearSession(); // đăng nhập mới: bỏ thông tin hiển thị của phiên trước
-  if (data?.user) cacheUser(data.user);
-  return { user: data.user };
-};
-
 // Nhớ tạm thông tin hiển thị của user trong tab (không có token) để chuyển trang không phải chờ /api/users/me.
 // Tên khoá trùng với script chèn trong <head> ở index.js (USER_HEADER_HEAD).
 const USER_CACHE_KEY = 'ai_legal_user';
+let currentUserMemory = null;
+let currentUserMemoryAt = 0;
+let currentUserInFlight = null;
+const CURRENT_USER_TTL_MS = 15000;
+
+let citizenProfileCache = undefined;
+let citizenProfileCacheAt = 0;
+let citizenProfileInFlight = null;
+const CITIZEN_PROFILE_TTL_MS = 60000;
+
 const readCachedUser = () => {
   try {
     return JSON.parse(sessionStorage.getItem(USER_CACHE_KEY));
@@ -99,15 +133,39 @@ const readCachedUser = () => {
   }
 };
 const cacheUser = (user) => {
+  if (!user) return;
+  currentUserMemory = user;
+  currentUserMemoryAt = Date.now();
+  if ('citizen_profile' in user) {
+    citizenProfileCache = user.citizen_profile ?? null;
+    citizenProfileCacheAt = Date.now();
+  }
   try {
-    const { id, role, full_name, username, email } = user;
-    sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify({ id, role, full_name, username, email }));
+    const { id, role, full_name, username, email, phone, has_citizen_profile } = user;
+    sessionStorage.setItem(
+      USER_CACHE_KEY,
+      JSON.stringify({ id, role, full_name, username, email, phone, has_citizen_profile })
+    );
   } catch {
     // Trình duyệt chặn sessionStorage: vẫn chạy, chỉ là không nhanh hơn
   }
 };
 
+// Backend đã set cookie khi đăng nhập; ở FE chỉ cần giữ thông tin user để chuyển trang.
+// Xoá phiên kiểu cũ (token trong localStorage) nếu còn sót lại.
+export const saveSession = (data) => {
+  clearSession(); // đăng nhập mới: bỏ thông tin hiển thị của phiên trước
+  if (data?.user) cacheUser(data.user);
+  return { user: data.user };
+};
+
 export const clearSession = () => {
+  currentUserMemory = null;
+  currentUserMemoryAt = 0;
+  currentUserInFlight = null;
+  citizenProfileCache = undefined;
+  citizenProfileCacheAt = 0;
+  citizenProfileInFlight = null;
   localStorage.removeItem(LEGACY_SESSION_KEY);
   try {
     sessionStorage.removeItem(USER_CACHE_KEY);
@@ -116,23 +174,96 @@ export const clearSession = () => {
   }
 };
 
-// Lấy user đang đăng nhập từ Backend. Chưa đăng nhập / phiên hết hạn → null.
-export const fetchCurrentUser = async () => {
-  const response = await authRequest('/api/users/me');
-  if (!response.ok) return null;
-  return readData(response);
+// Lấy user đang đăng nhập từ Backend. Chưa đăng nhập / phiên hết hạn (401/403) → null.
+// Khử trùng lặp (in-flight deduplication) và giữ nguyên phiên nhớ tạm nếu gặp lỗi tạm thời (429 / 5xx / cold-start).
+export const fetchCurrentUser = async ({ forceRefresh = false } = {}) => {
+  const now = Date.now();
+  if (!forceRefresh && currentUserMemory && (now - currentUserMemoryAt) < CURRENT_USER_TTL_MS) {
+    return currentUserMemory;
+  }
+  if (currentUserInFlight) return currentUserInFlight;
+
+  currentUserInFlight = (async () => {
+    try {
+      const response = await authRequest('/api/users/me');
+      if (response.status === 401 || response.status === 403) {
+        currentUserMemory = null;
+        currentUserMemoryAt = 0;
+        return null;
+      }
+      if (!response.ok) {
+        const cached = readCachedUser();
+        if (cached) return cached;
+        return null;
+      }
+      const user = await readData(response);
+      cacheUser(user);
+      return user;
+    } catch (error) {
+      const cached = readCachedUser();
+      if (cached) return cached;
+      throw error;
+    } finally {
+      currentUserInFlight = null;
+    }
+  })();
+
+  return currentUserInFlight;
 };
 
 // Hồ sơ cá nhân theo CCCD của user đang đăng nhập. Chưa khai → null.
+// Gộp chung dữ liệu từ /api/users/me (MeOut.citizen_profile) để không bắn thêm request /api/users/me/citizen-profile.
 export const fetchMyCitizenProfile = async () => {
-  const response = await authRequest('/api/users/me/citizen-profile');
-  if (!response.ok) return readData(response); // ném lỗi kèm mã từ Backend
-  const payload = await response.json().catch(() => null);
-  return payload?.data ?? null;
+  const now = Date.now();
+  if (citizenProfileCache !== undefined && (now - citizenProfileCacheAt) < CITIZEN_PROFILE_TTL_MS) {
+    return citizenProfileCache;
+  }
+  if (citizenProfileInFlight) return citizenProfileInFlight;
+
+  citizenProfileInFlight = (async () => {
+    try {
+      if (currentUserInFlight) {
+        await currentUserInFlight.catch(() => null);
+        if (citizenProfileCache !== undefined) return citizenProfileCache;
+      }
+      const user = await fetchCurrentUser({ forceRefresh: citizenProfileCache === undefined });
+      if (citizenProfileCache !== undefined) return citizenProfileCache;
+      if (user && 'citizen_profile' in user) {
+        const profile = user.citizen_profile ?? null;
+        citizenProfileCache = profile;
+        citizenProfileCacheAt = Date.now();
+        return profile;
+      }
+      const response = await authRequest('/api/users/me/citizen-profile');
+      if (!response.ok) return readData(response); // ném lỗi kèm mã từ Backend
+      const payload = await response.json().catch(() => null);
+      const profile = payload?.data ?? null;
+      citizenProfileCache = profile;
+      citizenProfileCacheAt = Date.now();
+      return profile;
+    } finally {
+      citizenProfileInFlight = null;
+    }
+  })();
+
+  return citizenProfileInFlight;
 };
 
-export const saveMyCitizenProfile = async (profile) =>
-  readData(await authRequest('/api/users/me/citizen-profile', { method: 'PUT', body: profile }));
+export const saveMyCitizenProfile = async (profile) => {
+  const saved = await readData(await authRequest('/api/users/me/citizen-profile', { method: 'PUT', body: profile }));
+  citizenProfileCache = saved;
+  citizenProfileCacheAt = Date.now();
+  if (currentUserMemory) {
+    cacheUser({
+      ...currentUserMemory,
+      full_name: saved?.full_name || currentUserMemory.full_name,
+      phone: saved?.phone || currentUserMemory.phone,
+      has_citizen_profile: Boolean(saved),
+      citizen_profile: saved ?? null
+    });
+  }
+  return saved;
+};
 
 // OCR CCCD hai mặt (Document service). Trả về { session_id, fields, warnings }.
 // fields: full_name, identity_number, date_of_birth, issue_date, issue_place, permanent_address (đọc không chắc → null).
@@ -147,8 +278,47 @@ export const readIdentityCardOcr = async (front, back) => {
   }));
 };
 
-export const fetchAdministrativeUnits = async (path) =>
-  readData(await request(`/api/locations/administrative/${path}`));
+const ADMIN_UNITS_TTL_MS = 24 * 60 * 60 * 1000; // 24 giờ
+const adminUnitsMemory = new Map();
+const adminUnitsInFlight = new Map();
+
+export const fetchAdministrativeUnits = async (path) => {
+  const key = String(path || '');
+  const now = Date.now();
+  const mem = adminUnitsMemory.get(key);
+  if (mem && (now - mem.timestamp) < ADMIN_UNITS_TTL_MS) {
+    return mem.data;
+  }
+  try {
+    const stored = localStorage.getItem(`ai_legal_admin_units_${key}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.timestamp && (now - parsed.timestamp) < ADMIN_UNITS_TTL_MS && parsed.data) {
+        adminUnitsMemory.set(key, parsed);
+        return parsed.data;
+      }
+    }
+  } catch {}
+
+  if (adminUnitsInFlight.has(key)) return adminUnitsInFlight.get(key);
+
+  const promise = (async () => {
+    try {
+      const data = await readData(await request(`/api/locations/administrative/${key}`));
+      const entry = { timestamp: Date.now(), data };
+      adminUnitsMemory.set(key, entry);
+      try {
+        localStorage.setItem(`ai_legal_admin_units_${key}`, JSON.stringify(entry));
+      } catch {}
+      return data;
+    } finally {
+      adminUnitsInFlight.delete(key);
+    }
+  })();
+
+  adminUnitsInFlight.set(key, promise);
+  return promise;
+};
 
 // Location search dùng cùng cookie/refresh flow; không đưa Goong key ra frontend.
 export const searchNearbyOffices = async (payload) =>
@@ -165,10 +335,13 @@ export const saveIdentityProfileFromOcr = async (sessionId, fields) => {
   const payload = await current.json().catch(() => null);
   if (!current.ok && current.status !== 404) throw apiError(current, payload);
   const revision = current.ok ? payload?.data?.revision : payload?.error?.current_revision;
-  return readData(await authRequest('/api/documents/identity-profile/me', {
+  const saved = await readData(await authRequest('/api/documents/identity-profile/me', {
     method: 'PUT',
     body: { source_session_id: sessionId, expected_revision: revision ?? 0, fields }
   }));
+  citizenProfileCache = undefined;
+  citizenProfileCacheAt = 0;
+  return saved;
 };
 
 export const PROFILE_PATH = '/detail-information';
@@ -192,7 +365,7 @@ export const requireLogin = async (allowedRoles) => {
   try {
     user = await fetchCurrentUser();
   } catch {
-    user = null; // Backend không chạy cũng coi như chưa đăng nhập
+    user = readCachedUser(); // Lỗi mạng/cold-start tạm thời: giữ phiên nhớ tạm nếu có
   }
   if (!user) {
     clearSession();
@@ -246,7 +419,7 @@ export const logout = async () => {
 // CSS viết sẵn ở đây vì file trong public/ không được Tailwind quét.
 const LOGOUT_DIALOG_CSS = `
 .logout-dialog{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(28,19,18,.65);font-family:'Be Vietnam Pro',system-ui,sans-serif}
-.logout-dialog__card{width:100%;max-width:480px;border-radius:16px;background:#fff;color:#1c1917;border:1px solid #e7e5e4;box-shadow:0 28px 80px rgba(18,10,9,.45);overflow:hidden}
+.logout-dialog__card{width:100%;max-width:480px;border-radius:16px;background:#faf6f2;color:#1c1917;border:1px solid #e7e5e4;box-shadow:0 28px 80px rgba(18,10,9,.45);overflow:hidden}
 .logout-dialog__bar{height:8px;background:linear-gradient(90deg,#8a1538,#b40006,#ecc15a)}
 .logout-dialog__body{padding:24px 28px}
 .logout-dialog__head{display:flex;align-items:center;gap:14px}
@@ -254,21 +427,21 @@ const LOGOUT_DIALOG_CSS = `
 .logout-dialog__eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#930004}
 .logout-dialog__title{margin:2px 0 0;font-size:20px;font-weight:700;color:#1c1917}
 .logout-dialog__user{margin-top:20px;padding:14px 16px;border-radius:12px;background:#faf6f0;border:1px solid #e9dec9;display:flex;align-items:center;gap:12px}
-.logout-dialog__avatar{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#b40006,#8a1538);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logout-dialog__avatar{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#b40006,#8a1538);color:#faf6f2;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logout-dialog__name{font-size:14px;font-weight:700;color:#1c1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .logout-dialog__role{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:6px;background:#ffdf99;color:#5a4300;font-size:11px;font-weight:700;vertical-align:middle}
 .logout-dialog__email{margin-top:2px;font-size:12px;color:#57534e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.logout-dialog__list{margin:16px 0 0;padding:14px;list-style:none;border-radius:12px;background:#fafaf9;border:1px solid #e7e5e4;font-size:12.5px;line-height:1.55;color:#57534e}
+.logout-dialog__list{margin:16px 0 0;padding:14px;list-style:none;border-radius:12px;background:#f6f6f5;border:1px solid #e7e5e4;font-size:12.5px;line-height:1.55;color:#57534e}
 .logout-dialog__list li+li{margin-top:8px}
 .logout-dialog__actions{margin-top:24px;display:flex;gap:12px}
 .logout-dialog__btn{flex:1;height:48px;padding:0 20px;border-radius:12px;font:600 14px/1 inherit;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background-color .15s}
-.logout-dialog__btn--cancel{background:#fff;color:#292524;border:1px solid #d6d3d1}
+.logout-dialog__btn--cancel{background:#faf6f2;color:#292524;border:1px solid #d6d3d1}
 .logout-dialog__btn--cancel:hover{background:#f5f5f4}
-.logout-dialog__btn--confirm{background:#b40006;color:#fff;border:0;box-shadow:0 6px 20px rgba(180,0,6,.28)}
+.logout-dialog__btn--confirm{background:#b40006;color:#faf6f2;border:0;box-shadow:0 6px 20px rgba(180,0,6,.28)}
 .logout-dialog__btn--confirm:hover{background:#930004}
 .logout-dialog__btn:disabled{opacity:.75;cursor:wait}
 .logout-dialog__btn:focus-visible{outline:3px solid #ecc15a;outline-offset:2px}
-.logout-dialog__spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:logout-spin .8s linear infinite}
+.logout-dialog__spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(250,246,242,.4);border-top-color:#faf6f2;animation:logout-spin .8s linear infinite}
 @keyframes logout-spin{to{transform:rotate(360deg)}}
 @media (max-width:480px){.logout-dialog__actions{flex-direction:column-reverse}.logout-dialog__body{padding:20px}}
 @media (prefers-reduced-motion:reduce){.logout-dialog__spinner{animation-duration:2s}}
@@ -388,7 +561,7 @@ export const protectPage = async (allowedRoles, { requireProfile = false } = {})
   };
   fillUserFields(user);
   currentUser = user;
-  if (useCache) verified.then((fresh) => { currentUser = fresh; fillUserFields(fresh); });
+  if (useCache) verified.then((fresh) => { if (fresh) { currentUser = fresh; fillUserFields(fresh); } });
   // Đăng xuất rồi bấm Back: trang cũ trong bộ nhớ trình duyệt không được hiện lại dữ liệu.
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && !readCachedUser()) window.location.replace('/login');
@@ -434,10 +607,6 @@ const getData = async (path) => readData(await authRequest(path));
 export const fetchMyApplications = ({ domain, status, q, page = 1, pageSize = 10 } = {}) =>
   getData(withQuery('/api/procedures/applications/me', { domain, status, q, page, page_size: pageSize }));
 
-// Tra cứu chi tiết tờ đơn hồ sơ bằng mã (DD-001-XXXXXXXX), tiền tố ID, hoặc UUID
-export const lookupApplication = async (code) =>
-  readData(await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}`));
-
 // Tải file PDF tờ đơn chính thức từ Backend (A4 chuẩn, không chứa URL hay thành phần giao diện web)
 export const exportApplicationPdf = async (code) => {
   const response = await authRequest(`/api/procedures/applications/lookup/${encodeURIComponent(code)}/export-pdf`);
@@ -463,13 +632,110 @@ export const fetchAllApplications = ({ domain, status, q, page = 1, pageSize = 1
 // Admin: { total, by_domain: { land, business }, by_status: { draft, submitted, processing, completed, cancelled } }
 export const fetchApplicationSummary = () => getData('/api/procedures/applications/summary');
 
-// Danh mục thủ tục công khai theo lĩnh vực ('land' | 'business') → mảng thủ tục
-export const fetchProcedures = async (domain) =>
-  (await readData(await request(`/api/procedures/domains/${domain}/procedures?include_details=false`))).items;
+const PROCEDURE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 phút
+const proceduresMemory = new Map();
+const proceduresInFlight = new Map();
+const procedureNamesMemory = new Map();
+const procedureNamesInFlight = new Map();
+
+export const invalidateProcedureCaches = () => {
+  proceduresMemory.clear();
+  procedureNamesMemory.clear();
+  try {
+    ['land', 'business', 'all'].forEach((key) => {
+      sessionStorage.removeItem(`ai_legal_procedures_${key}`);
+      sessionStorage.removeItem(`ai_legal_proc_names_${key}`);
+    });
+  } catch {}
+};
+
+// Danh mục thủ tục công khai theo lĩnh vực ('land' | 'business') → mảng thủ tục (có cache 5 phút + deduplicate)
+export const fetchProcedures = async (domain) => {
+  const key = String(domain || '');
+  const now = Date.now();
+  const mem = proceduresMemory.get(key);
+  if (mem && (now - mem.timestamp) < PROCEDURE_CACHE_TTL_MS) {
+    return mem.items;
+  }
+  try {
+    const stored = sessionStorage.getItem(`ai_legal_procedures_${key}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.timestamp && (now - parsed.timestamp) < PROCEDURE_CACHE_TTL_MS && Array.isArray(parsed.items)) {
+        proceduresMemory.set(key, parsed);
+        return parsed.items;
+      }
+    }
+  } catch {}
+
+  if (proceduresInFlight.has(key)) return proceduresInFlight.get(key);
+
+  const promise = (async () => {
+    try {
+      const items = (await readData(await request(`/api/procedures/domains/${key}/procedures?include_details=false`))).items;
+      const entry = { timestamp: Date.now(), items };
+      proceduresMemory.set(key, entry);
+      try {
+        sessionStorage.setItem(`ai_legal_procedures_${key}`, JSON.stringify(entry));
+      } catch {}
+      return items;
+    } finally {
+      proceduresInFlight.delete(key);
+    }
+  })();
+
+  proceduresInFlight.set(key, promise);
+  return promise;
+};
 
 // Tên & mã thủ tục rút gọn theo lĩnh vực (cho Dropdown select) → [{ id, code, name, domain }]
-export const fetchProcedureNames = async (domain = 'all') =>
-  (await readData(await request(`/api/procedures/domains/${encodeURIComponent(domain)}/names`))).items;
+export const fetchProcedureNames = async (domain = 'all') => {
+  const key = String(domain || 'all');
+  const now = Date.now();
+  const mem = procedureNamesMemory.get(key);
+  if (mem && (now - mem.timestamp) < PROCEDURE_CACHE_TTL_MS) {
+    return mem.items;
+  }
+  try {
+    const stored = sessionStorage.getItem(`ai_legal_proc_names_${key}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.timestamp && (now - parsed.timestamp) < PROCEDURE_CACHE_TTL_MS && Array.isArray(parsed.items)) {
+        procedureNamesMemory.set(key, parsed);
+        return parsed.items;
+      }
+    }
+  } catch {}
+
+  if (procedureNamesInFlight.has(key)) return procedureNamesInFlight.get(key);
+
+  const promise = (async () => {
+    try {
+      let items;
+      try {
+        items = (await readData(await request(`/api/procedures/domains/${encodeURIComponent(key)}/names`))).items;
+      } catch (err) {
+        if (key === 'all') {
+          const [land, business] = await Promise.all([fetchProcedures('land'), fetchProcedures('business')]);
+          items = [...land, ...business].map(({ id, code, name, domain: d }) => ({ id, code, name, domain: d }));
+        } else {
+          throw err;
+        }
+      }
+      const entry = { timestamp: Date.now(), items };
+      procedureNamesMemory.set(key, entry);
+      try {
+        sessionStorage.setItem(`ai_legal_proc_names_${key}`, JSON.stringify(entry));
+      } catch {}
+      return items;
+    } finally {
+      procedureNamesInFlight.delete(key);
+    }
+  })();
+
+  procedureNamesInFlight.set(key, promise);
+  return promise;
+};
 
 // Biểu mẫu riêng của một thủ tục (công khai) → { procedure_code, template_filename, sections, fields }
 export const fetchFormSchema = async (code) =>
@@ -486,8 +752,6 @@ export const submitApplication = async ({ procedureCode, status = 'submitted', f
     body: { procedure_code: procedureCode, status, form_data: formData }
   }));
 
-// File người dùng đã upload → { items, pagination }
-export const fetchMyDocuments = () => getData('/api/documents/');
 
 // Agent chat
 export const createAgentConversation = async () =>
@@ -570,6 +834,3 @@ export const escapeHtml = (value) =>
 
 // '2026-10-13T08:00:00+00:00' → '13/10/2026'
 export const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString('vi-VN') : '—');
-
-// 100000 → '100.000 đ'; 0 → 'Miễn phí'; null → '—'
-export const formatFee = (fee) => (fee === null || fee === undefined ? '—' : fee === 0 ? 'Miễn phí' : `${fee.toLocaleString('vi-VN')} đ`);

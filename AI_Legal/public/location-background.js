@@ -7,8 +7,16 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 let active = 0;
 let paused = false;
 let timer;
+const ensureSlideLoaded = (slide) => {
+  if (slide?.dataset?.src && !slide.getAttribute('src')) {
+    slide.src = slide.dataset.src;
+    delete slide.dataset.src;
+  }
+};
 const show = (index) => {
   active = (index + slides.length) % slides.length;
+  ensureSlideLoaded(slides[active]);
+  ensureSlideLoaded(slides[(active + 1) % slides.length]);
   slides.forEach((slide, position) => slide.classList.toggle('is-active', position === active));
 };
 const syncTimer = () => {
@@ -29,4 +37,5 @@ reduced.addEventListener('change', syncTimer);
 document.addEventListener('visibilitychange', syncTimer);
 window.addEventListener('pagehide', () => clearInterval(timer));
 window.addEventListener('pageshow', syncTimer);
+show(active);
 syncTimer();

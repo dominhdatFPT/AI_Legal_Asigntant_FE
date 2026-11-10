@@ -14,9 +14,9 @@
 <body class="location-dashboard">
   <a class="skip-link" href="#location-main">Đến nội dung chính</a>
   <div class="location-background" aria-hidden="true">
-    <img class="location-slide is-active" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" fetchpriority="high">
-    <img class="location-slide" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" loading="lazy">
-    <img class="location-slide" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="" loading="lazy">
+    <img class="location-slide is-active" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="" fetchpriority="high" decoding="async">
+    <img class="location-slide" data-src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="" loading="lazy" decoding="async">
+    <img class="location-slide" data-src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="" loading="lazy" decoding="async">
   </div>
   <div class="location-background-shade" aria-hidden="true"></div>
   <div class="location-background-controls" aria-label="Điều khiển ảnh nền">
@@ -35,7 +35,6 @@
           <div class="form-grid">
             <div class="form-field"><label for="province">Tỉnh / Thành phố <span aria-hidden="true">*</span></label><select id="province" required></select></div>
             <div class="form-field"><label for="ward">Xã / Phường <span aria-hidden="true">*</span></label><select id="ward" required></select></div>
-            <div class="form-field form-field--wide"><label for="detail">Số nhà, đường, khu hoặc thôn <span aria-hidden="true">*</span></label><input id="detail" maxlength="300" required autocomplete="street-address" placeholder="Ví dụ: 16 Hòa Mỹ 3"></div>
             <div class="form-field form-field--wide form-field--office"><label for="query">Loại cơ quan cần tìm <span aria-hidden="true">*</span></label><input id="query" maxlength="150" required list="office-suggestions" value="Trung tâm phục vụ hành chính công"><datalist id="office-suggestions"><option value="Ủy ban nhân dân"><option value="Văn phòng đăng ký đất đai"><option value="Trung tâm phục vụ hành chính công"><option value="Văn phòng công chứng"><option value="Phòng đăng ký kinh doanh"></datalist></div>
           </div>
           <button id="submit-search" class="primary-button search-button" type="submit"><span class="material-symbols-outlined" aria-hidden="true">search</span><span id="submit-label">Tìm nơi nộp</span><span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>
@@ -57,8 +56,10 @@
   <script type="module">
     import { protectPage } from '/auth-api.js';
     await protectPage(['citizen', 'lawyer']);
-    await import('/location-search.js');
-    await import('/location-background.js');
+    await Promise.all([
+      import('/location-search.js'),
+      import('/location-background.js')
+    ]);
   </script>
 </body>
 </html>

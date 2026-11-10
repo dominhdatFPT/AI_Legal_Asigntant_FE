@@ -105,7 +105,8 @@ test('HTTP serves the public catalogue and all document pages with no backend, a
       const served = await response.text();
       const [, body] = fs.readFileSync(path.join(root, 'src/pages', filename), 'utf8').split('<!-- user-header -->');
       assert.match(served, /<header class="unav"/);
-      assert.ok(served.includes(body));
+      // Footer chung cũng được server chèn vào chỗ đánh dấu nên kiểm tra từng đoạn quanh nó.
+      assert.ok(body.split('<!-- user-footer -->').every((part) => served.includes(part)));
     }
     const viewer = await (await fetch(`${base}/xem-mau-don`)).text();
     assert.doesNotMatch(viewer, /<form|<input|<textarea|contenteditable|data-action=/i);

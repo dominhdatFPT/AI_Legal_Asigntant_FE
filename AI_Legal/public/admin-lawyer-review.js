@@ -45,6 +45,7 @@ import {
       return days <= 0 ? 'Hôm nay' : days === 1 ? 'Hôm qua' : `${days} ngày trước`;
     }
 
+    const MAX_REVIEW_PAGES = 10;
     async function fetchPendingApplications() {
       const all = [];
       let page = 1;
@@ -52,7 +53,7 @@ import {
       do {
         const data = await fetchPendingLawyerApplications({ page });
         all.push(...(data?.items || []));
-        totalPages = data?.pagination?.total_pages || 1;
+        totalPages = Math.min(data?.pagination?.total_pages || 1, MAX_REVIEW_PAGES);
         page += 1;
       } while (page <= totalPages);
       return all;

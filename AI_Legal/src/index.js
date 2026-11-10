@@ -8,14 +8,13 @@ const pagesDirectory = path.join(__dirname, 'pages');
 // Navbar chung cho các trang người dùng: một nguồn (partials/user-header.html), chèn vào chỗ <!-- user-header -->
 // của trang và đánh dấu sẵn mục đang chọn theo URL, nên khi chuyển trang navbar không nháy hay nhảy.
 const userHeaderFile = path.join(__dirname, 'partials', 'user-header.html');
+const userFooterFile = path.join(__dirname, 'partials', 'user-footer.html');
 const USER_NAV_ACTIVE = {
   '/user-dashboard': 'tong-quan-ho-so',
-  '/application-submission': 'nop-ho-so-truc-tuyen',
+  '/application-submission': 'document-storages',
   '/document-storages': 'document-storages',
   '/form-library': 'document-storages',
   '/xem-mau-don': 'document-storages',
-  '/lam-don': 'lam-don',
-  '/form-fill': 'lam-don',
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/chatbox': 'chatbox',
@@ -23,9 +22,10 @@ const USER_NAV_ACTIVE = {
   '/detail-information': 'account'
 };
 // Trang xem được khi chưa đăng nhập: user-header.js tự điền người dùng hoặc hiện nút Đăng nhập.
-const PUBLIC_USER_PAGES = new Set(['/document-storages', '/xem-mau-don']);
+const PUBLIC_USER_PAGES = new Set(['/xem-mau-don']);
+const USER_FONT_LINK = '<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">';
 // Đã có user nhớ tạm trong tab (auth-api.js) thì hiện trang ngay từ lần vẽ đầu, không nháy trắng chờ kiểm tra đăng nhập.
-const USER_HEADER_HEAD = '<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="/user-header.css">'
+const USER_HEADER_CORE = '<link rel="stylesheet" href="/user-header.css">'
   + '<style>html.has-user body{visibility:visible!important}</style>'
   + '<script>try{if(sessionStorage.getItem("ai_legal_user"))document.documentElement.classList.add("has-user")}catch(e){}</script>';
 
@@ -35,9 +35,14 @@ const sendUserPage = (fileName) => (req, res, next) => {
     let header = fs.readFileSync(userHeaderFile, 'utf8')
       .replace(`class="unav-link" data-path="${active}"`, `class="unav-link is-active" aria-current="page" data-path="${active}"`);
     if (PUBLIC_USER_PAGES.has(req.path)) header = header.replace('<header class="unav"', '<header class="unav" data-public');
-    const page = fs.readFileSync(path.join(pagesDirectory, fileName), 'utf8')
-      .replace('</head>', `${USER_HEADER_HEAD}</head>`)
-      .replace('<!-- user-header -->', header);
+    const rawPage = fs.readFileSync(path.join(pagesDirectory, fileName), 'utf8');
+    const headSnippet = rawPage.includes('family=Be+Vietnam+Pro')
+      ? USER_HEADER_CORE
+      : `${USER_FONT_LINK}${USER_HEADER_CORE}`;
+    const page = rawPage
+      .replace('</head>', `${headSnippet}</head>`)
+      .replace('<!-- user-header -->', header)
+      .replace('<!-- user-footer -->', fs.readFileSync(userFooterFile, 'utf8'));
     res.type('html').send(page);
   } catch (error) {
     next(error);
@@ -56,7 +61,8 @@ const ADMIN_NAV_ACTIVE = {
   '/landforms': 'ho-so-dat-dai',
   '/land-forms': 'ho-so-dat-dai',
   '/business-form-templates': 'ho-so-ho-kinh-doanh',
-  '/user-management': 'quan-ly-nguoi-dung'
+  '/user-management': 'quan-ly-nguoi-dung',
+  '/lawyer-management': 'quan-ly-luat-su'
 };
 
 const sendAdminPage = (fileName) => (req, res, next) => {
@@ -74,9 +80,36 @@ const sendAdminPage = (fileName) => (req, res, next) => {
   }
 };
 
-// Public reference library and page previews. No user cookies or tokens forwarded.
+// Public reference library and page previews. Cached in-memory to prevent slow DB lookups.
+let referenceCatalogCache = null;
+let referenceCatalogCacheKey = '';
+let referenceCatalogCacheTime = 0;
+let bundledCatalogSnapshot = null;
+const CATALOG_CACHE_TTL = 120000; // 2 minutes
+
+const loadBundledCatalogSnapshot = () => {
+  if (!bundledCatalogSnapshot) {
+    const file = path.join(__dirname, '..', 'public', 'reference-templates', 'catalog.json');
+    bundledCatalogSnapshot = JSON.parse(fs.readFileSync(file, 'utf8'));
+  }
+  return bundledCatalogSnapshot;
+};
+
 app.get('/api/reference-catalog', async (req, res) => {
+  const now = Date.now();
+  const refresh = req.query.refresh === '1';
   const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
+  if (
+    !refresh &&
+    referenceCatalogCache &&
+    referenceCatalogCacheKey === backendBase &&
+    (now - referenceCatalogCacheTime) < CATALOG_CACHE_TTL
+  ) {
+    res.set('X-Reference-Catalog-Source', 'memory-cache');
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400');
+    return res.json(referenceCatalogCache);
+  }
+
   try {
     let payload;
     const items = [];
@@ -92,12 +125,29 @@ app.get('/api/reference-catalog', async (req, res) => {
       if (!result.data.items.length || page >= 1000) throw new Error('Invalid pagination');
     }
     payload.data.items = items;
+    referenceCatalogCache = payload;
+    referenceCatalogCacheKey = backendBase;
+    referenceCatalogCacheTime = now;
     res.set('X-Reference-Catalog-Source', 'contract-api');
-    res.set('Cache-Control', 'no-store');
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400');
     return res.json(payload);
   } catch (err) {
-    console.warn('[Catalog] Cannot fetch from backend API:', err.message);
-    return res.status(503).json({ data: null, error: { code: 'REFERENCE_CATALOG_UNAVAILABLE', message: 'Kho mẫu từ cơ sở dữ liệu chưa sẵn sàng.' } });
+    if (referenceCatalogCache && referenceCatalogCacheKey === backendBase) {
+      res.set('X-Reference-Catalog-Source', 'stale-cache');
+      return res.json(referenceCatalogCache);
+    }
+    try {
+      const snapshot = loadBundledCatalogSnapshot();
+      res.set('X-Reference-Catalog-Source', 'bundled-contract-snapshot');
+      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=86400');
+      return res.json({ data: {
+        items: snapshot.items, domains: snapshot.domains, classifications: snapshot.classifications,
+        counts: snapshot.counts, revision: snapshot.revision, read_only: snapshot.read_only
+      }, error: null });
+    } catch {
+      console.warn('[Catalog] Cannot fetch from backend API:', err.message);
+      return res.status(503).json({ data: null, error: { code: 'REFERENCE_CATALOG_UNAVAILABLE', message: 'Kho mẫu từ cơ sở dữ liệu chưa sẵn sàng.' } });
+    }
   }
 });
 
@@ -115,10 +165,80 @@ app.get('/api/reference-assets/:assetName', async (req, res) => {
     res.set('Content-Type', mediaType);
     res.set('Content-Disposition', `inline; filename="${assetName}"`);
     res.set('X-Content-Type-Options', 'nosniff');
-    res.set('Cache-Control', 'no-store');
+    res.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
     return res.send(Buffer.from(await response.arrayBuffer()));
   } catch {
     return res.sendStatus(503);
+  }
+});
+
+// Proxy các API từ Contract Service qua Gateway
+app.use('/api/contracts', async (req, res) => {
+  const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
+  const targetUrl = `${backendBase}${req.originalUrl}`;
+  try {
+    const headers = { ...req.headers };
+    delete headers.host;
+    delete headers.connection;
+
+    const fetchOptions = {
+      method: req.method,
+      headers,
+      signal: AbortSignal.timeout(30000)
+    };
+    if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
+      fetchOptions.body = req.body;
+    }
+
+    const response = await fetch(targetUrl, fetchOptions);
+    if (req.method !== 'GET' && req.method !== 'HEAD' && response.ok) {
+      referenceCatalogCache = null;
+      referenceCatalogCacheTime = 0;
+    }
+    res.status(response.status);
+    for (const [key, value] of response.headers.entries()) {
+      if (!['transfer-encoding', 'content-encoding'].includes(key.toLowerCase())) {
+        res.setHeader(key, value);
+      }
+    }
+    const buffer = Buffer.from(await response.arrayBuffer());
+    return res.send(buffer);
+  } catch (err) {
+    console.warn('[Proxy] /api/contracts error:', err.message);
+    return res.status(503).json({ error: 'Backend contract service unreachable' });
+  }
+});
+
+// Proxy các API và tài liệu biểu mẫu từ Procedure Service qua Gateway
+app.use('/api/procedures', async (req, res) => {
+  const backendBase = (process.env.BACKEND_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
+  const targetUrl = `${backendBase}${req.originalUrl}`;
+  try {
+    const headers = { ...req.headers };
+    delete headers.host;
+    delete headers.connection;
+
+    const fetchOptions = {
+      method: req.method,
+      headers,
+      signal: AbortSignal.timeout(30000)
+    };
+    if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
+      fetchOptions.body = req.body;
+    }
+
+    const response = await fetch(targetUrl, fetchOptions);
+    res.status(response.status);
+    for (const [key, value] of response.headers.entries()) {
+      if (!['transfer-encoding', 'content-encoding'].includes(key.toLowerCase())) {
+        res.setHeader(key, value);
+      }
+    }
+    const buffer = Buffer.from(await response.arrayBuffer());
+    return res.send(buffer);
+  } catch (err) {
+    console.warn('[Proxy] /api/procedures error:', err.message);
+    return res.status(503).json({ error: 'Backend procedure service unreachable' });
   }
 });
 
@@ -126,12 +246,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(pagesDirectory, 'welcome.html'));
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'login.html'));
-});
-
-app.get('/signup', (req, res) => {
-  res.sendFile(path.join(pagesDirectory, 'signup.html'));
+// Đăng nhập và Đăng ký là hai khung trên cùng một trang; đường dẫn quyết định khung nào nằm trước.
+app.get(['/login', '/signup'], (req, res) => {
+  res.sendFile(path.join(pagesDirectory, 'auth.html'));
 });
 
 // Điều khoản sử dụng & Chính sách bảo vệ dữ liệu cá nhân (link từ trang Đăng ký).
@@ -217,6 +334,7 @@ app.get('/land-forms', sendAdminPage('LandForms-admin.html'));
 app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', sendAdminPage('user-management.html'));
+app.get('/lawyer-management', sendAdminPage('lawyer-management.html'));
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
@@ -243,7 +361,7 @@ app.get('/dien-mau-don', (req, res) => {
 
 app.get('/xem-mau-don', sendUserPage('contract-viewer.html'));
 
-// Công dân chọn mẫu đơn dùng chung đã xuất bản, điền rồi tải PDF (form-fill.js).
+// Đường dẫn cũ của trang làm đơn (đã bỏ) chuyển về Tạo hồ sơ, giữ ?template=.
 app.get('/lam-don', (req, res) => res.redirect(`/application-submission${req.query.template ? `?template=${encodeURIComponent(String(req.query.template))}` : ''}`));
 // Bí danh tương thích cho đường dẫn điền mẫu đơn hiện tại.
 app.get('/form-fill', (req, res) => res.redirect(`/application-submission${req.query.template ? `?template=${encodeURIComponent(String(req.query.template))}` : ''}`));
@@ -260,7 +378,8 @@ app.get('/application-submission', sendUserPage('user-dashboard.html'));
 const renamedPaths = {
   '/applicationSubmission': '/application-submission',
   '/kho-mau-don-tham-khao': '/document-storages',
-  '/document-templates': '/document-storages'
+  '/document-templates': '/document-storages',
+  '/landforms': '/land-forms'
 };
 Object.entries(renamedPaths).forEach(([oldPath, newPath]) => {
   app.get(oldPath, (req, res) => {

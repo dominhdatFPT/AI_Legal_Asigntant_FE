@@ -1,5 +1,5 @@
 // =============================================================================
-// HIỂN THỊ MẪU ĐƠN TỪ JSON: dùng chung cho màn "Tổng hợp" của admin (form-templates-admin.js) và màn công dân điền (form-fill.js).
+// HIỂN THỊ MẪU ĐƠN TỪ JSON: dùng cho màn "Tổng hợp" của admin (form-templates-admin.js).
 // Ô nhập có name = "<instance_id>.<key>" (vd personal_info_2.full_name), đúng khóa dữ liệu trong hợp đồng API.
 // Bản in (PDF qua hộp thoại in của trình duyệt): phần đầu quốc hiệu/tiêu ngữ và phần ký là 2 thành phần riêng, dùng cho mọi mẫu.
 // CSS: form-templates.css.

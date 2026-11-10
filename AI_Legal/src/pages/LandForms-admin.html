@@ -29,18 +29,6 @@
     .drawer-panel { transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
     .drawer-backdrop { transition: opacity 180ms ease-out; }
   </style>
-
-<!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
-<script type="speculationrules">
-  {
-    "prerender": [
-      {
-        "where": { "href_matches": ["/landforms", "/business-form-templates", "/user-dashboard", "/dashboard"] },
-        "eagerness": "moderate"
-      }
-    ]
-  }
-</script>
 </head>
 
 <!-- THÊM CLASS ĐỒNG BỘ BODY TỪ DASHBOARD -->
@@ -112,7 +100,7 @@
               </div>
               <div>
                 <p class="text-[11px] font-bold text-amber-900/60 uppercase tracking-wider">Kho biểu mẫu</p>
-                <p class="text-lg font-extrabold text-amber-800 leading-none mt-1">Tải mẫu PDF</p>
+                <p class="text-lg font-extrabold text-amber-800 leading-none mt-1">Thêm thủ tục</p>
               </div>
             </div>
             <span class="material-symbols-outlined text-amber-500 group-hover:text-amber-700 transition-colors ml-4">arrow_forward_ios</span>
@@ -199,15 +187,19 @@
     </footer>
   </div>
 
-  <!-- DRAWER: THÊM MẪU ĐƠN ĐẤT ĐAI (đồng bộ với business-form-templates.html) -->
+  <!-- DRAWER: THÊM THỦ TỤC ĐẤT ĐAI (đồng bộ với business-form-templates.html) -->
   <div id="template-drawer" hidden class="fixed inset-0 z-[60]">
     <div class="drawer-backdrop absolute inset-0 bg-stone-950/45 opacity-0" data-close-drawer></div>
     <section role="dialog" aria-modal="true" aria-labelledby="template-drawer-title"
       class="drawer-panel absolute right-0 top-0 bottom-0 w-full max-w-xl bg-surface-panel shadow-2xl flex flex-col translate-x-full">
       <header class="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-subtle bg-gradient-to-r from-red-800 to-red-900 text-white">
         <div>
-          <p class="text-label-sm tracking-wider text-amber-300">Mã mẫu do máy chủ tự cấp</p>
-          <h2 id="template-drawer-title" class="text-headline-sm font-bold">Thêm mẫu đơn</h2>
+          <p class="text-label-sm tracking-wider text-amber-300 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">tag</span>
+            <span>Mã thủ tục 3 chữ số tự động:</span>
+            <strong id="drawer-code-badge" class="font-mono text-white bg-white/20 px-2 py-0.5 rounded">Đang cấp...</strong>
+          </p>
+          <h2 id="template-drawer-title" class="text-headline-sm font-bold">Thêm thủ tục</h2>
         </div>
         <button type="button" class="w-10 h-10 rounded-lg flex items-center justify-center text-red-100 hover:bg-white/15" aria-label="Đóng" data-close-drawer>
           <span class="material-symbols-outlined">close</span>
@@ -215,32 +207,49 @@
       </header>
 
       <form id="template-form" novalidate class="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-5">
+        <!-- 1. Tệp PDF mẫu tham khảo -->
         <div class="flex flex-col gap-1.5">
-          <span class="text-label-md font-bold text-stone-800" id="template-file-label">Tệp mẫu đơn <span class="text-red-700">*</span></span>
+          <span class="text-label-md font-bold text-stone-800" id="template-file-label">Tệp mẫu đơn PDF tham khảo <span class="text-red-700">*</span></span>
           <label for="f-file" id="dropzone" class="flex items-center gap-3 rounded-xl border-2 border-dashed border-stone-300 bg-surface-subtle px-4 py-5 cursor-pointer hover:border-red-600 hover:bg-red-50/50 transition-colors">
             <span class="w-11 h-11 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-red-700 shrink-0">
               <span class="material-symbols-outlined">upload_file</span>
             </span>
             <span class="flex flex-col min-w-0">
-              <span class="font-semibold text-stone-900 truncate" id="file-name">Chọn hoặc kéo thả tệp vào đây</span>
-              <span class="text-[12px] text-stone-600">PDF tối đa 10 MB, không đặt mật khẩu</span>
+              <span class="font-semibold text-stone-900 truncate" id="file-name">Chọn hoặc kéo thả tệp PDF vào đây</span>
+              <span class="text-[12px] text-stone-600">Tệp PDF này sẽ được hiển thị ở chức năng Kho đơn tham khảo của công dân.</span>
             </span>
           </label>
           <input id="f-file" name="file" type="file" accept=".pdf,application/pdf" class="sr-only" aria-labelledby="template-file-label" aria-describedby="e-file">
           <p id="e-file" class="text-[12px] text-red-700"></p>
         </div>
 
+        <!-- 2. Tên thủ tục -->
         <div class="flex flex-col gap-1.5">
-          <label for="f-name" class="text-label-md font-bold text-stone-800">Tên mẫu đơn <span class="text-red-700">*</span></label>
-          <input id="f-name" name="name" maxlength="255" aria-describedby="h-name e-name" class="h-11 rounded-xl border border-stone-300 px-3 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none">
-          <p id="h-name" class="text-[12px] text-stone-500">Tự điền từ tên tệp, bạn có thể sửa lại cho gọn.</p>
+          <label for="f-name" class="text-label-md font-bold text-stone-800">Tên của thủ tục <span class="text-red-700">*</span></label>
+          <input id="f-name" name="name" maxlength="255" placeholder="Ví dụ: Đăng ký cấp đổi Giấy chứng nhận quyền sử dụng đất" aria-describedby="h-name e-name" class="h-11 rounded-xl border border-stone-300 px-3 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none">
+          <p id="h-name" class="text-[12px] text-stone-500">Tên thủ tục và thông tin sẽ hiển thị ở chức năng Tạo hồ sơ và Kho đơn tham khảo.</p>
           <p id="e-name" class="text-[12px] text-red-700"></p>
         </div>
 
+        <!-- 3. Mã thủ tục (3 chữ số) -->
         <div class="flex flex-col gap-1.5">
-          <label for="f-procedure" class="text-label-md font-bold text-stone-800">Thuộc thủ tục <span class="text-red-700">*</span></label>
-          <select id="f-procedure" name="procedure" class="h-11 rounded-xl border border-stone-300 px-3 bg-stone-50 focus:border-red-700 outline-none" aria-describedby="e-procedure"></select>
-          <p id="e-procedure" class="text-[12px] text-red-700"></p>
+          <label for="f-code" class="text-label-md font-bold text-stone-800">Mã thủ tục (3 chữ số tăng dần) <span class="text-red-700">*</span></label>
+          <input id="f-code" name="code" readonly aria-describedby="h-code e-code" class="h-11 rounded-xl border border-stone-300 px-3 bg-stone-100 font-mono font-bold text-stone-800 outline-none cursor-not-allowed">
+          <p id="h-code" class="text-[12px] text-stone-500">Mã ID hệ thống tự động cấp đủ 3 chữ số, bảo toàn số 0 ở đầu (DD-xxx).</p>
+          <p id="e-code" class="text-[12px] text-red-700"></p>
+        </div>
+
+        <!-- 4. Match up với mẫu đơn điền hồ sơ -->
+        <div class="flex flex-col gap-1.5">
+          <label for="f-form-template" class="text-label-md font-bold text-stone-800 flex items-center justify-between">
+            <span>Mẫu đơn điền trực tuyến (Match up)</span>
+            <span class="text-xs text-secondary font-normal">Hiển thị ở Tạo hồ sơ</span>
+          </label>
+          <select id="f-form-template" name="form_template_id" class="h-11 rounded-xl border border-stone-300 px-3 bg-white focus:border-red-700 outline-none" aria-describedby="h-form-template">
+            <option value="">-- Đang tải danh sách mẫu đơn... --</option>
+          </select>
+          <p id="h-form-template" class="text-[12px] text-stone-500">Khớp nối với mẫu biểu mẫu tạo hồ sơ để người dân có thể điền thông tin trực tiếp.</p>
+          <p id="e-form-template" class="text-[12px] text-red-700"></p>
         </div>
 
         <p id="form-error" role="alert" class="hidden rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-body-md text-red-900"></p>
@@ -249,8 +258,8 @@
       <footer class="flex items-center justify-end gap-2 px-6 py-4 border-t border-border-subtle bg-surface-subtle">
         <button type="button" class="h-11 px-4 rounded-xl text-stone-700 font-semibold hover:bg-stone-100" data-close-drawer>Hủy</button>
         <button type="submit" form="template-form" id="save-btn" class="h-11 inline-flex items-center gap-2 px-5 rounded-xl bg-red-700 text-white font-bold hover:bg-red-800 disabled:opacity-60 disabled:cursor-wait">
-          <span class="material-symbols-outlined text-[20px]">upload_file</span>
-          <span id="save-label">Tải lên mẫu đơn</span>
+          <span class="material-symbols-outlined text-[20px]">add_task</span>
+          <span id="save-label">Thêm thủ tục</span>
         </button>
       </footer>
     </section>
@@ -423,7 +432,7 @@
 
       async function showView(row) {
         if (row.dataset.referenceId) {
-          window.open(`/xem-mau-don?template=${encodeURIComponent(row.dataset.referenceId)}`, '_blank', 'noopener');
+          window.location.href = `/xem-mau-don?template=${encodeURIComponent(row.dataset.referenceId)}&from=land-forms`;
           return;
         }
         const cells = row.querySelectorAll('td');
@@ -536,17 +545,16 @@
         </tr>`;
       }
 
-      async function loadDatabaseForms() {
+      async function loadDatabaseForms(forceRefresh = false) {
         try {
           const api = await import('/auth-api.js');
           authModule = api;
           fetchFormSchemaFromApi = api.fetchFormSchema;
           const { loadReferenceCatalog } = await import('/reference-catalog.mjs');
-          const catalog = await loadReferenceCatalog();
+          const catalog = forceRefresh ? await loadReferenceCatalog(fetch, true) : await loadReferenceCatalog();
           const templates = catalog.items.filter((item) => item.domain === 'land');
           currentTemplates = templates;
           landProcedures = (catalog.classifications || []).filter((item) => item.domain === 'land');
-          renderProcedureOptions();
           if (!tbody) return;
           tbody.innerHTML = templates.map(databaseRow).join('');
           document.getElementById('template-total-label').textContent = `${templates.length} biểu mẫu`;
@@ -562,6 +570,10 @@
       const MAX_FILE_BYTES = 10 * 1024 * 1024;
       const templateForm = document.getElementById('template-form');
       let lastFocus = null;
+      let matchupTemplatesCache = null;
+      let matchupTemplatesCacheAt = 0;
+      const MATCHUP_CACHE_TTL_MS = 60000;
+      window.addEventListener('form-templates:changed', () => { matchupTemplatesCache = null; matchupTemplatesCacheAt = 0; });
 
       function formatFileSize(bytes) {
         return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
@@ -583,12 +595,55 @@
         setTimeout(() => el.remove(), 3800);
       }
 
-      // Thủ tục lấy từ danh mục thủ tục đất đai của hệ thống
-      function renderProcedureOptions() {
-        const select = document.getElementById('f-procedure');
+      // Tải danh mục mẫu đơn điền trực tuyến để match-up với thủ tục
+      async function loadMatchupFormTemplates() {
+        const select = document.getElementById('f-form-template');
         if (!select) return;
-        select.innerHTML = '<option value="">Chọn thủ tục</option>'
-          + landProcedures.map((procedure) => `<option value="${escapeHtml(procedure.key)}">${escapeHtml(procedure.code ? procedure.code + ' · ' + procedure.name : procedure.name)}</option>`).join('');
+        try {
+          const now = Date.now();
+          let items = (matchupTemplatesCache && (now - matchupTemplatesCacheAt) < MATCHUP_CACHE_TTL_MS) ? matchupTemplatesCache : null;
+          if (!items) {
+            items = [];
+            if (authModule?.authRequest) {
+              try {
+                const res = await authModule.authRequest('/api/procedures/admin/form-templates?domain=dat_dai');
+                const payload = await res.json().catch(() => null);
+                items = (payload?.data?.items || []).filter((t) => !t.deleted_at);
+              } catch {}
+            }
+            if (!items.length) {
+              const res = await fetch('/api/procedures/form-templates?domain=dat_dai');
+              const payload = await res.json().catch(() => null);
+              items = payload?.data?.items || [];
+            }
+            matchupTemplatesCache = items;
+            matchupTemplatesCacheAt = Date.now();
+          }
+          if (!items.length) {
+            select.innerHTML = '<option value="">-- Chưa có mẫu đơn trực tuyến nào --</option>';
+            return;
+          }
+          select.innerHTML = '<option value="">-- Chọn mẫu đơn trực tuyến để match up --</option>'
+            + items.map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)}${t.status === 'published' ? '' : ' (Bản nháp)'}</option>`).join('');
+        } catch {
+          select.innerHTML = '<option value="">-- Không thể tải danh sách mẫu đơn --</option>';
+        }
+      }
+
+      // Lấy mã thủ tục 3 chữ số tiếp theo từ máy chủ
+      async function fetchNextProcedureCode() {
+        const codeInput = document.getElementById('f-code');
+        const badge = document.getElementById('drawer-code-badge');
+        try {
+          const res = await fetch('/api/contracts/reference-catalog/next-code?domain=land');
+          const payload = await res.json().catch(() => null);
+          const code = payload?.data?.code || 'DD-001';
+          if (codeInput) codeInput.value = code;
+          if (badge) badge.textContent = code;
+        } catch {
+          if (codeInput) codeInput.value = 'DD-001';
+          if (badge) badge.textContent = 'DD-001';
+        }
       }
 
       function openTemplateDrawer() {
@@ -598,18 +653,18 @@
           el.removeAttribute('aria-invalid');
           el.classList.remove('border-red-600');
         });
-        ['e-file', 'e-name', 'e-procedure'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = ''; });
+        ['e-file', 'e-name', 'e-code', 'e-form-template'].forEach((id) => { const el = document.getElementById(id); if (el) el.textContent = ''; });
         document.getElementById('form-error').classList.add('hidden');
-        document.getElementById('file-name').textContent = 'Chọn hoặc kéo thả tệp vào đây';
+        document.getElementById('file-name').textContent = 'Chọn hoặc kéo thả tệp PDF vào đây';
         document.getElementById('f-name').dataset.auto = '1';
-        renderProcedureOptions();
+        void Promise.all([fetchNextProcedureCode(), loadMatchupFormTemplates()]);
         const drawer = document.getElementById('template-drawer');
         drawer.hidden = false;
         requestAnimationFrame(() => {
           drawer.querySelector('.drawer-backdrop').classList.replace('opacity-0', 'opacity-100');
           drawer.querySelector('.drawer-panel').classList.remove('translate-x-full');
         });
-        setTimeout(() => document.getElementById('dropzone').focus(), 60);
+        setTimeout(() => document.getElementById('f-name').focus(), 60);
       }
 
       function closeTemplateDrawer() {
@@ -623,38 +678,49 @@
 
       function setTemplateFieldError(id, message) {
         const input = id === 'file' ? document.getElementById('dropzone') : document.getElementById(`f-${id}`);
-        document.getElementById(`e-${id}`).textContent = message || '';
+        const errorEl = document.getElementById(`e-${id}`);
+        if (errorEl) errorEl.textContent = message || '';
         if (message) input?.setAttribute('aria-invalid', 'true'); else input?.removeAttribute('aria-invalid');
         input?.classList.toggle('border-red-600', Boolean(message));
       }
 
       function validateTemplateForm() {
+        const codeEl = document.getElementById('f-code');
+        const procEl = document.getElementById('f-procedure');
+        const formTplEl = document.getElementById('f-form-template');
         const values = {
-          file: document.getElementById('f-file').files[0] || null,
-          name: document.getElementById('f-name').value.trim(),
-          procedure: document.getElementById('f-procedure').value
+          file: document.getElementById('f-file')?.files?.[0] || null,
+          name: (document.getElementById('f-name')?.value || '').trim(),
+          code: (codeEl?.value || '').trim(),
+          procedure: (procEl?.value || '').trim(),
+          form_template_id: formTplEl?.value || ''
         };
         const errors = {};
-        if (!values.file) errors.file = 'Chọn tệp mẫu đơn để tải lên.';
-        else if (!/\.pdf$/i.test(values.file.name)) errors.file = 'Chỉ nhận tệp PDF.';
+        if (!values.file) errors.file = 'Chọn tệp PDF mẫu đơn tham khảo để tải lên.';
+        else if (!/\.pdf$/i.test(values.file.name)) errors.file = 'Chỉ nhận tệp định dạng PDF.';
         else if (!values.file.size) errors.file = 'Tệp PDF đang trống.';
         else if (values.file.size > MAX_FILE_BYTES) errors.file = 'Tệp lớn hơn 10 MB, hãy nén hoặc chọn tệp khác.';
-        if (values.name.length < 5 || values.name.length > 255) errors.name = 'Tên mẫu đơn phải có từ 5 đến 255 ký tự.';
-        if (!values.procedure) errors.procedure = 'Chọn thủ tục của mẫu đơn.';
+        if (values.name.length < 5 || values.name.length > 255) errors.name = 'Tên thủ tục phải có từ 5 đến 255 ký tự.';
+        if (codeEl && !values.code) errors.code = 'Mã thủ tục chưa sẵn sàng.';
+        if (procEl && !values.procedure) errors.procedure = 'Chọn thủ tục áp dụng.';
 
-        ['file', 'name', 'procedure'].forEach((key) => setTemplateFieldError(key, errors[key]));
+        ['file', 'name', 'code', 'procedure'].forEach((key) => setTemplateFieldError(key, errors[key]));
         const first = Object.keys(errors)[0];
-        if (first) (first === 'file' ? document.getElementById('dropzone') : document.getElementById(`f-${first}`)).focus();
+        if (first) (first === 'file' ? document.getElementById('dropzone') : document.getElementById(`f-${first}`))?.focus?.();
         return first ? null : values;
       }
 
       async function uploadFormTemplate(values) {
-        if (!authModule) throw new Error('Chưa kết nối được Backend nên chưa thể tải mẫu đơn lên.');
+        if (!authModule) throw new Error('Chưa kết nối được Backend nên chưa thể lưu thủ tục.');
         const body = new FormData();
         body.append('file', values.file);
         body.append('name', values.name);
-        body.append('procedure', values.procedure);
+        if (values.code) body.append('code', values.code);
+        if (values.procedure) body.append('procedure', values.procedure);
         body.append('domain', 'land');
+        if (values.form_template_id) {
+          body.append('form_template_id', values.form_template_id);
+        }
         const res = await authModule.authRequest(FORM_TEMPLATES_PATH, { method: 'POST', body });
         const payload = await res.json().catch(() => null);
         if (!res.ok) throw new Error(payload?.error?.message || (res.status === 413 ? 'Tệp tải lên vượt quá dung lượng cho phép.' : `Máy chủ trả lỗi ${res.status}.`));
@@ -667,22 +733,27 @@
         if (!values) return;
         const button = document.getElementById('save-btn');
         button.disabled = true;
-        document.getElementById('save-label').textContent = 'Đang tải lên…';
+        document.getElementById('save-label').textContent = 'Đang lưu thủ tục…';
         try {
           const saved = await uploadFormTemplate(values);
+          try {
+            sessionStorage.removeItem('reference_catalog_cache');
+            sessionStorage.removeItem('custom_templates_cache');
+          } catch {}
+          authModule?.invalidateProcedureCaches?.();
           button.disabled = false;
           closeTemplateDrawer();
-          toast(`Đã thêm mẫu ${saved?.name || values.name} vào kho.`);
+          toast(`Đã thêm thủ tục ${saved?.name || values.name} (${values.code}) vào hệ thống.`);
           if (searchInput) searchInput.value = '';
           filterSelects.forEach((select) => { select.selectedIndex = 0; });
-          await loadDatabaseForms();
+          await loadDatabaseForms(true);
         } catch (error) {
           const formError = document.getElementById('form-error');
           formError.textContent = error.message;
           formError.classList.remove('hidden');
         } finally {
           button.disabled = false;
-          document.getElementById('save-label').textContent = 'Tải lên mẫu đơn';
+          document.getElementById('save-label').textContent = 'Thêm thủ tục';
         }
       });
 
@@ -728,7 +799,7 @@
       filterSelects.forEach((select) => select.addEventListener('change', refilter));
       pageSizeSelect?.addEventListener('change', refilter);
       document.getElementById('add-pdf-template-card')?.addEventListener('click', openTemplateDrawer);
-      document.getElementById('reload-btn')?.addEventListener('click', loadDatabaseForms);
+      document.getElementById('reload-btn')?.addEventListener('click', () => loadDatabaseForms(true));
       document.addEventListener('keydown', (event) => {
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
           event.preventDefault();

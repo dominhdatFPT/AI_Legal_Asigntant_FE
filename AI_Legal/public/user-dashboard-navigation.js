@@ -102,8 +102,8 @@ async function showApplicationView() {
   if (!dashboardMain) return;
 
   activeContentView = 'nop-ho-so-truc-tuyen';
-  document.title = 'Tạo hồ sơ - Cổng Dịch vụ công Quốc gia';
-  setActiveNavigation('nop-ho-so-truc-tuyen');
+  document.title = 'Tạo hồ sơ - AI Legal Assistant';
+  setActiveNavigation('document-storages'); // trang Tạo hồ sơ mở từ Mẫu đơn, không có mục riêng trên navbar
   dashboardMain.innerHTML = '<div class="mx-auto max-w-7xl px-4 py-12 text-center text-slate-600">Đang mở biểu mẫu nộp hồ sơ...</div>';
 
   try {
@@ -134,7 +134,7 @@ function showDashboardView() {
   }
   dashboardMain.innerHTML = dashboardHomeMarkup;
   activeContentView = 'tong-quan-ho-so';
-  document.title = 'Tổng quan hồ sơ - Cổng Dịch vụ công Quốc gia';
+  document.title = 'Tổng quan hồ sơ - AI Legal Assistant';
   setActiveNavigation('tong-quan-ho-so');
   // Khung HTML vừa được thay lại: báo user-dashboard-data.js điền dữ liệu thật.
   window.dispatchEvent(new Event('user-dashboard:shown'));

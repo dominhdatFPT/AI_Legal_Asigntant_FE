@@ -201,6 +201,9 @@
 
 .admin-records { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
 .admin-records__head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.admin-lawyer-applications__manage { flex: 0 0 auto; padding: 8px 12px; border: 1px solid var(--admin-line); border-radius: 8px; color: var(--admin-red); font-size: 12px; font-weight: 700; text-decoration: none; }
+.admin-lawyer-applications__manage:hover { background: rgba(166,64,49,.06); }
+.admin-table.admin-lawyer-table { min-width: 860px; }
 .admin-section-heading--records { align-items: center; justify-content: flex-start; gap: 12px; }
 .admin-section-heading--records > div { padding-left: 12px; border-left: 3px solid var(--admin-red); }
 .admin-section-heading--records h2 { font-size: 18px; }

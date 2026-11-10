@@ -1,14 +1,13 @@
-// Kiểm thử đầu-cuối "Thêm mẫu đơn" (admin dựng mẫu, công dân điền, tải PDF) bằng Playwright + Chrome đã cài.
+// Kiểm thử đầu-cuối "Thêm mẫu đơn" (admin dựng mẫu) bằng Playwright + Chrome đã cài.
 // Chạy: PORT=3100 node AI_Legal/src/index.js  rồi  node tests/form-templates.e2e.cjs
-// Admin: khung "Thêm mẫu đơn" trên /land-forms và /business-form-templates. Công dân: /form-fill.
+// Admin: khung "Thêm mẫu đơn" trên /land-forms và /business-form-templates.
 // Biến môi trường: BASE_URL (mặc định http://localhost:3100), PLAYWRIGHT (đường dẫn gói playwright nếu không cài trong dự án),
-//   CHROME (mặc định Chrome trên Windows), SHOTS (thư mục ảnh chụp + PDF, mặc định ../screenshots-mau-don).
+//   CHROME (mặc định Chrome trên Windows), SHOTS (thư mục ảnh chụp, mặc định ../screenshots-mau-don).
 // Phiên đăng nhập là phiên giả trong script (chặn /api/users/me...), không đi qua /login (Firebase đang hỏng).
 // Dữ liệu mẫu đơn dùng mock trong bộ nhớ của form-template-service.js (USE_MOCK mặc định).
 const path = require('path');
 const fs = require('fs');
 const assert = require('assert/strict');
-const { execFileSync } = require('child_process');
 const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const BASE = process.env.BASE_URL || 'http://localhost:3100';
@@ -203,113 +202,10 @@ async function admin(browser) {
   await biz.close();
 }
 
-async function citizen(browser) {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-  await context.addInitScript(() => { window.print = () => { window.__printed = (window.__printed || 0) + 1; }; });
-  const page = await context.newPage();
-  watch(page);
-  await fakeSession(page, { id: 'u2', role: 'citizen', full_name: 'Nguyễn Thị Hương', email: 'huong@example.vn' });
-  await page.goto(`${BASE}/form-fill`);
-  await page.waitForSelector('.ff-card');
-  assert.deepEqual(await page.locator('.ff-card h2').allInnerTexts(), ['Hợp đồng ủy quyền', 'Giấy đề nghị đăng ký hộ kinh doanh']); // chỉ mẫu đã xuất bản
-  await page.selectOption('[data-filter="domain"]', 'ho_kinh_doanh');
-  await page.waitForFunction(() => document.querySelectorAll('.ff-card').length === 1);
-  await page.selectOption('[data-filter="domain"]', '');
-  await page.waitForFunction(() => document.querySelectorAll('.ff-card').length === 2);
-  await shot(page, '06-cong-dan-danh-sach');
-  step('công dân: chỉ thấy mẫu đã xuất bản, lọc theo lĩnh vực');
-
-  await page.click('[data-act="preview"] >> nth=0');
-  await page.waitForSelector('.ff-preview .ft-form');
-  assert.ok(await page.locator('.ff-preview [name="personal_info_1.full_name"]').isDisabled());
-  await page.click('[data-act="fill"]');
-  await page.waitForSelector('#ff-form');
-
-  // Tự điền vào thẻ Bên được ủy quyền (thẻ lặp lại thứ 2), không điền Bên ủy quyền
-  const options = await page.locator('#ff-target option').allInnerTexts();
-  assert.deepEqual(options, ['I. Bên ủy quyền · Thông tin cá nhân', 'I. Bên ủy quyền · Số điện thoại',
-    'II. Bên được ủy quyền · Thông tin cá nhân', 'II. Bên được ủy quyền · Số điện thoại']);
-  await page.selectOption('#ff-target', 'personal_info_2');
-  await page.click('[data-act="autofill"]');
-  assert.equal(await page.inputValue('[name="personal_info_2.full_name"]'), 'NGUYỄN THỊ HƯƠNG');
-  assert.equal(await page.inputValue('[name="personal_info_2.permanent_address"]'), '12 Lê Lợi, Phường Bến Nghé, Thành phố Hồ Chí Minh');
-  assert.equal(await page.inputValue('[name="phone_2.phone"]'), '0901234567');
-  assert.equal(await page.inputValue('[name="personal_info_1.full_name"]'), '');
-  await page.fill('[name="personal_info_2.full_name"]', 'NGUYỄN THỊ HƯƠNG LAN'); // ô tự điền vẫn sửa được
-  step('tự điền vào đúng thẻ đã chọn, không điền tất cả, vẫn sửa được');
-
-  // Validate từng kiểu
-  const fill = async (values) => { for (const [name, value] of Object.entries(values)) await page.fill(`[name="${name}"]`, value); };
-  await fill({
-    'personal_info_1.full_name': 'Trần Văn Bình', 'personal_info_1.dob': '2999-01-01', 'personal_info_1.cccd_number': '12345678',
-    'personal_info_1.cccd_issue_date': '1980-01-01', 'personal_info_1.cccd_issue_place': 'Hà Nội', 'phone_1.phone': '0201234567',
-    'land_parcel_1.land_area': '1,000'
-  });
-  await page.click('#ff-form [type="submit"]');
-  const error = (name) => page.locator(`#ft-${name.replace(/[^a-z0-9_]/gi, '-')}-error`).innerText();
-  assert.equal(await error('personal_info_1.dob'), 'Ngày sinh không được ở tương lai.');
-  assert.equal(await error('personal_info_1.cccd_number'), 'Số CCCD phải gồm đúng 12 chữ số.');
-  assert.equal(await error('personal_info_1.cccd_issue_date'), 'Ngày cấp không hợp lệ.');
-  assert.match(await error('phone_1.phone'), /Số điện thoại chưa đúng/);
-  assert.match(await error('land_parcel_1.land_area'), /Giá trị chưa đúng/);
-  assert.equal(await error('personal_info_1.permanent_address'), 'Vui lòng nhập thông tin này.');
-  assert.equal(await page.evaluate(() => window.__printed || 0), 0);
-  await shot(page, '07-cong-dan-loi-validate');
-  step('validate CCCD 12 số, SĐT, ngày sinh tương lai, ngày cấp trước ngày sinh, số, bắt buộc');
-
-  await fill({
-    'personal_info_1.dob': '1980-07-20', 'personal_info_1.cccd_number': '0010 8001 2345', 'personal_info_1.cccd_issue_date': '2021-04-10',
-    'personal_info_1.permanent_address': 'Số 5 ngõ 18 phố Huế, phường Hai Bà Trưng, Hà Nội', 'phone_1.phone': '+84 912 345 678',
-    'land_parcel_1.plot_number': '125', 'land_parcel_1.map_sheet_number': '07', 'land_parcel_1.land_address': 'Xã Đông Anh, Hà Nội',
-    'land_parcel_1.land_area': '1.250,5', 'free_1.value': 'Thay mặt bên ủy quyền nộp hồ sơ, nhận kết quả và ký các giấy tờ liên quan.'
-  });
-  await page.selectOption('[name="land_parcel_1.land_use_purpose"]', 'Đất ở tại nông thôn (ONT)');
-  await page.click('#ff-form [type="submit"]');
-  await page.waitForFunction(() => window.__printed === 1);
-  const printed = await page.locator('#ft-print').innerText();
-  for (const text of ['Mẫu số HD-UQ', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', 'Độc lập - Tự do - Hạnh phúc', 'HỢP ĐỒNG ỦY QUYỀN',
-    'Số điện thoại liên hệ: 0912345678', 'Số CCCD: 001080012345', 'Ngày tháng năm sinh: 20/07/1980', 'NGƯỜI LÀM ĐƠN', '(Ký, ghi rõ họ tên)']) {
-    assert.ok(printed.includes(text) || printed.toUpperCase().includes(text), `bản in thiếu "${text}"`);
-  }
-  assert.equal(await page.locator('#ft-print .ft-dots').count() > 0, true, 'ô trống phải in dòng chấm');
-  await page.emulateMedia({ media: 'print' });
-  const pdfPath = path.join(SHOTS, 'hop-dong-uy-quyen.pdf');
-  await page.pdf({ path: pdfPath, format: 'A4', preferCSSPageSize: true });
-  await page.screenshot({ path: path.join(SHOTS, '08-ban-in-a4.png'), fullPage: true });
-  await page.emulateMedia({ media: 'screen' });
-  try {
-    const text = execFileSync('pdftotext', ['-enc', 'UTF-8', '-layout', pdfPath, '-'], { encoding: 'utf8' });
-    for (const expected of ['Mẫu số HD-UQ', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', 'Độc lập - Tự do - Hạnh phúc', 'HỢP ĐỒNG ỦY QUYỀN',
-      'NGUYỄN THỊ HƯƠNG LAN', 'Thay mặt bên ủy quyền nộp hồ sơ', 'NGƯỜI LÀM ĐƠN', '(Ký, ghi rõ họ tên)', 'ngày … tháng … năm']) {
-      assert.ok(text.includes(expected), `PDF thiếu "${expected}"`);
-    }
-    fs.writeFileSync(path.join(SHOTS, 'hop-dong-uy-quyen.txt'), text);
-    step('PDF A4 đúng tiếng Việt, có quốc hiệu, tiêu ngữ, mã mẫu, phần ký (kiểm bằng pdftotext)');
-  } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
-    console.log('! Không có pdftotext: chỉ kiểm nội dung bản in trên trang, PDF đã lưu ở', pdfPath);
-  }
-  await context.close();
-
-  // Hồ sơ chưa có CCCD → báo cần cập nhật hồ sơ
-  const page2 = await browser.newPage();
-  watch(page2);
-  await fakeSession(page2, { id: 'u3', role: 'citizen', full_name: 'Chưa khai hồ sơ', email: 'moi@example.vn' }, null);
-  await page2.goto(`${BASE}/form-fill`);
-  await page2.click('[data-act="preview"] >> nth=0');
-  await page2.click('[data-act="fill"]');
-  await page2.waitForSelector('text=Cần cập nhật hồ sơ cá nhân');
-  assert.equal(await page2.locator('#ff-form').count(), 0);
-  await shot(page2, '09-cong-dan-chua-co-cccd');
-  step('hồ sơ chưa có CCCD → yêu cầu cập nhật hồ sơ trước khi làm đơn');
-  await page2.close();
-}
-
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
   try {
     await admin(browser);
-    await citizen(browser);
     assert.deepEqual(errors, [], `lỗi trên trang: ${errors.join('; ')}`);
     console.log(`Tất cả ca kiểm thử đạt. Ảnh chụp và PDF: ${SHOTS}`);
   } finally {

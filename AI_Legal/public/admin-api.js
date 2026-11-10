@@ -60,8 +60,8 @@ export const createUser = (body) => api('/api/users', { method: 'POST', body });
 
 // ===== Duyệt hồ sơ luật sư =====
 
-export const fetchPendingLawyerApplications = ({ page = 1, pageSize = 100 } = {}) =>
-  api(`/api/lawyers/applications?approval_status=pending&page=${page}&page_size=${pageSize}`);
+export const fetchPendingLawyerApplications = ({ page = 1, pageSize = 100, order = 'asc' } = {}) =>
+  api(`/api/lawyers/applications?approval_status=pending&order=${encodeURIComponent(order)}&page=${page}&page_size=${pageSize}`);
 
 // decision: 'approve' | 'reject'. body: { reason } khi từ chối.
 export const reviewLawyerApplication = (applicationId, decision, body) =>

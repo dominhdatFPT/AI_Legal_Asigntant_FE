@@ -4,7 +4,8 @@
 (() => {
   const root = document.documentElement;
   const animate = root.classList.contains('js-anim');
-  const card = document.querySelector('.auth-card');
+  // Trang gộp Đăng nhập/Đăng ký: lấy khung đang nằm trước (theo <html data-auth-mode>)
+  const card = document.querySelector(`.auth-slot[data-mode="${root.dataset.authMode}"] .auth-card`) || document.querySelector('.auth-card');
 
   // 1. Hộp form hiện ra: tiêu đề và từng ô nhập lần lượt hiện lên
   if (card && animate) {
@@ -163,6 +164,8 @@
       if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || link.target) return;
       const url = new URL(link.href, location.href);
       if (url.origin !== location.origin || !AUTH_PATHS.includes(url.pathname) || url.pathname === location.pathname) return;
+      // Đăng nhập ⇄ Đăng ký nằm chung một trang: auth-deck.js tự đổi khung, không chuyển trang
+      if (document.getElementById('auth-deck') && (url.pathname === '/login' || url.pathname === '/signup')) return;
       e.preventDefault();
       card.classList.add('is-leaving');
       setTimeout(() => location.assign(url.href), 200);

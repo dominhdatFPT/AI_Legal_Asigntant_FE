@@ -179,7 +179,7 @@ const loadWards = async () => {
 
 province.addEventListener('change', () => { clearResults(); loadWards(); });
 ward.addEventListener('change', clearResults);
-for (const id of ['detail', 'query']) byId(id).addEventListener('input', clearResults);
+for (const id of ['query']) byId(id).addEventListener('input', clearResults);
 
 const safeDirections = (value) => {
   try {
@@ -455,7 +455,8 @@ form.addEventListener('submit', async (event) => {
   const sequence = ++searchSequence;
   const address = {
     administrative_version: 'current',
-    detail: byId('detail').value.trim(),
+    // shortcut: location-service vẫn bắt buộc address.detail nên gửi tên xã/phường; bỏ khi backend cho detail tùy chọn.
+    detail: ward.selectedOptions[0]?.text || '',
     province_code: Number(province.value),
     district_code: null,
     ward_code: Number(ward.value)

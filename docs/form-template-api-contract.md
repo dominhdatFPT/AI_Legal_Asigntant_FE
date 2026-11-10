@@ -9,7 +9,6 @@ Khi BE xong: đặt `USE_MOCK = false` trong `AI_Legal/public/form-template-serv
 | Gọi API (mock / thật) | `AI_Legal/public/form-template-service.js` |
 | Hiển thị form, tự điền, bản in | `AI_Legal/public/form-renderer.js` |
 | Admin: danh sách + khung "Thêm mẫu đơn" trên `/land-forms` (đất đai) và `/business-form-templates` (hộ kinh doanh, doanh nghiệp) | `AI_Legal/public/form-templates-admin.js` |
-| Màn công dân `/form-fill` | `AI_Legal/public/form-fill.js` |
 
 ## 1. Quy ước chung
 
@@ -264,8 +263,6 @@ Nguồn: `GET /api/users/me/citizen-profile` (User service, `CitizenProfileOut`)
 | `profile.email` | `email` | |
 | `profile.tax_code` | `tax_code` | có thể `null` |
 
-Hồ sơ chưa có `id_number` (hoặc chưa có hồ sơ) → FE không cho điền mẫu, hiện thông báo và nút "Cập nhật hồ sơ" (`/detail-information?required=1&redirect=/form-fill`).
-Mẫu có thẻ lặp lại (Bên A/Bên B): công dân chọn thẻ để tự điền; FE điền thẻ đó và các thẻ tự điền khác **cùng mục** chỉ xuất hiện một lần trong mục (vd "Số điện thoại" của cùng bên), không điền các mục khác.
 
 ## 7. Điểm lệch FE/BE đã thấy (form schema hiện tại, `procedure_form_service.py`)
 

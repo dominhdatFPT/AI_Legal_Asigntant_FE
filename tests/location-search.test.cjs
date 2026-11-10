@@ -351,7 +351,7 @@ test('location uses the shared user navigation instead of a separate header', ()
 });
 
 test('both reviewed Da Nang offices show named Google destinations and vertical hours', () => {
-  const profiles = JSON.parse(fs.readFileSync(path.join(__dirname, '../../backend/services/location-service/app/data/office_profiles.json'), 'utf8'));
+  const profiles = JSON.parse(fs.readFileSync(path.join(__dirname, '../../BE/services/location-service/app/data/office_profiles.json'), 'utf8'));
   for (const id of ['danang-public-service-03', 'danang-public-service-09']) {
     const profile = profiles[id];
     const ui = render({origin:{resolved_address:'Đà Nẵng'},warnings:[],is_partial:false,items:[{
@@ -389,7 +389,7 @@ test('missing hours no longer add a link to view hours on Google Maps', () => {
 });
 
 test('reviewed web hours use the normal label and keep split shifts vertical', () => {
-  const profiles=JSON.parse(fs.readFileSync(path.join(__dirname,'../../backend/services/location-service/app/data/office_profiles.json'),'utf8'));
+  const profiles=JSON.parse(fs.readFileSync(path.join(__dirname,'../../BE/services/location-service/app/data/office_profiles.json'),'utf8'));
   const hours=profiles['danang-public-service-01'].opening_hours;
   const data={origin:{resolved_address:'Đà Nẵng'},warnings:[],is_partial:false,items:[{
     name:'Trung tâm Phục vụ hành chính công phường Hải Châu',address:'15 Lê Hồng Phong, Hải Châu, Đà Nẵng',distance_meters:100,opening_hours:hours

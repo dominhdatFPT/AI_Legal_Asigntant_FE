@@ -21,6 +21,10 @@ let lastTrigger = null;
 const filters = { domain: '', status: '', includeDeleted: false };
 let editor = null; // { id, version, status, content, selected, dirty, tab }
 let procedures = null; // [{ id, code, name }] hoặc 'unavailable' (khi đó nhập tay mã thủ tục)
+const notifyFormTemplatesChanged = () => {
+  try { sessionStorage.removeItem('custom_templates_cache'); } catch {}
+  try { window.dispatchEvent(new CustomEvent('form-templates:changed')); } catch {}
+};
 const options = (map, selected, empty) => `${empty ? `<option value="">${empty}</option>` : ''}${Object.entries(map)
   .map(([value, label]) => `<option value="${value}"${value === selected ? ' selected' : ''}>${escapeHtml(label)}</option>`).join('')}`;
 
@@ -80,7 +84,8 @@ function rowActions(row) {
   const button = (action, label, extra = '') => `<button type="button" class="ft-btn ft-btn--sm ${extra}" data-row-act="${action}" data-id="${row.id}">${label}</button>`;
   if (row.deleted_at) return button('restore', 'Khôi phục');
   return [
-    button('edit', row.status === 'draft' ? 'Sửa' : 'Sửa (tạo bản mới)'),
+    button('edit', 'Sửa'),
+    button('clone', 'Nhân bản'),
     ['draft', 'hidden'].includes(row.status) ? button('publish', 'Xuất bản', 'ft-btn--primary') : '',
     row.status === 'published' ? button('hide', 'Ẩn') : '',
     button('delete', 'Xóa', 'ft-btn--danger')
@@ -88,6 +93,7 @@ function rowActions(row) {
 }
 
 function renderList() {
+  if (!listRoot) return; // Trang không có vùng #ft-app (vd. /form-templates/editor) thì không có danh sách để vẽ.
   listRoot.innerHTML = `<section class="ftl" aria-labelledby="ftl-title">
     <div class="ftl__head"><div><h2 id="ftl-title">Mẫu đơn dựng từ thư viện thẻ · ${Object.values(pageDomains).join(', ')}</h2>
       <p class="ft-muted">Mẫu đã xuất bản hiện cho công dân ở trang "Làm đơn theo mẫu".${USE_MOCK ? ' <strong>Đang dùng dữ liệu thử (mock)</strong>, tải lại trang là mất.' : ''}</p></div>
@@ -121,18 +127,102 @@ async function loadRows() {
   }
 }
 
-async function rowAction(action, id) {
+async function rowAction(action, id, triggerBtn = null) {
   try {
     if (action === 'edit') {
       const row = await formTemplates.getAdmin(id);
-      if (row.status === 'draft') return openEditor(row);
-      const draft = await formTemplates.newVersion(id);
-      toast(`Đã tạo bản nháp phiên bản ${draft.version}. Bản cũ vẫn giữ nguyên cho tới khi xuất bản bản mới.`);
-      return openEditor(draft);
+      return openEditor(row);
     }
-    if (action === 'delete' && !(await confirmDialog('Xóa mẫu đơn?', 'Mẫu sẽ bị ẩn khỏi mọi danh sách. Có thể khôi phục lại từ bộ lọc "Hiện cả mẫu đã xóa".', 'Xóa mẫu'))) return;
-    const messages = { publish: 'Đã xuất bản mẫu. Phiên bản cũ (nếu có) chuyển sang lưu trữ.', hide: 'Đã ẩn mẫu khỏi công dân.', delete: 'Đã xóa mẫu.', restore: 'Đã khôi phục mẫu.' };
-    await formTemplates[action === 'delete' ? 'remove' : action](id);
+    if (action === 'clone') {
+      const cloned = await formTemplates.clone(id);
+      notifyFormTemplatesChanged();
+      toast(`Đã nhân bản mẫu "${cloned.name}".`);
+      return loadRows();
+    }
+    if (action === 'delete') {
+      const confirmed = await confirmDialog(
+        'Xóa mẫu đơn?',
+        'Mẫu sẽ bị ẩn khỏi mọi danh sách. Có thể khôi phục lại từ bộ lọc "Hiện cả mẫu đã xóa".',
+        'Xóa mẫu'
+      );
+      if (!confirmed) return;
+
+      const tr = triggerBtn?.closest('tr');
+
+      // --- OPTIMISTIC UI: Cập nhật giao diện NGAY LẬP TỨC (0ms) ---
+      if (tr) {
+        if (!filters.includeDeleted) {
+          tr.style.transition = 'all 240ms cubic-bezier(0.4, 0, 0.2, 1)';
+          tr.style.opacity = '0';
+          tr.style.transform = 'scaleY(0.6)';
+          tr.style.transformOrigin = 'top';
+          setTimeout(() => { tr.style.display = 'none'; }, 240);
+        } else {
+          const badgeCell = tr.querySelector('.ft-badge');
+          if (badgeCell) {
+            badgeCell.className = 'ft-badge ft-badge--deleted';
+            badgeCell.textContent = 'Đã xóa';
+          }
+          const actionsDiv = tr.querySelector('.ftl__actions');
+          if (actionsDiv) {
+            actionsDiv.innerHTML = `<button type="button" class="ft-btn ft-btn--sm" data-row-act="restore" data-id="${id}">Khôi phục</button>`;
+          }
+        }
+      }
+      toast('Đã xóa mẫu đơn.');
+
+      // Gửi request DELETE xuống backend dưới nền (Sync DB + Async RabbitMQ event)
+      try {
+        await formTemplates.remove(id);
+        notifyFormTemplatesChanged();
+      } catch (error) {
+        // Rollback nếu có lỗi xảy ra
+        if (tr) {
+          tr.style.display = '';
+          requestAnimationFrame(() => {
+            tr.style.opacity = '1';
+            tr.style.transform = '';
+          });
+        }
+        toast(`Không thể xóa mẫu đơn: ${error.message}`, true);
+        return;
+      }
+      return;
+    }
+
+    if (action === 'restore') {
+      const tr = triggerBtn?.closest('tr');
+      if (tr) {
+        const badgeCell = tr.querySelector('.ft-badge');
+        if (badgeCell) {
+          badgeCell.className = 'ft-badge ft-badge--draft';
+          badgeCell.textContent = 'Bản nháp';
+        }
+        const actionsDiv = tr.querySelector('.ftl__actions');
+        if (actionsDiv) {
+          actionsDiv.innerHTML = `
+            <button type="button" class="ft-btn ft-btn--sm" data-row-act="edit" data-id="${id}">Sửa</button>
+            <button type="button" class="ft-btn ft-btn--sm" data-row-act="clone" data-id="${id}">Nhân bản</button>
+            <button type="button" class="ft-btn ft-btn--sm ft-btn--primary" data-row-act="publish" data-id="${id}">Xuất bản</button>
+            <button type="button" class="ft-btn ft-btn--sm ft-btn--danger" data-row-act="delete" data-id="${id}">Xóa</button>
+          `;
+        }
+      }
+      toast('Đã khôi phục mẫu.');
+      try {
+        await formTemplates.restore(id);
+        notifyFormTemplatesChanged();
+      } catch (error) {
+        if (tr) loadRows();
+        toast(`Không thể khôi phục mẫu: ${error.message}`, true);
+        return;
+      }
+      return;
+    }
+
+    const messages = { publish: 'Đã xuất bản mẫu. Phiên bản cũ (nếu có) chuyển sang lưu trữ.', hide: 'Đã ẩn mẫu khỏi công dân.' };
+    await formTemplates[action](id);
+    notifyFormTemplatesChanged();
     toast(messages[action]);
     loadRows();
   } catch (error) {
@@ -343,9 +433,7 @@ function buildView() {
   const selected = findSection(editor.selected);
   return `<details class="ftb__metadata"${content.name ? '' : ' open'}><summary>Thông tin mẫu và PDF tham khảo</summary><div class="ftb__card"><h2>a. Thông tin chung</h2><div class="ftb__info">
       <label><span>Tên mẫu <span class="ft-req" aria-hidden="true">*</span></span><input data-info="name" value="${escapeHtml(content.name)}" required aria-required="true" placeholder="vd: Hợp đồng ủy quyền"></label>
-      <label>Mã mẫu<input data-info="code" value="${escapeHtml(content.code || '')}" placeholder="vd: 09/ĐK (không bắt buộc)"></label>
       <label>Lĩnh vực<select data-info="domain">${options(pageDomains[content.domain] ? pageDomains : DOMAINS, content.domain)}</select></label>
-      <label>Thủ tục liên kết<span id="ftb-procedure">${procedureControl()}</span></label>
     </div></div>
     ${filesView()}</details>
     <div class="ftb__work">
@@ -390,8 +478,8 @@ function renderEditor(focusSelector) {
       <div class="ftb__tabs" role="tablist" aria-label="Bước dựng mẫu">
         <button type="button" role="tab" data-tab="build" aria-selected="${editor.tab === 'build'}">1. Dựng mẫu</button>
         <button type="button" role="tab" data-tab="preview" aria-selected="${editor.tab === 'preview'}">2. Tổng hợp</button></div>
-      <div class="ftb__bar-actions"><button type="button" class="ft-btn" data-act="save">Lưu nháp</button>
-        <button type="button" class="ft-btn ft-btn--primary" data-act="publish">Xác thực &amp; xuất bản</button></div>`;
+      <div class="ftb__bar-actions"><button type="button" class="ft-btn" data-act="save">${editor.status === 'published' ? 'Lưu thay đổi' : 'Lưu nháp'}</button>
+        <button type="button" class="ft-btn ft-btn--primary" data-act="publish">${editor.status === 'published' ? 'Cập nhật &amp; xuất bản' : 'Xác thực &amp; xuất bản'}</button></div>`;
   const preview = editor.tab === 'preview';
   app.classList.toggle('is-inline-build', !preview);
   document.getElementById('ftb-build-layout').hidden = preview;
@@ -489,12 +577,14 @@ async function save(publish) {
     editor.hasReferencePdf = Boolean(row.has_reference_pdf || editor.hasReferencePdf);
     editor.wordFilename = row.word_filename || editor.wordFilename;
     editor.pdfFilename = row.reference_pdf_filename || editor.pdfFilename;
+    notifyFormTemplatesChanged();
     if (publish) {
       row = await formTemplates.publish(row.id);
-      toast(`Đã xuất bản "${row.name}" phiên bản ${row.version}.`);
+      notifyFormTemplatesChanged();
+      toast(editor.status === 'published' ? `Đã cập nhật xuất bản "${row.name}".` : `Đã xuất bản "${row.name}" phiên bản ${row.version}.`);
       return closeEditor();
     }
-    toast('Đã lưu nháp.');
+    toast(editor.status === 'published' ? 'Đã lưu thay đổi.' : 'Đã lưu nháp.');
     renderEditor();
     if (replacedWord) await openWordPanel();
     return true;
@@ -558,7 +648,7 @@ async function checkWord() {
 const requestClose = async () => { if (!editor.dirty || await confirmLeave()) closeEditor(); };
 const onClick = async (event) => {
   const rowButton = event.target.closest('[data-row-act]');
-  if (rowButton) return rowAction(rowButton.dataset.rowAct, rowButton.dataset.id);
+  if (rowButton) return rowAction(rowButton.dataset.rowAct, rowButton.dataset.id, rowButton);
   const tab = event.target.closest('[data-tab]');
   if (tab && editor) { editor.tab = tab.dataset.tab; return renderEditor(`[data-tab="${editor.tab}"]`); }
   const button = event.target.closest('[data-act]');
@@ -639,7 +729,7 @@ const onClick = async (event) => {
     return change(() => addBlock(FREE_BLOCK_KEY, editor.selected, undefined, { label, type }), '#ftb-free-title');
   }
 };
-[listRoot, app].forEach((root) => root.addEventListener('click', onClick));
+[listRoot, app].filter(Boolean).forEach((root) => root.addEventListener('click', onClick));
 app.addEventListener('keydown', (event) => { if (event.key === 'Escape' && editor && !event.defaultPrevented) requestClose(); });
 document.getElementById('add-template-card')?.addEventListener('click', () => openEditor(null));
 
@@ -694,7 +784,7 @@ app.addEventListener('input', (event) => {
   markDirty();
 });
 
-listRoot.addEventListener('change', (event) => {
+listRoot?.addEventListener('change', (event) => {
   const el = event.target;
   if (!el.dataset.filter) return;
   filters[el.dataset.filter] = el.type === 'checkbox' ? el.checked : el.value;
@@ -724,8 +814,6 @@ app.addEventListener('change', async (event) => {
   }
   if (el.dataset.info === 'domain') {
     editor.content.domain = el.value;
-    editor.content.procedure_id = null; // danh mục thủ tục đi theo lĩnh vực
-    document.getElementById('ftb-procedure').innerHTML = procedureControl();
     return markDirty();
   }
   if (el.dataset.info === 'procedure_id') { editor.content.procedure_id = el.value; return markDirty(); }

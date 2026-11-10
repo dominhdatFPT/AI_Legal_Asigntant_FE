@@ -145,14 +145,15 @@ import { PAGE_SIZE, clampPage, pageSlice, renderPager } from '/admin-pager.js';
     }
 
     // Backend: deleted=false (mặc định) chỉ trả tài khoản chưa xóa, deleted=true chỉ trả tài khoản đã xóa mềm.
+    const MAX_USER_PAGES = 10;
     async function fetchAllUsers(deleted) {
       const all = [];
       let page = 1;
       let totalPages = 1;
       do {
         const data = await fetchUsersPage({ page, deleted });
-        all.push(...data.items);
-        totalPages = data.pagination.total_pages;
+        all.push(...(data?.items || []));
+        totalPages = Math.min(data?.pagination?.total_pages || 1, MAX_USER_PAGES);
         page += 1;
       } while (page <= totalPages);
       return all;

@@ -26,7 +26,22 @@
     }
     .chat-layout { min-height: calc(100vh - 15rem); }
     .chat-panel { min-height: 38rem; }
+    .chat-sessions { min-height: 0; }
     .chat-history { min-height: 0; }
+    .chat-session-list { min-height: 0; flex: 1 1 0%; overflow-y: auto; overscroll-behavior: contain; }
+    .chat-session-item { border-left: 4px solid transparent; transition: background-color 140ms ease, border-color 140ms ease; }
+    .chat-session-item:hover, .chat-session-item[aria-pressed="true"] { background-color: #fef2f2; }
+    .chat-session-list > .chat-session-item.is-active,
+    .chat-session-list > .chat-session-item[aria-pressed="true"] { border-left-color: #dc2626; }
+    .chat-session-list > .chat-session-item.is-active h4,
+    .chat-session-list > .chat-session-item[aria-pressed="true"] h4 { color: #b91c1c; }
+    .chat-session-item:focus-visible { outline: 2px solid #93000b; outline-offset: -2px; }
+    .chat-history .text-xs { font-size: .9375rem; line-height: 1.55; }
+    .chat-history [class~="text-[11px]"] { font-size: .8125rem; }
+    .chat-history [class~="text-[10px]"] { font-size: .75rem; }
+    .chat-session-item .text-xs { font-size: .8125rem; }
+    .chat-session-item [class~="text-[11px]"] { font-size: .75rem; }
+    .chat-prompt, .chat-composer textarea { font-size: .875rem; }
     @media (min-width: 1280px) {
       .chat-layout { height: calc(100vh - 14rem); min-height: 38rem; }
       .chat-panel { min-height: 0; }
@@ -36,390 +51,101 @@
     }
     @media (max-width: 639px) {
       .chat-layout { min-height: 0; }
-      .chat-sessions { max-height: 13rem; }
+      .chat-sessions { max-height: 17rem; }
       .chat-panel { min-height: 34rem; }
       .chat-history { padding: .875rem; }
     }
+    .chat-session-list { scrollbar-gutter: stable; }
+    .chat-session-item:hover, .chat-session-item[aria-pressed="true"] { background-color: #fff7f5; }
+    .chat-session-item[aria-pressed="true"] { border-color: #b91c1c; }
+    .chat-session-item:focus-visible, [data-tab]:focus-visible { outline: 2px solid #93000b; outline-offset: -2px; }
+    .chat-history { scrollbar-gutter: stable; }
+    [data-chat-feedback][hidden], [data-terms][hidden], [data-lobby-tabs][hidden], [data-chat-accept][hidden], [data-chat-close][hidden], [data-chat-new][hidden] { display: none !important; }
+    @media (max-width: 1279px) {
+      .chat-layout { height: auto; min-height: 0; }
+      .chat-panel { min-height: 34rem; }
+      .chat-session-list { max-height: 20rem; }
+    }
   </style>
 </head>
-<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-on-surface font-body-md min-h-screen flex flex-col antialiased">
 <a class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:bg-surface-container-lowest focus:px-4 focus:py-2 focus:text-primary focus:shadow-md" href="#chat-main">Đến nội dung tư vấn</a>
 <!-- user-header -->
-<!-- BEGIN: SubBannerAndBreadcrumb -->
-<section class="bg-surface-container-low border-b border-outline-variant px-4 py-5 lg:px-8">
-<div class="max-w-[1680px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
 
-<div class="flex items-center space-x-2.5">
-<span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary-fixed text-primary text-sm">
-<i class="fa-solid fa-comments"></i>
-</span>
-<h1 class="text-xl font-bold text-on-surface">Tư vấn trực tuyến</h1>
-</div>
-</div>
-</div>
-</section>
+
 <!-- END: SubBannerAndBreadcrumb -->
 <!-- BEGIN: MainContentArea -->
 <main id="chat-main" class="flex-1 max-w-[1680px] w-full mx-auto p-3 lg:p-5">
-<!-- Giao diện 3 cột Chat liên thông -->
-<div class="chat-layout grid grid-cols-1 lg:grid-cols-12 gap-4">
-<!-- CỘT 1: Sidebar Danh sách cuộc hội thoại & Kênh tư vấn (Col 3/12) -->
-<aside class="chat-sessions lg:col-span-4 xl:col-span-3 bg-surface-container-lowest rounded-lg border border-outline-variant flex flex-col overflow-hidden">
-<!-- Header cột trái & Nút tạo yêu cầu -->
-<div class="p-3.5 border-b border-outline-variant bg-surface-container-low">
-<div class="flex items-center justify-between mb-3">
-<h3 class="font-bold text-sm text-slate-800 flex items-center">
-<i class="fa-solid fa-list-check text-red-600 mr-2"></i>
-              Phiên tư vấn của bạn
-            </h3>
+  <header class="mb-4 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Tư vấn riêng với luật sư</h1>
+      <p class="mt-1 text-sm text-slate-600">Câu hỏi và trao đổi chỉ hiển thị với bạn và luật sư phụ trách.</p>
+    </div>
+    <div data-lobby-tabs aria-label="Danh sách tư vấn" class="flex gap-2" hidden role="tablist">
+      <button aria-selected="false" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700" data-tab="mine" role="tab" type="button">Cuộc tư vấn</button>
+      <button aria-selected="true" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700" data-tab="lobby" role="tab" type="button">Câu hỏi mới</button>
+    </div>
+  </header>
+  <p class="mb-3 rounded-md border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-900">
+    Nội dung trao đổi được gửi riêng. Không gửi mật khẩu, mã xác thực hoặc thông tin không cần thiết cho việc tư vấn.
+  </p>
+  <p class="mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900" data-chat-feedback hidden role="alert"></p>
 
-</div>
-
-</div>
-<!-- Ô Tìm kiếm nhanh -->
-<div class="p-3 border-b border-slate-100">
-<div class="relative">
-<i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-<input class="w-full text-xs pl-8 pr-3 py-2 border border-outline-variant rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-surface-container-low" placeholder="Tìm theo tên cán bộ, mã hồ sơ..." type="text">
-</div>
-<!-- Bộ lọc danh mục -->
-<div class="flex items-center space-x-1.5 mt-2.5 overflow-x-auto pb-1 text-[11px] font-medium custom-scrollbar">
-<button class="px-2.5 py-1 rounded-full bg-primary text-white whitespace-nowrap">Tất cả</button>
-<button class="px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant whitespace-nowrap">Tiếp nhận một cửa</button>
-<button class="px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant whitespace-nowrap">Luật sư hỗ trợ</button>
-<button class="px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant whitespace-nowrap">Trợ lý AI</button>
-</div>
-</div>
-<!-- Danh sách phiên Chat -->
-<div class="flex-1 overflow-y-auto custom-scrollbar divide-y divide-slate-100">
-<!-- Phiên 1 (Đang kích hoạt) -->
-<div class="p-3.5 bg-primary-fixed cursor-pointer transition-colors hover:bg-surface-container-low">
-<div class="flex items-start space-x-3">
-<div class="relative shrink-0">
-<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center border border-outline-variant text-xs">
-                  MA
-                </div>
-<span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<h4 class="text-xs font-bold text-slate-900 truncate">Nguyễn Minh Anh</h4>
-<span class="text-[10px] text-slate-500 font-medium">14:04</span>
-</div>
-<div class="text-[11px] text-red-800 font-medium flex items-center space-x-1 mt-0.5">
-<i class="fa-solid fa-building-columns text-[10px]"></i>
-<span class="truncate">Cán bộ một cửa - Sở Tư pháp</span>
-</div>
-<p class="text-xs text-slate-600 truncate mt-1">
-<span class="font-semibold text-slate-700">Cán bộ:</span> Dạ em đã kiểm tra mã hồ sơ DD-001 của anh...
-                </p>
-<div class="mt-2 flex items-center gap-1.5">
-<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
-                    Hồ sơ DD-001
-                  </span>
-<span class="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 font-medium">
-                    Đang xử lý
-                  </span>
-</div>
-</div>
-</div>
-</div>
-<!-- Phiên 2 -->
-<div class="p-3.5 hover:bg-slate-50 cursor-pointer transition-colors">
-<div class="flex items-start space-x-3">
-<div class="relative shrink-0">
-<div class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center border border-slate-300 text-xs">
-                  HĐ
-                </div>
-<span class="absolute bottom-0 right-0 w-3 h-3 bg-slate-400 border-2 border-white rounded-full"></span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<h4 class="text-xs font-bold text-slate-800 truncate">Hỗ trợ kỹ thuật Cổng DVC</h4>
-<span class="text-[10px] text-slate-400">10:20</span>
-</div>
-<p class="text-[11px] text-slate-500 truncate">Đ/c Trần Hữu Đức - Kỹ thuật viên</p>
-<p class="text-xs text-slate-500 truncate mt-1">
-                  Đã hướng dẫn khôi phục mật khẩu tài khoản VNeID...
-                </p>
-<div class="mt-1.5">
-<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600">
-<i class="fa-solid fa-check mr-1 text-emerald-600"></i> Đã giải quyết
-                  </span>
-</div>
-</div>
-</div>
-</div>
-<!-- Phiên 3 -->
-<div class="p-3.5 hover:bg-slate-50 cursor-pointer transition-colors">
-<div class="flex items-start space-x-3">
-<div class="relative shrink-0">
-<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 font-bold flex items-center justify-center border border-amber-200 text-xs">
-                  LS
-                </div>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<h4 class="text-xs font-bold text-slate-800 truncate">LS. Hoàng Văn Thái</h4>
-<span class="text-[10px] text-slate-400">Hôm qua</span>
-</div>
-<p class="text-[11px] text-amber-800 truncate">Đoàn Luật sư TP. Hà Nội</p>
-<p class="text-xs text-slate-500 truncate mt-1">
-                  Tư vấn thủ tục khai sinh có yếu tố nước ngoài...
-                </p>
-</div>
-</div>
-</div>
-<!-- Phiên 4 -->
-<div class="p-3.5 hover:bg-slate-50 cursor-pointer transition-colors">
-<div class="flex items-start space-x-3">
-<div class="relative shrink-0">
-<div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center border border-blue-200 text-xs">
-                  AI
-                </div>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<h4 class="text-xs font-bold text-slate-800 truncate">Trợ lý Pháp lý Số (AI DVC)</h4>
-<span class="text-[10px] text-slate-400">3 ngày trước</span>
-</div>
-<p class="text-xs text-slate-500 truncate mt-1">
-                  Tra cứu biểu mức thu phí trước bạ nhà đất 2026...
-                </p>
-</div>
-</div>
-</div>
-</div>
-<!-- Footer sidebar -->
-
-</aside>
-<!-- CỘT 2: Khung Chat Chính (Col 6/12 hoặc 5/12) -->
-<section class="chat-panel lg:col-span-8 xl:col-span-6 bg-surface-container-lowest rounded-lg border border-outline-variant flex flex-col overflow-hidden">
-<!-- Header phiên trò chuyện -->
-<div class="p-3.5 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs">
-<div class="flex items-center space-x-3">
-<div class="relative">
-<div class="w-11 h-11 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm shadow">
-                MA
-              </div>
-<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
-</div>
-<div>
-<div class="flex items-center space-x-2">
-<h3 class="font-bold text-slate-900 text-sm">Nguyễn Minh Anh</h3>
-<span class="bg-amber-100 text-amber-800 text-[10px] font-semibold px-2 py-0.5 rounded border border-amber-300 flex items-center">
-<i class="fa-solid fa-circle-check text-amber-600 mr-1"></i> Cán bộ công chức
-                </span>
-</div>
-<p class="text-xs text-slate-600 flex items-center mt-0.5">
-<span class="font-medium text-red-700 mr-1.5">Sở Tư pháp TP. Hà Nội</span> • 
-                <span class="text-emerald-700 ml-1.5 font-medium flex items-center">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block mr-1"></span> Phản hồi trung bình: 2 phút
-                </span>
-</p>
-</div>
-</div>
-<!-- Các nút tác vụ nhanh trong hội thoại -->
-<div class="flex items-center space-x-1.5">
-<button class="p-2 text-slate-600 hover:text-red-700 hover:bg-slate-100 rounded-md transition-colors border border-slate-200 text-xs flex items-center space-x-1" title="Gửi thông tin hồ sơ nhanh">
-<i class="fa-solid fa-folder-open text-amber-600"></i>
-<span class="hidden sm:inline">Gắn hồ sơ</span>
-</button>
-<button class="p-2 text-slate-600 hover:text-amber-600 hover:bg-slate-100 rounded-md transition-colors border border-slate-200 text-xs flex items-center space-x-1" title="Đánh giá cán bộ tiếp nhận">
-<i class="fa-solid fa-star text-amber-500"></i>
-<span class="hidden sm:inline">Đánh giá</span>
-</button>
-</div>
-</div>
-<!-- Khung nội dung hội thoại (Chat History) -->
-<div class="chat-history flex-1 p-4 overflow-y-auto bg-surface-container-low space-y-4 custom-scrollbar">
-<!-- Thông báo hệ thống khởi tạo phiên -->
-<div class="flex justify-center my-2">
-<div class="bg-white border border-slate-200 shadow-2xs text-[11px] text-slate-600 px-3 py-1.5 rounded-full flex items-center space-x-2">
-<i class="fa-solid fa-shield-halved text-red-700"></i>
-<span class="">Phiên hỗ trợ trực tuyến bắt đầu lúc <strong>14:00</strong> • Mã phiên: <strong>#HT-2026-8912</strong></span>
-</div>
-</div>
-<!-- Tin nhắn từ Cán bộ tiếp nhận -->
-<div class="flex items-start space-x-2.5 max-w-[85%]">
-<div class="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
-              MA
-            </div>
-<div>
-<div class="flex items-center space-x-2 mb-1">
-<span class="text-xs font-semibold text-slate-800">C/b Nguyễn Minh Anh</span>
-<span class="text-[10px] text-slate-400">14:01</span>
-</div>
-<div class="bg-white p-3 rounded-2xl rounded-tl-sm border border-slate-200 shadow-sm text-xs leading-relaxed text-slate-800">
-                Xin chào anh Lê Hoàng Nam. Tôi là Nguyễn Minh Anh, cán bộ tiếp nhận và hỗ trợ tại Cổng Dịch vụ công Quốc gia. Tôi có thể hỗ trợ anh giải quyết vướng mắc thủ tục hành chính nào hôm nay ạ?
-              </div>
-</div>
-</div>
-<!-- Tin nhắn từ Người dân (Lê Hoàng Nam) -->
-<div class="flex items-start justify-end space-x-2.5 max-w-[88%] ml-auto">
-<div class="flex flex-col items-end">
-<div class="flex items-center space-x-2 mb-1">
-<span class="text-[10px] text-slate-400">14:02</span>
-<span class="text-xs font-semibold text-slate-800">Lê Hoàng Nam (Bạn)</span>
-</div>
-<div class="bg-primary text-white p-3.5 rounded-2xl rounded-tr-sm shadow-sm text-xs leading-relaxed max-w-full">
-                Chào cán bộ, tôi vừa nộp hồ sơ mã số <strong class="underline decoration-yellow-400">DD-001-811F7E21</strong> về việc Đăng ký biến động quyền sử dụng đất vào sáng nay nhưng hiện tại chưa nhận được thông báo nộp phí/lệ phí. Không biết hồ sơ của tôi đã hợp lệ chưa ạ?
-              </div>
-<!-- Card tóm tắt hồ sơ gửi kèm từ người dân -->
-<div class="mt-2 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm text-left w-full text-xs">
-<div class="flex items-center justify-between text-[11px] text-slate-500 pb-1.5 border-b border-slate-100">
-<span class="font-semibold text-red-700"><i class="fa-solid fa-file-lines mr-1"></i> Hồ sơ đính kèm</span>
-<span class="bg-amber-100 text-amber-800 font-medium px-1.5 py-0.2 rounded text-[10px]">Chờ đóng phí</span>
-</div>
-<div class="font-semibold text-slate-800 mt-1">Mã: DD-001-811F7E21</div>
-<div class="text-slate-600 text-[11px]">Đăng ký biến động đất đai, quyền sở hữu tài sản gắn liền với đất</div>
-</div>
-</div>
-<div class="w-8 h-8 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center shrink-0">
-              LN
-            </div>
-</div>
-<!-- Tin nhắn phản hồi từ Cán bộ kèm chi tiết nghiệp vụ -->
-<div class="flex items-start space-x-2.5 max-w-[88%]">
-<div class="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
-              MA
-            </div>
-<div>
-<div class="flex items-center space-x-2 mb-1">
-<span class="text-xs font-semibold text-slate-800">C/b Nguyễn Minh Anh</span>
-<span class="text-[10px] text-slate-400">14:04</span>
-</div>
-<div class="bg-white p-3.5 rounded-2xl rounded-tl-sm border border-slate-200 shadow-sm text-xs leading-relaxed text-slate-800 space-y-2">
-<p class="">
-                  Chào anh Nam, em đã tiến hành tra cứu trực tiếp trên <strong>Hệ thống một cửa điện tử liên thông Quốc gia</strong>:
-                </p>
-<div class="bg-emerald-50 border-l-3 border-emerald-600 p-2.5 rounded text-[11px] text-emerald-950 space-y-1">
-<div class=""><strong>1. Tình trạng hồ sơ:</strong> Đã hoàn tất bước thẩm định sơ bộ các văn bản scan công chứng.</div>
-<div class=""><strong>2. Nghĩa vụ tài chính:</strong> Đang chờ đối soát từ Chi cục Thuế khu vực.</div>
-<div class=""><strong>3. Dự kiến thời gian:</strong> Khoảng <strong>15:30 chiều nay</strong> hệ thống sẽ gửi mã QR nộp phí trực tuyến qua SMS và ứng dụng VNeID của anh.</div>
-</div>
-<p class="">
-                  Sau khi nhận được thông báo nộp phí, anh có thể thanh toán trực tiếp qua cổng thanh toán VNPT Pay, VNPAY hoặc tài khoản ngân hàng liên kết để nhận biên lai điện tử ngay nhé.
-                </p>
-</div>
-<!-- File đính kèm hướng dẫn từ Cán bộ -->
-<div class="mt-2 bg-white border border-slate-200 rounded-lg p-2.5 flex items-center justify-between max-w-sm hover:border-slate-300 transition-colors shadow-2xs">
-<div class="flex items-center space-x-2.5">
-<div class="w-9 h-9 bg-red-50 text-red-600 rounded flex items-center justify-center text-base">
-<i class="fa-regular fa-file-pdf"></i>
-</div>
-<div>
-<div class="text-xs font-semibold text-slate-800">Huong_dan_nop_phi_truc_tuyen.pdf</div>
-<div class="text-[10px] text-slate-400">1.2 MB • Tài liệu chuẩn DVCQG</div>
-</div>
-</div>
-<button class="text-red-700 hover:text-red-800 text-xs p-1.5 font-medium flex items-center" title="Tải xuống tài liệu">
-<i class="fa-solid fa-download"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- Thanh Quick Prompts (Gợi ý câu hỏi nhanh) -->
-<div class="px-3.5 py-2 bg-slate-50 border-t border-slate-200 flex items-center space-x-2 overflow-x-auto text-[11px] custom-scrollbar">
-<span class="text-slate-400 shrink-0 font-medium"><i class="fa-solid fa-bolt text-amber-500"></i> Gợi ý:</span>
-<button class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
-            Cách nộp lệ phí trực tuyến?
+  <section aria-label="Hộp thư tư vấn" class="chat-layout grid grid-cols-1 gap-4 lg:grid-cols-12">
+    <aside class="chat-sessions flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white lg:col-span-4">
+      <div class="border-b border-slate-200 bg-slate-50 p-4">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <h2 class="text-sm font-bold text-slate-800">Câu hỏi và cuộc tư vấn</h2>
+          <button class="rounded-md bg-red-700 px-3 py-2 text-sm font-semibold text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-new type="button">
+            <i class="fa-solid fa-plus mr-2" aria-hidden="true"></i>Đặt câu hỏi
           </button>
-<button class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
-            Thời gian trả kết quả bản cứng?
-          </button>
-<button class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full whitespace-nowrap transition-colors">
-            Thủ tục nhận kết quả qua bưu chính công ích
-          </button>
-</div>
-<!-- Chat Input Footer -->
-<div class="p-3 bg-white border-t border-slate-200">
-<form class="flex flex-col space-y-2" onsubmit="event.preventDefault();">
-<div class="flex items-center space-x-2">
-<textarea class="flex-1 text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-red-700 focus:border-red-700 outline-none resize-none bg-slate-50/40" placeholder="Nhập nội dung câu hỏi hoặc vướng mắc cần giải đáp (Nhấn Enter để gửi)..." rows="2"></textarea>
-<button class="h-[52px] px-5 bg-primary hover:bg-tertiary text-white font-semibold text-xs rounded-lg flex flex-col items-center justify-center transition-colors shadow-sm shrink-0" type="submit">
-<i class="fa-solid fa-paper-plane mb-1"></i>
-<span class="">Gửi tin</span>
-</button>
-</div>
-<!-- Toolbar đính kèm tài liệu -->
-<div class="flex items-center justify-between pt-1 text-xs text-slate-500">
-<div class="flex items-center space-x-3">
-<button class="hover:text-red-700 transition-colors flex items-center space-x-1" title="Đính kèm file PDF/Word/Ảnh" type="button">
-<i class="fa-solid fa-paperclip"></i>
-<span class="text-[11px]">Đính kèm tệp</span>
-</button>
+        </div>
+        <label class="sr-only" for="session-search">Tìm câu hỏi hoặc cuộc tư vấn</label>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-slate-500" aria-hidden="true"></i>
+          <input class="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm focus:border-red-700 focus:outline-none focus:ring-2 focus:ring-red-100" data-session-search id="session-search" placeholder="Tìm câu hỏi..." type="search">
+        </div>
+      </div>
+      <div aria-label="Danh sách câu hỏi và cuộc tư vấn" class="chat-session-list custom-scrollbar divide-y divide-slate-100" data-session-list role="list"></div>
+      <p class="px-4 py-8 text-center text-sm text-slate-600" data-search-empty hidden></p>
+    </aside>
 
+    <section aria-label="Nội dung tư vấn riêng" class="chat-panel flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white lg:col-span-8">
+      <header class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
+        <div class="min-w-0">
+          <h2 class="text-base font-bold text-slate-900" data-chat-title>Chọn một cuộc tư vấn</h2>
+          <p class="mt-1 break-words text-sm text-slate-600" data-chat-organization></p>
+          <span class="mt-2 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700" data-chat-response></span>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-2">
+          <button class="rounded-md bg-red-700 px-3 py-2 text-sm font-semibold text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-accept hidden type="button">Nhận tư vấn</button>
+          <button class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-close hidden type="button">Kết thúc tư vấn</button>
+        </div>
+      </header>
 
-</div>
-<div class="text-[11px] text-slate-400">
-                Hỗ trợ tệp: PDF, DOCX, PNG, JPG (&lt; 15MB)
-              </div>
-</div>
-</form>
-</div>
-</section>
-<!-- CỘT 3: Thông tin chi tiết hồ sơ & Tiện ích tra cứu (Col 3/12) -->
-<aside class="lg:col-span-12 xl:col-span-3 flex flex-col space-y-3.5 overflow-y-auto custom-scrollbar">
-<!-- Card 1: Thông tin công dân -->
-<div class="bg-white rounded-lg border border-slate-200 shadow-sm p-4">
-<div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
-<h4 class="font-bold text-xs uppercase tracking-wide text-slate-700 flex items-center">
-<i class="fa-solid fa-id-card text-red-700 mr-2"></i> Thông tin công dân
-            </h4>
-<span class="bg-emerald-100 text-emerald-800 text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center">
-<i class="fa-solid fa-check-circle mr-1"></i> Định danh Mức 2
-            </span>
-</div>
-<div class="space-y-2 text-xs">
-<div>
-<span class="text-slate-400 block text-[11px]">Họ và tên:</span>
-<span class="font-bold text-slate-800">Vua Cau Long</span>
-</div>
-<div>
-<span class="text-slate-400 block text-[11px]">Số CCCD/Định danh:</span>
-<span class="font-medium text-slate-700 font-mono">00109600****</span>
-</div>
-<div>
-<span class="text-slate-400 block text-[11px]">Email đăng ký:</span>
-<span class="font-medium text-slate-700">user2026@gmail.com</span>
-</div>
-<div>
-<span class="text-slate-400 block text-[11px]">Địa bàn đăng ký thường trú:</span>
-<span class="font-medium text-slate-700">Phường Phan Chu Trinh, Quận Hoàn Kiếm, TP. Hà Nội</span>
-</div>
-</div>
-</div>
-<!-- Card 2: Tiến độ hồ sơ đang trao đổi -->
+      <div class="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:px-6" data-terms hidden>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p>Vui lòng đọc và đồng ý điều khoản tư vấn trước khi gửi câu hỏi hoặc nhận tư vấn.</p>
+          <button class="shrink-0 rounded-md border border-amber-700 px-3 py-2 text-sm font-semibold text-amber-950 hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-800" data-terms-accept type="button">Đồng ý điều khoản</button>
+        </div>
+      </div>
 
-<!-- Card 3: Tiện ích hỗ trợ nhanh & Hướng dẫn -->
+      <div aria-live="polite" aria-relevant="additions text" class="chat-history custom-scrollbar flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4 sm:p-6"></div>
 
-</aside>
-</div>
+      <form class="chat-composer flex items-end gap-2 border-t border-slate-200 bg-white p-3 sm:p-4">
+        <label class="sr-only" for="chat-message">Nội dung câu hỏi hoặc tin nhắn</label>
+        <textarea class="min-h-12 flex-1 resize-y rounded-md border border-slate-300 bg-white p-3 text-sm focus:border-red-700 focus:outline-none focus:ring-2 focus:ring-red-100 disabled:bg-slate-100" id="chat-message" maxlength="3000" placeholder="Nhập câu hỏi cần luật sư tư vấn..." rows="2"></textarea>
+        <button aria-label="Gửi câu hỏi hoặc tin nhắn" class="h-12 w-12 shrink-0 rounded-md bg-red-700 text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 disabled:cursor-not-allowed disabled:opacity-50" type="submit">
+          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+        </button>
+      </form>
+    </section>
+  </section>
 </main>
-<!-- END: MainContentArea -->
-<!-- BEGIN: MainFooter -->
-<!-- Footer chuẩn nhận diện của Cổng Dịch vụ công Quốc gia -->
-<!-- END: MainFooter -->
-<!-- JavaScript: Tương tác nhập liệu cơ bản -->
-<script data-purpose="chat-interaction">
-    document.addEventListener('DOMContentLoaded', () => {
-      // Tự động cuộn xuống cuối khung chat
-      const chatContainer = document.querySelector('.chat-history');
-      if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }
-    });
-  </script>
-
-
-
-
-
-
 <script type="module">
   import { protectPage } from '/auth-api.js';
+  import { startChatbox } from '/chatbox.js';
   await protectPage(['citizen', 'lawyer']);
+  await startChatbox();
 </script>
 </body></html>

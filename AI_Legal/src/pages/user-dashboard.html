@@ -1,6 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
-<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Tổng quan hồ sơ - Cổng Dịch vụ công Quốc gia</title><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning,hourglass_top&amp;display=block" rel="stylesheet">
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Tổng quan hồ sơ - AI Legal Assistant</title><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><!-- Material Symbols: chỉ tải các icon có trong icon_names (~26 KB thay vì ~4 MB). Dùng icon mới thì thêm tên vào icon_names (giữ thứ tự a→z) ở MỌI trang, nếu không icon sẽ hiện thành chữ. --><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400..700,0..1,0&amp;icon_names=account_balance,account_balance_wallet,add_business,add_circle,add_location_alt,admin_panel_settings,apartment,arrow_back,arrow_forward,assignment_late,assured_workload,auto_awesome,auto_fix_high,backspace,badge,calendar_clock,calendar_month,calendar_today,call,chat,check,check_circle,chevron_left,chevron_right,child_friendly,close,cloud_done,cloud_off,content_cut,credit_card,delete,delete_forever,description,directions_car,diversity_3,document_scanner,domain,download,download_done,edit,edit_document,edit_note,error,event_available,event_busy,event_repeat,expand_more,face,fact_check,favorite,flag,folder_open,folder_shared,folder_special,grid_view,group,headset_mic,help,history_edu,home,home_pin,id_card,info,landscape,location_on,lock,login,logout,mail,manage_accounts,map,memory,notification_important,notifications,notifications_active,password,pause,payments,pending_actions,person,person_add,person_search,phone_iphone,photo_camera_front,print,priority_high,qr_code_2,real_estate_agent,receipt_long,restart_alt,save,schedule,search,security,send,shield_locked,shield_with_heart,star,stars,store,storefront,sync,task_alt,timelapse,track_changes,travel_explore,trending_up,upload_file,verified,verified_user,visibility,visibility_off,warning,hourglass_top&amp;display=block" rel="stylesheet">
 <style>
 @layer base{html,body{margin:0;padding:0;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}
 .dashboard-orb{animation:dashboard-float 16s ease-in-out infinite alternate;will-change:transform}
@@ -9,54 +9,52 @@
 .hero-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;opacity:0;transform:scale(1.04);transition:opacity 1.2s ease,transform 7s ease}
 .hero-slide.is-active{opacity:.66;transform:scale(1)}
 .hero-carousel-shade{position:fixed;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(55,0,10,.84) 0%,rgba(82,5,19,.7) 52%,rgba(35,18,18,.58) 100%),linear-gradient(0deg,rgba(28,17,15,.52),rgba(65,0,2,.2) 55%,rgba(65,0,2,.4))}
-.hero-carousel-controls{position:fixed;z-index:40;right:max(.75rem,env(safe-area-inset-right));bottom:max(.75rem,env(safe-area-inset-bottom));display:flex;align-items:center;gap:.2rem;padding:.2rem .3rem;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(35,15,15,.58);backdrop-filter:blur(8px)}
-.hero-carousel-controls button{display:flex;align-items:center;justify-content:center;min-width:1.5rem;min-height:1.5rem;border:0;border-radius:999px;background:transparent;color:white;cursor:pointer;transition:background-color .2s ease}
-.hero-carousel-controls button:hover,.hero-carousel-controls button:focus-visible{background:rgba(255,255,255,.2);outline:2px solid rgba(255,255,255,.8);outline-offset:1px}
+.hero-carousel-controls{position:fixed;z-index:40;left:max(.75rem,env(safe-area-inset-left));bottom:max(.75rem,env(safe-area-inset-bottom));display:flex;align-items:center;gap:.2rem;padding:.2rem .3rem;border:1px solid rgba(250,246,242,.22);border-radius:999px;background:rgba(35,15,15,.58);backdrop-filter:blur(8px)}
+.hero-carousel-controls button{display:flex;align-items:center;justify-content:center;min-width:1.5rem;min-height:1.5rem;border:0;border-radius:999px;background:transparent;color:#faf6f2;cursor:pointer;transition:background-color .2s ease}
+.hero-carousel-controls button:hover,.hero-carousel-controls button:focus-visible{background:rgba(250,246,242,.2);outline:2px solid rgba(250,246,242,.8);outline-offset:1px}
 .hero-carousel-dots{display:flex;align-items:center;gap:.25rem}
-.hero-carousel-dots button{min-width:.4rem;min-height:.4rem;width:.4rem;height:.4rem;padding:0;background:rgba(255,255,255,.55);transition:width .25s ease,background-color .25s ease}
-.hero-carousel-dots button[aria-pressed="true"]{width:.75rem;background:white}
-.dashboard-card,.dashboard-stat-grid>div{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;border:1px solid transparent}
-.dashboard-card:hover,.dashboard-stat-grid>div:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(65,0,2,.09);border-color:rgba(147,0,11,.12)}
-.dashboard-stat-grid>div:nth-child(2){--reveal-delay:80ms}
-.dashboard-stat-grid>div:nth-child(3){--reveal-delay:160ms}
+.hero-carousel-dots button{min-width:.4rem;min-height:.4rem;width:.4rem;height:.4rem;padding:0;background:rgba(250,246,242,.55);transition:width .25s ease,background-color .25s ease}
+.hero-carousel-dots button[aria-pressed="true"]{width:.75rem;background:#faf6f2}
+.dashboard-card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;border:1px solid transparent}
+.dashboard-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(65,0,2,.09);border-color:rgba(147,0,11,.12)}
 .dashboard-row{transition:background-color .18s ease}
 .dashboard-row:hover{background-color:rgba(250,242,238,.8)}
-.dashboard-motion-ready [data-reveal],.dashboard-motion-ready .dashboard-stat-grid>div{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
-.dashboard-motion-ready [data-reveal].is-visible,.dashboard-motion-ready .dashboard-stat-grid>div.is-visible{opacity:1;transform:translateY(0)}
+.dashboard-motion-ready [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
+.dashboard-motion-ready [data-reveal].is-visible{opacity:1;transform:translateY(0)}
 @keyframes dashboard-float{from{transform:translate3d(0,-8px,0) scale(.98)}to{transform:translate3d(-14px,14px,0) scale(1.04)}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .dashboard-motion-ready [data-reveal],.dashboard-motion-ready .dashboard-stat-grid>div{opacity:1;transform:none}
+  .dashboard-motion-ready [data-reveal]{opacity:1;transform:none}
   .hero-slide{transform:none}
 }
 body.bg-background{background:transparent;isolation:isolate}
 body.bg-background>#user-dashboard-main{position:relative;z-index:1;background:transparent}
 body.bg-background>#user-dashboard-main>div>section:first-child{background:transparent}
-body.bg-background>footer{position:relative;z-index:1;background:rgba(250,242,238,.22);backdrop-filter:blur(12px)}
-body.bg-background>footer,body.bg-background>footer .text-on-surface,body.bg-background>footer .text-on-surface-variant{color:#fff}
-body.bg-background>footer .bg-surface-container{background:rgba(35,15,15,.38)}
-body.bg-background>footer a:hover{color:#ffd9dd}
-body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
+body.bg-background .bg-surface-container-lowest{background-color:#faf6ee}
+.next-panel{display:grid;grid-template-columns:minmax(0,1fr)}
+.next-panel__action{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:.75rem;padding:2rem;min-height:12rem}
+.next-panel__action p{max-width:65ch}
+#next-action:empty{display:none}
+.next-stat{display:flex;align-items:baseline;gap:.75rem;padding:1.25rem 2rem;background:#f5ebe4}
+.next-panel.has-action .next-stat{flex-direction:column;justify-content:center;gap:.25rem}
+.next-stat__value{color:#93000b;font-size:2.5rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
+.next-stat__label{color:#5b403d;font-size:.9375rem}
+#dashboard-search-input:focus-visible{outline:none}
+.next-panel a:focus-visible,.dashboard-panel a:focus-visible,.dashboard-panel button:focus-visible,#domain-filter:focus-visible{outline:2px solid #93000b;outline-offset:2px}
+.dashboard-aside{display:grid;gap:1.5rem}
+@media (min-width:1024px){
+  .next-panel.has-action,.dashboard-aside{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+  #featured-procedures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style><link rel="stylesheet" href="/tailwind-user.css?v=20261022"><style id="auth-pending">body{visibility:hidden!important}</style>
-<!-- Nạp trước (prerender khi hover) để chuyển trang gần như tức thì; trình duyệt không hỗ trợ sẽ bỏ qua -->
-<script type="speculationrules">
-  {
-    "prerender": [
-      {
-        "where": { "href_matches": ["/landforms", "/business-form-templates", "/user-dashboard", "/dashboard"] },
-        "eagerness": "moderate"
-      }
-    ]
-  }
-</script>
   <link rel="stylesheet" href="/admin-ai-chat.css">
-</head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><!-- user-header --><main id="user-dashboard-main" class="w-full bg-surface min-h-[calc(100vh-16rem)]"><div class="flex flex-col w-full">
-<!-- BANNER CHÀO MỪNG & TRA CỨU HÀNH CHÍNH -->
+</head><body class="user-photo-theme bg-background font-body-md text-body-md text-on-surface antialiased"><!-- user-header --><main id="user-dashboard-main" class="w-full bg-surface min-h-[calc(100vh-16rem)]"><div class="flex flex-col w-full">
+<!-- BANNER CHÀO MỪNG & TÌM HỒ SƠ -->
 <section class="w-full bg-gradient-to-r from-tertiary via-primary-container to-primary text-on-primary py-space-xl px-margin relative overflow-hidden shadow-md">
 <div class="hero-carousel" id="dashboard-hero-carousel" role="group" aria-label="Ảnh minh họa lĩnh vực đất đai và kinh doanh">
-  <img class="hero-slide is-active" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="Toàn cảnh cánh đồng và khu đất nông nghiệp" fetchpriority="high" data-carousel-slide>
-  <img class="hero-slide" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="Các tòa nhà văn phòng hiện đại, đại diện cho hoạt động kinh doanh" loading="lazy" data-carousel-slide>
-  <img class="hero-slide" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1800&amp;q=85" alt="Tài liệu và giấy tờ trên bàn làm việc" loading="lazy" data-carousel-slide>
+  <img class="hero-slide is-active" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="Toàn cảnh cánh đồng và khu đất nông nghiệp" fetchpriority="high" decoding="async" data-carousel-slide>
+  <img class="hero-slide" data-src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="Các tòa nhà văn phòng hiện đại, đại diện cho hoạt động kinh doanh" loading="lazy" decoding="async" data-carousel-slide>
+  <img class="hero-slide" data-src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="Tài liệu và giấy tờ trên bàn làm việc" loading="lazy" decoding="async" data-carousel-slide>
 </div>
 <div class="hero-carousel-shade" aria-hidden="true"></div>
 <div class="hero-carousel-controls" aria-label="Điều khiển ảnh nền">
@@ -71,163 +69,76 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 <div class="dashboard-orb absolute -right-16 -top-16 w-80 h-80 rounded-full bg-surface-container-lowest/5 pointer-events-none blur-2xl"></div>
 <div class="dashboard-orb dashboard-orb--delayed absolute right-1/4 -bottom-24 w-96 h-96 rounded-full bg-secondary-container/10 pointer-events-none blur-3xl"></div>
 <div class="max-w-7xl mx-auto flex flex-col gap-space-lg relative z-10" data-reveal>
-<!-- Cột tiêu đề & Huy hiệu công dân -->
-<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<!-- Lời chào -->
 <div class="flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs text-on-primary-container font-label-md text-label-md uppercase tracking-wider">
-<span class="material-symbols-outlined text-title-sm text-secondary-container">shield_with_heart</span>
-<span>Hệ thống Một cửa điện tử liên thông Quốc gia</span>
-</div>
 <h1 class="font-display text-display text-on-primary tracking-tight">
-            Chào mừng, <span data-user-field="name">công dân</span>
+            Chào <span data-user-field="name">bạn</span>
           </h1>
-<div class="flex flex-wrap items-center gap-space-sm mt-space-xs font-body-sm text-body-sm text-on-primary-container">
-<span>Email: <strong class="text-on-primary" data-user-field="email"></strong></span>
-<span class="w-1.5 h-1.5 rounded-full bg-on-primary-container/40"></span>
-<span>Vai trò: <strong class="text-on-primary" data-user-field="role"></strong></span>
+<p class="font-body-md text-body-md text-on-primary">Hôm nay bạn cần làm thủ tục gì?</p>
 </div>
-</div>
-</div>
-<!-- Ô Tra cứu nhanh & Hành động cấp bách -->
+<!-- Tìm hồ sơ & tạo hồ sơ mới -->
 <div class="bg-surface-container-lowest text-on-surface rounded-xl p-space-md shadow-xl flex flex-col md:flex-row gap-space-md items-center justify-between">
 <div class="flex-1 w-full flex items-center bg-surface-container-low rounded-lg px-space-md py-space-xs focus-within:bg-surface-container-lowest transition-colors">
 <span class="material-symbols-outlined text-outline text-headline-sm mr-space-sm">search</span>
-<input id="dashboard-search-input" class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-space-xs" placeholder="Nhập mã số hồ sơ (ví dụ: DD-001-811F7E21) hoặc tên thủ tục..." type="text"/>
-<button id="dashboard-search-btn" class="bg-primary-container hover:bg-primary text-on-primary font-title-sm text-title-sm px-space-lg py-space-sm rounded-lg transition-all shadow-[0_4px_14px_rgba(185,28,28,0.35)] flex items-center gap-space-xs shrink-0" type="button">
-<span>Tra cứu</span>
+<input id="dashboard-search-input" class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-space-xs" placeholder="Tìm theo loại hồ sơ" aria-label="Tìm theo loại hồ sơ" type="text"/>
+<button id="dashboard-search-btn" class="bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-title-sm text-title-sm px-space-lg py-space-sm rounded-lg transition-colors flex items-center gap-space-xs shrink-0" type="button">
+<span>Tìm</span>
 <span class="material-symbols-outlined text-title-sm">arrow_forward</span>
 </button>
 </div>
-<div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-<a class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all flex items-center justify-center gap-space-xs font-title-sm text-title-sm shadow-[0_4px_14px_rgba(185,28,28,0.35)] whitespace-nowrap" href="/application-submission">
+<div class="flex flex-wrap md:flex-nowrap items-center gap-space-sm shrink-0 w-full md:w-auto">
+<a class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all flex items-center justify-center gap-space-xs font-title-sm text-title-sm shadow-[0_4px_14px_rgba(185,28,28,0.35)] whitespace-nowrap" href="/document-storages">
 <span class="material-symbols-outlined text-title-md">add_circle</span>
-<span>Nộp hồ sơ mới</span>
+<span>Tạo hồ sơ mới</span>
 </a>
-<button class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-title-sm text-title-sm transition-colors flex items-center justify-center gap-space-xs whitespace-nowrap" type="button">
-<span class="material-symbols-outlined text-title-md text-secondary">calendar_clock</span>
-<span>Lịch hẹn giao dịch</span>
-</button>
-<button class="flex-1 md:flex-initial h-11 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-title-sm text-title-sm transition-colors flex items-center justify-center gap-space-xs whitespace-nowrap" type="button">
-<span class="material-symbols-outlined text-title-md text-secondary">account_balance_wallet</span>
-<span>Nộp phí &amp; Lệ phí</span>
-</button>
 </div>
 </div>
 </div>
 </section>
-<!-- NỘI DUNG CHÍNH: KHỐI THỐNG KÊ, DANH SÁCH & TIẾN TRÌNH -->
+<!-- NỘI DUNG CHÍNH: VIỆC TIẾP THEO, DANH SÁCH HỒ SƠ -->
 <div class="max-w-7xl mx-auto w-full px-margin py-space-xl flex flex-col gap-space-xl">
-<!-- 1. KHỐI THỐNG KÊ TỔNG QUAN HỒ SƠ CỦA TÔI -->
-<section class="dashboard-stat-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" aria-live="polite" data-reveal>
-<!-- Số liệu lấy từ GET /api/procedures/applications/me (user-dashboard-data.js) -->
-<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-semibold">Tổng hồ sơ đã tạo</span>
-<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined text-headline-sm">folder_shared</span>
-</div>
-</div>
-<div class="mt-space-md flex items-baseline justify-between">
-<span class="font-headline-lg text-headline-lg text-on-surface font-bold" data-stat="total">—</span>
-</div>
-<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">Gồm hồ sơ đất đai và hộ kinh doanh</div>
-</div>
-<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Đang xử lý</span>
-<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-headline-sm">sync</span>
-</div>
-</div>
-<div class="mt-space-md flex items-baseline justify-between">
-<span class="font-headline-lg text-headline-lg text-secondary font-bold" data-stat="in_progress">—</span>
-</div>
-<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-secondary font-body-sm text-body-sm" data-stat-note="next_due">Đã nộp hoặc đang được giải quyết</div>
-</div>
-<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md text-emerald-800 uppercase tracking-wider font-semibold">Đã hoàn tất</span>
-<div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-800">
-<span class="material-symbols-outlined text-headline-sm">verified</span>
-</div>
-</div>
-<div class="mt-space-md flex items-baseline justify-between">
-<span class="font-headline-lg text-headline-lg text-emerald-800 font-bold" data-stat="completed">—</span>
-</div>
-<div class="mt-space-sm pt-space-xs flex items-center gap-space-xs text-emerald-800 font-body-sm text-body-sm">Hồ sơ đã có kết quả</div>
+<!-- 1. SỐ MẪU ĐƠN ĐÃ TẠO; thiếu CCCD thì user-dashboard-data.js thêm nhắc cập nhật -->
+<section class="next-panel bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden" data-reveal>
+<div class="next-panel__action" id="next-action" aria-live="polite"></div>
+<div class="next-stat">
+<span class="next-stat__value" id="forms-created-count">—</span>
+<span class="next-stat__label">mẫu đơn đã tạo</span>
 </div>
 </section>
-<!-- 2. BỐ CỤC 2 CỘT CHÍNH (8 CỘT NỘI DUNG XỬ LÝ & 4 CỘT WIDGET DỊCH VỤ) -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-<!-- CỘT CHÍNH (8 CỘT) -->
-<div class="lg:col-span-8 flex flex-col gap-space-xl">
-<!-- HỒ SƠ ĐANG XỬ LÝ (dữ liệu thật; bước chi tiết từng hồ sơ: sắp ra mắt) -->
-<div class="dashboard-panel dashboard-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden" data-reveal>
-<div class="p-space-lg bg-surface-container-low flex items-center justify-between gap-space-sm">
-<div class="flex items-center gap-space-sm">
-<span class="material-symbols-outlined text-primary text-headline-sm">track_changes</span>
-<div class="flex flex-col">
-<h2 class="font-title-lg text-title-lg text-on-surface font-bold uppercase tracking-wide">Hồ sơ đang xử lý</h2>
-<span class="font-label-sm text-label-sm text-on-surface-variant">Theo dõi chi tiết từng bước: <span data-coming-soon></span></span>
-</div>
-</div>
-<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed px-space-sm py-1 rounded font-semibold" id="processing-count">—</span>
-</div>
-<div class="p-space-lg flex flex-col gap-space-md" id="processing-list" aria-live="polite">
-<p class="font-body-sm text-body-sm text-on-surface-variant">Đang tải hồ sơ...</p>
-</div>
-</div>
-<!-- 3. BẢNG DANH SÁCH LỊCH SỬ HỒ SƠ GẦN ĐÂY -->
+<!-- 2. DANH SÁCH HỒ SƠ & KHỐI PHỤ -->
+<div class="flex flex-col gap-space-xl">
+<!-- 3. HỒ SƠ CỦA TÔI -->
 <div class="dashboard-panel dashboard-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-reveal>
 <div class="p-space-lg bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
 <div class="flex items-center gap-space-sm">
-<span class="material-symbols-outlined text-primary text-headline-sm">history_edu</span>
+<span class="material-symbols-outlined text-primary text-headline-sm">folder_open</span>
 <div class="flex flex-col">
-<h2 class="font-title-lg text-title-lg text-on-surface font-bold uppercase tracking-wide">
-                  Danh Sách Lịch Sử Hồ Sơ Gần Đây
+<h2 class="font-title-lg text-title-lg text-on-surface font-bold">
+                  Hồ sơ của tôi
                 </h2>
-<span class="font-label-sm text-label-sm text-on-surface-variant">Theo dõi toàn bộ kết quả, chứng thư số và trạng thái xử lý</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Loại hồ sơ và thời gian tạo</span>
 </div>
-</div>
-<button class="text-on-surface-variant px-space-md py-space-xs rounded-lg font-title-sm text-title-sm flex items-center gap-space-xs self-start sm:self-auto cursor-not-allowed opacity-70" type="button" disabled title="Sắp ra mắt">
-<span class="material-symbols-outlined text-title-sm">download</span>
-<span>Xuất danh sách</span><span data-coming-soon></span>
-</button>
-</div>
-<!-- Thanh Bộ Lọc Trạng Thái & Lĩnh Vực -->
-<div class="p-space-md bg-surface-container-lowest flex flex-wrap items-center justify-between gap-space-md">
-<div class="flex flex-wrap items-center gap-space-xs" id="status-filters">
-<span class="font-label-md text-label-md text-on-surface-variant mr-space-xs">Trạng thái:</span>
-<button class="px-space-md py-1 rounded font-label-md text-label-md transition-colors" type="button" data-status="">Tất cả</button>
-<button class="px-space-md py-1 rounded font-label-md text-label-md transition-colors" type="button" data-status="submitted">Đã nộp</button>
-<button class="px-space-md py-1 rounded font-label-md text-label-md transition-colors" type="button" data-status="processing">Đang xử lý</button>
-<button class="px-space-md py-1 rounded font-label-md text-label-md transition-colors" type="button" data-status="completed">Đã hoàn tất</button>
-<button class="px-space-md py-1 rounded font-label-md text-label-md transition-colors" type="button" data-status="draft">Bản nháp</button>
 </div>
 <div class="flex items-center gap-space-xs">
 <span class="font-label-md text-label-md text-on-surface-variant">Lĩnh vực:</span>
-<select class="bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded px-space-sm py-1 border-none outline-none" id="domain-filter" aria-label="Lọc theo lĩnh vực">
+<select class="bg-surface-container-high text-on-surface font-body-sm text-body-sm rounded px-space-sm py-1 border-none outline-none" id="domain-filter" aria-label="Lọc theo lĩnh vực">
 <option value="">Tất cả lĩnh vực</option>
 <option value="land">Đất đai</option>
 <option value="business">Hộ kinh doanh</option>
 </select>
 </div>
 </div>
-<!-- Bảng Data Table chuẩn quy cách Nhà Nước -->
+<!-- Bảng hồ sơ -->
 <div class="w-full overflow-x-auto">
-<table class="w-full text-left font-body-sm text-body-sm">
-<thead class="bg-surface-container-high text-on-surface font-label-md text-label-md uppercase tracking-wider">
+<table class="applications-table w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-high text-on-surface font-label-md text-label-md">
 <tr>
-<th class="py-space-md px-space-md">Tên thủ tục hành chính</th>
-<th class="py-space-md px-space-md">Cơ quan thụ lý</th>
-<th class="py-space-md px-space-md">Ngày nộp</th>
-<th class="py-space-md px-space-md">Hạn trả</th>
-<th class="py-space-md px-space-md text-center">Trạng thái</th>
-<th class="py-space-md px-space-md text-right">Thao tác</th>
+<th class="py-space-md px-space-md">Loại hồ sơ</th>
+<th class="py-space-md px-space-md text-right">Thời gian tạo</th>
 </tr>
 </thead>
 <tbody class="text-on-surface" id="my-applications-body" aria-live="polite">
-<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="6">Đang tải hồ sơ...</td></tr>
+<tr><td class="py-space-lg px-space-md text-center text-on-surface-variant" colspan="2">Đang tải hồ sơ...</td></tr>
 </tbody>
 </table>
 </div>
@@ -245,42 +156,14 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 </div>
 </div>
 </div>
-</div>
-<!-- CỘT PHỤ (4 CỘT WIDGET / SIDE PANEL) -->
-<aside class="lg:col-span-4 flex flex-col gap-space-xl">
-<!-- THẺ 1: LỊCH HẸN TIẾP DÂN & NHẬN KẾT QUẢ -->
-<div class="dashboard-panel dashboard-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden" data-reveal>
-<div class="p-space-md bg-gradient-to-r from-primary to-primary-container text-on-primary flex items-center justify-between">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-title-lg">calendar_today</span>
-<h3 class="font-title-md text-title-md font-bold uppercase">Lịch hẹn Tiếp dân</h3>
-</div>
-<span class="font-label-sm text-label-sm bg-surface-container-lowest/20 px-space-xs py-0.5 rounded">Sắp ra mắt</span>
-</div>
-<div class="p-space-lg flex flex-col items-start gap-space-sm">
-<span data-coming-soon></span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Đặt lịch hẹn nộp và nhận kết quả tại cơ quan tiếp nhận sẽ có trong phiên bản tới.</p>
-</div>
-</div>
-<!-- THẺ 2: KHO TÀI LIỆU SỐ CÔNG DÂN (ĐÃ ĐỒNG BỘ CSDL QUỐC GIA) -->
+<!-- KHỐI PHỤ -->
+<aside class="dashboard-aside">
+<!-- THỦ TỤC BẮT ĐẦU NHANH -->
 <div class="dashboard-panel dashboard-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-reveal>
 <div class="p-space-md bg-surface-container-low flex items-center justify-between">
 <div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-title-lg">folder_special</span>
-<h3 class="font-title-md text-title-md text-on-surface font-bold uppercase">Kho Tài Liệu Số Công Dân</h3>
-</div>
-<a class="text-primary font-label-md text-label-md hover:underline" href="/detail-information">Cập nhật CCCD</a>
-</div>
-<div class="p-space-md flex flex-col gap-space-sm" id="my-documents" aria-live="polite">
-<p class="font-body-sm text-body-sm text-on-surface-variant">Đang tải tài liệu...</p>
-</div>
-</div>
-<!-- THẺ 3: DỊCH VỤ CÔNG TRỰC TUYẾN NỔI BẬT & THỰC HIỆN NHIỀU -->
-<div class="dashboard-panel dashboard-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-reveal>
-<div class="p-space-md bg-surface-container-low flex items-center justify-between">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-title-lg">star</span>
-<h3 class="font-title-md text-title-md text-on-surface font-bold uppercase">Dịch Vụ Công Nổi Bật</h3>
+<span class="material-symbols-outlined text-primary text-title-lg">edit_document</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Thủ tục bắt đầu nhanh</h3>
 </div>
 <span class="font-label-sm text-label-sm text-secondary font-semibold">Đất đai &amp; Hộ kinh doanh</span>
 </div>
@@ -288,20 +171,20 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 <p class="font-body-sm text-body-sm text-on-surface-variant">Đang tải thủ tục...</p>
 </div>
 </div>
-<!-- BANNER TRỢ GIÚP & ĐƯỜNG DÂY NÓNG 24/7 -->
+<!-- TRỢ GIÚP -->
 <div class="bg-gradient-to-br from-surface-container-high to-surface-container p-space-lg rounded-xl flex items-center gap-space-md shadow-sm">
 <div class="w-12 h-12 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-headline-sm">headset_mic</span>
+<span class="material-symbols-outlined text-headline-sm">help</span>
 </div>
 <div class="flex flex-col">
-<span class="font-title-sm text-title-sm text-on-surface font-bold">Cần hỗ trợ hồ sơ trực tuyến?</span>
-<span class="font-body-sm text-body-sm text-on-surface-variant">Tổng đài quốc gia <strong>1800 1096</strong> (Miễn phí 24/7)</span>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Chưa rõ cần chuẩn bị gì?</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Bấm nút trợ lý AI để hỏi về thủ tục và giấy tờ cần chuẩn bị.</span>
 </div>
 </div>
 </aside>
 </div>
 </div>
-</div></main><footer class="w-full bg-surface-container-high shadow-[0_-2px_10px_rgba(28,25,23,0.04)]"><div class="max-w-7xl mx-auto px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-space-xl"><div class="md:col-span-2 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><img alt="Logo Cổng Dịch vụ công Quốc gia" class="w-8 h-8 object-contain" src="/images/national-service-logo.png"/><span class="font-title-md text-title-md text-on-surface uppercase">Cơ quan chủ quản: Văn phòng Chính phủ</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Hệ thống giải quyết thủ tục hành chính liên thông cấp Bộ, Tỉnh và Cổng Dịch vụ công Quốc gia theo Nghị định số 61/2018/NĐ-CP và Nghị định số 107/2021/NĐ-CP của Chính phủ.</p><p class="font-label-sm text-label-sm text-on-surface-variant">Địa chỉ: Số 1 Hoàng Hoa Thám, Ba Đình, Hà Nội</p></div><div class="flex flex-col gap-space-sm"><span class="font-title-sm text-title-sm text-on-surface uppercase">Đường dây nóng hỗ trợ</span><div class="flex items-center gap-space-xs text-primary"><span class="font-headline-sm text-headline-sm">1800 1096</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Tổng đài miễn cước cuộc gọi phục vụ người dân và doanh nghiệp</span><span class="font-label-sm text-label-sm text-on-surface-variant">Email: dichvucong@chinhphu.vn</span></div><div class="flex flex-col gap-space-sm"><span class="font-title-sm text-title-sm text-on-surface uppercase">Quy định &amp; Hướng dẫn</span><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Quy chế hoạt động cổng thông tin</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Chính sách bảo mật dữ liệu công dân</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Hướng dẫn ký số và giao dịch trực tuyến</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Câu hỏi thường gặp (FAQ)</a></div></div><div class="bg-surface-container py-space-md px-space-md rounded flex flex-col md:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-sm"><span>© 2026 Cổng Dịch vụ công Quốc gia. Bản quyền thuộc Chính phủ nước CHXHCN Việt Nam.</span></div><div class="flex items-center gap-space-lg"><a class="hover:text-primary transition-colors" href="#">Điều khoản sử dụng</a><a class="hover:text-primary transition-colors" href="#">An toàn thông tin mạng</a><a class="hover:text-primary transition-colors" href="#">Sơ đồ cổng dịch vụ</a></div></div></div></footer><script type="module">
+</div></main><!-- user-footer --><script type="module">
   // Chưa đăng nhập → /login; sai vai trò → trang đúng vai trò; hợp lệ → điền thông tin user.
   // Trang tạo hồ sơ: chưa cập nhật thông tin cá nhân → chuyển sang /detail-information.
   import { protectPage } from '/auth-api.js';
@@ -326,8 +209,17 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
     let activeIndex = 0;
     let timer;
 
+    const ensureSlideLoaded = slide => {
+      if (slide?.dataset?.src && !slide.getAttribute('src')) {
+        slide.src = slide.dataset.src;
+        delete slide.dataset.src;
+      }
+    };
+
     const showSlide = index => {
       activeIndex = (index + slides.length) % slides.length;
+      ensureSlideLoaded(slides[activeIndex]);
+      ensureSlideLoaded(slides[(activeIndex + 1) % slides.length]);
       slides.forEach((slide, slideIndex) => {
         const active = slideIndex === activeIndex;
         slide.classList.toggle('is-active', active);
@@ -363,7 +255,7 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
 </script>
 <script>
   (() => {
-    const targets = document.querySelectorAll('[data-reveal], .dashboard-stat-grid > div');
+    const targets = document.querySelectorAll('[data-reveal]');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion || !('IntersectionObserver' in window)) {
@@ -384,157 +276,4 @@ body.bg-background .bg-surface-container-lowest{background-color:#fffaf2}
   })();
 </script>
 
-<!-- MODAL XEM CHI TIẾT TỜ ĐƠN HỒ SƠ CHÍNH THỨC -->
-<div id="application-dossier-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
-  <div class="dossier-modal-card relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-slate-200">
-    
-    <!-- Modal Header (no-print) -->
-    <div class="dossier-modal-header no-print bg-slate-900 text-white px-5 sm:px-6 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
-      <div class="flex items-center gap-2.5">
-        <span class="material-symbols-outlined text-red-500">description</span>
-        <span id="dossier-title" class="font-bold text-xs sm:text-sm tracking-wide uppercase">Cổng Dịch Vụ Công Quốc Gia • Xem Chi Tiết Tờ Đơn</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button id="btn-print-dossier" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition shadow-sm" title="Tải file PDF tờ đơn chính thức về máy tính">
-          <span class="material-symbols-outlined text-sm">download</span>
-          <span>Tải file PDF</span>
-        </button>
-        <button id="btn-close-dossier-modal" type="button" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-red-600 text-white flex items-center justify-center transition" title="Đóng cửa sổ">
-          <span class="material-symbols-outlined text-lg">close</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Modal Content: Printable Sheet Body -->
-    <div id="dossier-modal-content" class="p-5 sm:p-10 overflow-y-auto bg-white text-slate-800 font-serif leading-relaxed text-sm">
-      <!-- Loading indicator -->
-      <div id="dossier-loading" class="py-16 text-center text-slate-500 font-sans">
-        <div class="inline-block animate-spin w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full mb-3"></div>
-        <p class="font-medium text-sm">Đang nạp dữ liệu tờ đơn từ hệ thống...</p>
-      </div>
-
-      <!-- Error box -->
-      <div id="dossier-error" class="hidden py-12 text-center text-red-600 font-sans">
-        <span class="material-symbols-outlined text-4xl mb-2">error</span>
-        <p id="dossier-error-text" class="font-semibold text-base">Không tìm thấy thông tin hồ sơ.</p>
-      </div>
-
-      <!-- Printable Sheet Body -->
-      <div id="dossier-sheet" class="hidden"></div>
-    </div>
-
-    <!-- Modal Footer (no-print) -->
-    <div class="dossier-modal-footer no-print bg-slate-50 px-6 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-sans shrink-0">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
-        <span>Hồ sơ đã được mã hóa và xác thực chữ ký điện tử công dân.</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button id="btn-close-dossier-modal-bottom" type="button" class="px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition">Đóng</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<style>
-/* Đảm bảo modal Xem đơn luôn hiển thị đè lên toàn bộ giao diện và căn giữa màn hình */
-#application-dossier-modal {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 99999 !important;
-  background-color: rgba(15, 23, 42, 0.72) !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 1rem !important;
-  overflow-y: auto !important;
-  box-sizing: border-box !important;
-}
-#application-dossier-modal.hidden {
-  display: none !important;
-}
-#application-dossier-modal > .dossier-modal-card {
-  position: relative !important;
-  width: 100% !important;
-  max-width: 56rem !important;
-  max-height: 90vh !important;
-  background-color: #ffffff !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45) !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  border: 1px solid #cbd5e1 !important;
-  box-sizing: border-box !important;
-}
-#application-dossier-modal .dossier-modal-header {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid #1e293b !important;
-}
-#dossier-modal-content {
-  flex: 1 1 auto !important;
-  overflow-y: auto !important;
-  background-color: #ffffff !important;
-  box-sizing: border-box !important;
-}
-#application-dossier-modal .dossier-modal-footer {
-  background-color: #f8fafc !important;
-  border-top: 1px solid #e2e8f0 !important;
-}
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 12mm 15mm;
-  }
-  html, body {
-    overflow: visible !important;
-    height: auto !important;
-    background: #ffffff !important;
-  }
-  body > *:not(#application-dossier-modal) {
-    display: none !important;
-  }
-  #application-dossier-modal {
-    position: static !important;
-    display: block !important;
-    padding: 0 !important;
-    background: transparent !important;
-    overflow: visible !important;
-    width: 100% !important;
-    height: auto !important;
-    inset: auto !important;
-  }
-  #application-dossier-modal > div {
-    display: block !important;
-    position: static !important;
-    max-height: none !important;
-    height: auto !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    overflow: visible !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-  }
-  #application-dossier-modal .no-print {
-    display: none !important;
-  }
-  #dossier-modal-content {
-    overflow: visible !important;
-    max-height: none !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-  #dossier-sheet > div,
-  #dossier-sheet .mb-5 {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-}
-</style>
 </body></html>

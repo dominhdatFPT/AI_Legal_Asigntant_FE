@@ -35,7 +35,38 @@ window.addEventListener('pageshow', stopLoading);
 const header = document.querySelector('header.unav[data-public]');
 
 if (header) {
+  const applyAdminNav = () => {
+    const brand = header.querySelector('.unav-brand');
+    if (brand) brand.href = '/dashboard';
+    const accountLink = header.querySelector('[data-account-link]');
+    if (accountLink) {
+      accountLink.href = '/dashboard';
+      accountLink.title = 'Về trang quản trị';
+    }
+    const navLinks = header.querySelector('.unav-links');
+    if (!navLinks || navLinks.dataset.roleNav === 'admin') return;
+    navLinks.dataset.roleNav = 'admin';
+    const from = new URLSearchParams(location.search).get('from');
+    const activePath = from === 'business-form-templates'
+      ? 'ho-so-ho-kinh-doanh'
+      : 'ho-so-dat-dai';
+    navLinks.innerHTML = [
+      ['tong-quan', '/dashboard', 'Tổng quan'],
+      ['ho-so-dat-dai', '/land-forms', 'Hồ sơ đất đai'],
+      ['ho-so-ho-kinh-doanh', '/business-form-templates', 'Hồ sơ hộ kinh doanh'],
+      ['quan-ly-nguoi-dung', '/user-management', 'Quản lý người dùng']
+    ].map(([p, href, label]) => (
+      `<a class="unav-link${p === activePath ? ' is-active' : ''}"${p === activePath ? ' aria-current="page"' : ''} data-path="${p}" href="${href}">${label}</a>`
+    )).join('');
+  };
+
+  const fromParam = new URLSearchParams(location.search).get('from');
+  if (fromParam === 'land-forms' || fromParam === 'business-form-templates') {
+    applyAdminNav();
+  }
+
   const fill = (user) => {
+    if (user?.role === 'admin') applyAdminNav();
     const values = { name: displayName(user), role: roleLabel(user.role) };
     header.querySelectorAll('[data-user-field]').forEach((element) => {
       element.textContent = values[element.dataset.userField] ?? '';

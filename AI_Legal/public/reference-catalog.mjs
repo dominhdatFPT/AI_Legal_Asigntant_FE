@@ -16,9 +16,14 @@ const FALLBACK_CODES = {
   'land-allocation-method-change': 'DD-017',
 };
 
+export const procedureCode = (group) => group.code || group.procedure_code || FALLBACK_CODES[group.key] || FALLBACK_CODES[group.procedure] || '';
+
 export const groupLabel = (group) => {
-  const code = group.code || group.procedure_code || FALLBACK_CODES[group.key] || FALLBACK_CODES[group.procedure] || '';
-  return code ? `${code} · ${group.name}` : group.name;
+  const code = procedureCode(group);
+  const name = (group?.name || '').trim();
+  if (!code) return name;
+  if (!name || name === code) return code;
+  return `${code} · ${name}`;
 };
 
 export const proceduresOf = (item) => item.procedures || [{ key: item.procedure, code: item.procedure_code ?? FALLBACK_CODES[item.procedure] ?? item.procedure, name: item.procedure_name }];
@@ -39,37 +44,107 @@ export function normalizeSearch(value) {
   return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().trim();
 }
 
+const searchIndexCache = new WeakMap();
+function getItemSearchText(item) {
+  let cached = searchIndexCache.get(item);
+  if (cached === undefined) {
+    cached = normalizeSearch(`${item.name} ${item.description || ''} ${item.source_filename || ''} ${domainLabels[item.domain] || ''} ${proceduresOf(item).map(groupLabel).join(' ')}`);
+    searchIndexCache.set(item, cached);
+  }
+  return cached;
+}
+
 export function filterReferences(items, { query = '', domain = '', procedure = '', status = '' } = {}) {
   const words = normalizeSearch(query).split(/\s+/).filter(Boolean);
   return items.filter((item) => (!domain || item.domain === domain)
     && (!procedure || proceduresOf(item).some((p) => p.key === procedure || p.code === procedure))
     && (!status || item.content_status === status)
-    && words.every((word) => normalizeSearch(`${item.name} ${item.description || ''} ${item.source_filename || ''} ${domainLabels[item.domain] || ''} ${proceduresOf(item).map(groupLabel).join(' ')}`).includes(word)));
+    && (!words.length || words.every((word) => getItemSearchText(item).includes(word))));
 }
 
-// Public, unfilled source PDFs, including administrator uploads.
-export async function loadReferenceCatalog(fetcher = fetch) {
-  const response = await fetcher('/api/reference-catalog', { cache: 'no-cache' });
-  if (!response.ok) throw new Error('REFERENCE_CATALOG_UNAVAILABLE');
-  const envelope = await response.json();
-  const payload = envelope.data || envelope;
-  if (!payload.read_only || !Array.isArray(payload.items) || payload.items.some((item) =>
-    typeof item.id !== 'string' || typeof item.name !== 'string' || typeof item.text !== 'string'
-    || (item.procedure && (typeof item.procedure !== 'string' || typeof item.procedure_name !== 'string' || !item.procedure_name.trim()))
-    || item.view_only !== true || item.can_fill !== false || !statusLabels[item.content_status]
-    || !Array.isArray(item.procedures) || !item.procedures.length
-    || !Array.isArray(item.pages) || !item.pages.length || item.pages.length !== item.page_count
-    || !Array.isArray(item.page_dimensions) || item.page_dimensions.length !== item.pages.length
-    || item.page_dimensions.some((size) => !Number.isFinite(size.width) || size.width <= 0 || !Number.isFinite(size.height) || size.height <= 0)
-    || item.pages.some((page, index) => !/^\/reference-templates\/[a-z0-9-]+\.png$/.test(page)
-      && (!/^\/api\/reference-assets\/[0-9a-f-]{36}-page-[1-9][0-9]{0,2}\.png$/.test(page)
-        || page !== `/api/reference-assets/${item.id}-page-${index + 1}.png`)))) {
-    throw new Error('REFERENCE_CATALOG_INVALID');
+// Public, unfilled source PDFs, with client-side caching (Memory + SessionStorage) for instant navigation.
+let memoryCatalog = null;
+let memoryCatalogTime = 0;
+let inFlightCatalog = null;
+const CLIENT_CATALOG_TTL = 300000; // 5 minutes
+
+export function invalidateReferenceCatalogCache() {
+  memoryCatalog = null;
+  memoryCatalogTime = 0;
+  inFlightCatalog = null;
+  if (typeof sessionStorage !== 'undefined') {
+    try {
+      sessionStorage.removeItem('reference_catalog_cache');
+    } catch {}
   }
-  return payload;
 }
 
-export async function loadReferences(fetcher = fetch) { return (await loadReferenceCatalog(fetcher)).items; }
+export async function loadReferenceCatalog(fetcher = fetch, forceRefresh = false) {
+  const isDefaultFetcher = fetcher === fetch;
+  const now = Date.now();
+  if (isDefaultFetcher && !forceRefresh && memoryCatalog && (now - memoryCatalogTime) < CLIENT_CATALOG_TTL) {
+    return memoryCatalog;
+  }
+  if (isDefaultFetcher && !forceRefresh && typeof sessionStorage !== 'undefined') {
+    try {
+      const stored = sessionStorage.getItem('reference_catalog_cache');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.timestamp && (now - parsed.timestamp) < CLIENT_CATALOG_TTL && parsed.payload) {
+          memoryCatalog = parsed.payload;
+          memoryCatalogTime = parsed.timestamp;
+          return memoryCatalog;
+        }
+      }
+    } catch {}
+  }
+
+  if (isDefaultFetcher && !forceRefresh && inFlightCatalog) {
+    return inFlightCatalog;
+  }
+
+  const runFetch = async () => {
+    const url = forceRefresh ? '/api/reference-catalog?refresh=1' : '/api/reference-catalog';
+    const response = await fetcher(url, { cache: 'no-cache' });
+    if (!response.ok) throw new Error('REFERENCE_CATALOG_UNAVAILABLE');
+    const envelope = await response.json();
+    const payload = envelope.data || envelope;
+    if (!payload.read_only || !Array.isArray(payload.items) || payload.items.some((item) =>
+      typeof item.id !== 'string' || typeof item.name !== 'string' || typeof item.text !== 'string'
+      || (item.procedure && (typeof item.procedure !== 'string' || typeof item.procedure_name !== 'string' || !item.procedure_name.trim()))
+      || item.view_only !== true || item.can_fill !== false || !statusLabels[item.content_status]
+      || !Array.isArray(item.procedures) || !item.procedures.length
+      || !Array.isArray(item.pages) || !item.pages.length || item.pages.length !== item.page_count
+      || !Array.isArray(item.page_dimensions) || item.page_dimensions.length !== item.pages.length
+      || item.page_dimensions.some((size) => !Number.isFinite(size.width) || size.width <= 0 || !Number.isFinite(size.height) || size.height <= 0)
+      || item.pages.some((page, index) => !/^\/reference-templates\/[a-z0-9-]+\.png$/.test(page)
+        && (!/^\/api\/reference-assets\/[0-9a-f-]{36}-page-[1-9][0-9]{0,2}\.png$/.test(page)
+          || page !== `/api/reference-assets/${item.id}-page-${index + 1}.png`)))) {
+      throw new Error('REFERENCE_CATALOG_INVALID');
+    }
+    if (isDefaultFetcher) {
+      const finishedAt = Date.now();
+      memoryCatalog = payload;
+      memoryCatalogTime = finishedAt;
+      if (typeof sessionStorage !== 'undefined') {
+        try {
+          sessionStorage.setItem('reference_catalog_cache', JSON.stringify({ timestamp: finishedAt, payload }));
+        } catch {}
+      }
+    }
+    return payload;
+  };
+
+  if (isDefaultFetcher && !forceRefresh) {
+    inFlightCatalog = runFetch().finally(() => { inFlightCatalog = null; });
+    return inFlightCatalog;
+  }
+  return runFetch();
+}
+
+export async function loadReferences(fetcher = fetch, forceRefresh = false) { 
+  return (await loadReferenceCatalog(fetcher, forceRefresh)).items; 
+}
 
 export function getPdfUrl(item) {
   if (item?.pdf && typeof item.pdf === 'string') return item.pdf;
@@ -124,4 +199,3 @@ export async function downloadReferencePdf(item) {
     link.remove();
   }
 }
-

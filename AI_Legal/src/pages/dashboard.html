@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300..600,0..1,0&icon_names=add_business,add_location_alt,assignment_late,badge,calendar_month,chat,chevron_left,chevron_right,domain,document_scanner,expand_more,folder_open,grid_view,group,landscape,logout,map,person,print,schedule,search,star,storefront,travel_explore,verified&display=block" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/tailwind-admin.css">
   <link rel="stylesheet" href="/admin-ai-chat.css">
   <link rel="stylesheet" href="/admin-dashboard.css">
@@ -82,6 +81,22 @@
             <article class="admin-card admin-insight admin-insight--risk"><div class="admin-insight__head"><h3>Hồ sơ chờ giải quyết</h3><strong data-admin-stat="in_progress">—</strong></div><div class="admin-insight__metrics"><div><span>Đã nộp</span><strong data-admin-stat="submitted">—</strong></div><div><span>Đang thẩm định</span><strong data-admin-stat="processing">—</strong></div></div></article>
             <article class="admin-card admin-insight admin-insight--pipeline"><div class="admin-insight__head"><h3>Khối lượng hồ sơ</h3><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__metrics"><div><span>Tổng</span><strong data-admin-stat="total">—</strong></div><div><span>Đất đai</span><strong data-admin-stat="land">—</strong></div><div><span>Hộ kinh doanh</span><strong data-admin-stat="business">—</strong></div></div></article>
             <article class="admin-card admin-insight admin-insight--pulse"><div class="admin-insight__head"><h3>Nhịp hoàn tất</h3><span class="admin-insight__tag">Trực tuyến</span></div><div class="admin-insight__metrics"><div><span>Đã hoàn tất</span><strong data-admin-stat="completed">—</strong></div><div><span>Tỉ lệ hoàn tất</span><strong data-orchard-stat="completed">—</strong></div></div></article>
+          </div>
+        </section>
+
+        <section class="admin-card admin-records" aria-labelledby="admin-lawyer-applications-title">
+          <div class="admin-records__head">
+            <div class="admin-section-heading admin-section-heading--records">
+              <div><h2 id="admin-lawyer-applications-title">Hồ sơ đăng ký luật sư</h2></div>
+              <span class="admin-live-badge"><span></span><span id="admin-lawyer-applications-count">Đang tải</span> chờ xác thực</span>
+            </div>
+            <a class="admin-lawyer-applications__manage" href="/user-management">Quản lý hồ sơ</a>
+          </div>
+          <div class="admin-records__table-scroll">
+            <table class="admin-table admin-lawyer-table">
+              <thead><tr><th>Người đăng ký &amp; số thẻ</th><th>Tổ chức hành nghề</th><th>Lĩnh vực tư vấn</th><th>Ngày gửi</th><th>Trạng thái</th></tr></thead>
+              <tbody id="admin-lawyer-applications-body" aria-live="polite"><tr><td class="admin-table__message" colspan="5">Đang tải hồ sơ luật sư...</td></tr></tbody>
+            </table>
           </div>
         </section>
 

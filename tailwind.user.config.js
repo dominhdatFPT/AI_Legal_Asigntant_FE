@@ -1,4 +1,4 @@
-// Cấu hình Tailwind của các trang người dùng (user-dashboard, account, form-library, lawyer-registration).
+// Cấu hình Tailwind của các trang người dùng (user-dashboard, account, form-library, lawyer-registration, location-search).
 // Trước đây dựng trên trình duyệt bằng cdn.tailwindcss.com mỗi lần mở trang (gây nháy khi chuyển trang);
 // giờ build sẵn: npm run css:build:user → AI_Legal/public/tailwind-user.css. Đổi màu/cỡ chữ ở đây.
 module.exports = {
@@ -7,6 +7,8 @@ module.exports = {
     './AI_Legal/src/pages/account.html',
     './AI_Legal/src/pages/form-library.html',
     './AI_Legal/src/pages/lawyer-registration.html',
+    './AI_Legal/src/pages/location-search.html',
+    './AI_Legal/src/pages/detail-information.html',
     './AI_Legal/src/pages/chatbox.html',
     // Nội dung "Tạo hồ sơ" được chèn vào trang tổng quan (user-dashboard-navigation.js)
     './AI_Legal/src/pages/application-submission.html',
@@ -16,17 +18,25 @@ module.exports = {
   "darkMode": "class",
   "theme": {
     "extend": {
+      "ringOffsetColor": { "DEFAULT": "#faf6f2" },
       "colors": {
+        // Không dùng trắng tinh (#fff) vì gây chói: "white" và các sắc -50 quá sáng được hạ về mức trắng ngà #faf6f2.
+        "white": "#faf6f2",
+        "slate": { "50": "#f4f6f8" },
+        "stone": { "50": "#f6f6f5" },
+        "emerald": { "50": "#e9faf2" },
+        "green": { "50": "#edf9f0" },
+        "amber": { "50": "#faf6e7" },
         "tertiary-fixed": "#ffd9dd",
-        "surface-bright": "#fff8f5",
+        "surface-bright": "#fcf5f2",
         "tertiary-fixed-dim": "#ffb2bd",
         "secondary-fixed": "#ffdcc3",
-        "surface-container-lowest": "#ffffff",
+        "surface-container-lowest": "#faf6f2",
         "surface-variant": "#e9e1dd",
         "on-background": "#1e1b19",
         "secondary-fixed-dim": "#ffb77d",
         "on-tertiary-container": "#ffcbd2",
-        "background": "#fff8f5",
+        "background": "#fcf5f2",
         "primary-fixed": "#ffdad6",
         "on-primary-fixed": "#410002",
         "primary-container": "#b91c1c",
@@ -39,17 +49,17 @@ module.exports = {
         "on-primary-container": "#ffcdc7",
         "surface-container-low": "#faf2ee",
         "secondary-container": "#fe932c",
-        "on-secondary": "#ffffff",
+        "on-secondary": "#faf6f2",
         "primary-fixed-dim": "#ffb4ab",
         "on-tertiary-fixed": "#400014",
         "secondary": "#904d00",
         "on-secondary-fixed": "#2f1500",
         "error": "#ba1a1a",
         "outline": "#8f6f6c",
-        "on-primary": "#ffffff",
+        "on-primary": "#faf6f2",
         "on-secondary-fixed-variant": "#6e3900",
         "surface-container-high": "#eee7e3",
-        "on-error": "#ffffff",
+        "on-error": "#faf6f2",
         "inverse-on-surface": "#f7efeb",
         "on-surface-variant": "#5b403d",
         "on-error-container": "#93000a",
@@ -58,12 +68,19 @@ module.exports = {
         "on-surface": "#1e1b19",
         "tertiary": "#8a1538",
         "on-tertiary-fixed-variant": "#8a1538",
-        "on-tertiary": "#ffffff",
+        "on-tertiary": "#faf6f2",
         "outline-variant": "#e4beb9",
-        "surface": "#fff8f5",
+        "surface": "#fcf5f2",
         "surface-container": "#f4ece8",
         "surface-container-highest": "#e9e1dd",
-        "tertiary-container": "#aa304f"
+        "tertiary-container": "#aa304f",
+        "state-success": "#15803d",
+        "state-error": "#b91c1c",
+        "border-focus": "#b91c1c",
+        "border-subtle": "#e9e1dd",
+        "surface-subtle": "#faf2ee",
+        "surface-panel": "#faf6f2",
+        "surface-brand-tint": "#fdf2f1"
       },
       "borderRadius": {
         "DEFAULT": "0.125rem",

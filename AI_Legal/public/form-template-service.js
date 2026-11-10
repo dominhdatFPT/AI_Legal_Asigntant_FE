@@ -49,6 +49,7 @@ const real = {
   publish: (id) => post(`${ADMIN}/${encodeURIComponent(id)}/publish`),
   hide: (id) => post(`${ADMIN}/${encodeURIComponent(id)}/hide`),
   newVersion: (id) => post(`${ADMIN}/${encodeURIComponent(id)}/new-version`),
+  clone: (id) => post(`${ADMIN}/${encodeURIComponent(id)}/clone`),
   remove: (id) => api(`${ADMIN}/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   restore: (id) => post(`${ADMIN}/${encodeURIComponent(id)}/restore`),
   listPublished: ({ domain, procedureId } = {}) => api(`${PUBLIC}${query({ domain, procedure_id: procedureId })}`),
@@ -84,7 +85,6 @@ const mock = {
   create: async (content) => copy(insert(content)),
   update: async (id, content) => {
     const row = await alive(id);
-    if (row.status !== 'draft') return fail(409, 'TEMPLATE_NOT_DRAFT', 'Chỉ sửa được bản nháp. Hãy tạo phiên bản mới.');
     return copy(touch(row, { content: structuredClone(content), name: content.name, domain: content.domain, procedure_id: content.procedure_id ?? null }));
   },
   publish: async (id) => {
@@ -98,6 +98,12 @@ const mock = {
     const row = await alive(id);
     if (row.status !== 'published') return fail(409, 'INVALID_STATUS', 'Chỉ ẩn được mẫu đang xuất bản.');
     return copy(touch(row, { status: 'hidden' }));
+  },
+  clone: async (id) => {
+    const row = await alive(id);
+    const content = structuredClone(row.content);
+    content.name = `${row.name} (Bản sao)`;
+    return copy(insert(content, { status: 'draft' }));
   },
   newVersion: async (id) => {
     const row = await alive(id);

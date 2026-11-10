@@ -1,0 +1,114 @@
+/* Đăng nhập, Đăng ký: trang trí lấy cảm hứng chim Lạc Đông Sơn và tranh cổ động sao vàng (gắn bởi auth-decor.js) */
+
+/* Vân giấy cũ, vết cọ rất nhẹ phủ lên nền đỏ (tĩnh) */
+.auth-bg::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.045; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.35' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* Đàn chim Lạc bay ngang phía trên hộp form; không có hiệu ứng thì đứng yên */
+.auth-lac-flock { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.auth-lac-flock .lac { position: absolute; left: var(--x); top: var(--y); width: var(--w, 100px); color: #F2B544; opacity: var(--o, 0.4); }
+.auth-lac-flock .lac svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* Chim chỉ bay vào sau khi hạt đã tụ thành mặt trống */
+.auth-lac-flock .lac-wing-svg { position: absolute; inset: 0; }
+/* Chim vàng kim bay từ trái sang phải (đầu hướng phải) */
+.js-anim .auth-lac-flock .lac { left: calc(-1 * var(--w)); animation: auth-lac-fly var(--t, 30s) linear calc(var(--delay, 0s) + 1.6s) infinite both; }
+.js-anim .auth-lac-flock .lac-wing-svg { transform-origin: 52% 60%; animation: auth-lac-flap 1.6s ease-in-out var(--delay, 0s) infinite; }
+@keyframes auth-lac-fly {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(calc(25vw + 60px), -14px); }
+  50% { transform: translate(calc(50vw + 120px), 6px); }
+  75% { transform: translate(calc(75vw + 180px), -10px); }
+  100% { transform: translate(calc(100vw + 240px), 0); }
+}
+@keyframes auth-lac-flap { 0%, 100% { transform: scaleY(1); } 50% { transform: rotate(16deg) scaleY(0.8); } }
+
+/* Sao vàng trước dòng chào: vẽ nét rồi tô màu khi hộp hiện, sau đó thỉnh thoảng sáng lên */
+.auth-star { display: inline-block; width: 1.15em; height: 1.15em; margin-right: 0.45em; vertical-align: -0.2em; color: #F2D43A; }
+.auth-star path { fill: currentColor; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+.js-anim .auth-star path { fill-opacity: 0; stroke-dasharray: 62; stroke-dashoffset: 62; animation: auth-star-draw 0.9s ease 0.7s forwards, auth-star-fill 0.4s ease 1.5s forwards; }
+.js-anim .auth-star { animation: auth-star-glow 4.5s ease-in-out 2.2s infinite; }
+@keyframes auth-star-draw { to { stroke-dashoffset: 0; } }
+@keyframes auth-star-fill { to { fill-opacity: 1; } }
+@keyframes auth-star-glow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(242, 212, 58, 0)); } 50% { filter: drop-shadow(0 0 6px rgba(242, 212, 58, 0.55)); } }
+
+/* Nút đang gửi: sao vàng xoay thay cho vòng xoay */
+.auth-card .auth-btn.is-busy::before { border: 0; border-radius: 0; background: #F2D43A; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5l2.9 6.2 6.6.7-4.9 4.6 1.4 6.6L12 17.3 6 20.6l1.4-6.6-4.9-4.6 6.6-.7z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5l2.9 6.2 6.6.7-4.9 4.6 1.4 6.6L12 17.3 6 20.6l1.4-6.6-4.9-4.6 6.6-.7z'/%3E%3C/svg%3E") center / contain no-repeat; animation: spin 1.2s linear infinite; }
+
+
+/* ---------- Múa rối nước ở đáy trang (auth-water-puppet.js) ---------- */
+.wp-stage { --stage-h: 140px; position: fixed; left: 0; right: 0; bottom: 0; height: var(--stage-h); z-index: 1; pointer-events: none; overflow: hidden; }
+/* Mặt nước tối, ánh đèn vàng phản chiếu và gợn sóng chạy ngang */
+.wp-water { position: absolute; left: 0; right: 0; bottom: 0; height: 42%; border-top: 1px solid rgba(242, 181, 68, 0.28);
+  background:
+    radial-gradient(60% 120% at 50% 0%, rgba(242, 181, 68, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(40, 8, 10, 0.80), rgba(12, 3, 4, 0.95));
+  background-size: 100% 100%, 100% 100%; }
+/* Vệt lấp lánh nằm ở lớp riêng, trượt bằng transform nên không phải vẽ lại dải nước */
+.wp-water { overflow: hidden; }
+.wp-water::before { content: ""; position: absolute; inset: 0 -140px 0 -140px; background: repeating-linear-gradient(180deg, rgba(242, 181, 68, 0.10) 0 1px, transparent 1px 7px); background-size: 140px 100%; }
+.js-anim .wp-water::before { animation: wp-shimmer 6s linear infinite; }
+@keyframes wp-shimmer { to { transform: translateX(140px); } }
+/* Mành tre bên trái, nơi con rối đi ra */
+.wp-curtain { position: absolute; left: 0; bottom: 42%; width: clamp(48px, 5vw, 80px); height: 46%; opacity: 0.55; border-top: 3px solid #8A6236;
+  background: repeating-linear-gradient(90deg, #8A6236 0 3px, #5E432A 3px 5px, transparent 5px 8px); -webkit-mask: linear-gradient(90deg, #000 40%, transparent); mask: linear-gradient(90deg, #000 40%, transparent); }
+
+/* Mỗi con rối: chân chìm dưới nước, có bóng phản chiếu mờ */
+.wp-puppet { position: absolute; left: var(--x); bottom: 30%; height: 62%; aspect-ratio: 3 / 4; }
+.wp-rong { aspect-ratio: 2 / 1; height: 50%; bottom: 37%; }
+.wp-bob, .wp-face { width: 100%; height: 100%; }
+.wp-face { transform: scaleX(var(--dir, 1)); -webkit-box-reflect: below -2px linear-gradient(transparent 45%, rgba(0, 0, 0, 0.28)); }
+.wp-face svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.wp-arm { transform-box: fill-box; }
+.wp-arm-l { transform-origin: 100% 100%; }
+.wp-arm-r { transform-origin: 0% 100%; }
+.wp-bow { transform-box: fill-box; transform-origin: 50% 100%; }
+.wp-hump { transform-box: fill-box; transform-origin: 50% 100%; }
+/* Gợn sóng tròn lan ra quanh chân con rối */
+.wp-ripple { position: absolute; left: 10%; right: 10%; bottom: -4%; height: 14%; border: 1px solid rgba(242, 181, 68, 0.45); border-radius: 50%; opacity: 0; }
+
+/* Cả sân khấu hiện ra sau khi trống và đàn chim đã vào */
+.js-anim .wp-stage { animation: wp-in 1.2s ease 1.8s both; }
+@keyframes wp-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* Lướt ra, dừng, lật mặt, lùi về: như nghệ nhân giật sào dưới nước */
+.js-anim .wp-puppet { animation: wp-patrol var(--t) ease-in-out var(--delay) infinite; }
+.js-anim .wp-face { animation: wp-turn var(--t) linear var(--delay) infinite; }
+.js-anim .wp-bob { animation: wp-bob 1.5s ease-in-out var(--delay) infinite alternate; }
+.js-anim .wp-ripple { animation: wp-ripple 1.8s ease-out var(--delay) infinite; }
+.js-anim .wp-arm-r { animation: wp-wave-r 0.9s steps(5) var(--delay) infinite alternate; }
+.js-anim .wp-arm-l { animation: wp-wave-l 1.3s steps(6) var(--delay) infinite alternate; }
+.js-anim .wp-teu .wp-bow { animation: wp-bow 9s steps(40) infinite; }
+.js-anim .wp-hump { animation: wp-hump 1.6s steps(6) infinite alternate; animation-delay: calc(var(--h) * -0.4s); }
+.js-anim .wp-head { animation: wp-bob 1.6s steps(6) infinite alternate; }
+@keyframes wp-patrol { 0%, 6% { transform: translateX(0); } 40%, 52% { transform: translateX(var(--dx)); } 86%, 100% { transform: translateX(0); } }
+@keyframes wp-turn { 0%, 44% { transform: scaleX(var(--dir)); } 48%, 92% { transform: scaleX(calc(var(--dir) * -1)); } 96%, 100% { transform: scaleX(var(--dir)); } }
+@keyframes wp-bob { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-5%) rotate(2.5deg); } }
+@keyframes wp-ripple { 0% { opacity: 0.8; transform: scale(0.5); } 100% { opacity: 0; transform: scale(1.5); } }
+@keyframes wp-wave-r { from { transform: rotate(-28deg); } to { transform: rotate(14deg); } }
+@keyframes wp-wave-l { from { transform: rotate(10deg); } to { transform: rotate(-12deg); } }
+@keyframes wp-bow { 0%, 72%, 100% { transform: none; } 80%, 86% { transform: rotate(16deg); } }
+@keyframes wp-hump { from { transform: translateY(0) scaleY(1); } to { transform: translateY(8%) scaleY(0.75); } }
+
+/* ---------- Hai khung Đăng nhập / Đăng ký trên cùng một trang (auth-deck.js) ---------- */
+/* <html data-auth-mode> quyết định khung nào ở trước. Khung trước nằm trong dòng chảy trang (quyết định chiều cao),
+   khung sau nằm đè phía sau, thu nhỏ, mờ và lộ một mép bên cạnh; auth-deck.js tính chính xác độ thu nhỏ và độ lệch. */
+.auth-main { overflow-x: clip; }
+.auth-deck { position: relative; width: 100%; max-width: 560px; display: flex; justify-content: center; }
+.auth-card { position: relative; z-index: 1; }
+.auth-slot { position: relative; z-index: 2; will-change: transform; }
+:is([data-auth-mode="login"] .auth-slot[data-mode="signup"], [data-auth-mode="signup"] .auth-slot[data-mode="login"]) { --side: 1; position: absolute; z-index: 1; inset: 0; margin: auto; height: fit-content; opacity: 0.55; cursor: pointer; transform: translateX(calc(var(--side) * 40px)) scale(0.9); transition: opacity 0.25s ease; }
+[data-auth-mode="login"] .auth-slot[data-mode="signup"] { --side: -1; }
+:is([data-auth-mode="login"] .auth-slot[data-mode="signup"], [data-auth-mode="signup"] .auth-slot[data-mode="login"]):hover, :is([data-auth-mode="login"] .auth-slot[data-mode="signup"], [data-auth-mode="signup"] .auth-slot[data-mode="login"]):focus-visible { opacity: 0.8; outline: none; }
+:is([data-auth-mode="login"] .auth-slot[data-mode="signup"], [data-auth-mode="signup"] .auth-slot[data-mode="login"]) .auth-close { visibility: hidden; }
+/* Chữ dựng đứng ở mép đang lộ của khung sau */
+.auth-peek-label { position: absolute; z-index: 2; top: 0; bottom: 0; display: none; align-items: center; writing-mode: vertical-rl; white-space: nowrap; color: #F2B544; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; pointer-events: none; }
+:is([data-auth-mode="login"] .auth-slot[data-mode="signup"], [data-auth-mode="signup"] .auth-slot[data-mode="login"]) .auth-peek-label { display: flex; }
+[data-auth-mode="login"] .auth-slot[data-mode="signup"] .auth-peek-label { left: 8px; transform: rotate(180deg); }
+[data-auth-mode="signup"] .auth-slot[data-mode="login"] .auth-peek-label { right: 8px; }
+@media (max-width: 640px) { .auth-peek-label { font-size: 0; } }
+.auth-deck.is-shuffling .auth-peek-label { display: none; }
+/* Thanh trên: nút Đăng ký vàng khi đang ở khung Đăng ký */
+[data-auth-mode="signup"] .nav-signup { background: #F2B544 !important; color: #140405 !important; }
+/* Màn rộng: con rối cao hơn dải nước (đứng hai bên hộp form), vẫn chìm chân xuống nước */
+.wp-stage.wp-wide { overflow: visible; }
+.wp-puppet { --dx: var(--dx0); }
+.wp-stage.wp-wide .wp-puppet { bottom: calc(var(--stage-h) * 0.3); }
+.wp-stage.wp-wide .wp-rong { bottom: calc(var(--stage-h) * 0.36); }

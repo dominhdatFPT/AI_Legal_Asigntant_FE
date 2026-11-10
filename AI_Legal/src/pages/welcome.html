@@ -11,7 +11,7 @@
   <!-- Một họ chữ duy nhất (Inter, hỗ trợ đầy đủ tiếng Việt): tiêu đề nét 400 cỡ lớn, nội dung nét 200 -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <link href="/tailwind.css" rel="stylesheet">
   <script>
     // Bật hiệu ứng xuất hiện trước khi trang vẽ, trừ khi máy bật "giảm chuyển động"
@@ -41,7 +41,7 @@
     body {
       background: var(--void);
       color: var(--bone);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-family: "Be Vietnam Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       font-feature-settings: "ss01" on;
     }
 
@@ -109,12 +109,55 @@
 
     .nav-link {
       color: var(--ash);
+      white-space: nowrap;
       transition: color 0.2s ease;
     }
 
     .nav-link:hover,
     .nav-link[aria-current="true"] {
       color: var(--bone);
+    }
+
+    /* Menu ngang luôn một hàng: thu nhỏ chữ và khoảng cách trên màn hình vừa, tràn thì cuộn ngang */
+    .main-nav {
+      min-width: 0;
+      font-size: 0.6875rem;
+      column-gap: 0.75rem;
+      padding-block: 0.375rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .main-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header-actions {
+      column-gap: 1rem;
+    }
+
+    @media (min-width: 768px) and (max-width: 1279px) {
+      .brand-name {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .main-nav {
+        font-size: 0.75rem;
+        column-gap: 1.25rem;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .main-nav {
+        font-size: 0.8125rem;
+        column-gap: 1.75rem;
+      }
+
+      .header-actions {
+        column-gap: 1.5rem;
+      }
     }
 
     /* ---------- Nút: một nút viên thuốc đỏ son cho hành động chính, còn lại là link chữ ---------- */
@@ -315,6 +358,12 @@
     /* 3. Khối trống đồng thu nhỏ, mờ dần khi cuộn qua hero */
     .hero-drum {
       will-change: transform, opacity;
+    }
+
+    /* clip thay cho hidden: khung chứa trống lòi ra mép phải, với hidden thì scrollIntoView/tìm chữ trên trang
+       cuộn ngang được cả section và đẩy tiêu đề ra ngoài mép trái */
+    #get-started {
+      overflow: clip;
     }
 
     /* 4. Các mục hiện dần khi cuộn tới (cả cuộn xuống lẫn cuộn lên); phần tử cùng nhóm lệch nhau 70ms.
@@ -711,20 +760,18 @@
       <a class="flex items-center gap-3 shrink-0" href="#top" aria-label="AI Legal Assistant, về đầu trang">
         <img alt="" class="w-9 h-9 rounded-[10px] object-cover" width="36" height="36"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnlkQoeQ9cz3O0zHezfnJW4i8PbOqNuqCM_y55TX3U1BXwu363H9aKum-CzoC6jH3E8KgRmTnjg6ahp1_0U4Uu7KlgoL-NddAXz2D2XhnbRhUHSynxMXspIRWCp6gO9GfE0mPu7xSV2yXkstnSI-UqyLL9cUZYchWEE_xXHwAcKYC8mOAVROpEiOiEoUh4IIBkqehqRVdGI1SJcTeCy9fwRTkBk3nvQPwTzqMV5ckvIWSpXGRWVNBSEZ2AgnWqrWF4-gE">
-        <span class="text-[15px] font-normal tracking-[-0.01em] text-white" translate="no">AI Legal Assistant</span>
+        <span class="brand-name text-[15px] font-normal tracking-[-0.01em] text-white" translate="no">AI Legal Assistant</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-7 t-label" aria-label="Điều hướng chính">
+      <nav class="main-nav hidden md:flex items-center t-label" aria-label="Điều hướng chính">
         <a class="nav-link" href="#procedures">Thủ tục</a>
-        <a class="nav-link" href="/application-submission">Nộp hồ sơ</a>
-        <a class="nav-link" href="/document-storages">Kho biểu mẫu</a>
+        <a class="nav-link" href="/document-storages">Mẫu đơn</a>
         <a class="nav-link" href="/location-search">Tìm nơi nộp</a>
         <a class="nav-link" href="#audiences">Dành cho ai</a>
         <a class="nav-link" href="#workflow">Cách làm</a>
-        <button class="nav-link uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
       </nav>
 
-      <div class="hidden sm:flex items-center gap-6">
+      <div class="header-actions hidden sm:flex items-center shrink-0">
         <a class="nav-link t-label" href="/login">Đăng nhập</a>
         <a class="btn-pill !min-h-[42px] !px-5" href="/signup">Đăng ký</a>
       </div>
@@ -741,12 +788,10 @@
     <div class="hidden md:hidden bg-[#140405] px-5 pt-2 pb-6" id="mobile-menu">
       <nav class="flex flex-col t-label text-[15px]" aria-label="Điều hướng trên di động">
         <a class="nav-link py-3.5" href="#procedures">Thủ tục</a>
-        <a class="nav-link py-3.5" href="/application-submission">Nộp hồ sơ</a>
-        <a class="nav-link py-3.5" href="/document-storages">Kho biểu mẫu</a>
+        <a class="nav-link py-3.5" href="/document-storages">Mẫu đơn</a>
         <a class="nav-link py-3.5" href="/location-search">Tìm nơi nộp</a>
         <a class="nav-link py-3.5" href="#audiences">Dành cho ai</a>
         <a class="nav-link py-3.5" href="#workflow">Cách làm</a>
-        <button class="nav-link py-3.5 text-left uppercase" type="button" data-open-chat>Hỏi trợ lý AI</button>
       </nav>
       <div class="pt-4 flex items-center gap-6 sm:hidden">
         <a class="btn-pill" href="/signup">Đăng ký</a>
@@ -949,7 +994,7 @@
               <ul class="hover-list mt-5 space-y-3 text-[15px] font-light text-white">
                 <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết giấy nào cần bản chính, giấy nào cần bản sao công chứng</li>
                 <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Biết nộp ở bộ phận một cửa nào</li>
-                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Theo dõi tiến độ xử lý hồ sơ sau khi nộp</li>
+                <li class="flex items-baseline gap-4"><span class="tri" aria-hidden="true"></span>Tải đơn PDF ngay sau khi điền xong</li>
               </ul>
             </div>
           </article>
@@ -1166,8 +1211,6 @@
         <p class="mt-1">Hoa văn trống đồng Đông Sơn: Wikimedia Commons, phạm vi công cộng.</p>
       </div>
       <div class="flex gap-6 uppercase tracking-[0.06em]">
-        <a class="hover:text-white" href="#">Facebook</a>
-        <a class="hover:text-white" href="#">Zalo OA</a>
         <a class="hover:text-white" href="mailto:support@legalai.vn">Gửi phản hồi</a>
       </div>
     </div>
@@ -1265,6 +1308,7 @@
     </button>
   </div>
 
+  <script src="/drum-constellation.js"></script>
   <script>
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const header = document.getElementById('site-header');
@@ -1356,270 +1400,10 @@
       if (el) sectionObserver.observe(el);
     });
 
-    // ================= Chòm sao trống đồng: tam giác nhỏ lấy mẫu từ hoa văn mặt trống =================
-    // Hai lớp: lớp tĩnh hàng chục nghìn tam giác li ti vẽ sẵn một lần để hoa văn (ngôi sao, các vành, hình người, chim) hiện rõ,
-    // và vài trăm tam giác lớn hơn chuyển động, lấp lánh, né con trỏ chuột. Cả mặt trống xoay rất chậm.
-    const PARTICLE_COLORS = ['#F2B544', '#F2B544', '#F7C766', '#E4572E', '#FF8A5B', '#E5484D', '#F6DCCF', '#C9221F'];
-    const drumImage = new Image();
-    drumImage.src = '/images/login/dong-son-drum-face.png';
-    const drumReady = drumImage.decode().then(() => drumImage).catch(() => null);
-
-    // Điểm thuộc hoa văn = pixel không trong suốt của ảnh mặt trống; toạ độ chuẩn hoá trong đường tròn bán kính 1
-    const sampleDrum = (img) => {
-      const size = 360;
-      const off = document.createElement('canvas');
-      off.width = size;
-      off.height = size;
-      const ctx = off.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(img, 0, 0, size, size);
-      const data = ctx.getImageData(0, 0, size, size).data;
-      const points = [];
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-          if (data[(y * size + x) * 4 + 3] < 140) continue;
-          const nx = (x / size) * 2 - 1;
-          const ny = (y / size) * 2 - 1;
-          // Vành tối ngoài cùng là mảng đặc: chỉ giữ thưa để hoa văn bên trong nổi lên
-          if (Math.hypot(nx, ny) > 0.9 && Math.random() > 0.12) continue;
-          points.push([nx, ny]);
-        }
-      }
-      return points;
-    };
-
-    // Dự phòng khi không tải được ảnh: các vòng tròn đồng tâm và ngôi sao 14 cánh
-    const proceduralDrum = () => {
-      const points = [];
-      [0.22, 0.42, 0.6, 0.74, 0.86, 0.95].forEach(ring => {
-        for (let a = 0; a < Math.PI * 2; a += 0.004) points.push([Math.cos(a) * ring, Math.sin(a) * ring]);
-      });
-      for (let k = 0; k < 14; k++) {
-        const a = (k / 14) * Math.PI * 2;
-        for (let t = 0.03; t < 0.2; t += 0.002) points.push([Math.cos(a) * t, Math.sin(a) * t]);
-      }
-      return points;
-    };
-
-    const initConstellation = async (canvas, { fine, sparks, ambient, scale, scrollSpin = false, startOnView = false }) => {
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const img = await drumReady;
-      const source = img ? sampleDrum(img) : proceduralDrum();
-      if (!source.length) return;
-
-      const factor = window.innerWidth < 640 ? 0.6 : 1;
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-      const fineDots = Array.from({ length: Math.round(fine * factor) }, () => {
-        const [nx, ny] = pick(source);
-        return { nx, ny, size: 0.9 + Math.random() * 1.3, rot: Math.random() * Math.PI * 2, color: pick(PARTICLE_COLORS), alpha: 0.55 + Math.random() * 0.45 };
-      });
-      const particles = Array.from({ length: Math.round(sparks * factor) }, () => {
-        const [nx, ny] = pick(source);
-        return {
-          nx,
-          ny,
-          sx: (Math.random() - 0.5) * 3,
-          sy: (Math.random() - 0.5) * 3,
-          size: 2.6 + Math.random() * 2.6,
-          rot: Math.random() * Math.PI * 2,
-          spin: (Math.random() - 0.5) * 0.6,
-          color: pick(PARTICLE_COLORS),
-          alpha: 0.6 + Math.random() * 0.4,
-          phase: Math.random() * Math.PI * 2,
-          delay: Math.random() * 0.5
-        };
-      });
-      const dust = Array.from({ length: ambient }, () => ({
-        x: Math.random(),
-        y: Math.random(),
-        vx: (Math.random() - 0.5) * 0.004,
-        vy: (Math.random() - 0.5) * 0.004,
-        size: 1.5 + Math.random() * 3,
-        rot: Math.random() * Math.PI * 2,
-        color: pick(PARTICLE_COLORS),
-        alpha: 0.12 + Math.random() * 0.25
-      }));
-
-      const triangle = (c, x, y, size, rot) => {
-        c.moveTo(x + Math.cos(rot) * size, y + Math.sin(rot) * size);
-        c.lineTo(x + Math.cos(rot + 2.094) * size, y + Math.sin(rot + 2.094) * size);
-        c.lineTo(x + Math.cos(rot - 2.094) * size, y + Math.sin(rot - 2.094) * size);
-        c.closePath();
-      };
-
-      // Lớp tĩnh: vẽ một lần vào canvas phụ theo kích thước hiện tại, mỗi khung hình chỉ cần xoay rồi dán lại
-      const layer = document.createElement('canvas');
-      const layerCtx = layer.getContext('2d');
-      let width = 0;
-      let height = 0;
-      let radius = 0;
-      let dpr = 1;
-      const renderLayer = () => {
-        const side = Math.ceil((radius + 6) * 2);
-        layer.width = Math.round(side * dpr);
-        layer.height = Math.round(side * dpr);
-        layerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        layerCtx.clearRect(0, 0, side, side);
-        layerCtx.lineWidth = 0.9;
-        const c = side / 2;
-        // Gom theo màu để giảm số lần đổi kiểu nét
-        PARTICLE_COLORS.forEach(color => {
-          layerCtx.strokeStyle = color;
-          [0.6, 0.8, 1].forEach(alpha => {
-            layerCtx.globalAlpha = alpha;
-            layerCtx.beginPath();
-            fineDots.forEach(d => {
-              if (d.color !== color || Math.abs(d.alpha - alpha) > 0.1) return;
-              triangle(layerCtx, c + d.nx * radius, c + d.ny * radius, d.size, d.rot);
-            });
-            layerCtx.stroke();
-          });
-        });
-        layerCtx.globalAlpha = 1;
-      };
-      const resize = () => {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        width = canvas.clientWidth;
-        height = canvas.clientHeight;
-        radius = Math.min(width, height) * 0.5 * scale;
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        renderLayer();
-      };
-      fineDots.forEach(d => { d.alpha = d.alpha < 0.7 ? 0.6 : d.alpha < 0.9 ? 0.8 : 1; });
-      resize();
-      new ResizeObserver(() => {
-        if (canvas.clientWidth === width && canvas.clientHeight === height) return;
-        resize();
-        if (!running) draw(performance.now());
-      }).observe(canvas);
-
-      const pointer = { x: -9999, y: -9999 };
-      canvas.parentElement.addEventListener('pointermove', (e) => {
-        const box = canvas.getBoundingClientRect();
-        pointer.x = e.clientX - box.left;
-        pointer.y = e.clientY - box.top;
-      });
-      canvas.parentElement.addEventListener('pointerleave', () => {
-        pointer.x = -9999;
-        pointer.y = -9999;
-      });
-
-      // Trống cuối trang chỉ bắt đầu tụ lại khi lần đầu cuộn tới
-      let start = startOnView ? null : performance.now();
-      const draw = (now) => {
-        const t = start === null ? 0 : (now - start) / 1000;
-        const still = reduceMotion.matches;
-        ctx.clearRect(0, 0, width, height);
-        const cx = width / 2;
-        const cy = height / 2;
-        // Mặt trống quay rất chậm, khoảng 3 phút một vòng; trống ở hero quay thêm theo quãng cuộn trang
-        const spin = still ? 0 : t * 0.035 + (scrollSpin ? window.scrollY * 0.0022 : 0);
-        const cos = Math.cos(spin);
-        const sin = Math.sin(spin);
-        // Hoa văn hiện dần trong 2 giây đầu, cùng lúc các hạt lớn bay về
-        const reveal = still ? 1 : Math.min(1, t / 2);
-
-        ctx.lineWidth = 1;
-        dust.forEach(d => {
-          if (!still) {
-            d.x = (d.x + d.vx / 60 + 1) % 1;
-            d.y = (d.y + d.vy / 60 + 1) % 1;
-          }
-          ctx.globalAlpha = d.alpha;
-          ctx.strokeStyle = d.color;
-          ctx.beginPath();
-          triangle(ctx, d.x * width, d.y * height, d.size, d.rot + (still ? 0 : t * 0.2));
-          ctx.stroke();
-        });
-
-        ctx.save();
-        ctx.globalAlpha = reveal * reveal;
-        ctx.translate(cx, cy);
-        ctx.rotate(spin);
-        const half = layer.width / dpr / 2;
-        ctx.drawImage(layer, -half, -half, half * 2, half * 2);
-        ctx.restore();
-
-        if (!still && reveal > 0.3) {
-          // Mặt trời giữa trống thở sáng
-          const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.26);
-          glow.addColorStop(0, `rgba(255,215,140,${(0.22 + 0.14 * Math.sin(t * 2.2)) * reveal})`);
-          glow.addColorStop(1, 'rgba(255,215,140,0)');
-          ctx.fillStyle = glow;
-          ctx.beginPath(); ctx.arc(cx, cy, radius * 0.26, 0, Math.PI * 2); ctx.fill();
-          // Hai vòng sóng lan ra như tiếng trống vang, mỗi nhịp 3,2 giây
-          ctx.lineWidth = 1.2;
-          [0, 0.5].forEach(offset => {
-            const beat = ((t / 3.2) + offset) % 1;
-            ctx.strokeStyle = `rgba(242,181,68,${0.5 * (1 - beat) * reveal})`;
-            ctx.beginPath(); ctx.arc(cx, cy, radius * (0.1 + beat), 0, Math.PI * 2); ctx.stroke();
-          });
-        }
-
-        particles.forEach(p => {
-          const k = still ? 1 : Math.min(1, Math.max(0, (t - p.delay) / 1.8));
-          const ease = 1 - Math.pow(1 - k, 3);
-          const rx = p.nx * cos - p.ny * sin;
-          const ry = p.nx * sin + p.ny * cos;
-          let x = cx + (rx + p.sx * (1 - ease)) * radius;
-          let y = cy + (ry + p.sy * (1 - ease)) * radius;
-          // Hạt né nhẹ con trỏ chuột
-          const dx = x - pointer.x;
-          const dy = y - pointer.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 80 && dist > 0.01) {
-            const push = (80 - dist) / 80 * 18;
-            x += (dx / dist) * push;
-            y += (dy / dist) * push;
-          }
-          ctx.globalAlpha = p.alpha * ease * (still ? 1 : 0.6 + 0.4 * Math.sin(t * 1.6 + p.phase));
-          ctx.strokeStyle = p.color;
-          ctx.beginPath();
-          triangle(ctx, x, y, p.size, p.rot + (still ? 0 : t * p.spin));
-          ctx.stroke();
-        });
-        ctx.globalAlpha = 1;
-      };
-
-      // Chỉ chạy hoạt ảnh khi canvas đang hiện trên màn hình và tab đang mở
-      let running = false;
-      let visible = false;
-      let frame = 0;
-      const loop = (now) => {
-        draw(now);
-        frame = requestAnimationFrame(loop);
-      };
-      const sync = () => {
-        const shouldRun = visible && !document.hidden && !reduceMotion.matches;
-        if (shouldRun && !running) {
-          running = true;
-          frame = requestAnimationFrame(loop);
-        } else if (!shouldRun && running) {
-          running = false;
-          cancelAnimationFrame(frame);
-        }
-      };
-      new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting && entry.intersectionRatio >= (startOnView ? 0.35 : 0);
-        // Ra hẳn khỏi màn hình thì lần quay lại các hạt bay về tụ thành mặt trống từ đầu
-        if (!entry.isIntersecting) start = null;
-        if (visible && start === null) start = performance.now();
-        sync();
-      }, { threshold: [0, startOnView ? 0.35 : 0] }).observe(canvas);
-      document.addEventListener('visibilitychange', sync);
-      reduceMotion.addEventListener?.('change', () => {
-        sync();
-        if (!running) draw(performance.now());
-      });
-      draw(performance.now());
-    };
-
     const heroCanvas = document.querySelector('[data-constellation="hero"]');
     const ctaCanvas = document.querySelector('[data-constellation="cta"]');
-    if (heroCanvas) initConstellation(heroCanvas, { fine: 15000, sparks: 450, ambient: 90, scale: 0.88, scrollSpin: true });
-    if (ctaCanvas) initConstellation(ctaCanvas, { fine: 9000, sparks: 260, ambient: 0, scale: 0.9, startOnView: true });
+    if (heroCanvas) window.initDrumConstellation(heroCanvas, { sparks: 450, ambient: 90, scale: 0.88, scrollSpin: true });
+    if (ctaCanvas) window.initDrumConstellation(ctaCanvas, { sparks: 260, ambient: 0, scale: 0.9, startOnView: true });
 
     // ================= Hiệu ứng xuất hiện, đếm số, cuộn trang =================
     const animate = document.documentElement.classList.contains('js-anim');
@@ -2102,7 +1886,7 @@
         });
       } else {
         document.addEventListener("click", (event) => {
-          const targetLink = event.target.closest('a[href^="/application-submission"], a[href^="/location-search"]');
+          const targetLink = event.target.closest('a[href^="/application-submission"], a[href^="/location-search"], a[href^="/document-storages"]');
           if (targetLink && !currentUser) {
             event.preventDefault();
             const destination = targetLink.getAttribute("href");
