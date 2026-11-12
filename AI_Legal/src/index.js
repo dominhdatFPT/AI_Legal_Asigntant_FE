@@ -18,6 +18,7 @@ const USER_NAV_ACTIVE = {
   '/location-search': 'location-search',
   '/lawyer-registration': 'dang-ky-luat-su',
   '/chatbox': 'chatbox',
+  '/report': 'bao-cao',
   '/account': 'account',
   '/detail-information': 'account'
 };
@@ -62,7 +63,9 @@ const ADMIN_NAV_ACTIVE = {
   '/land-forms': 'ho-so-dat-dai',
   '/business-form-templates': 'ho-so-ho-kinh-doanh',
   '/user-management': 'quan-ly-nguoi-dung',
-  '/lawyer-management': 'quan-ly-luat-su'
+  '/lawyer-management': 'quan-ly-luat-su',
+  '/report-management': 'quan-ly-bao-cao',
+  '/announcements': 'thong-bao-chung'
 };
 
 const sendAdminPage = (fileName) => (req, res, next) => {
@@ -335,6 +338,8 @@ app.get('/detail-information', sendUserPage('detail-information.html'));
 
 app.get('/user-management', sendAdminPage('user-management.html'));
 app.get('/lawyer-management', sendAdminPage('lawyer-management.html'));
+app.get('/report-management', sendAdminPage('report-management.html'));
+app.get('/announcements', sendAdminPage('announcements.html'));
 // Keep the existing Procedure library available on its own route.
 app.get('/form-library', sendUserPage('form-library.html'));
 
@@ -351,6 +356,8 @@ app.get('/user-chatbox', (req, res) => res.redirect(301, '/chatbox'));
 app.get('/location-search', sendUserPage('location-search.html'));
 
 app.get('/account', sendUserPage('account.html'));
+
+app.get('/report', sendUserPage('report.html'));
 
 app.get('/document-storages', sendUserPage('contract-catalog.html'));
 

@@ -1618,7 +1618,7 @@
 
 /* Vạch trạng thái 4px ở mép trái thẻ: xám chưa điền · vàng nghệ đang dở · xanh đủ · đỏ còn lỗi */
 
-.form-collapse[data-step]{--step-color:#cbd5e1;position:relative;margin-left:48px;border-left:4px solid var(--step-color)!important}
+.form-collapse[data-step]{--step-color:#cbd5e1;position:relative;border-left:4px solid var(--step-color)!important}
 
 .form-collapse[data-step-state=progress]{--step-color:#d99206}
 
@@ -1626,16 +1626,6 @@
 
 .form-collapse[data-step-state=error]{--step-color:#dc2626}
 
-/* Stepper dọc: vòng số bên trái từng thẻ, nối bằng đường mảnh; đoạn của bước đã đủ tô xanh */
-.form-collapse[data-step]::before{content:attr(data-step);position:absolute;left:-52px;top:20px;z-index:1;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;border:2px solid #cbd5e1;background:#faf6f2;color:#64748b;font-size:14px;font-weight:700;box-sizing:border-box}
-.form-collapse[data-step]:not(.is-collapsed)::before{border-color:#b91c1c;color:#b91c1c;box-shadow:0 0 0 4px rgba(185,28,28,.12)}
-.form-collapse[data-step-state=done]::before{content:'✓';border-color:#16a34a;background:#16a34a;color:#faf6f2;box-shadow:none}
-.form-collapse[data-step-state=error]::before{content:'!';border-color:#dc2626;background:#dc2626;color:#faf6f2;box-shadow:none}
-.form-collapse[data-step]::after{content:'';position:absolute;left:-37px;top:54px;bottom:-26px;width:2px;border-radius:2px;background:#e2e8f0}
-
-.form-collapse[data-step-state=done]::after{background:#16a34a}
-
-#form-step-review[data-step]::after{display:none}
 .form-collapse-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;border:1px solid #e2e8f0;border-radius:12px;background:#faf6f2;color:#b91c1c;cursor:pointer}
 .form-collapse-toggle:hover{background:#fef2f2}
 
@@ -1658,15 +1648,9 @@
 
 @media (prefers-reduced-motion:reduce){.form-collapse-icon{transition:none}.form-collapse:not(.is-collapsed)>.form-collapse-body{animation:none}}
 
-/* Điện thoại: stepper thu nhỏ (vòng 24px, thụt lề ít), thanh tiến độ ngắn lại; thanh bước 1/2/3 phía trên trùng chức năng nên ẩn */
+/* Điện thoại: thanh tiến độ ngắn lại; thanh bước 1/2/3 phía trên trùng chức năng nên ẩn */
 
 @media (max-width:640px){
-
-.form-collapse[data-step]{margin-left:32px}
-
-.form-collapse[data-step]::before{left:-34px;top:18px;width:24px;height:24px;font-size:12px}
-
-.form-collapse[data-step]::after{left:-24px;top:44px}
 
 .step-progress-track{display:none}
 
@@ -1992,7 +1976,7 @@ div:has(> [data-form-step]){display:none}
 
         enhanceStepCard(card);
 
-        if (card) card.dataset.step = String(index + 1); // số trong vòng tròn của stepper dọc
+        if (card) card.dataset.step = String(index + 1); // đánh dấu thẻ bước để tô vạch trạng thái bên trái
 
       });
 

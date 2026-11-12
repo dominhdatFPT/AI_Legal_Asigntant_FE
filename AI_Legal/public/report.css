@@ -1,0 +1,57 @@
+/* Trang Báo cáo (/report). Khung trang dùng lớp Tailwind có sẵn như trang Tài khoản; ở đây chỉ có phần form và danh sách. */
+.report-form{display:flex;flex-direction:column;gap:20px}
+.report-field{display:flex;flex-direction:column;gap:6px;min-width:0;margin:0;padding:0;border:0}
+.report-field[hidden]{display:none}
+.report-field>label,.report-field>legend{font-size:14px;font-weight:600;color:#1e1b19;padding:0;margin-bottom:6px}
+.report-field>label>span,.report-field>legend>span{color:#93000b}
+.report-field input,.report-field select,.report-field textarea{width:100%;min-height:44px;padding:10px 12px;border:1px solid #9e887c;border-radius:8px;background:#faf6f2;color:#1e1b19;font:inherit;font-size:14px;line-height:1.6;transition:border-color .15s,box-shadow .15s}
+.report-field textarea{resize:vertical;min-height:140px}
+.report-field input::placeholder,.report-field textarea::placeholder{color:#7a665b}
+.report-field input:focus,.report-field select:focus,.report-field textarea:focus{outline:0;border-color:#93000b;box-shadow:0 0 0 3px rgba(147,0,11,.12)}
+.report-field [aria-invalid="true"]{border-color:#ba1a1a}
+.report-chips{display:flex;flex-wrap:wrap;gap:8px}
+.report-chip{position:relative;cursor:pointer}
+.report-chip input{position:absolute;opacity:0;pointer-events:none}
+.report-chip span{display:inline-flex;align-items:center;min-height:40px;padding:8px 14px;border:1px solid #d9ccc3;border-radius:999px;background:#faf6f2;color:#3d2f2b;font-size:14px;line-height:1.4;transition:border-color .15s,background-color .15s}
+.report-chip:hover span{border-color:#b9a399}
+.report-chip input:checked+span{border-color:#93000b;background:#fbefe8;color:#93000b;font-weight:600;box-shadow:inset 0 0 0 1px #93000b}
+.report-chip input:focus-visible+span{outline:3px solid #bc4d49;outline-offset:2px}
+.report-field>label>.report-optional{color:#5b403d;font-weight:400}
+.report-hint{font-size:12px;color:#5b403d;text-align:right}
+.report-error{font-size:13px;color:#ba1a1a}
+.report-error[hidden],.report-alert[hidden]{display:none}
+.report-actions{display:flex;justify-content:flex-end}
+.report-alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.6}
+.report-alert--ok{background:#edf7ef;border:1px solid #b9dcc0;color:#1d4d2a}
+.report-alert:focus{outline:0}
+.report-empty{font-size:14px;color:#5b403d}
+.report-empty[hidden]{display:none}
+.report-list{list-style:none;margin:0;padding:0}
+.report-item{display:flex;flex-direction:column;gap:4px;padding:16px 24px;border-top:1px solid #e9e1dd}
+.report-item:first-child{border-top:0}
+.report-item-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.report-tag,.report-status{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px}
+.report-tag{background:#f4e2db;color:#93000b}
+.report-status--pending{background:#fdf1d6;color:#7a4b00}
+.report-status--resolved{background:#edf6ef;color:#2f6b3a}
+.report-status--dismissed{background:#ece7e5;color:#6b5a55}
+.report-item-note{font-size:13px;color:#1e1b19;padding:8px 10px;border-radius:8px;background:#f4ece7;overflow-wrap:anywhere}
+.report-item-title{font-size:14px;color:#1e1b19;overflow-wrap:anywhere}
+.report-item-sub,.report-item-time{font-size:12px;color:#5b403d;overflow-wrap:anywhere}
+@media(max-width:640px){.report-actions>button{width:100%;justify-content:center}.report-item{padding:14px 20px}}
+/* Hộp "Báo cáo" trong khung chat tư vấn (chatbox.html). */
+.report-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:16px;background:#faf6f2;color:#1e1b19;box-shadow:0 28px 80px rgba(30,15,12,.35)}
+.report-dialog::backdrop{background:rgba(30,20,18,.55)}
+.report-dialog form{display:flex;flex-direction:column;gap:18px;padding:22px 24px}
+.report-dialog h2{margin:0;font-size:19px;font-weight:700}
+.report-dialog-sub{margin:4px 0 0;font-size:13px;line-height:1.6;color:#5b403d;overflow-wrap:anywhere}
+.report-dialog-actions{display:flex;justify-content:flex-end;gap:8px}
+.report-dialog-actions button{min-height:40px;padding:8px 16px;border-radius:999px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.report-dialog-cancel{border:1px solid #d9ccc3;background:#f4ece7;color:#3d2f2b}
+.report-dialog-submit{border:1px solid #93000b;background:#93000b;color:#faf6f2}
+.report-dialog-submit:hover{background:#750009}
+.chat-report-button{display:inline-flex;align-items:center;min-height:34px;padding:6px 16px;border:1px solid #d9ccc3;border-radius:999px;background:#f4ece7;color:#3d2f2b;font-size:12px;font-weight:600;cursor:pointer}
+.chat-report-button:hover:not(:disabled){background:#efe2dc;border-color:#b9a399}
+.chat-report-button:disabled{cursor:default;opacity:.65}
+.chat-report-button[hidden],.chat-report-notice[hidden]{display:none}
+.chat-report-notice{margin:0 0 8px;font-size:13px;color:#1d4d2a}

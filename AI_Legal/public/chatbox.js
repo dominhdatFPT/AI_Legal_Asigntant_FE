@@ -1,4 +1,5 @@
-import { authRequest, getApiBaseUrl, fetchCurrentUser } from '/auth-api.js';
+import { authRequest, getApiBaseUrl, fetchCurrentUser, displayName } from '/auth-api.js';
+import { USER_REASONS, addReport, choiceChips, listReports } from '/report-store.js';
 
 const $ = (selector) => document.querySelector(selector);
 const el = (tag, className, text) => {
@@ -173,13 +174,14 @@ function onChatEvent({ type, data }) {
     reloadSoon();
   } else if (type === 'consultation.closed') {
     Object.assign(c, data);
-    renderHeader();
-    renderMessages();
+    select(null); // cuộc tư vấn đã kết thúc: đóng tab, không hiển thị nữa
     reloadSoon();
   }
 }
 
 function onMeEvent({ type, data }) {
+  // Dự phòng khi socket riêng của cuộc tư vấn rớt: addMessage đã chống trùng nên gọi 2 đường vẫn an toàn.
+  if (type === 'message.created' && data.consultation_id === state.activeId) onChatEvent({ type, data });
   if (type === 'consultation.accepted' && data.consultation_id === state.activeId) {
     run(loadMine).then(() => select(state.activeId));
     return;
@@ -214,7 +216,7 @@ function renderList() {
   const list = $('[data-session-list]');
   const query = $('[data-session-search]').value.trim().toLocaleLowerCase('vi');
   const source = state.tab === 'lobby' ? state.lobby : state.mine;
-  const items = source.filter((c) => c.question.toLocaleLowerCase('vi').includes(query));
+  const items = source.filter((c) => c.status !== 'closed' && c.question.toLocaleLowerCase('vi').includes(query));
   list.replaceChildren();
 
   items.forEach((c) => {
@@ -295,6 +297,13 @@ function renderHeader() {
   }
 
   closeButton.hidden = !(c && c.status === 'in_progress');
+  // Báo cáo bên kia: chỉ khi đã có luật sư nhận (đang tư vấn hoặc đã kết thúc); mỗi cuộc chỉ một báo cáo đang chờ.
+  const reportButton = $('[data-chat-report]');
+  const canReport = Boolean(c && c.lawyer_id && c.status !== 'waiting');
+  const reported = canReport && listReports().some((r) => r.consultation_id === c.id && r.reporter?.id === state.me.id && r.status === 'pending');
+  reportButton.hidden = !canReport;
+  reportButton.disabled = reported;
+  reportButton.textContent = reported ? 'Đã báo cáo' : 'Báo cáo';
   const canAccept = c && c.status === 'waiting' && state.tab === 'lobby';
   accept.hidden = !canAccept;
   composer.hidden = canAccept || (!c && state.me.role === 'lawyer');
@@ -393,8 +402,7 @@ async function closeActive() {
   if (!window.confirm('Kết thúc cuộc tư vấn này? Sau đó không thể nhắn thêm.')) return;
   const closed = await api(`/api/consultations/${state.activeId}/close`, { method: 'POST' });
   Object.assign(active(), closed);
-  renderHeader();
-  renderMessages();
+  await select(null);
   reloadSoon();
 }
 
@@ -415,12 +423,64 @@ function bindEvents() {
   $('[data-chat-close]').addEventListener('click', () => run(closeActive));
   $('[data-chat-accept]').addEventListener('click', () => run(acceptActive));
   $('[data-terms-accept]').addEventListener('click', () => run(ensureTerms));
+  bindReport();
   document.querySelectorAll('[data-tab]').forEach((tab) => {
     tab.addEventListener('click', async () => {
       state.tab = tab.dataset.tab;
       if (state.tab === 'lobby') await run(loadLobby);
       select(null);
     });
+  });
+}
+
+// ---------------------------------------------------------------- Báo cáo người dùng trong cuộc tư vấn
+// shortcut: BE chưa có API report nên lưu qua report-store.js (máy chủ giả); có API thì gọi POST report của Consultation Service.
+function bindReport() {
+  const dialog = $('[data-report-dialog]');
+  const form = dialog.querySelector('form');
+  const error = $('#chat-report-error');
+  $('[data-report-reasons]').append(...choiceChips('reason', USER_REASONS));
+
+  $('[data-chat-report]').addEventListener('click', () => {
+    const c = active();
+    if (!c) return;
+    form.reset();
+    error.hidden = true;
+    $('[data-report-title]').textContent = `Báo cáo ${otherPartyLabel(c).toLowerCase()}`;
+    $('[data-report-sub]').textContent = `Cuộc tư vấn: "${c.question.length > 80 ? `${c.question.slice(0, 80)}…` : c.question}". Quản trị viên sẽ xem xét, bạn nhận thông báo khi có kết quả.`;
+    dialog.showModal();
+  });
+
+  form.addEventListener('submit', (event) => {
+    if (event.submitter?.value !== 'send') return;
+    const reason = form.elements.reason.value;
+    error.hidden = Boolean(reason);
+    if (!reason) {
+      event.preventDefault();
+      form.querySelector('input[name="reason"]').focus();
+      return;
+    }
+    const c = active();
+    if (!c) return;
+    const question = c.question.length > 60 ? `${c.question.slice(0, 60)}…` : c.question;
+    addReport({
+      id: `r-${Date.now()}`,
+      type: 'user',
+      title: reason,
+      detail: $('#chat-report-detail').value.trim(),
+      target: `${otherPartyLabel(c)} trong cuộc tư vấn "${question}"`,
+      page: '',
+      consultation_id: c.id,
+      reported_user_id: state.me.id === c.citizen_id ? c.lawyer_id : c.citizen_id,
+      reporter: { id: state.me.id, name: displayName(state.me), role: state.me.role },
+      status: 'pending',
+      created_at: new Date().toISOString()
+    });
+    const notice = $('[data-chat-notice]');
+    notice.textContent = 'Đã gửi báo cáo tới quản trị viên. Bạn sẽ nhận thông báo khi có kết quả.';
+    notice.hidden = false;
+    setTimeout(() => { notice.hidden = true; }, 5000);
+    renderHeader();
   });
 }
 
@@ -441,7 +501,7 @@ export async function startChatbox() {
     renderHeader();
     await loadMine();
     await loadLobby();
-    const firstConsultation = state.tab === 'lobby' ? state.lobby[0] || state.mine[0] : state.mine[0];
+    const firstConsultation = [...(state.tab === 'lobby' ? state.lobby : []), ...state.mine].find((c) => c.status !== 'closed');
     if (firstConsultation) await select(firstConsultation.id);
   });
 

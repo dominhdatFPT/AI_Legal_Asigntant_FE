@@ -6,6 +6,7 @@
 <!-- Font Awesome Icons -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/tailwind-user.css">
+<link rel="stylesheet" href="/report.css">
 <style id="auth-pending">body{visibility:hidden!important}</style>
 <!-- Custom Styles for Scrollbars and Chat Layout -->
 <style data-purpose="chat-scroll-and-layout">
@@ -76,72 +77,84 @@
 <!-- END: SubBannerAndBreadcrumb -->
 <!-- BEGIN: MainContentArea -->
 <main id="chat-main" class="flex-1 max-w-[1680px] w-full mx-auto p-3 lg:p-5">
-  <header class="mb-4 flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <h1 class="text-xl font-bold text-slate-900">Tư vấn riêng với luật sư</h1>
-      <p class="mt-1 text-sm text-slate-600">Câu hỏi và trao đổi chỉ hiển thị với bạn và luật sư phụ trách.</p>
-    </div>
-    <div data-lobby-tabs aria-label="Danh sách tư vấn" class="flex gap-2" hidden role="tablist">
-      <button aria-selected="false" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700" data-tab="mine" role="tab" type="button">Cuộc tư vấn</button>
-      <button aria-selected="true" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700" data-tab="lobby" role="tab" type="button">Câu hỏi mới</button>
-    </div>
-  </header>
-  <p class="mb-3 rounded-md border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-900">
-    Nội dung trao đổi được gửi riêng. Không gửi mật khẩu, mã xác thực hoặc thông tin không cần thiết cho việc tư vấn.
-  </p>
-  <p class="mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900" data-chat-feedback hidden role="alert"></p>
-
-  <section aria-label="Hộp thư tư vấn" class="chat-layout grid grid-cols-1 gap-4 lg:grid-cols-12">
-    <aside class="chat-sessions flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white lg:col-span-4">
-      <div class="border-b border-slate-200 bg-slate-50 p-4">
-        <div class="mb-3 flex items-center justify-between gap-3">
-          <h2 class="text-sm font-bold text-slate-800">Câu hỏi và cuộc tư vấn</h2>
-          <button class="rounded-md bg-red-700 px-3 py-2 text-sm font-semibold text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-new type="button">
-            <i class="fa-solid fa-plus mr-2" aria-hidden="true"></i>Đặt câu hỏi
-          </button>
-        </div>
-        <label class="sr-only" for="session-search">Tìm câu hỏi hoặc cuộc tư vấn</label>
-        <div class="relative">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-slate-500" aria-hidden="true"></i>
-          <input class="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm focus:border-red-700 focus:outline-none focus:ring-2 focus:ring-red-100" data-session-search id="session-search" placeholder="Tìm câu hỏi..." type="search">
-        </div>
-      </div>
-      <div aria-label="Danh sách câu hỏi và cuộc tư vấn" class="chat-session-list custom-scrollbar divide-y divide-slate-100" data-session-list role="list"></div>
-      <p class="px-4 py-8 text-center text-sm text-slate-600" data-search-empty hidden></p>
-    </aside>
-
-    <section aria-label="Nội dung tư vấn riêng" class="chat-panel flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white lg:col-span-8">
-      <header class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
-        <div class="min-w-0">
-          <h2 class="text-base font-bold text-slate-900" data-chat-title>Chọn một cuộc tư vấn</h2>
-          <p class="mt-1 break-words text-sm text-slate-600" data-chat-organization></p>
-          <span class="mt-2 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700" data-chat-response></span>
-        </div>
-        <div class="flex shrink-0 flex-wrap gap-2">
-          <button class="rounded-md bg-red-700 px-3 py-2 text-sm font-semibold text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-accept hidden type="button">Nhận tư vấn</button>
-          <button class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800" data-chat-close hidden type="button">Kết thúc tư vấn</button>
-        </div>
-      </header>
-
-      <div class="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:px-6" data-terms hidden>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <p>Vui lòng đọc và đồng ý điều khoản tư vấn trước khi gửi câu hỏi hoặc nhận tư vấn.</p>
-          <button class="shrink-0 rounded-md border border-amber-700 px-3 py-2 text-sm font-semibold text-amber-950 hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-800" data-terms-accept type="button">Đồng ý điều khoản</button>
-        </div>
-      </div>
-
-      <div aria-live="polite" aria-relevant="additions text" class="chat-history custom-scrollbar flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4 sm:p-6"></div>
-
-      <form class="chat-composer flex items-end gap-2 border-t border-slate-200 bg-white p-3 sm:p-4">
-        <label class="sr-only" for="chat-message">Nội dung câu hỏi hoặc tin nhắn</label>
-        <textarea class="min-h-12 flex-1 resize-y rounded-md border border-slate-300 bg-white p-3 text-sm focus:border-red-700 focus:outline-none focus:ring-2 focus:ring-red-100 disabled:bg-slate-100" id="chat-message" maxlength="3000" placeholder="Nhập câu hỏi cần luật sư tư vấn..." rows="2"></textarea>
-        <button aria-label="Gửi câu hỏi hoặc tin nhắn" class="h-12 w-12 shrink-0 rounded-md bg-red-700 text-white hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-800 disabled:cursor-not-allowed disabled:opacity-50" type="submit">
-          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-        </button>
-      </form>
-    </section>
-  </section>
+<div class="chat-layout grid grid-cols-1 lg:grid-cols-12 gap-4">
+<!-- Cột trái: danh sách phiên tư vấn -->
+<aside class="chat-sessions lg:col-span-3 xl:col-span-3 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+<div class="p-3.5 border-b border-outline-variant bg-surface-container-low">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-bold text-sm text-slate-800 flex items-center"><i class="fa-solid fa-list-check text-red-600 mr-2"></i>Phiên tư vấn của bạn</h3>
+<button class="text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full px-3 py-1.5" data-chat-new type="button"><i class="fa-solid fa-plus mr-1"></i>Câu hỏi mới</button>
+</div>
+<div class="flex gap-1.5 text-xs font-semibold" data-lobby-tabs hidden>
+<button class="px-3 py-1.5 rounded-full border border-slate-200 bg-red-600 text-white" data-tab="mine" type="button">Của tôi</button>
+<button class="px-3 py-1.5 rounded-full border border-slate-200" data-tab="lobby" type="button">Hàng chờ</button>
+</div>
+</div>
+<div class="p-3 border-b border-slate-100">
+<div class="relative">
+<i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+<input aria-label="Tìm kiếm phiên tư vấn" class="w-full text-sm pl-9 pr-4 py-2.5 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-400 bg-slate-50" data-session-search placeholder="Tìm kiếm..." type="search">
+</div>
+</div>
+<div class="chat-session-list custom-scrollbar divide-y divide-slate-100" data-session-list></div>
+<p class="px-3 py-5 text-center text-xs text-slate-500" data-search-empty hidden></p>
+</aside>
+<!-- Cột phải: khung chat -->
+<section class="chat-panel lg:col-span-9 xl:col-span-9 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+<div class="p-3.5 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs">
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="font-bold text-slate-900 text-sm" data-chat-title></h3>
+<span class="bg-amber-100 text-amber-800 text-[10px] font-semibold px-2 py-0.5 rounded border border-amber-300" data-chat-response></span>
+</div>
+<p class="text-xs text-slate-600 mt-0.5" data-chat-organization></p>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full px-4 py-2" data-chat-accept type="button" hidden>Nhận tư vấn</button>
+<button class="text-xs font-semibold text-red-700 border border-red-200 hover:bg-red-50 rounded-full px-4 py-2" data-chat-close type="button" hidden>Kết thúc tư vấn</button>
+<button class="chat-report-button" data-chat-report type="button" hidden>Báo cáo</button>
+</div>
+</div>
+<div class="chat-history flex-1 p-4 overflow-y-auto bg-surface-container-low space-y-4 custom-scrollbar"></div>
+<div class="p-3 bg-white border-t border-slate-200">
+<div class="mb-2 flex items-center justify-between gap-3 bg-amber-50 py-2 text-xs text-amber-900" data-terms hidden>
+<span><strong>Điều khoản tư vấn trực tuyến:</strong> nội dung trao đổi chỉ mang tính tham khảo, không thay thế hợp đồng dịch vụ pháp lý; bạn đồng ý để luật sư xem câu hỏi và hồ sơ liên quan nhằm tư vấn. Cần đồng ý trước khi gửi hoặc nhận câu hỏi.</span>
+<button class="shrink-0 rounded-full bg-red-600 hover:bg-red-700 px-4 py-2 font-semibold text-white" data-terms-accept type="button">Đồng ý điều khoản</button>
+</div>
+<p class="mb-2 text-xs text-red-700" data-chat-feedback role="alert" hidden></p>
+<p class="chat-report-notice" data-chat-notice role="status" hidden></p>
+<form class="chat-composer flex items-center space-x-2">
+<textarea aria-label="Nội dung tin nhắn" class="flex-1 text-sm border border-slate-200 rounded-2xl p-4 focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none resize-none bg-slate-50 disabled:opacity-60" maxlength="5000" rows="2"></textarea>
+<button aria-label="Gửi tin nhắn" class="h-[52px] px-5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl flex flex-col items-center justify-center transition-colors shadow-lg shadow-red-600/30 shrink-0" type="submit">
+<i class="fa-solid fa-paper-plane mb-1"></i><span>Gửi tin</span>
+</button>
+</form>
+</div>
+</section>
+</div>
 </main>
+<!-- Báo cáo bên kia của cuộc tư vấn (luật sư báo cáo người dân và ngược lại); xử lý trong chatbox.js -->
+<dialog class="report-dialog" data-report-dialog aria-labelledby="chat-report-title">
+<form method="dialog" novalidate>
+<div>
+<h2 id="chat-report-title" data-report-title>Báo cáo</h2>
+<p class="report-dialog-sub" data-report-sub></p>
+</div>
+<fieldset class="report-field" aria-describedby="chat-report-error">
+<legend>Lý do <span aria-hidden="true">*</span></legend>
+<div class="report-chips" data-report-reasons></div>
+<p class="report-error" id="chat-report-error" hidden>Vui lòng chọn lý do báo cáo.</p>
+</fieldset>
+<div class="report-field">
+<label for="chat-report-detail">Mô tả chi tiết <span class="report-optional">(không bắt buộc)</span></label>
+<textarea id="chat-report-detail" rows="4" maxlength="1000" placeholder="Ghi thêm chuyện gì đã xảy ra nếu cần"></textarea>
+</div>
+<div class="report-dialog-actions">
+<button class="report-dialog-cancel" type="submit" value="cancel">Hủy</button>
+<button class="report-dialog-submit" type="submit" value="send">Gửi báo cáo</button>
+</div>
+</form>
+</dialog>
 <script type="module">
   import { protectPage } from '/auth-api.js';
   import { startChatbox } from '/chatbox.js';

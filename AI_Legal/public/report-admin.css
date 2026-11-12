@@ -1,0 +1,65 @@
+/* Trang Quản lí báo cáo (/report-management). Màu theo giao diện quản trị sáng (admin-dashboard.css), không dùng trắng tinh. */
+.ra-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ra-hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;padding:24px;border-radius:16px;background:linear-gradient(100deg,#9e3b2d,#a8442f 55%,#b74f3b);color:#faf6f2;box-shadow:0 12px 28px rgba(110,56,43,.18)}
+.ra-hero h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.4px}
+.ra-hero p{margin:6px 0 0;max-width:640px;font-size:14px;line-height:1.7;color:#fbe3dc}
+.ra-stats{display:flex;gap:10px;margin:0}
+.ra-stats div{min-width:96px;padding:10px 14px;border-radius:12px;background:rgba(250,246,242,.14);border:1px solid rgba(250,246,242,.24)}
+.ra-stats dt{font-size:12px;color:#fbe3dc}
+.ra-stats dd{margin:2px 0 0;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.ra-panel{border:1px solid #ead7d0;border-radius:16px;background:#faf6f2;box-shadow:0 16px 34px rgba(110,56,43,.09);overflow:hidden}
+.ra-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #ead7d0}
+.ra-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.ra-tabs button{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px;border:1px solid transparent;border-radius:10px;background:transparent;color:#8e6b63;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.ra-tabs button:hover{background:#f4e9e4;color:#51332d}
+.ra-tabs button[aria-pressed="true"]{background:#f4e2db;border-color:#d9b8ae;color:#812f24}
+.ra-tabs span{min-width:22px;padding:0 6px;border-radius:999px;background:rgba(129,47,36,.1);font-size:12px;text-align:center}
+.ra-filters{display:flex;flex-wrap:wrap;gap:8px}
+.ra-search{position:relative;display:block}
+.ra-search>.material-symbols-outlined{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:18px;color:#8e6b63}
+.ra-filters input,.ra-filters select{min-height:38px;padding:6px 12px;border:1px solid #d9b8ae;border-radius:10px;background:#f6efeb;color:#51332d;font:inherit;font-size:13px}
+.ra-filters input{width:300px;max-width:100%;padding-left:34px}
+.ra-filters input:focus,.ra-filters select:focus,.ra-field textarea:focus{outline:0;border-color:#a64031;box-shadow:0 0 0 3px rgba(166,64,49,.14)}
+.ra-list{list-style:none;margin:0;padding:0}
+.ra-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-top:1px solid #ead7d0}
+.ra-row:first-child{border-top:0}
+.ra-row:hover{background:#f6efeb}
+.ra-row-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ra-row-meta{display:flex;flex-wrap:wrap;gap:6px}
+.ra-row-title{font-size:15px;color:#51332d;overflow-wrap:anywhere}
+.ra-row-sub{font-size:13px;color:#8e6b63;overflow-wrap:anywhere}
+.ra-row-side{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.ra-row-time{font-size:12px;color:#8e6b63;white-space:nowrap}
+.ra-tag,.ra-status{padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.ra-tag--bug{background:#f4e2db;color:#812f24}
+.ra-tag--user{background:#ece4f2;color:#57406d}
+.ra-status--pending{background:#fdf1d6;color:#7a4b00}
+.ra-status--resolved{background:#edf6ef;color:#2f6b3a}
+.ra-status--dismissed{background:#ece7e5;color:#6b5a55}
+.ra-empty{margin:0;padding:32px 20px;text-align:center;font-size:14px;color:#8e6b63}
+.ra-empty[hidden]{display:none}
+.ra-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:7px 14px;border:1px solid #d9b8ae;border-radius:10px;background:#f6efeb;color:#51332d;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ra-button:hover{background:#f4e2db;border-color:#c9a294}
+.ra-button--primary{background:#a64031;border-color:#a64031;color:#faf6f2}
+.ra-button--primary:hover{background:#812f24;border-color:#812f24}
+.ra-button .material-symbols-outlined{font-size:18px}
+.ra-button:focus-visible,.ra-tabs button:focus-visible,.ra-icon-button:focus-visible{outline:3px solid #bd5440;outline-offset:2px}
+.ra-dialog{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:16px;background:#faf6f2;color:#51332d;box-shadow:0 28px 80px rgba(18,10,9,.35)}
+.ra-dialog::backdrop{background:rgba(28,19,18,.55)}
+.ra-dialog-card{display:flex;flex-direction:column;gap:16px;padding:22px 24px}
+.ra-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ra-dialog-head h2{margin:8px 0 0;font-size:19px;line-height:1.4;overflow-wrap:anywhere}
+.ra-icon-button{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border:0;border-radius:10px;background:transparent;color:#8e6b63;cursor:pointer}
+.ra-icon-button:hover{background:#f4e2db;color:#51332d}
+.ra-detail{display:grid;grid-template-columns:140px minmax(0,1fr);gap:8px 14px;margin:0;padding:14px 16px;border:1px solid #ead7d0;border-radius:12px;background:#f6efeb;font-size:14px}
+.ra-detail dt{color:#8e6b63}
+.ra-detail dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.ra-field{display:flex;flex-direction:column;gap:6px}
+.ra-field[hidden],.ra-dialog-actions[hidden],.ra-toast[hidden]{display:none}
+.ra-field label{font-size:14px;font-weight:700}
+.ra-optional{font-weight:400;color:#8e6b63}
+.ra-field textarea{width:100%;min-height:84px;padding:10px 12px;border:1px solid #d9b8ae;border-radius:10px;background:#f6efeb;color:#51332d;font:inherit;font-size:14px;resize:vertical;box-sizing:border-box}
+.ra-dialog-actions{display:flex;justify-content:flex-end;gap:8px}
+.ra-toast{position:fixed;right:24px;bottom:24px;z-index:110;max-width:min(420px,calc(100vw - 48px));padding:12px 16px;border-radius:12px;background:#2b1a17;color:#faf6f2;font-size:14px;box-shadow:0 16px 40px rgba(18,10,9,.3)}
+@media(max-width:720px){.ra-hero{padding:20px}.ra-hero h1{font-size:23px}.ra-stats{width:100%}.ra-stats div{flex:1;min-width:0}.ra-toolbar{padding:14px 16px}.ra-filters,.ra-search,.ra-filters input,.ra-filters select{width:100%}.ra-row{flex-direction:column;align-items:stretch;padding:14px 16px}.ra-row-side{justify-content:space-between}.ra-detail{grid-template-columns:1fr}.ra-dialog-card{padding:18px}}
+@media(prefers-reduced-motion:no-preference){.ra-dialog[open]{animation:ra-in .16s ease-out}@keyframes ra-in{from{opacity:0;transform:translateY(6px)}}}

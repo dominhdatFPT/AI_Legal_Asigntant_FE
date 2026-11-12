@@ -1,0 +1,51 @@
+/* Chuông thông báo trên header (notification-bell.js). Không dùng trắng tinh; không có nút màu đỏ chính. */
+.nbell { position: relative; flex-shrink: 0; font-family: "Be Vietnam Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.nbell[hidden] { display: none; }
+.nbell-button { position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; transition: background-color .2s ease; }
+.nbell-button:focus-visible { outline: 2px solid #fe932c; outline-offset: 2px; }
+.nbell-badge { position: absolute; top: 3px; right: 3px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #c2410c; color: #faf6f2; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; box-shadow: 0 0 0 2px var(--nbell-ring, #4a1018); }
+.nbell-badge[hidden] { display: none; }
+
+/* Header người dùng / luật sư (nền đỏ đậm) */
+.nbell--dark .nbell-button { border: 0; background: rgba(250,246,242,.1); color: #faf6f2; }
+.nbell--dark .nbell-button:hover { background: rgba(250,246,242,.2); }
+.nbell--dark { --nbell-ring: #5c1520; }
+
+/* Topbar quản trị (nền sáng) */
+.admin-topbar > .nbell { margin-left: auto; }
+.nbell--light .nbell-button { border: 1px solid #e4d1c9; background: #f6efeb; color: #51332d; }
+.nbell--light .nbell-button:hover { background: #f1dfd8; }
+.nbell--light { --nbell-ring: #f6efeb; }
+
+/* Bảng thông báo */
+.nbell-panel { position: absolute; top: calc(100% + 8px); right: 0; z-index: 60; width: min(360px, calc(100vw - 24px)); max-height: min(480px, calc(100vh - 96px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e4d1c9; border-radius: 14px; background: #faf6f2; color: #1e1b19; box-shadow: 0 16px 40px rgba(65,0,2,.18); text-align: left; }
+.nbell-panel[hidden] { display: none; }
+.nbell-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #ecdbd4; }
+.nbell-title { margin: 0; font-size: 15px; font-weight: 700; color: #1e1b19; }
+.nbell-mark-all { border: 0; background: none; padding: 4px 6px; border-radius: 6px; color: #8a3b2d; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.nbell-mark-all:hover:not(:disabled) { background: #f1dfd8; }
+.nbell-mark-all:disabled { color: #a8948e; cursor: default; }
+.nbell-list { list-style: none; margin: 0; padding: 4px 0; overflow-y: auto; }
+.nbell-empty { padding: 24px 16px; text-align: center; font-size: 13px; color: #6b5a55; }
+.nbell-link { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px 14px; border: 0; background: none; color: inherit; font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+.nbell-link:hover { background: #f4e7e1; }
+.nbell-link:focus-visible { outline: 2px solid #b45309; outline-offset: -2px; }
+.nbell-item.is-unread .nbell-link { background: #fbefe8; }
+.nbell-item.is-unread .nbell-link:hover { background: #f6e2d8; }
+.nbell-icon { display: grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0; border-radius: 999px; background: #f1dfd8; color: #8a3b2d; }
+.nbell-icon--message { background: #e8efe9; color: #3f6b4c; }
+.nbell-icon--report_resolved { background: #e6eef6; color: #2f557a; }
+.nbell-icon--announcement { background: #fdf1d6; color: #7a4b00; }
+.nbell-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.nbell-item-title { font-size: 13.5px; font-weight: 700; color: #1e1b19; }
+.nbell-item.is-unread .nbell-item-title { color: #7a2418; }
+.nbell-item-body { font-size: 13px; line-height: 1.45; color: #4a3b37; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.nbell-time { font-size: 12px; color: #8a7670; }
+.nbell-dot { width: 8px; height: 8px; margin-top: 6px; flex-shrink: 0; border-radius: 999px; background: #c2410c; }
+
+@media (max-width: 639px) {
+  .nbell-button { width: 36px; height: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nbell-button, .nbell-link { transition: none; }
+}
